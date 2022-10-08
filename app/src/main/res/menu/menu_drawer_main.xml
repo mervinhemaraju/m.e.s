@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/Fragment_Emergencies"
+            android:icon="@drawable/ic_emergency"
+            android:title="@string/menu_drawer_emergencies" />
+        <item
+            android:id="@+id/Fragment_All_Services"
+            android:icon="@drawable/ic_phonebook"
+            android:title="@string/menu_drawer_all_services" />
+    </group>
+
+    <item android:title="@string/title_drawer_categories_others">
+        <menu>
+            <item
+                android:id="@+id/Fragment_Settings"
+                android:icon="@drawable/ic_settings"
+                android:title="@string/menu_drawer_settings" />
+            <item
+                android:id="@+id/Fragment_About"
+                android:icon="@drawable/ic_about"
+                android:title="@string/menu_drawer_about" />
+        </menu>
+    </item>
+</menu>

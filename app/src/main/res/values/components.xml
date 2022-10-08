@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<resources>
+
+    <!-- Material Toolbar Styles -->
+    <style name="Mes.Toolbar.Main" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="android:background">?attr/colorScreenSurface</item>
+    </style>
+
+    <!-- Hamburger Drawer Icon Style -->
+    <style name="Mes.Drawer.Icon.Style" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">?attr/colorOnSecondary</item>
+    </style>
+
+    <!-- Navigation View Style -->
+    <style name="Mes.Drawer.NavigationView" parent="Widget.Design.NavigationView">
+        <item name="itemBackground">@drawable/custom_selector_state_drawer_item</item>
+    </style>
+
+    <!-- Settings Preferences -->
+    <style name="Mes.Theme.Preference" parent="PreferenceThemeOverlay">
+        <item name="android:divider">@android:color/transparent</item>
+        <item name="android:dividerHeight">0dp</item>
+    </style>
+
+    <!-- Material Card Styles-->
+    <style name="Mes.CardView.Default" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">?attr/colorSurface</item>
+        <item name="cardCornerRadius">6dp</item>
+    </style>
+
+    <style name="Mes.CardView.About" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">?attr/colorScreenSurface</item>
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">1dp</item>
+        <item name="contentPadding">8dp</item>
+    </style>
+
+    <!-- TextBox Styles-->
+    <style name="Mes.TextField.Search" parent="">
+        <item name="drawableStartCompat">@drawable/ic_search</item>
+        <item name="drawableTint">?attr/colorPrimary</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textAppearance">@style/Mes.Text.Subtitle1</item>
+        <item name="android:background">@drawable/custom_rounded_background_searchtextview</item>
+    </style>
+
+    <!-- Button Styles-->
+    <style name="Mes.Button.Emergency" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">
+        <item name="icon">@drawable/ic_emergency</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">0dp</item>
+        <item name="iconSize">24dp</item>
+        <item name="iconTint">@color/white</item>
+        <item name="shapeAppearanceOverlay">@style/Mes.Button.Shape.Circle</item>
+        <item name="strokeColor">?attr/colorScreenSurface</item>
+        <item name="strokeWidth">16dp</item>
+        <item name="android:backgroundTint">?attr/colorPrimary</item>
+    </style>
+
+    <!-- Progress Indicators Styles-->
+    <style name="Mes.ProgressIndicators.Default" parent="Widget.MaterialComponents.CircularProgressIndicator">
+        <item name="materialThemeOverlay">@style/Mes.ProgressIndicators.ThemeOverlay.Default</item>
+        <item name="trackThickness">20dp</item>
+    </style>
+
+    <style name="Mes.ProgressIndicators.ThemeOverlay.Default" parent="">
+        <item name="colorPrimary">?attr/colorPrimaryLight</item>
+    </style>
+</resources>

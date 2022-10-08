@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <!-- Color Attributes -->
+    <attr name="colorPrimaryLight" format="color" />
+    <attr name="colorScreenSurface" format="color" />
+    <attr name="colorOnScreenSurface" format="color" />
+</resources>

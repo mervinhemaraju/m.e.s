@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="ViewModel"
+            type="com.th3pl4gu3.mes.ui.main.emergencies.EmergenciesViewModel" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/Root_Emergencies"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/Emergency_Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/title_emergencies_main"
+                android:textAlignment="center"
+                android:textAppearance="@style/Mes.Text.Title1" />
+
+            <TextView
+                android:id="@+id/Emergency_Subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/subtitle_emergencies_main"
+                android:textAlignment="center"
+                android:textAppearance="@style/Mes.Text.Subtitle1" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/Emergency_Button"
+                style="@style/Mes.Button.Emergency"
+                android:layout_width="220dp"
+                android:layout_height="220dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="32dp"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                android:padding="0dp"
+                android:visibility="@{ViewModel.loading || ViewModel.message != null ? View.GONE : View.VISIBLE}" />
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/ProgressBar_Emergency_Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="80dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="80dp"
+                android:indeterminate="true"
+                android:visibility="@{!ViewModel.loading || ViewModel.message != null? View.GONE : View.VISIBLE}" />
+
+            <ImageView
+                android:id="@+id/Illus_Error_Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="32dp"
+                android:contentDescription="@string/icd_error_services_unavailable"
+                android:scaleType="centerCrop"
+                android:src="@drawable/il_error"
+                android:visibility="@{ViewModel.message != null ? View.VISIBLE : View.GONE}"
+                tools:src="@drawable/il_error" />
+
+            <TextView
+                android:id="@+id/Emergency_Other_Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/title_emergencies_otherAction"
+                android:textAlignment="center"
+                android:textAppearance="@style/Mes.Text.Title3" />
+
+            <TextView
+                android:id="@+id/Emergency_Other_Subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:text="@string/subtitle_emergencies_otherAction"
+                android:textAlignment="center"
+                android:textAppearance="@style/Mes.Text.Subtitle1" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/RecyclerView_Emergencies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="16dp"
+                android:scrollbars="horizontal"
+                android:visibility="@{ViewModel.loading || ViewModel.message != null ? View.GONE : View.VISIBLE}" />
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/ProgressBar_Emergency_List"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="80dp"
+                android:layout_marginBottom="80dp"
+                android:indeterminate="true"
+                android:visibility="@{!ViewModel.loading || ViewModel.message != null? View.GONE : View.VISIBLE}" />
+
+            <ImageView
+                android:id="@+id/Illus_Error_List"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="80dp"
+                android:layout_marginBottom="80dp"
+                android:contentDescription="@string/icd_error_services_unavailable"
+                android:scaleType="centerCrop"
+                android:src="@drawable/il_error"
+                android:visibility="@{ViewModel.message != null ? View.VISIBLE : View.GONE}"
+                tools:src="@drawable/il_error" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>

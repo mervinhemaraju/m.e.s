@@ -1,0 +1,62 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+
+    <!-- ======================== -->
+    <!-- Application's Base Theme -->
+    <!-- ======================== -->
+    <style name="Mes.Theme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
+        <!-- Primary brand color. -->
+        <item name="colorPrimaryLight">@color/red_50</item>
+        <item name="colorPrimary">@color/red_400</item>
+        <item name="colorPrimaryVariant">@color/red_500</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/red_400</item>
+        <item name="colorOnSecondary">@color/grey_200</item>
+
+        <!-- Screen brand color. -->
+        <item name="colorScreenSurface">@color/light_blue_grey_50</item>
+        <item name="colorOnScreenSurface">@color/grey_200</item>
+
+        <!-- Surface Brand Color -->
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/grey_600</item>
+
+        <!-- Default background screen -->
+        <item name="android:windowBackground">?attr/colorScreenSurface</item>
+
+        <!-- Set the Font Family -->
+        <item name="fontFamily">@font/rubik</item>
+
+        <!-- Status bar -->
+        <item name="android:statusBarColor">?attr/colorScreenSurface</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <!-- Navigation Bar -->
+        <item name="android:navigationBarColor">?attr/colorScreenSurface</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="O_MR1">true</item>
+
+        <!-- Hamburger Drawer Icon Style -->
+        <item name="drawerArrowStyle">@style/Mes.Drawer.Icon.Style</item>
+
+        <!-- Line Dividers -->
+        <item name="android:listDivider">@android:color/transparent</item>
+
+        <!-- Settings Preferences Theme -->
+        <item name="preferenceTheme">@style/Mes.Theme.Preference</item>
+
+        <!-- Progress Bar Style -->
+        <item name="circularProgressIndicatorStyle">@style/Mes.ProgressIndicators.Default</item>
+
+    </style>
+
+    <!-- ====================== -->
+    <!-- Splash Launcher Theme -->
+    <!-- ====================== -->
+    <style name="Mes.Theme.Launcher">
+        <item name="android:windowBackground">@drawable/custom_launcher_loading</item>
+    </style>
+
+</resources>

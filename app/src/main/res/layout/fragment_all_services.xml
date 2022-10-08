@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="ViewModel"
+            type="com.th3pl4gu3.mes.ui.main.all_services.AllServicesViewModel" />
+
+        <import type="android.view.View" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/Root_All_Services"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/Illus_Error"
+            android:layout_width="350dp"
+            android:layout_height="350dp"
+            android:layout_margin="16dp"
+            android:contentDescription="@string/icd_error_services_unavailable"
+            android:scaleType="centerCrop"
+            android:src="@drawable/il_error"
+            android:visibility="@{ViewModel.message != null ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/il_error" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/Group_Main_Content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{ViewModel.loading || ViewModel.message != null ? View.GONE : View.VISIBLE}"
+            app:constraint_referenced_ids="TextField_Search,RecyclerView_Services" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/TextField_Search"
+            style="@style/Mes.TextField.Search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:drawablePadding="-24dp"
+            android:hint="@string/action_search"
+            android:imeOptions="actionSearch"
+            android:padding="24dp"
+            android:singleLine="true"
+            android:text="@={ViewModel.searchQuery}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/RecyclerView_Services"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="24dp"
+            android:clipToPadding="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/TextField_Search"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/Animation_Loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{!ViewModel.loading || ViewModel.message != null? View.GONE : View.VISIBLE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/raw_anim_loading_services" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

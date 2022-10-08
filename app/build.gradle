@@ -1,0 +1,124 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'kotlin-android-extensions'
+    id 'androidx.navigation.safeargs'
+    id 'com.google.android.gms.oss-licenses-plugin'
+}
+
+android {
+    signingConfigs {
+        release
+    }
+    compileSdkVersion rootProject.ext.sdk_compiled_version
+    buildToolsVersion rootProject.ext.build_tools
+
+    defaultConfig {
+        applicationId application_id
+        minSdkVersion rootProject.ext.sdk_minimum_version
+        targetSdkVersion rootProject.ext.sdk_compiled_version
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.release
+    }
+
+    buildTypes {
+        release {
+            // Enables code shrinking, obfuscation, and optimization for only
+            // your project's release build type.
+            minifyEnabled true
+
+            // Enables resource shrinking, which is performed by the
+            // Android Gradle plugin.
+            shrinkResources true
+
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            signingConfig signingConfigs.release
+        }
+    }
+    buildFeatures {
+        dataBinding true
+        viewBinding true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+}
+
+// Create a variable called keystorePropertiesFile, and initialize it to your
+// keystore.properties file, in the rootProject folder.
+def props = new Properties()
+def propFile = new File("keystore.properties")
+
+// Check if we can read the file
+if (propFile.canRead()){
+    props.load(new FileInputStream(propFile))
+
+    // Before assigning, we check if key is present
+    if (props!=null && props.containsKey('STORE_FILE') && props.containsKey('STORE_PASSWORD') &&
+            props.containsKey('KEY_ALIAS') && props.containsKey('KEY_PASSWORD')) {
+        android.signingConfigs.release.storeFile = file(props['STORE_FILE'])
+        android.signingConfigs.release.storePassword = props['STORE_PASSWORD']
+        android.signingConfigs.release.keyAlias = props['KEY_ALIAS']
+        android.signingConfigs.release.keyPassword = props['KEY_PASSWORD']
+    } else {
+        println 'signing.properties found but some entries are missing'
+        android.buildTypes.release.signingConfig = null
+    }
+}else {
+    println 'signing.properties not found'
+    android.buildTypes.release.signingConfig = null
+}
+
+dependencies {
+
+    // Kotlin Dependencies
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    // Android Dependencies
+    implementation "androidx.core:core-ktx:$android_core_version"
+    implementation "androidx.constraintlayout:constraintlayout:$android_layout_constraint_version"
+    implementation "com.google.android.material:material:$android_material_version"
+
+    implementation "androidx.lifecycle:lifecycle-extensions:$android_lifecycle_version"
+    implementation "androidx.navigation:navigation-fragment-ktx:$android_navigation_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$android_navigation_version"
+    implementation "androidx.preference:preference-ktx:$android_preference_version"
+    implementation "androidx.work:work-runtime-ktx:$android_work_version"
+
+    implementation "androidx.room:room-runtime:$android_room_version"
+    kapt "androidx.room:room-compiler:$android_room_version"
+    implementation "androidx.room:room-ktx:$android_room_version"
+    implementation "androidx.room:room-rxjava2:$android_room_version"
+
+    implementation "androidx.paging:paging-runtime-ktx:$android_paging_version"
+
+    // 3rd Party Dependencies
+    implementation "com.squareup.retrofit2:retrofit:$external_retrofit_version"
+    implementation "com.squareup.retrofit2:converter-moshi:$external_retrofit_version"
+
+    implementation "com.squareup.moshi:moshi:$external_moshi_version"
+    implementation "com.squareup.moshi:moshi-kotlin:$external_moshi_version"
+
+    implementation "com.github.bumptech.glide:glide:$external_glide_version"
+
+    implementation "com.airbnb.android:lottie:$external_lottie_version"
+
+    implementation "com.google.code.gson:gson:$external_gson_version"
+
+    implementation "com.google.android.gms:play-services-oss-licenses:$external_oss_licences_version"
+
+    // Testing Framework Dependencies
+    testImplementation "org.junit.jupiter:junit-jupiter:$testing_junit"
+    androidTestImplementation "androidx.test.ext:junit:$testing_android_junit"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$testing_espresso_core"
+}

@@ -1,0 +1,140 @@
+<resources>
+
+    <!-- Application Specific -->
+    <string name="app_name" translatable="false">MES</string>
+    <string name="app_name_long" translatable="false">Mauritius Emergency Services</string>
+
+    <string name="app_website_developer" translatable="false">https://mes.th3pl4gu3.com/web#developer</string>
+    <string name="app_website_privacy" translatable="false">https://mes.th3pl4gu3.com/web/privacy</string>
+    <string name="app_url_playstore" translatable="false">https://play.google.com/store/apps/dev?id=5236150593519379806</string>
+
+    <string name="app_share_content">Please find MES on www.mes.com</string>
+
+    <string name="app_support_email" translatable="false">th3pl4gu33@gmail.com</string>
+
+    <!-- Menu Items -->
+    <string name="menu_drawer_emergencies">Emergencies</string>
+    <string name="menu_drawer_all_services">All Services</string>
+    <string name="menu_drawer_settings">Settings</string>
+    <string name="menu_drawer_about">About</string>
+
+    <!-- Titles, Subtitles & Messages-->
+    <string name="title_drawer_categories_others">OTHERS</string>
+
+    <string name="title_emergencies_main">Emergency Police Help Needed?</string>
+    <string name="subtitle_emergencies_main">Just hold the button to call</string>
+
+    <string name="title_emergencies_otherAction">Need other emergency actions?</string>
+    <string name="subtitle_emergencies_otherAction">Pick another action below</string>
+
+    <string name="title_permission_call_info">MES Phone Call Permission</string>
+    <string name="message_permission_call_info">To be able to make phone calls for you, MES needs your permission. Please note that phone calls are not made unless the user does so through the application.</string>
+
+    <string name="title_permission_call_explicit">Allow Permissions in Settings</string>
+    <string name="message_permission_call_explicit">To provide us the permission manually to make phone calls, please click Proceed > Permissions > Allow Phone Permissions</string>
+
+    <string name="title_precall_title">Emergency %1$s</string>
+    <string name="title_precall_subtitle">Don\'t panic. Starting a call to %1$s for you</string>
+
+
+    <string name="title_service_suggestions">Please provide services applicable in Mauritius Only</string>
+    <string name="subtitle_service_suggestions">Providing a proof will be more easy for us to validate it as a service and provide it quicker on the application</string>
+
+    <string name="subtitle_bug_report">Please provide as much details as possible in the steps for us to be able to understand the bug</string>
+
+    <string name="title_unable_open_app_email">Unable to Open Email App</string>
+    <string name="message_unable_open_app_email">There are no application installed to process this request. Please consider installing  an email application to continue</string>
+
+    <!-- Fields Text & Hints -->
+    <string name="hint_field_service_name">Service Name</string>
+    <string name="hint_field_service_number">Service Number</string>
+    <string name="hint_field_service_proof">Proof of service (A link, or a reference of the Service)</string>
+
+    <string name="hint_field_bug_issue">Bug Identified</string>
+    <string name="hint_field_bug_steps">Steps to reproduce issue</string>
+
+    <!-- Actions -->
+    <string name="action_retry">Retry</string>
+    <string name="action_allow">Allow</string>
+    <string name="action_proceed">Proceed</string>
+    <string name="action_search">Search</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_ask_me_later">Ask Me Later</string>
+    <string name="action_submit">Submit</string>
+    <string name="action_ok">OK</string>
+
+    <!-- Settings -->
+    <string name="settings_key_category_display" translatable="false">settings_key_category_display</string>
+    <string name="settings_key_category_help" translatable="false">settings_key_category_help</string>
+
+    <string name="settings_title_category_display">Display</string>
+    <string name="settings_title_category_help">Help</string>
+
+    <string name="settings_key_display_theme" translatable="false">settings_title_display_theme</string>
+    <string name="settings_title_display_theme">App Theme</string>
+    <string name="settings_value_display_default">Follow System</string>
+    <string name="settings_value_display_light">Light</string>
+    <string name="settings_value_display_dark">Dark</string>
+
+    <string name="settings_key_help_feedback" translatable="false">settings_key_help_feedback</string>
+    <string name="settings_title_help_feedback">Send feedback</string>
+    <string name="settings_summary_help_feedback">Report technical issues or suggest new features</string>
+
+    <string name="settings_key_help_add_services" translatable="false">settings_key_help_add_services</string>
+    <string name="settings_title_help_add_services">Suggest New Service</string>
+    <string name="settings_summary_help_add_services">Send propositions for services not listed on MES</string>
+
+
+    <!-- About -->
+    <string name="text_subtitle_about_sections_dev">Support &amp; Development</string>
+    <string name="text_subtitle_about_sections_other">Other</string>
+
+    <string name="text_title_about_dev_rate">Rate MES</string>
+    <string name="text_title_about_dev_bug">Report a Bug</string>
+    <string name="text_title_about_dev_suggestion">Suggest a Missing Service</string>
+    <string name="text_title_about_dev_share">Share MES</string>
+
+    <string name="text_description_about_dev_rate">If you love the app, let us know in the Google Play Store and we can make it even better</string>
+    <string name="text_description_about_dev_suggestion">Send propositions for services not listed on MES</string>
+    <string name="text_description_about_dev_bug">Any error that is persisting in the app, please send an email by clicking here</string>
+    <string name="text_description_about_dev_share">Do not forget to share the app with your friends and family</string>
+
+    <string name="text_title_about_other_license">Open Source Licenses</string>
+    <string name="text_title_about_other_terms">Terms &amp; Privacy Policy</string>
+    <string name="text_title_about_other_version">Version</string>
+    <string name="text_title_about_other_developer">Developer</string>
+
+    <string name="text_description_about_other_developer">The Developer history of MES</string>
+
+
+    <!-- Messages -->
+    <string name="message_info_no_internet">You need to be connected to the internet for the first time to fetch the services.</string>
+    <string name="message_info_permission_denied">Permission has been denied</string>
+    <string name="message_info_field_required">* This field is required</string>
+
+    <string name="message_error_bug_report">An error occurred while fetching the data. Please report a bug issue in Settings</string>
+
+    <string name="message_error_field_empty">This field cannot be empty</string>
+
+    <string name="message_info_hold_emergency_button">You need to hold the big emergency button to perform an emergency call</string>
+
+
+    <!-- Styling -->
+    <string name="styling_seconds_s" translatable="false">%1$ss</string>
+
+    <!-- Image Content Descriptions -->
+    <string name="icd_error_services_unavailable">Error image illustration to represent no services available</string>
+
+    <string name="icd_service_logo">Represents the Service\'s Logo</string>
+    <string name="icd_arrow_logo">An arrow logo pointing to the service\'s logo</string>
+
+    <string name="icd_close_call_countdown">A round button to stop the call countdown</string>
+
+
+    <!-- Email Literals -->
+    <string name="email_subject_bug_report">MES :: Bug Report :: %1$s</string>
+    <string name="email_body_bug_report">Below are the steps to reproduce issue: \n \n %1$s</string>
+
+    <string name="email_subject_service_suggestion">MES :: Service Suggestion :: %1$s :: %2$s</string>
+    <string name="email_body_service_suggestion">Below are the links for the service\'s proofs: \n \n %1$s</string>
+</resources>
