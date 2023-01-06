@@ -1,48 +1,30 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
-    id 'kotlin-android-extensions'
-    id 'androidx.navigation.safeargs'
-    id 'com.google.android.gms.oss-licenses-plugin'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
-    signingConfigs {
-        release
-    }
-    compileSdkVersion rootProject.ext.sdk_compiled_version
-    buildToolsVersion rootProject.ext.build_tools
+    namespace app_id
+    compileSdk 33
 
     defaultConfig {
-        applicationId application_id
-        minSdkVersion rootProject.ext.sdk_minimum_version
-        targetSdkVersion rootProject.ext.sdk_compiled_version
-        versionCode rootProject.ext.versionCode
-        versionName rootProject.ext.versionName
+        applicationId app_id
+        minSdk 29
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        signingConfig signingConfigs.release
+        vectorDrawables {
+            useSupportLibrary true
+        }
     }
 
     buildTypes {
         release {
-            // Enables code shrinking, obfuscation, and optimization for only
-            // your project's release build type.
-            minifyEnabled true
-
-            // Enables resource shrinking, which is performed by the
-            // Android Gradle plugin.
-            shrinkResources true
-
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
-            signingConfig signingConfigs.release
         }
-    }
-    buildFeatures {
-        dataBinding true
-        viewBinding true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -51,74 +33,41 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-
-}
-
-// Create a variable called keystorePropertiesFile, and initialize it to your
-// keystore.properties file, in the rootProject folder.
-def props = new Properties()
-def propFile = new File("keystore.properties")
-
-// Check if we can read the file
-if (propFile.canRead()){
-    props.load(new FileInputStream(propFile))
-
-    // Before assigning, we check if key is present
-    if (props!=null && props.containsKey('STORE_FILE') && props.containsKey('STORE_PASSWORD') &&
-            props.containsKey('KEY_ALIAS') && props.containsKey('KEY_PASSWORD')) {
-        android.signingConfigs.release.storeFile = file(props['STORE_FILE'])
-        android.signingConfigs.release.storePassword = props['STORE_PASSWORD']
-        android.signingConfigs.release.keyAlias = props['KEY_ALIAS']
-        android.signingConfigs.release.keyPassword = props['KEY_PASSWORD']
-    } else {
-        println 'signing.properties found but some entries are missing'
-        android.buildTypes.release.signingConfig = null
+    buildFeatures {
+        compose true
     }
-}else {
-    println 'signing.properties not found'
-    android.buildTypes.release.signingConfig = null
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.1.1'
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
 }
 
 dependencies {
 
-    // Kotlin Dependencies
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    // Material Design Components
+    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+    implementation 'androidx.compose.material3:material3:1.0.1'
+    implementation "androidx.compose.material3:material3-window-size-class:1.1.0-alpha03"
 
-    // Android Dependencies
-    implementation "androidx.core:core-ktx:$android_core_version"
-    implementation "androidx.constraintlayout:constraintlayout:$android_layout_constraint_version"
-    implementation "com.google.android.material:material:$android_material_version"
+    // Android Components
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+    implementation 'androidx.activity:activity-compose:1.6.1'
+    implementation "androidx.navigation:navigation-compose:2.4.2"
+    implementation 'androidx.window:window-core:1.1.0-alpha04'
 
-    implementation "androidx.lifecycle:lifecycle-extensions:$android_lifecycle_version"
-    implementation "androidx.navigation:navigation-fragment-ktx:$android_navigation_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$android_navigation_version"
-    implementation "androidx.preference:preference-ktx:$android_preference_version"
-    implementation "androidx.work:work-runtime-ktx:$android_work_version"
+    // Unit Testings
+    testImplementation 'junit:junit:4.13.2'
 
-    implementation "androidx.room:room-runtime:$android_room_version"
-    kapt "androidx.room:room-compiler:$android_room_version"
-    implementation "androidx.room:room-ktx:$android_room_version"
-    implementation "androidx.room:room-rxjava2:$android_room_version"
-
-    implementation "androidx.paging:paging-runtime-ktx:$android_paging_version"
-
-    // 3rd Party Dependencies
-    implementation "com.squareup.retrofit2:retrofit:$external_retrofit_version"
-    implementation "com.squareup.retrofit2:converter-moshi:$external_retrofit_version"
-
-    implementation "com.squareup.moshi:moshi:$external_moshi_version"
-    implementation "com.squareup.moshi:moshi-kotlin:$external_moshi_version"
-
-    implementation "com.github.bumptech.glide:glide:$external_glide_version"
-
-    implementation "com.airbnb.android:lottie:$external_lottie_version"
-
-    implementation "com.google.code.gson:gson:$external_gson_version"
-
-    implementation "com.google.android.gms:play-services-oss-licenses:$external_oss_licences_version"
-
-    // Testing Framework Dependencies
-    testImplementation "org.junit.jupiter:junit-jupiter:$testing_junit"
-    androidTestImplementation "androidx.test.ext:junit:$testing_android_junit"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$testing_espresso_core"
+    // Android Testing
+    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
 }
