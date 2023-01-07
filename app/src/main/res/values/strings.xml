@@ -3,4 +3,5 @@
 
     <!-- Content Descriptions -->
     <string name="ctnt_desc_drawer_open">Open Navigation Drawer</string>
+    <string name="ctnt_desc_phone_button">Phone Button</string>
 </resources>

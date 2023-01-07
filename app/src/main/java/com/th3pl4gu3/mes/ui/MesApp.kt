@@ -14,6 +14,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.th3pl4gu3.mes.MesApplication
+import com.th3pl4gu3.mes.data.network.AppContainer
 import com.th3pl4gu3.mes.ui.components.MesDrawer
 import com.th3pl4gu3.mes.ui.components.MesTopAppBar
 import com.th3pl4gu3.mes.ui.navigation.MesDestinations
@@ -25,6 +27,7 @@ import kotlinx.coroutines.launch
 @Composable
 @ExperimentalMaterial3Api
 fun MesApp(
+    appContainer: AppContainer,
     widthSizeClass: WindowWidthSizeClass
 ) {
     MesTheme {
@@ -77,6 +80,7 @@ fun MesApp(
     //                    )
     //                }
                     MesNavGraph(
+                        appContainer = appContainer,
                         isExpandedScreen = isExpandedScreen,
                         modifier = contentModifier,
                         navController = navController,
@@ -135,6 +139,7 @@ private fun rememberSizeAwareDrawerState(isExpandedScreen: Boolean): DrawerState
 fun PreviewTopAppBarMediumSize() {
     MesTheme {
         MesApp(
+            appContainer = MesApplication().container,
             widthSizeClass = WindowWidthSizeClass.Medium
         )
     }
@@ -147,6 +152,7 @@ fun PreviewTopAppBarMediumSize() {
 fun PreviewTopAppBarExpandedSize() {
     MesTheme {
         MesApp(
+            appContainer = MesApplication().container,
             widthSizeClass = WindowWidthSizeClass.Expanded
         )
     }

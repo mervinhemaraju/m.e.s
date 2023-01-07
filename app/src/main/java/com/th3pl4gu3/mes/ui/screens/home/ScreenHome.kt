@@ -1,4 +1,4 @@
-package com.th3pl4gu3.mes.ui.screens
+package com.th3pl4gu3.mes.ui.screens.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

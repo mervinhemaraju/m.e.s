@@ -16,9 +16,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
+        val appContainer = (application as MesApplication).container
 
         setContent {
             MesApp(
+                appContainer = appContainer,
                 widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
             )
         }

@@ -2,6 +2,7 @@ package com.th3pl4gu3.mes.ui.utils
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.font.FontFamily
+import java.util.*
 
 fun Typography.defaultFontFamily(primaryFontFamily: FontFamily, secondaryFontFamily: FontFamily): Typography {
     return this.copy(
@@ -21,4 +22,11 @@ fun Typography.defaultFontFamily(primaryFontFamily: FontFamily, secondaryFontFam
         labelMedium = this.labelMedium.copy(fontFamily = primaryFontFamily),
         labelSmall = this.labelSmall.copy(fontFamily = primaryFontFamily)
     )
+}
+
+fun String.capitalize(): String {
+    return this.lowercase().replaceFirstChar {
+        if (it.isLowerCase()) it.titlecase(Locale.getDefault())
+        else it.toString()
+    }
 }

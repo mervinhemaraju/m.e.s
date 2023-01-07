@@ -22,7 +22,8 @@ private val MesColorLight = lightColorScheme(
     primary = BlueLight50,
     background = BlueLight50,
     surface = WhiteBluish10,
-    onSurface = BlueA100
+    onSurface = BlueA100,
+    onSurfaceVariant = BlueGray100,
 )
 
 @Composable
