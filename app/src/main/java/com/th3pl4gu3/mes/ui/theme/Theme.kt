@@ -19,10 +19,10 @@ private val MesColorDark = darkColorScheme(
 )
 
 private val MesColorLight = lightColorScheme(
-    primary = green,
-    onPrimary = green,
-    secondary = green40,
-    surface = green,
+    primary = BlueLight50,
+    background = BlueLight50,
+    surface = WhiteBluish10,
+    onSurface = BlueA100
 )
 
 @Composable

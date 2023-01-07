@@ -6,6 +6,7 @@ import androidx.compose.material3.Typography
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import com.th3pl4gu3.mes.R
 import com.th3pl4gu3.mes.ui.utils.defaultFontFamily
 
@@ -31,6 +32,12 @@ private val MesTitleLarge = TextStyle(
         letterSpacing = 9.sp
 )
 
+private val MesTitleMedium = TextStyle(
+        fontWeight = FontWeight.Bold,
+        fontSize = 24.sp,
+        letterSpacing = 9.sp
+)
+
 private val MesBodyLarge = TextStyle(
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
@@ -49,6 +56,7 @@ private val MesBodySmall = TextStyle(
  **/
 val MesTypography = Typography(
         titleLarge = MesTitleLarge,
+        titleMedium = MesTitleMedium,
         bodyLarge = MesBodyLarge,
         bodySmall = MesBodySmall
 ).defaultFontFamily(

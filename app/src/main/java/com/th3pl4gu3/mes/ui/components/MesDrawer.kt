@@ -1,6 +1,7 @@
 package com.th3pl4gu3.mes.ui.components
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -38,54 +39,39 @@ fun MesDrawer(
     closeDrawer: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    ModalDrawerSheet(modifier) {
+    ModalDrawerSheet(
+        modifier = modifier.background(MaterialTheme.colorScheme.surface),
+    ) {
         MesLogo(
-            modifier = Modifier.padding(horizontal = 28.dp, vertical = 24.dp)
+            modifier = Modifier.padding(horizontal = 28.dp, vertical = 24.dp),
         )
         NavigationDrawerItem(
             label = { Text(text = "Home") },
-            icon = { Icon(Icons.Outlined.Home, null) },
+            icon = { MesIcon(Icons.Outlined.Home, null) },
             selected = currentRoute == MesDestinations.SCREEN_HOME,
             onClick = { navigateToHome(); closeDrawer() },
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
         )
         NavigationDrawerItem(
             label = { Text(text = "Services") },
-            icon = { Icon(Icons.Outlined.Phone, null) },
+            icon = { MesIcon(Icons.Outlined.Phone, null) },
             selected = currentRoute == MesDestinations.SCREEN_SERVICES,
             onClick = { navigateToServices(); closeDrawer() },
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
         )
         NavigationDrawerItem(
             label = { Text(text = "About") },
-            icon = { Icon(Icons.Outlined.Info, null) },
+            icon = { MesIcon(Icons.Outlined.Info, null) },
             selected = currentRoute == MesDestinations.SCREEN_ABOUT,
             onClick = { navigateToAbout(); closeDrawer() },
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
         )
         NavigationDrawerItem(
             label = { Text(text = "Settings") },
-            icon = { Icon(Icons.Outlined.Settings, null) },
+            icon = { MesIcon(Icons.Outlined.Settings, null) },
             selected = currentRoute == MesDestinations.SCREEN_SETTINGS,
             onClick = { navigateToSettings(); closeDrawer() },
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-        )
-    }
-}
-
-@Composable
-private fun MesLogo(modifier: Modifier = Modifier) {
-    Row(modifier = modifier) {
-        Icon(
-            imageVector = Icons.Outlined.Phone,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary
-        )
-        Spacer(Modifier.width(8.dp))
-        Icon(
-            painter = painterResource(R.drawable.ic_mes_wordmark),
-            contentDescription = stringResource(R.string.app_name),
-            tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }

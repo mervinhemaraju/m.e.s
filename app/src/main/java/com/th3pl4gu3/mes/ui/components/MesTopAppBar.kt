@@ -25,34 +25,31 @@ internal fun MesTopAppBar(
         TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
 ) {
     CenterAlignedTopAppBar(
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.secondary),
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.background),
         title = {
-            Text(
-                text = stringResource(id = R.string.app_name).lowercase(),
-                style=MaterialTheme.typography.titleLarge,
+            MesTitleLogo(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentWidth(align= Alignment.CenterHorizontally)
+                    .wrapContentWidth(align = Alignment.CenterHorizontally)
             )
         },
         navigationIcon = {
             IconButton(onClick = openDrawer) {
-                Icon(
+                MesIcon(
                     imageVector = Icons.Outlined.Phone,
-                    contentDescription = "Open navigation drawer",
-                    tint = MaterialTheme.colorScheme.primary
+                    contentDescription = R.string.ctnt_desc_drawer_open,
                 )
             }
         },
-        actions = {
-            IconButton(onClick = { /* TODO: Open search */ }) {
-                Icon(
-                    imageVector = Icons.Filled.Search,
-                    contentDescription = "Search",
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            }
-        },
+//        actions = {
+//            IconButton(onClick = { /* TODO: Open search */ }) {
+//                Icon(
+//                    imageVector = Icons.Filled.Search,
+//                    contentDescription = "Search",
+//                    tint = MaterialTheme.colorScheme.onSurface
+//                )
+//            }
+//        },
         scrollBehavior = scrollBehavior,
         modifier = modifier
     )
