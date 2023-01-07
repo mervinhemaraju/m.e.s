@@ -16,6 +16,7 @@ import com.th3pl4gu3.mes.ui.utils.defaultFontFamily
  * in the main MesTypography below
  **/
 
+// TODO(Fix typography)
 private val Montserrat_Alternates = FontFamily(
         Font(R.font.montserrat_alternates_regular),
         Font(R.font.montserrat_alternates_medium, FontWeight.Medium),

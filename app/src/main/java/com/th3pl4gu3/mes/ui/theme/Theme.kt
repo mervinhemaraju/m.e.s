@@ -12,18 +12,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val MesColorDark = darkColorScheme(
-    primary = greenDark,
-    onPrimary = greenDark,
-    secondary = green40,
-    surface = greenDark,
+    primary = greenDark
 )
 
 private val MesColorLight = lightColorScheme(
-    primary = BlueLight50,
+    // Main color palettes
+    primary = BlueA100,
+    secondary = Red400,
+    onSecondary = BlueLight50,
+
+    // Background variants
     background = BlueLight50,
+
+    // Surface variants
     surface = WhiteBluish10,
     onSurface = BlueA100,
     onSurfaceVariant = BlueGray100,
+
+    // Outline Variants
+    outlineVariant = Red500
+
 )
 
 @Composable

@@ -2,7 +2,6 @@ package com.th3pl4gu3.mes.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val green = Color(0xFF388E3C)
 val green40 = Color(0xFFDD623C)
 val greenDark = Color(0xFFD84315)
 
@@ -13,4 +12,5 @@ val BlueA100 = Color(0xFF003964)
 val BlueGray100 = Color(0xFF7CA6C7)
 
 // Red Shades
-val Red100 = Color(0xFFF8BBD0)
+val Red400 = Color(0xFFEF5350)
+val Red500 = Color(0xFFF44336)
