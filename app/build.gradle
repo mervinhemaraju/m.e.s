@@ -69,6 +69,8 @@ dependencies {
     implementation "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0"
     // Kotlin Serialization
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0"
+    // Coil
+    implementation "io.coil-kt:coil-compose:2.1.0"
 
     // Unit Testings
     testImplementation 'junit:junit:4.13.2'

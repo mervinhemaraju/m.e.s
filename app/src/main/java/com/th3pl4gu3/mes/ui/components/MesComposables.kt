@@ -20,10 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.th3pl4gu3.mes.R
 import com.th3pl4gu3.mes.models.Service
 import com.th3pl4gu3.mes.ui.theme.MesTheme
@@ -84,18 +87,32 @@ fun MesServiceItem(
                     .padding(8.dp)
             ) {
 
-                Image(
+//                Image(
+//                    modifier = modifier
+//                        .size(64.dp)
+//                        .padding(8.dp)
+//                        .clip(RoundedCornerShape(50)),
+//                    contentScale = ContentScale.Crop,
+//                    imageVector = Icons.Filled.Home,
+//                    /*
+//                     * Content Description is not needed here - image is decorative, and setting a null content
+//                     * description allows accessibility services to skip this element during navigation.
+//                     */
+//                    contentDescription = null
+//                )
+                AsyncImage(
                     modifier = modifier
                         .size(64.dp)
                         .padding(8.dp)
                         .clip(RoundedCornerShape(50)),
                     contentScale = ContentScale.Crop,
-                    imageVector = Icons.Filled.Home,
-                    /*
-                     * Content Description is not needed here - image is decorative, and setting a null content
-                     * description allows accessibility services to skip this element during navigation.
-                     */
-                    contentDescription = null
+                    model = ImageRequest.Builder(context = LocalContext.current)
+                        .data(service.icon)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = "Service Icon",
+                    error = painterResource(R.drawable.ic_image_broken),
+                    placeholder = painterResource(R.drawable.ic_image_loading),
                 )
 
                 Column {
