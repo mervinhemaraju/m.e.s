@@ -27,6 +27,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -41,10 +42,10 @@ fun MesIcon(
     imageVector: ImageVector,
     @StringRes contentDescription: Int? = null,
     tint: Color = MaterialTheme.colorScheme.onSurface
-){
+) {
     Icon(
         imageVector = imageVector,
-        contentDescription = if(contentDescription != null) stringResource(id = contentDescription) else null,
+        contentDescription = if (contentDescription != null) stringResource(id = contentDescription) else null,
         tint = tint
     )
 }
@@ -54,21 +55,36 @@ fun MesIcon(
     @DrawableRes painterResource: Int,
     @StringRes contentDescription: Int? = null,
     tint: Color = MaterialTheme.colorScheme.onSurface
-){
+) {
     Icon(
         painter = painterResource(id = painterResource),
-        contentDescription = if(contentDescription != null) stringResource(id = contentDescription) else null,
+        contentDescription = if (contentDescription != null) stringResource(id = contentDescription) else null,
         tint = tint
+    )
+}
+
+@Composable
+fun MesAsyncRoundedImage(service: Service, modifier: Modifier = Modifier){
+    AsyncImage(
+        modifier = modifier
+            .size(64.dp)
+            .padding(8.dp)
+            .clip(RoundedCornerShape(50)),
+        contentScale = ContentScale.Crop,
+        model = ImageRequest.Builder(context = LocalContext.current)
+            .data(service.icon)
+            .crossfade(true)
+            .build(),
+        contentDescription = service.name,
+        error = painterResource(R.drawable.ic_image_broken),
+        placeholder = painterResource(R.drawable.ic_image_loading),
     )
 }
 
 @Composable
 fun MesLogo(modifier: Modifier = Modifier) {
     Row(modifier = modifier) {
-//        MesIcon(
-//            imageVector = Icons.Outlined.Phone,
-//            contentDescription = null,
-//        )
+
         Spacer(Modifier.width(8.dp))
 
         MesTitleLogo()
@@ -76,11 +92,11 @@ fun MesLogo(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun MesTitleLogo(modifier: Modifier = Modifier){
+fun MesTitleLogo(modifier: Modifier = Modifier) {
     Text(
         text = stringResource(id = R.string.app_name).lowercase(),
-        style=MaterialTheme.typography.titleLarge,
-        color=MaterialTheme.colorScheme.onSurface,
+        style = MaterialTheme.typography.titleLarge,
+        color = MaterialTheme.colorScheme.onSurface,
         modifier = modifier
     )
 }
@@ -90,7 +106,7 @@ fun MesServiceItem(
     service: Service,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
-){
+) {
 
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
@@ -105,45 +121,19 @@ fun MesServiceItem(
                     .padding(8.dp)
             ) {
 
-//                Image(
-//                    modifier = modifier
-//                        .size(64.dp)
-//                        .padding(8.dp)
-//                        .clip(RoundedCornerShape(50)),
-//                    contentScale = ContentScale.Crop,
-//                    imageVector = Icons.Filled.Home,
-//                    /*
-//                     * Content Description is not needed here - image is decorative, and setting a null content
-//                     * description allows accessibility services to skip this element during navigation.
-//                     */
-//                    contentDescription = null
-//                )
-                AsyncImage(
-                    modifier = modifier
-                        .size(64.dp)
-                        .padding(8.dp)
-                        .clip(RoundedCornerShape(50)),
-                    contentScale = ContentScale.Crop,
-                    model = ImageRequest.Builder(context = LocalContext.current)
-                        .data(service.icon)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = "Service Icon",
-                    error = painterResource(R.drawable.ic_image_broken),
-                    placeholder = painterResource(R.drawable.ic_image_loading),
-                )
+                MesAsyncRoundedImage(service = service, modifier = modifier)
 
                 Column {
                     Text(
                         text = service.name.capitalize(),
                         style = MaterialTheme.typography.headlineLarge,
-                        color=MaterialTheme.colorScheme.onSurface,
+                        color = MaterialTheme.colorScheme.onSurface,
                         modifier = modifier.padding(top = 8.dp)
                     )
                     Text(
                         text = service.number.toString(),
                         style = MaterialTheme.typography.headlineSmall,
-                        color=MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = modifier.padding(4.dp)
                     )
                 }
@@ -164,13 +154,59 @@ fun MesServiceItem(
 }
 
 @Composable
+@ExperimentalMaterial3Api
+fun MesEmergencyItem(
+    service: Service,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+
+    Card(
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        shape = MaterialTheme.shapes.medium,
+        onClick = onClick,
+        modifier = modifier.padding(start = 8.dp)
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier
+                .padding(
+                    start = 24.dp,
+                    end = 24.dp,
+                    top = 8.dp,
+                    bottom = 8.dp
+                ),
+        ) {
+            Text(
+                text = service.name.capitalize(),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = modifier
+                    .padding(8.dp),
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            MesAsyncRoundedImage(
+                service = service,
+                modifier = modifier
+                    .padding(8.dp),
+            )
+
+        }
+    }
+
+}
+
+@Composable
 fun MesEmergencyButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
-){
+) {
     ElevatedButton(
         onClick = onClick,
-        modifier= modifier,
+        modifier = modifier,
         shape = CircleShape,
         colors = ButtonDefaults.elevatedButtonColors(containerColor = MaterialTheme.colorScheme.secondary),
         border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.outlineVariant),
@@ -185,28 +221,24 @@ fun MesEmergencyButton(
     }
 }
 
-///**
-// * Composable Previews
-// **/
-//
-//@Preview("MesServiceItem Light")
-//@Preview("MesServiceItem Light", uiMode = UI_MODE_NIGHT_YES)
-//@Composable
-//fun MesServiceItemPreview(){
-//
-//    // Create a dummy service for preview
-//    val service = Service(
-//        identifier = "id-01",
-//        name = "Police",
-//        type = "E",
-//        number = 999,
-//        icon = "url"
-//    )
-//
-//    MesTheme {
-//        MesServiceItem(
-//            service = service,
-//            onClick = {}
-//        )
-//    }
-//}
+
+@Preview(name = "Mes Composable Light", showBackground = true)
+@Preview(name = "Mes Composable Dark", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@Composable
+@ExperimentalMaterial3Api
+fun MesComposablePreview() {
+    MesTheme {
+        val mockData = Service(
+            identifier = "security-police-direct-2",
+            name = "Police Direct Line 2",
+            type = "E",
+            icon = "https://img.icons8.com/fluent/100/000000/policeman-male.png",
+            number = 112
+        )
+
+        MesEmergencyItem(
+            service = mockData,
+            onClick = {}
+        )
+    }
+}

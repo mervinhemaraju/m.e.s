@@ -64,7 +64,7 @@ object DummyData {
         Service(
             identifier = "id-03",
             name = "Hospital",
-            type = "E",
+            type = "N",
             number = 999,
             icon = "http://www.google.com"
         ),

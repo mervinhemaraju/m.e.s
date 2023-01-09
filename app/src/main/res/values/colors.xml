@@ -3,4 +3,8 @@
 <resources>
     <!-- Status bar -->
     <color name="black30">#4D000000</color>
+
+
+    <!-- Launcher Icon Colors -->
+    <color name="ic_launcher_background">#AEC4FA</color>
 </resources>

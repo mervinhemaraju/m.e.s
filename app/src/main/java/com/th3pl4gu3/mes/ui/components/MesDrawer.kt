@@ -7,17 +7,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Phone
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.NavigationDrawerItem
-import androidx.compose.material3.NavigationDrawerItemDefaults
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.outlined.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -36,6 +28,8 @@ fun MesDrawer(
     navigateToServices: () -> Unit,
     navigateToAbout: () -> Unit,
     navigateToSettings: () -> Unit,
+    navigateToContactUs: () -> Unit,
+    toggleThemeDialog: () -> Unit,
     closeDrawer: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -73,6 +67,33 @@ fun MesDrawer(
             onClick = { navigateToSettings(); closeDrawer() },
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
         )
+
+        Divider(
+            thickness = 0.7.dp,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(
+                top = 16.dp,
+                bottom = 16.dp,
+                start = 32.dp,
+                end = 32.dp
+            )
+        )
+
+        NavigationDrawerItem(
+            label = { Text(text = "Choose Theme") },
+            icon = { MesIcon(Icons.Outlined.Brightness4, null) },
+            selected = currentRoute == MesDestinations.SCREEN_THEME,
+            onClick = { toggleThemeDialog() },
+            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+        )
+
+        NavigationDrawerItem(
+            label = { Text(text = "Contact Us") },
+            icon = { MesIcon(Icons.Outlined.Email, null) },
+            selected = currentRoute == MesDestinations.SCREEN_CONTACTUS,
+            onClick = { navigateToContactUs() },
+            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+        )
     }
 }
 
@@ -88,6 +109,8 @@ fun PreviewAppDrawer() {
             navigateToServices = {},
             navigateToAbout = {},
             navigateToSettings = {},
+            toggleThemeDialog = {},
+            navigateToContactUs = {},
             closeDrawer = {}
         )
     }

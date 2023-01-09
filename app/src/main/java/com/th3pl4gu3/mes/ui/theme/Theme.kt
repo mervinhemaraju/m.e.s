@@ -52,6 +52,7 @@ fun MesTheme(
     MaterialTheme(
         colorScheme = mesColorScheme,
         typography = MesTypography,
+        shapes = MesShapes,
         content = content
     )
 }

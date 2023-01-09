@@ -23,40 +23,6 @@ import com.th3pl4gu3.mes.models.Service
 import com.th3pl4gu3.mes.ui.components.MesServiceItem
 import com.th3pl4gu3.mes.ui.theme.MesTheme
 
-//@Composable
-//fun ScreenServices(
-//    servicesUiState: ServicesUiState,
-//    servicesViewModel: ServicesViewModel
-//) {
-//    LazyColumn(modifier = Modifier
-//        .background(MaterialTheme.colorScheme.background)
-//    ) {
-//
-//        // Get the dummy list of services
-//        val services = servicesUiState.
-//
-//        // Load the services
-//        items(services) { service ->
-//            MesServiceItem(
-//                service = service,
-//                onClick = {}
-//            )
-//        }
-//    }
-//}
-
-//@Preview("Services Screen Light")
-//@Preview("Services Screen Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
-//@Composable
-//@ExperimentalMaterial3Api
-//fun PreviewTopAppBarExpandedSize() {
-//    MesTheme {
-//        ScreenServices(
-//            servicesViewModel = ServicesViewModel()
-//        )
-//    }
-//}
-
 @Composable
 fun ScreenServices(
     servicesUiState: ServicesUiState,
