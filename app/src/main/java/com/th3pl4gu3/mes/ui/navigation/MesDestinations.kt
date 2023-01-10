@@ -1,5 +1,7 @@
 package com.th3pl4gu3.mes.ui.navigation
 
+import com.th3pl4gu3.mes.ui.MesApp
+
 /**
  * Destinations used in the [MesApp].
  */

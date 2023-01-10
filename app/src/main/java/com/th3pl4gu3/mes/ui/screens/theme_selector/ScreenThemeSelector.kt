@@ -19,6 +19,7 @@ fun ScreenThemeSelector(
 ) {
     AlertDialog(
         onDismissRequest = {
+            dialogState()
         },
         title = {
             Text(text = "Title")

@@ -227,18 +227,30 @@ fun MesEmergencyButton(
 @Composable
 @ExperimentalMaterial3Api
 fun MesComposablePreview() {
-    MesTheme {
-        val mockData = Service(
-            identifier = "security-police-direct-2",
-            name = "Police Direct Line 2",
-            type = "E",
-            icon = "https://img.icons8.com/fluent/100/000000/policeman-male.png",
-            number = 112
-        )
 
-        MesEmergencyItem(
-            service = mockData,
-            onClick = {}
-        )
+    val mockData = Service(
+        identifier = "security-police-direct-2",
+        name = "Police Direct Line 2",
+        type = "E",
+        icon = "https://img.icons8.com/fluent/100/000000/policeman-male.png",
+        number = 112
+    )
+
+    MesTheme {
+        Column {
+
+            MesEmergencyItem(
+                service = mockData,
+                onClick = {}
+            )
+
+            MesIcon(
+                painterResource = R.drawable.ic_image_broken,
+            )
+
+            MesIcon(
+                imageVector = Icons.Outlined.Phone,
+            )
+        }
     }
 }

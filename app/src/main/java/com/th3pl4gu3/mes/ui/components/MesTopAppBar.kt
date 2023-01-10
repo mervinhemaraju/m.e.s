@@ -4,13 +4,11 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.outlined.Phone
+import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.th3pl4gu3.mes.R
 import com.th3pl4gu3.mes.ui.theme.MesTheme
@@ -36,20 +34,11 @@ internal fun MesTopAppBar(
         navigationIcon = {
             IconButton(onClick = openDrawer) {
                 MesIcon(
-                    imageVector = Icons.Outlined.Phone,
+                    imageVector = Icons.Outlined.Menu,
                     contentDescription = R.string.ctnt_desc_drawer_open,
                 )
             }
         },
-//        actions = {
-//            IconButton(onClick = { /* TODO: Open search */ }) {
-//                Icon(
-//                    imageVector = Icons.Filled.Search,
-//                    contentDescription = "Search",
-//                    tint = MaterialTheme.colorScheme.onSurface
-//                )
-//            }
-//        },
         scrollBehavior = scrollBehavior,
         modifier = modifier
     )

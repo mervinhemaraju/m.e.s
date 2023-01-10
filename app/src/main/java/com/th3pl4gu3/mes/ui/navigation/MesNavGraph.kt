@@ -8,18 +8,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.th3pl4gu3.mes.MesApplication
 import com.th3pl4gu3.mes.data.network.AppContainer
-import com.th3pl4gu3.mes.models.MesAppSettings
 import com.th3pl4gu3.mes.ui.screens.ScreenAbout
 import com.th3pl4gu3.mes.ui.screens.home.ScreenHome
 import com.th3pl4gu3.mes.ui.screens.services.ScreenServices
 import com.th3pl4gu3.mes.ui.screens.ScreenSettings
 import com.th3pl4gu3.mes.ui.screens.home.HomeViewModel
-import com.th3pl4gu3.mes.ui.screens.openDialog
 import com.th3pl4gu3.mes.ui.screens.services.ServicesViewModel
-import com.th3pl4gu3.mes.ui.screens.theme_selector.ScreenThemeSelector
-import com.th3pl4gu3.mes.ui.screens.theme_selector.ThemeViewModel
 
 @Composable
 @ExperimentalMaterial3Api
@@ -55,15 +50,9 @@ fun MesNavGraph(
             )
         }
         composable(MesDestinations.SCREEN_ABOUT) {
-//            val interestsViewModel: InterestsViewModel = viewModel(
-//                factory = InterestsViewModel.provideFactory(appContainer.interestsRepository)
-//            )
             ScreenAbout()
         }
         composable(MesDestinations.SCREEN_SETTINGS) {
-//            val homeViewModel: HomeViewModel = viewModel(
-//                factory = HomeViewModel.provideFactory(appContainer.postsRepository)
-//            )
             ScreenSettings()
         }
     }

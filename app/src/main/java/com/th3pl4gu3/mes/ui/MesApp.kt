@@ -1,10 +1,7 @@
 package com.th3pl4gu3.mes.ui
 
 import android.app.Activity
-import android.content.Context
-import android.content.Intent
 import android.content.res.Configuration
-import android.net.Uri
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -15,17 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.content.ContextCompat.startActivity
-import androidx.datastore.core.DataStore
-import androidx.datastore.dataStore
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.th3pl4gu3.mes.MesApplication
-import com.th3pl4gu3.mes.data.network.AppContainer
 import com.th3pl4gu3.mes.datastore
 import com.th3pl4gu3.mes.models.AppTheme
 import com.th3pl4gu3.mes.models.MesAppSettings
-import com.th3pl4gu3.mes.models.MesAppSettingsSerializer
 import com.th3pl4gu3.mes.ui.components.MesDrawer
 import com.th3pl4gu3.mes.ui.components.MesTopAppBar
 import com.th3pl4gu3.mes.ui.navigation.MesDestinations
@@ -43,8 +35,10 @@ fun MesApp(
     widthSizeClass: WindowWidthSizeClass
 ) {
 
+    // Load the app settings from datastore
     val appSettings = application.datastore.data.collectAsState(initial = MesAppSettings()).value
 
+    // Verify the app theme that the user has set
     val darkTheme = when (appSettings.appTheme) {
         AppTheme.FOLLOW_SYSTEM -> isSystemInDarkTheme()
         AppTheme.DARK -> true
@@ -52,12 +46,10 @@ fun MesApp(
     }
 
     MesTheme(
-        darkTheme = darkTheme
+        darkTheme = darkTheme // Load the app theme
     ) {
 
-        /**
-         * Define the remember variables
-         **/
+        // Define variables
         val navController = rememberNavController()
         val navigationActions = remember(navController) { MesNavigationActions(navController) }
         val coroutineScope = rememberCoroutineScope()
@@ -67,11 +59,7 @@ fun MesApp(
         val sizeAwareDrawerState = rememberSizeAwareDrawerState(isExpandedScreen)
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topAppBarState)
-
-        var showDialog by remember {
-            mutableStateOf(value = false)
-        }
-
+        var showDialog by remember { mutableStateOf(value = false) }
         val activity = LocalContext.current as Activity
 
         ModalNavigationDrawer(
