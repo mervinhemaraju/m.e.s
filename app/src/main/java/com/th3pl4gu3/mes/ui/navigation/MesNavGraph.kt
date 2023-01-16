@@ -8,7 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.th3pl4gu3.mes.data.network.AppContainer
+import com.th3pl4gu3.mes.data.AppContainer
 import com.th3pl4gu3.mes.ui.screens.ScreenAbout
 import com.th3pl4gu3.mes.ui.screens.home.ScreenHome
 import com.th3pl4gu3.mes.ui.screens.services.ScreenServices
@@ -36,8 +36,8 @@ fun MesNavGraph(
                 factory = HomeViewModel.provideFactory(appContainer = appContainer)
             )
             ScreenHome(
-                homeUiState = homeViewModel.homeUiState,
-                retryAction = homeViewModel::getServices
+                viewModel = homeViewModel,
+                retryAction = homeViewModel::loadOnlineServices
             )
         }
         composable(MesDestinations.SCREEN_SERVICES) {

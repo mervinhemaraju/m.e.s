@@ -6,6 +6,8 @@ import android.net.Uri
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.font.FontFamily
 import com.th3pl4gu3.mes.models.AppTheme
+import com.th3pl4gu3.mes.models.MesResponse
+import com.th3pl4gu3.mes.ui.screens.home.HomeUiState
 import java.util.*
 
 fun Typography.defaultFontFamily(primaryFontFamily: FontFamily, secondaryFontFamily: FontFamily): Typography {

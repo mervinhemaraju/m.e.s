@@ -7,13 +7,15 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.th3pl4gu3.mes.data.DummyData
-import com.th3pl4gu3.mes.models.MesResponse
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.th3pl4gu3.mes.MesApplication
 import com.th3pl4gu3.mes.models.Service
 import com.th3pl4gu3.mes.ui.components.MesEmergencyButton
 import com.th3pl4gu3.mes.ui.components.MesEmergencyItem
@@ -22,10 +24,12 @@ import com.th3pl4gu3.mes.ui.theme.MesTheme
 @Composable
 @ExperimentalMaterial3Api
 fun ScreenHome(
-    homeUiState: HomeUiState,
+    viewModel: HomeViewModel,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+
+    val homeUiState: HomeUiState by viewModel.homeUiState.collectAsState()
 
     Column(
         modifier = modifier
@@ -96,7 +100,7 @@ fun ScreenHome(
         when(homeUiState) {
             is HomeUiState.Success -> {
                 MesEmergencyRow(
-                    services = homeUiState.servicesResponse.services
+                    services = (homeUiState as HomeUiState.Success).services
                 )
             }
             is HomeUiState.Loading -> LoadingScreen(modifier)
@@ -167,15 +171,13 @@ fun MesEmergencyRow(
 @ExperimentalMaterial3Api
 fun ScreenHomePreview() {
 
-    val mockData = MesResponse(
-        services = DummyData.services,
-        message = "Success",
-        success = true
+    val homeViewModel: HomeViewModel = viewModel(
+        factory = HomeViewModel.provideFactory(appContainer = MesApplication().container)
     )
 
     MesTheme {
         ScreenHome(
-            homeUiState = HomeUiState.Error,
+            viewModel = homeViewModel,
             retryAction = {}
         )
     }
