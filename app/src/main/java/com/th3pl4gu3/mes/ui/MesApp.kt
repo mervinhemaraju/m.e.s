@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -30,6 +31,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 @ExperimentalMaterial3Api
+@ExperimentalComposeUiApi
 fun MesApp(
     application: MesApplication,
     widthSizeClass: WindowWidthSizeClass
@@ -164,6 +166,7 @@ private fun rememberSizeAwareDrawerState(isExpandedScreen: Boolean): DrawerState
 @Preview("Mes App Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 @ExperimentalMaterial3Api
+@ExperimentalComposeUiApi
 fun PreviewTopAppBarMediumSize() {
 
     MesTheme {
@@ -178,6 +181,7 @@ fun PreviewTopAppBarMediumSize() {
 @Preview("Mes App Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 @ExperimentalMaterial3Api
+@ExperimentalComposeUiApi
 fun PreviewTopAppBarExpandedSize() {
     MesTheme {
         MesApp(

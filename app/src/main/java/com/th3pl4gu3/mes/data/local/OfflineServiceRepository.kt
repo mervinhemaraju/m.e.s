@@ -9,9 +9,11 @@ class OfflineServiceRepository(private val serviceDao: ServiceDao) : ServiceRepo
 
     override suspend fun count(): Int = serviceDao.count()
 
-    override fun wipe() = serviceDao.wipe()
+    override suspend fun wipe() = serviceDao.wipe()
 
-    override fun getAll(): Flow<List<Service>> = serviceDao.getAll()
+    override fun getAllServices(): Flow<List<Service>> = serviceDao.getAllServices()
+
+    override fun getService(identifier: String): Flow<List<Service>> = serviceDao.getService(identifier = identifier)
 
     override fun getEmergencyServices(): Flow<List<Service>> = serviceDao.getEmergencyServices()
 

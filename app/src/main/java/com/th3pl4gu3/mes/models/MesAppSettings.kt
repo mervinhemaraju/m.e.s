@@ -4,7 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MesAppSettings (
-    val appTheme: AppTheme = AppTheme.FOLLOW_SYSTEM
+    val appTheme: AppTheme = AppTheme.FOLLOW_SYSTEM,
+    val servicesRefreshDate: String = ""
 )
 
 enum class AppTheme {

@@ -8,6 +8,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -64,10 +66,10 @@ fun MesIcon(
 }
 
 @Composable
-fun MesAsyncRoundedImage(service: Service, modifier: Modifier = Modifier){
+fun MesAsyncRoundedImage(service: Service, size: Dp = 64.dp, modifier: Modifier = Modifier){
     AsyncImage(
         modifier = modifier
-            .size(64.dp)
+            .size(size)
             .padding(8.dp)
             .clip(RoundedCornerShape(50)),
         contentScale = ContentScale.Crop,

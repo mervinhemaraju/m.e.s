@@ -20,10 +20,13 @@ interface ServiceDao {
     suspend fun count(): Int
 
     @Query("DELETE FROM service_table")
-    fun wipe()
+    suspend fun wipe()
 
     @Query("SELECT * FROM service_table")
-    fun getAll(): Flow<List<Service>>
+    fun getAllServices(): Flow<List<Service>>
+
+    @Query("SELECT * FROM service_table WHERE identifier = :identifier")
+    fun getService(identifier: String): Flow<List<Service>>
 
     @Query("SELECT * FROM service_table WHERE type = 'E'")
     fun getEmergencyServices(): Flow<List<Service>>

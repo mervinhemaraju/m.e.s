@@ -1,5 +1,6 @@
 package com.th3pl4gu3.mes.ui.screens.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -30,7 +31,7 @@ class HomeViewModel(
      * Holds home ui state. The list of items are retrieved from [ItemsRepository] and mapped to
      * [HomeUiState]
      */
-    val homeUiState: StateFlow<HomeUiState> = offlineServiceRepository.getAll().map { HomeUiState.Success(it) }
+    val homeUiState: StateFlow<HomeUiState> = offlineServiceRepository.getEmergencyServices().map { HomeUiState.Success(it) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
@@ -68,14 +69,17 @@ class HomeViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
 
-                // First we wipe the existing data
-                wipeServices()
+                if(!doesServicesExists()) {
 
-                // Then we save the services locally in Room
-                saveServicesLocally(onlineServiceRepository.getMesServices().services)
+                    // Logging for information
+                    Log.i("api_services", "No services found. Fetching data from the API")
 
-                // Load the services on the UI
-//                HomeUiState.Success(onlineServiceRepository.getMesServices())
+                    // First we wipe the existing data
+                    wipeServices()
+
+                    // Then we save the services locally in Room
+                    saveServicesLocally(onlineServiceRepository.getMesServices().services)
+                }
 
             } catch (e: IOException) {
                 HomeUiState.Error
@@ -85,7 +89,11 @@ class HomeViewModel(
         }
     }
 
-    private fun wipeServices(){
+    private suspend fun doesServicesExists(): Boolean{
+        return offlineServiceRepository.count() > 0
+    }
+
+    private suspend fun wipeServices(){
         offlineServiceRepository.wipe()
     }
 

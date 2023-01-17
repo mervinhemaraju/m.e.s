@@ -2,6 +2,8 @@ package com.th3pl4gu3.mes.ui.navigation
 
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import com.th3pl4gu3.mes.models.Service
+import com.th3pl4gu3.mes.ui.navigation.MesDestinationArguments.ARG_PRE_CALL_SERVICE_IDENTIFIER
 
 /**
  * Models the navigation actions in the app.
@@ -42,6 +44,15 @@ class MesNavigationActions(navController: NavHostController) {
     }
     val navigateToSettings: () -> Unit = {
         navController.navigate(MesDestinations.SCREEN_SETTINGS) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
+    val navigateToPreCall: (service: Service) -> Unit = {
+        navController.navigate(MesDestinations.SCREEN_PRE_CALL.replace(ARG_PRE_CALL_SERVICE_IDENTIFIER, it.identifier)) {
             popUpTo(navController.graph.findStartDestination().id) {
                 saveState = true
             }

@@ -14,18 +14,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.th3pl4gu3.mes.MesApplication
 import com.th3pl4gu3.mes.models.Service
 import com.th3pl4gu3.mes.ui.components.MesEmergencyButton
 import com.th3pl4gu3.mes.ui.components.MesEmergencyItem
-import com.th3pl4gu3.mes.ui.theme.MesTheme
 
 @Composable
 @ExperimentalMaterial3Api
 fun ScreenHome(
     viewModel: HomeViewModel,
     retryAction: () -> Unit,
+    navigateToPreCall: (service: Service) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -100,7 +98,8 @@ fun ScreenHome(
         when(homeUiState) {
             is HomeUiState.Success -> {
                 MesEmergencyRow(
-                    services = (homeUiState as HomeUiState.Success).services
+                    services = (homeUiState as HomeUiState.Success).services,
+                    navigateToPreCall = navigateToPreCall
                 )
             }
             is HomeUiState.Loading -> LoadingScreen(modifier)
@@ -151,7 +150,8 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
 @Composable
 @ExperimentalMaterial3Api
 fun MesEmergencyRow(
-    services: List<Service>
+    services: List<Service>,
+    navigateToPreCall: (service: Service) -> Unit,
 ){
     // Create the Lazy row
     LazyRow {
@@ -159,7 +159,9 @@ fun MesEmergencyRow(
         items(services) { service ->
             MesEmergencyItem(
                 service = service,
-                onClick = {}
+                onClick = {
+                    navigateToPreCall(service)
+                }
             )
         }
     }
@@ -171,14 +173,14 @@ fun MesEmergencyRow(
 @ExperimentalMaterial3Api
 fun ScreenHomePreview() {
 
-    val homeViewModel: HomeViewModel = viewModel(
-        factory = HomeViewModel.provideFactory(appContainer = MesApplication().container)
-    )
-
-    MesTheme {
-        ScreenHome(
-            viewModel = homeViewModel,
-            retryAction = {}
-        )
-    }
+//    val homeViewModel: HomeViewModel = viewModel(
+//        factory = HomeViewModel.provideFactory(appContainer = MesApplication().container)
+//    )
+//
+//    MesTheme {
+//        ScreenHome(
+//            viewModel = homeViewModel,
+//            retryAction = {}
+//        )
+//    }
 }

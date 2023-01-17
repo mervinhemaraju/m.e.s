@@ -9,9 +9,11 @@ interface ServiceRepository {
 
     suspend fun count(): Int
 
-    fun wipe()
+    suspend fun wipe()
 
-    fun getAll(): Flow<List<Service>>
+    fun getAllServices(): Flow<List<Service>>
+
+    fun getService(identifier: String): Flow<List<Service>>
 
     fun getEmergencyServices(): Flow<List<Service>>
 
