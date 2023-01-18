@@ -5,43 +5,60 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.th3pl4gu3.mes.models.Service
 import com.th3pl4gu3.mes.ui.components.MesEmergencyButton
 import com.th3pl4gu3.mes.ui.components.MesEmergencyItem
+import com.th3pl4gu3.mes.ui.theme.MesTheme
 
 @Composable
 @ExperimentalMaterial3Api
 fun ScreenHome(
-    viewModel: HomeViewModel,
+    homeUiState: HomeUiState,
     retryAction: () -> Unit,
     navigateToPreCall: (service: Service) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
-    val homeUiState: HomeUiState by viewModel.homeUiState.collectAsState()
-
-    Column(
-        modifier = modifier
+    ConstraintLayout(
+        modifier
             .background(MaterialTheme.colorScheme.background)
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .fillMaxHeight()
+            .verticalScroll(rememberScrollState()),
     ) {
+
+        val (
+            textMainTitle,
+            textMainSubtitle,
+            textHeaderTitle,
+            textHeaderSubtitle,
+            buttonEmergency,
+            contentDynamic
+        ) = createRefs()
 
         Text(
             text = "Emergency Police Help Needed ?",
             style = MaterialTheme.typography.headlineLarge,
             color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .constrainAs(textMainTitle) {
+                    with(16.dp){
+                        top.linkTo(parent.top, this)
+                        start.linkTo(parent.start, this)
+                        end.linkTo(parent.end, this)
+                    }
+                }
+                .fillMaxWidth()
         )
 
         Text(
@@ -49,26 +66,26 @@ fun ScreenHome(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(
-                bottom = 16.dp,
-                start = 16.dp,
-                end = 16.dp
-            )
-        )
-
-        Spacer(
-            modifier = Modifier.height(24.dp)
+            modifier = Modifier
+                .constrainAs(textMainSubtitle) {
+                    top.linkTo(textMainTitle.bottom, 8.dp)
+                    start.linkTo(parent.start, 16.dp)
+                    end.linkTo(parent.end, 16.dp)
+                }
         )
 
         MesEmergencyButton(
             onClick = {},
             modifier = Modifier
                 .size(200.dp)
-                .padding(8.dp)
-        )
-
-        Spacer(
-            modifier = Modifier.height(24.dp)
+                .constrainAs(buttonEmergency) {
+                    with(16.dp){
+                        top.linkTo(textMainSubtitle.bottom, this)
+                        start.linkTo(parent.start, this)
+                        end.linkTo(parent.end, this)
+                        bottom.linkTo(textHeaderTitle.top,this)
+                    }
+                }
         )
 
         Text(
@@ -76,7 +93,12 @@ fun ScreenHome(
             style = MaterialTheme.typography.headlineLarge,
             color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .constrainAs(textHeaderTitle) {
+                    bottom.linkTo(textHeaderSubtitle.top, 8.dp)
+                    start.linkTo(parent.start, 16.dp)
+                    end.linkTo(parent.end, 16.dp)
+                }
         )
 
         Text(
@@ -84,66 +106,82 @@ fun ScreenHome(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(
-                bottom = 16.dp,
-                start = 16.dp,
-                end = 16.dp
-            )
+            modifier = Modifier
+                .constrainAs(textHeaderSubtitle) {
+                    start.linkTo(parent.start, 16.dp)
+                    end.linkTo(parent.end, 16.dp)
+                    bottom.linkTo(contentDynamic.top, 24.dp)
+                }
         )
 
-        Spacer(
-            modifier = Modifier.height(16.dp)
+        DynamicContent(
+            homeUiState = homeUiState,
+            navigateToPreCall = navigateToPreCall,
+            retryAction = retryAction,
+            modifier = Modifier
+                .constrainAs(contentDynamic) {
+                    bottom.linkTo(parent.bottom, 24.dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
         )
 
-        when(homeUiState) {
-            is HomeUiState.Success -> {
-                MesEmergencyRow(
-                    services = (homeUiState as HomeUiState.Success).services,
-                    navigateToPreCall = navigateToPreCall
-                )
-            }
-            is HomeUiState.Loading -> LoadingScreen(modifier)
-            is HomeUiState.Error -> ErrorScreen(retryAction, modifier.padding(bottom = 16.dp))
-        }
     }
 }
 
-/**
- * The home screen displaying the loading message.
- */
 @Composable
-fun LoadingScreen(modifier: Modifier = Modifier) {
-//    Column(
-//        modifier = modifier.fillMaxSize(),
-//        verticalArrangement = Arrangement.Center,
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        Text("Loading...")
-//    }
-
-    Text(
-        text = "Loading...",
-        modifier = modifier
-    )
-    
-    Spacer(modifier = Modifier.height(24.dp))
+@ExperimentalMaterial3Api
+fun DynamicContent(
+    homeUiState: HomeUiState,
+    navigateToPreCall: (service: Service) -> Unit,
+    retryAction: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    when (homeUiState) {
+        is HomeUiState.Success -> {
+            MesEmergencyRow(
+                services = homeUiState.services,
+                navigateToPreCall = navigateToPreCall,
+                modifier = modifier
+            )
+        }
+        is HomeUiState.Loading -> LoadingScreen(modifier)
+        is HomeUiState.Error -> ErrorScreen(retryAction, modifier)
+    }
 }
 
-/**
- * The home screen displaying error message with re-attempt button.
- */
 @Composable
-fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
-    Text(
-        text = "Loading failed",
-        modifier = modifier
-    )
-
-    Button(
-        onClick = retryAction,
+fun LoadingScreen(modifier: Modifier = Modifier) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
         modifier = modifier
     ) {
-        Text("Retry")
+        Text(
+            text = "Loading...",
+            modifier = modifier
+        )
+    }
+}
+
+@Composable
+fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = modifier
+    ) {
+        Text(
+            text = "Loading failed",
+            modifier = modifier
+        )
+
+        Button(
+            onClick = retryAction,
+            modifier = modifier
+        ) {
+            Text("Retry")
+        }
     }
 }
 
@@ -152,9 +190,12 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
 fun MesEmergencyRow(
     services: List<Service>,
     navigateToPreCall: (service: Service) -> Unit,
-){
+    modifier: Modifier = Modifier
+) {
     // Create the Lazy row
-    LazyRow {
+    LazyRow(
+        modifier = modifier
+    ) {
         // Load the services
         items(services) { service ->
             MesEmergencyItem(
@@ -173,14 +214,11 @@ fun MesEmergencyRow(
 @ExperimentalMaterial3Api
 fun ScreenHomePreview() {
 
-//    val homeViewModel: HomeViewModel = viewModel(
-//        factory = HomeViewModel.provideFactory(appContainer = MesApplication().container)
-//    )
-//
-//    MesTheme {
-//        ScreenHome(
-//            viewModel = homeViewModel,
-//            retryAction = {}
-//        )
-//    }
+    MesTheme {
+        ScreenHome(
+            retryAction = {},
+            navigateToPreCall = {},
+            homeUiState = HomeUiState.Loading
+        )
+    }
 }

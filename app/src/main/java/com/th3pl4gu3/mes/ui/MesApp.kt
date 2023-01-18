@@ -85,6 +85,7 @@ fun MesApp(
                 topBar = {
                     MesTopAppBar(
                         openDrawer = { coroutineScope.launch { sizeAwareDrawerState.open() } },
+                        showSearchIcon = currentRoute == MesDestinations.SCREEN_SERVICES
                     )
                 },
             ) { innerPadding ->

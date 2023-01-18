@@ -5,6 +5,7 @@
          respective values-vXX folder. -->
     <style name="Platform.Theme.Mes" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:statusBarColor">#FFE8F4FA</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <!-- The actual theme we use. This varies for light theme (here),

@@ -53,7 +53,7 @@ class MesNavigationActions(navController: NavHostController) {
     }
     val navigateToPreCall: (service: Service) -> Unit = {
         navController.navigate(MesDestinations.SCREEN_PRE_CALL.replace(ARG_PRE_CALL_SERVICE_IDENTIFIER, it.identifier)) {
-            popUpTo(navController.graph.findStartDestination().id) {
+            popUpTo(if(navController.previousBackStackEntry == null) MesDestinations.SCREEN_SERVICES else navController.previousBackStackEntry!!.id) {
                 saveState = true
             }
             launchSingleTop = true

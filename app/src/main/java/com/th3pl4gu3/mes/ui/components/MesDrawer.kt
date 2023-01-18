@@ -34,28 +34,28 @@ fun MesDrawer(
         )
         NavigationDrawerItem(
             label = { Text(text = "Home") },
-            icon = { MesIcon(Icons.Outlined.Home, null) },
+            icon = { MesIcon(Icons.Outlined.Home, contentDescription = null) },
             selected = currentRoute == MesDestinations.SCREEN_HOME,
             onClick = { navigateToHome(); closeDrawer() },
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
         )
         NavigationDrawerItem(
             label = { Text(text = "Services") },
-            icon = { MesIcon(Icons.Outlined.Phone, null) },
+            icon = { MesIcon(Icons.Outlined.Phone, contentDescription = null) },
             selected = currentRoute == MesDestinations.SCREEN_SERVICES,
             onClick = { navigateToServices(); closeDrawer() },
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
         )
         NavigationDrawerItem(
             label = { Text(text = "About") },
-            icon = { MesIcon(Icons.Outlined.Info, null) },
+            icon = { MesIcon(Icons.Outlined.Info, contentDescription = null) },
             selected = currentRoute == MesDestinations.SCREEN_ABOUT,
             onClick = { navigateToAbout(); closeDrawer() },
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
         )
         NavigationDrawerItem(
             label = { Text(text = "Settings") },
-            icon = { MesIcon(Icons.Outlined.Settings, null) },
+            icon = { MesIcon(Icons.Outlined.Settings, contentDescription = null) },
             selected = currentRoute == MesDestinations.SCREEN_SETTINGS,
             onClick = { navigateToSettings(); closeDrawer() },
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
@@ -74,7 +74,7 @@ fun MesDrawer(
 
         NavigationDrawerItem(
             label = { Text(text = "Choose Theme") },
-            icon = { MesIcon(Icons.Outlined.Brightness4, null) },
+            icon = { MesIcon(Icons.Outlined.Brightness4, contentDescription = null) },
             selected = currentRoute == MesDestinations.SCREEN_THEME,
             onClick = { toggleThemeDialog() },
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
@@ -82,7 +82,7 @@ fun MesDrawer(
 
         NavigationDrawerItem(
             label = { Text(text = "Contact Us") },
-            icon = { MesIcon(Icons.Outlined.Email, null) },
+            icon = { MesIcon(Icons.Outlined.Email, contentDescription = null) },
             selected = currentRoute == MesDestinations.SCREEN_CONTACTUS,
             onClick = { navigateToContactUs() },
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)

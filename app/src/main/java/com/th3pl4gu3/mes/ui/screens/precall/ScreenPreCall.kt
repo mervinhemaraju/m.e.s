@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.compose.rememberNavController
 import com.th3pl4gu3.mes.models.Service
 import com.th3pl4gu3.mes.ui.components.MesAsyncRoundedImage
 import com.th3pl4gu3.mes.ui.theme.MesTheme
@@ -27,7 +28,8 @@ import com.th3pl4gu3.mes.ui.theme.MesTheme
 @Composable
 @ExperimentalComposeUiApi
 fun ScreenPreCall(
-    viewModel: PreCallViewModel
+    viewModel: PreCallViewModel,
+    closeScreen: () -> Unit,
 ) {
 
     // Get service
@@ -35,7 +37,10 @@ fun ScreenPreCall(
 
     // Load the UI
     when (preCallUiState) {
-        is PreCallUiState.Success -> PreCallContent(service = (preCallUiState as PreCallUiState.Success).service)
+        is PreCallUiState.Success -> PreCallContent(
+            service = (preCallUiState as PreCallUiState.Success).service,
+            closeScreen = closeScreen
+        )
         is PreCallUiState.Error -> PreCallError()
         is PreCallUiState.Loading -> PreCallLoading()
     }
@@ -64,7 +69,10 @@ fun PreCallError(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun PreCallContent(service: Service) {
+fun PreCallContent(
+    service: Service,
+    closeScreen: () -> Unit,
+) {
 
     // Log for information
     Log.i(
@@ -147,7 +155,9 @@ fun PreCallContent(service: Service) {
         )
 
         FloatingActionButton(
-            onClick = { /*TODO*/ },
+            onClick = {
+                closeScreen()
+            },
             modifier = Modifier
                 .constrainAs(buttonCancel) {
                     bottom.linkTo(parent.bottom, margin = 48.dp)
@@ -159,17 +169,6 @@ fun PreCallContent(service: Service) {
         ) {
             Icon(imageVector = Icons.Outlined.Close, contentDescription = "Cancel button")
         }
-
-//        Button(
-//            onClick = { /*TODO*/ },
-//            modifier = Modifier.constrainAs(buttonCancel) {
-//                bottom.linkTo(parent.bottom, margin = 48.dp)
-//                start.linkTo(parent.start, margin = 16.dp)
-//                end.linkTo(parent.end, margin = 16.dp)
-//            }
-//        ) {
-//            Icon(imageVector = Icons.Outlined.Cancel, contentDescription = "Cancel button")
-//        }
     }
 }
 
@@ -188,6 +187,6 @@ fun PreviewScreenPreCall() {
     )
 
     MesTheme {
-        PreCallContent(service = mockData)
+        PreCallContent(service = mockData, closeScreen = {})
     }
 }

@@ -2,6 +2,8 @@ package com.th3pl4gu3.mes.ui.navigation
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -20,6 +22,7 @@ import com.th3pl4gu3.mes.ui.screens.ScreenAbout
 import com.th3pl4gu3.mes.ui.screens.home.ScreenHome
 import com.th3pl4gu3.mes.ui.screens.services.ScreenServices
 import com.th3pl4gu3.mes.ui.screens.ScreenSettings
+import com.th3pl4gu3.mes.ui.screens.home.HomeUiState
 import com.th3pl4gu3.mes.ui.screens.home.HomeViewModel
 import com.th3pl4gu3.mes.ui.screens.precall.PreCallViewModel
 import com.th3pl4gu3.mes.ui.screens.precall.ScreenPreCall
@@ -45,13 +48,17 @@ fun MesNavGraph(
         modifier = modifier
     ) {
         composable(MesDestinations.SCREEN_HOME) {
+
             val homeViewModel: HomeViewModel = viewModel(
                 factory = HomeViewModel.provideFactory(
                     appContainer = appContainer
                 )
             )
+
+            val homeUiState: HomeUiState by homeViewModel.homeUiState.collectAsState()
+
             ScreenHome(
-                viewModel = homeViewModel,
+                homeUiState = homeUiState,
                 retryAction = homeViewModel::loadOnlineServices,
                 navigateToPreCall = navigationActions.navigateToPreCall
             )
@@ -76,6 +83,7 @@ fun MesNavGraph(
 
             ScreenPreCall(
                 viewModel = preCallViewModel,
+                closeScreen = navController::popBackStack
             )
         }
         composable(MesDestinations.SCREEN_ABOUT) {
