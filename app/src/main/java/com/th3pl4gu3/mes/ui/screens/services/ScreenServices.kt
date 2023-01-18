@@ -20,13 +20,11 @@ import com.th3pl4gu3.mes.ui.components.MesServiceItem
 
 @Composable
 fun ScreenServices(
-    viewModel: ServicesViewModel,
+    servicesUiState: ServicesUiState,
     retryAction: () -> Unit,
     navigateToPreCall: (service: Service) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val servicesUiState by viewModel.servicesUiState.collectAsState()
-
     when (servicesUiState) {
         is ServicesUiState.Loading -> LoadingScreen(modifier)
         is ServicesUiState.Success -> ServicesList((servicesUiState as ServicesUiState.Success).services, navigateToPreCall, modifier)

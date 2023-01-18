@@ -25,6 +25,8 @@ internal fun MesTopAppBar(
     openDrawer: () -> Unit,
     showSearchIcon: Boolean,
     modifier: Modifier = Modifier,
+    searchValue: String,
+    searchValueChange: (String) -> Unit,
     topAppBarState: TopAppBarState = rememberTopAppBarState(),
     scrollBehavior: TopAppBarScrollBehavior? =
         TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
@@ -34,10 +36,6 @@ internal fun MesTopAppBar(
         mutableStateOf(false)
     }
 
-    var searchValue by remember {
-        mutableStateOf("")
-    }
-
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.background),
         title = {
@@ -45,7 +43,7 @@ internal fun MesTopAppBar(
             MesAnimatedVisibilityExpandedHorizontallyContent(visibility = searchActivated) {
                 OutlinedTextField(
                     value = searchValue,
-                    onValueChange = { searchValue = it },
+                    onValueChange = searchValueChange,
                     singleLine = true,
                     placeholder = {
                         Text(text = "Search")
@@ -122,7 +120,9 @@ fun PreviewTopAppBar() {
     MesTheme {
         MesTopAppBar(
             openDrawer = { },
-            showSearchIcon = true
+            showSearchIcon = true,
+            searchValue = "",
+            searchValueChange = {}
         )
     }
 }

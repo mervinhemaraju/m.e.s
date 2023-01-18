@@ -1,5 +1,6 @@
 package com.th3pl4gu3.mes.ui.navigation
 
+import android.util.Log
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -33,6 +34,7 @@ import com.th3pl4gu3.mes.ui.screens.services.ServicesViewModel
 @ExperimentalComposeUiApi
 fun MesNavGraph(
     appContainer: AppContainer,
+    searchBarValue: String,
     isExpandedScreen: Boolean,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
@@ -64,11 +66,16 @@ fun MesNavGraph(
             )
         }
         composable(MesDestinations.SCREEN_SERVICES) {
+
             val servicesViewModel: ServicesViewModel = viewModel(
                 factory = ServicesViewModel.provideFactory(appContainer = appContainer)
             )
+            servicesViewModel.search(searchBarValue)
+
+            val servicesUiState by servicesViewModel.servicesUiState.collectAsState()
+
             ScreenServices(
-                viewModel = servicesViewModel,
+                servicesUiState = servicesUiState,
                 retryAction = servicesViewModel::loadOnlineServices,
                 navigateToPreCall = navigationActions.navigateToPreCall
             )

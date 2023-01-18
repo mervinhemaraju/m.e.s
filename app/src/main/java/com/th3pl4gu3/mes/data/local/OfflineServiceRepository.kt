@@ -17,5 +17,5 @@ class OfflineServiceRepository(private val serviceDao: ServiceDao) : ServiceRepo
 
     override fun getEmergencyServices(): Flow<List<Service>> = serviceDao.getEmergencyServices()
 
-    override fun search(search: String): Flow<List<Service>> = serviceDao.search(search)
+    override fun search(search: String): Flow<List<Service>> = serviceDao.search("%$search%")
 }

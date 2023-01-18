@@ -9,10 +9,7 @@ import com.th3pl4gu3.mes.data.AppContainer
 import com.th3pl4gu3.mes.models.Service
 import com.th3pl4gu3.mes.ui.screens.home.HomeUiState
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -22,17 +19,25 @@ class ServicesViewModel(
     private val offlineServiceRepository: com.th3pl4gu3.mes.data.local.ServiceRepository
 ) : ViewModel() {
 
-    val servicesUiState: StateFlow<ServicesUiState> = offlineServiceRepository.getAllServices().map { ServicesUiState.Success(it) }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = ServicesUiState.Loading
-        )
+    /**
+     * Create a private ServicesUiState to hold the MutableStateFlow of the items
+     * It starts as Loading
+     **/
+    private val _servicesUiState: MutableStateFlow<ServicesUiState> = MutableStateFlow(ServicesUiState.Loading)
+
+    /**
+     * Create an accessible ServicesUiState for the Composable to collect
+     **/
+    val servicesUiState: StateFlow<ServicesUiState> = _servicesUiState
+
+    /**
+     * On Init, load the offline services
+     **/
+    init {
+        loadOfflineServices()
+    }
 
     companion object {
-
-        private const val TIMEOUT_MILLIS = 5_000L
-
         fun provideFactory(
             appContainer: AppContainer
         ): ViewModelProvider.Factory = viewModelFactory {
@@ -46,9 +51,8 @@ class ServicesViewModel(
     }
 
     /**
-     * Gets services information from the Mes API Retrofit service and updates the
-     * [Service] [List] [MutableList].
-     */
+     * Public Functions
+     **/
     fun loadOnlineServices() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -63,6 +67,31 @@ class ServicesViewModel(
                 HomeUiState.Error
             } catch (e: HttpException) {
                 HomeUiState.Error
+            }
+        }
+    }
+
+    fun search(query: String){
+        viewModelScope.launch {
+            offlineServiceRepository.search(query).collect{
+                // TODO(Add new state for items that are not found)
+                _servicesUiState.value = ServicesUiState.Success(it)
+            }
+        }
+    }
+
+
+    /**
+     * Private Functions
+     **/
+    private fun loadOfflineServices() {
+        viewModelScope.launch {
+            offlineServiceRepository.getAllServices().collect{
+                _servicesUiState.value = if(it.isNotEmpty()){
+                    ServicesUiState.Success(it)
+                }else{
+                    ServicesUiState.Error
+                }
             }
         }
     }

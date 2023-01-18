@@ -2,6 +2,7 @@ package com.th3pl4gu3.mes.ui
 
 import android.app.Activity
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -63,6 +64,7 @@ fun MesApp(
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topAppBarState)
         var showDialog by remember { mutableStateOf(value = false) }
         val activity = LocalContext.current as Activity
+        var searchBarValue by remember { mutableStateOf("") }
 
         ModalNavigationDrawer(
             drawerContent = {
@@ -85,7 +87,9 @@ fun MesApp(
                 topBar = {
                     MesTopAppBar(
                         openDrawer = { coroutineScope.launch { sizeAwareDrawerState.open() } },
-                        showSearchIcon = currentRoute == MesDestinations.SCREEN_SERVICES
+                        showSearchIcon = currentRoute == MesDestinations.SCREEN_SERVICES,
+                        searchValue = searchBarValue,
+                        searchValueChange = { searchBarValue = it }
                     )
                 },
             ) { innerPadding ->
@@ -104,6 +108,7 @@ fun MesApp(
                     //                }
                     MesNavGraph(
                         appContainer = application.container,
+                        searchBarValue = searchBarValue,
                         isExpandedScreen = isExpandedScreen,
                         modifier = contentModifier,
                         navController = navController,
