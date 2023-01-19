@@ -22,15 +22,6 @@ class HomeViewModel(
     private val offlineServiceRepository: com.th3pl4gu3.mes.data.local.ServiceRepository
 ) : ViewModel() {
 
-    /** The mutable State that stores the status of the most recent request */
-//    var homeUiState: HomeUiState by mutableStateOf(HomeUiState.Loading)
-//        private set
-
-
-    /**
-     * Holds home ui state. The list of items are retrieved from [ItemsRepository] and mapped to
-     * [HomeUiState]
-     */
     val homeUiState: StateFlow<HomeUiState> = offlineServiceRepository.getEmergencyServices().map { HomeUiState.Success(it) }
         .stateIn(
             scope = viewModelScope,
@@ -54,17 +45,12 @@ class HomeViewModel(
         }
     }
 
-    /**
-     * Call [getServices] on init so we can display status immediately.
-     */
+
     init {
         loadOnlineServices()
     }
 
-    /**
-     * Gets services information from the Mes API Retrofit service and updates the
-     * [Service] [List] [MutableList].
-     */
+
     fun loadOnlineServices() {
         viewModelScope.launch(Dispatchers.IO) {
             try {

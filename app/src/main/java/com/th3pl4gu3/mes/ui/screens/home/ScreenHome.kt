@@ -1,6 +1,7 @@
 package com.th3pl4gu3.mes.ui.screens.home
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -22,6 +23,7 @@ import com.th3pl4gu3.mes.ui.theme.MesTheme
 
 @Composable
 @ExperimentalMaterial3Api
+@ExperimentalFoundationApi
 fun ScreenHome(
     homeUiState: HomeUiState,
     retryAction: () -> Unit,
@@ -52,7 +54,7 @@ fun ScreenHome(
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .constrainAs(textMainTitle) {
-                    with(16.dp){
+                    with(16.dp) {
                         top.linkTo(parent.top, this)
                         start.linkTo(parent.start, this)
                         end.linkTo(parent.end, this)
@@ -62,7 +64,7 @@ fun ScreenHome(
         )
 
         Text(
-            text = "Hold the button to quick call",
+            text = "Click the button to quick call",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
@@ -75,15 +77,27 @@ fun ScreenHome(
         )
 
         MesEmergencyButton(
-            onClick = {},
+            onClick = {
+                when (homeUiState) {
+                    is HomeUiState.Success -> {
+                        // Launch the pre-call screen
+                        navigateToPreCall(
+                            homeUiState.services.first {
+                                it.identifier == "security-police-direct-1"
+                            }
+                        )
+                    }
+                    else -> {}
+                }
+            },
             modifier = Modifier
                 .size(200.dp)
                 .constrainAs(buttonEmergency) {
-                    with(16.dp){
+                    with(16.dp) {
                         top.linkTo(textMainSubtitle.bottom, this)
                         start.linkTo(parent.start, this)
                         end.linkTo(parent.end, this)
-                        bottom.linkTo(textHeaderTitle.top,this)
+                        bottom.linkTo(textHeaderTitle.top, this)
                     }
                 }
         )
@@ -196,8 +210,10 @@ fun MesEmergencyRow(
     LazyRow(
         modifier = modifier
     ) {
-        // Load the services
-        items(services) { service ->
+        // Load filtered services
+        items(
+            services.filterNot { it.identifier == "security-police-direct-1" }
+        ) { service ->
             MesEmergencyItem(
                 service = service,
                 onClick = {
@@ -212,6 +228,7 @@ fun MesEmergencyRow(
 @Preview("Home Screen Dark", uiMode = UI_MODE_NIGHT_YES)
 @Composable
 @ExperimentalMaterial3Api
+@ExperimentalFoundationApi
 fun ScreenHomePreview() {
 
     MesTheme {

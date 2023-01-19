@@ -1,6 +1,7 @@
 package com.th3pl4gu3.mes.ui.components
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -39,44 +40,14 @@ internal fun MesTopAppBar(
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.background),
         title = {
-
-            MesAnimatedVisibilityExpandedHorizontallyContent(visibility = searchActivated) {
-                OutlinedTextField(
-                    value = searchValue,
-                    onValueChange = searchValueChange,
-                    singleLine = true,
-                    placeholder = {
-                        Text(text = "Search")
-                    },
-                    colors = TextFieldDefaults.textFieldColors(
-                        containerColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent
-                    ),
-                    textStyle = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentWidth(align = Alignment.CenterHorizontally)
-                        .animateContentSize(
-                            animationSpec = spring(
-                                dampingRatio = Spring.DampingRatioMediumBouncy,
-                                stiffness = Spring.StiffnessLow
-                            )
-                        )
-                )
-            }
-
-            MesAnimatedVisibilityExpandedHorizontallyContent(visibility = !searchActivated) {
-                MesTitleLogo(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentWidth(align = Alignment.CenterHorizontally)
-                )
-            }
-
+            AppBarTitleContent(
+                isSearchBarActivate = searchActivated && showSearchIcon,
+                searchValue = searchValue,
+                searchValueChange = searchValueChange
+            )
         },
         navigationIcon = {
-            Crossfade(targetState = searchActivated) { isChecked ->
+            Crossfade(targetState = searchActivated && showSearchIcon) { isChecked ->
                 if(!isChecked){
                     IconButton(onClick = openDrawer) {
                         MesIcon(
@@ -110,6 +81,49 @@ internal fun MesTopAppBar(
         scrollBehavior = scrollBehavior,
         modifier = modifier
     )
+}
+
+@Composable
+@ExperimentalMaterial3Api
+fun AppBarTitleContent(
+    isSearchBarActivate: Boolean,
+    searchValue: String,
+    searchValueChange: (String) -> Unit
+){
+
+    MesAnimatedVisibilityExpandedHorizontallyContent(visibility = isSearchBarActivate) {
+        OutlinedTextField(
+            value = searchValue,
+            onValueChange = searchValueChange,
+            singleLine = true,
+            placeholder = {
+                Text(text = "Search")
+            },
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            textStyle = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentWidth(align = Alignment.CenterHorizontally)
+                .animateContentSize(
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessLow
+                    )
+                )
+        )
+    }
+
+    MesAnimatedVisibilityExpandedHorizontallyContent(visibility = !isSearchBarActivate) {
+        MesTitleLogo(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentWidth(align = Alignment.CenterHorizontally)
+        )
+    }
 }
 
 @Preview("Top App Bar Light")

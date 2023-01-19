@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <!-- Status bar -->
-
+    <!-- Colors -->
+    <color name="blue_light_50">#E3F2FD</color>
+    <color name="blue_a_100">#003964</color>
 
     <!-- Launcher Icon Colors -->
-    <color name="ic_launcher_background">#AEC4FA</color>
+    <color name="ic_launcher_background">@color/blue_light_50</color>
 </resources>

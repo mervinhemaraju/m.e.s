@@ -1,6 +1,7 @@
 package com.th3pl4gu3.mes.ui.navigation
 
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -32,6 +33,7 @@ import com.th3pl4gu3.mes.ui.screens.services.ServicesViewModel
 @Composable
 @ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
+@ExperimentalFoundationApi
 fun MesNavGraph(
     appContainer: AppContainer,
     searchBarValue: String,

@@ -3,6 +3,7 @@ package com.th3pl4gu3.mes.ui
 import android.app.Activity
 import android.content.res.Configuration
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -33,6 +34,7 @@ import kotlinx.coroutines.launch
 @Composable
 @ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
+@ExperimentalFoundationApi
 fun MesApp(
     application: MesApplication,
     widthSizeClass: WindowWidthSizeClass
@@ -173,6 +175,7 @@ private fun rememberSizeAwareDrawerState(isExpandedScreen: Boolean): DrawerState
 @Composable
 @ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
+@ExperimentalFoundationApi
 fun PreviewTopAppBarMediumSize() {
 
     MesTheme {
@@ -188,6 +191,7 @@ fun PreviewTopAppBarMediumSize() {
 @Composable
 @ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
+@ExperimentalFoundationApi
 fun PreviewTopAppBarExpandedSize() {
     MesTheme {
         MesApp(
