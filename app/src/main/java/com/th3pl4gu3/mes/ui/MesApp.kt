@@ -2,7 +2,6 @@ package com.th3pl4gu3.mes.ui
 
 import android.app.Activity
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Row
@@ -17,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.th3pl4gu3.mes.MesApplication
 import com.th3pl4gu3.mes.datastore
 import com.th3pl4gu3.mes.models.AppTheme
@@ -27,6 +27,7 @@ import com.th3pl4gu3.mes.ui.navigation.MesDestinations
 import com.th3pl4gu3.mes.ui.navigation.MesNavGraph
 import com.th3pl4gu3.mes.ui.navigation.MesNavigationActions
 import com.th3pl4gu3.mes.ui.screens.theme_selector.ScreenThemeSelector
+import com.th3pl4gu3.mes.ui.theme.MesColorDark
 import com.th3pl4gu3.mes.ui.theme.MesTheme
 import com.th3pl4gu3.mes.ui.utils.launchContactUsIntent
 import kotlinx.coroutines.launch
@@ -54,20 +55,42 @@ fun MesApp(
         darkTheme = darkTheme // Load the app theme
     ) {
 
-        // Define variables
+        /**
+         * Define a variable to know if the screen has been expanded
+         **/
+        val isExpandedScreen = widthSizeClass == WindowWidthSizeClass.Expanded
+
+        /**
+         * Define remember state variables
+         **/
+        val systemUiController = rememberSystemUiController()
         val navController = rememberNavController()
         val navigationActions = remember(navController) { MesNavigationActions(navController) }
         val coroutineScope = rememberCoroutineScope()
+        val topAppBarState = rememberTopAppBarState()
+        val sizeAwareDrawerState = rememberSizeAwareDrawerState(isExpandedScreen)
+        var searchBarValue by remember { mutableStateOf("") }
+        var showDialog by remember { mutableStateOf(value = false) }
+
+        /**
+         * Define other variables for future use
+         **/
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route ?: MesDestinations.SCREEN_HOME
-        val isExpandedScreen = widthSizeClass == WindowWidthSizeClass.Expanded
-        val sizeAwareDrawerState = rememberSizeAwareDrawerState(isExpandedScreen)
-        val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topAppBarState)
-        var showDialog by remember { mutableStateOf(value = false) }
         val activity = LocalContext.current as Activity
-        var searchBarValue by remember { mutableStateOf("") }
 
+        /**
+         * Restore System Bars color which can change
+         * later in the app when launching Pre Call Screen
+         **/
+        if(activity.window.statusBarColor != activity.window.navigationBarColor){
+            systemUiController.setSystemBarsColor(MaterialTheme.colorScheme.background)
+        }
+
+        /**
+         * Composable
+         **/
         ModalNavigationDrawer(
             drawerContent = {
                 MesDrawer(
@@ -87,12 +110,14 @@ fun MesApp(
         ) {
             Scaffold(
                 topBar = {
-                    MesTopAppBar(
-                        openDrawer = { coroutineScope.launch { sizeAwareDrawerState.open() } },
-                        showSearchIcon = currentRoute == MesDestinations.SCREEN_SERVICES,
-                        searchValue = searchBarValue,
-                        searchValueChange = { searchBarValue = it }
-                    )
+                    if (currentRoute != MesDestinations.SCREEN_PRE_CALL) {
+                        MesTopAppBar(
+                            openDrawer = { coroutineScope.launch { sizeAwareDrawerState.open() } },
+                            showSearchIcon = currentRoute == MesDestinations.SCREEN_SERVICES,
+                            searchValue = searchBarValue,
+                            searchValueChange = { searchBarValue = it }
+                        )
+                    }
                 },
             ) { innerPadding ->
 

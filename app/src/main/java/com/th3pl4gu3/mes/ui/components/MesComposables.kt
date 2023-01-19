@@ -24,7 +24,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -42,6 +44,8 @@ import coil.request.ImageRequest
 import com.th3pl4gu3.mes.R
 import com.th3pl4gu3.mes.models.Service
 import com.th3pl4gu3.mes.ui.theme.MesTheme
+import com.th3pl4gu3.mes.ui.theme.Orange500
+import com.th3pl4gu3.mes.ui.theme.Red500
 import com.th3pl4gu3.mes.ui.utils.capitalize
 
 @Composable
@@ -78,12 +82,14 @@ fun MesIcon(
 fun MesIcon(
     @DrawableRes painterResource: Int,
     @StringRes contentDescription: Int? = null,
-    tint: Color = MaterialTheme.colorScheme.onSurface
+    tint: Color = MaterialTheme.colorScheme.onSurface,
+    modifier: Modifier = Modifier
 ) {
     Icon(
         painter = painterResource(id = painterResource),
         contentDescription = if (contentDescription != null) stringResource(id = contentDescription) else null,
-        tint = tint
+        tint = tint,
+        modifier = modifier
     )
 }
 
@@ -134,7 +140,7 @@ fun MesServiceItem(
 
     Card(
         modifier = modifier
-            .padding(8.dp),
+            .padding(4.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
 
@@ -164,7 +170,7 @@ fun MesServiceItem(
 
             Text(
                 text = service.name.capitalize(),
-                style = MaterialTheme.typography.headlineLarge,
+                style = MaterialTheme.typography.headlineSmall,
                 softWrap = true,
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
@@ -184,7 +190,7 @@ fun MesServiceItem(
 
             Text(
                 text = service.number.toString(),
-                style = MaterialTheme.typography.headlineSmall,
+                style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier
                     .constrainAs(textSubtitle) {
@@ -226,44 +232,6 @@ fun MesServiceItem(
 
         }
 
-//
-//        Column {
-//            Row(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(8.dp)
-//            ) {
-//
-//                MesAsyncRoundedImage(service = service, modifier = modifier)
-//
-//                Column {
-//                    Text(
-//                        text = service.name.capitalize(),
-//                        style = MaterialTheme.typography.headlineLarge,
-//                        color = MaterialTheme.colorScheme.onSurface,
-//                        modifier = modifier.padding(top = 8.dp)
-//                    )
-//                    Text(
-//                        text = service.number.toString(),
-//                        style = MaterialTheme.typography.headlineSmall,
-//                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-//                        modifier = modifier.padding(4.dp)
-//                    )
-//                }
-//
-//                Spacer(modifier = Modifier.weight(1f))
-//
-//                IconButton(
-//                    onClick = onClick
-//                ) {
-//                    MesIcon(
-//                        imageVector = Icons.Outlined.Phone,
-//                        contentDescription = R.string.ctnt_desc_phone_button
-//                    )
-//                }
-//            }
-//        }
-//    }
     }
 }
 
@@ -296,7 +264,7 @@ fun MesEmergencyItem(
                 text = service.name.capitalize(),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = modifier
                     .constrainAs(textTitle) {
                         with(16.dp) {
@@ -353,6 +321,7 @@ fun MesEmergencyButton(
 @Preview(name = "Mes Composable Dark", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 @ExperimentalMaterial3Api
+@ExperimentalFoundationApi
 fun MesComposablePreview() {
 
     val mockData = Service(
@@ -384,9 +353,11 @@ fun MesComposablePreview() {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            MesServiceItem(service = mockData) {
+            MesServiceItem(service = mockData){}
 
-            }
+            Spacer(modifier = Modifier.height(24.dp))
+
+            MesEmergencyButton(onClick = { /*TODO*/ }, modifier = Modifier.size(200.dp))
         }
     }
 }

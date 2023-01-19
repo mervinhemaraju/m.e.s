@@ -1,37 +1,43 @@
 package com.th3pl4gu3.mes.ui.theme
 
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
-private val MesColorDark = darkColorScheme(
-    primary = greenDark
-)
+internal val MesColorDark = darkColorScheme(
+    primary = Red200,
+    onPrimary = Gray50,
+    secondary = Red200,
 
-private val MesColorLight = lightColorScheme(
-    // Main color palettes
-    primary = BlueA100,
-    secondary = Red400,
-    onSecondary = BlueLight50,
+    background = Gray500,
 
-    // Background variants
-    background = BlueLight50,
-
-    // Surface variants
-    surface = WhiteBluish10,
-    onSurface = BlueA100,
-    onSurfaceVariant = BlueGray100,
+    surface = Gray600,
+    onSurface = Gray50,
+    onSurfaceVariant = Gray200,
 
     // Outline Variants
-    outlineVariant = Red500
+    outlineVariant = Red300
+)
 
+internal val MesColorLight = lightColorScheme(
+    // Main color palettes
+    primary = BlueA100,
+    onPrimary = WhiteBlue10,
+    secondary = Red400,
+
+    // Background variants
+    background = WhiteBlue10,
+
+    // Surface variants
+    surface = Blue20,
+    onSurface = BlueA100,
+    onSurfaceVariant = Gray600,
+
+    // Outline Variants
+    outlineVariant = Red500,
 )
 
 @Composable
@@ -47,7 +53,19 @@ fun MesTheme(
 //            if (darkTheme) MesColorDark else MesColorLight
 //        }
 
-    val mesColorScheme = if (darkTheme) MesColorDark else MesColorLight
+    val systemUiController = rememberSystemUiController()
+
+    val mesColorScheme = if (darkTheme) {
+        systemUiController.setSystemBarsColor(
+            color = MesColorDark.background
+        )
+        MesColorDark
+    } else {
+        systemUiController.setSystemBarsColor(
+            color = MesColorLight.background
+        )
+        MesColorLight
+    }
 
     MaterialTheme(
         colorScheme = mesColorScheme,

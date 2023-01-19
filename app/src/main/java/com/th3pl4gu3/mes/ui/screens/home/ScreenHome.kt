@@ -50,7 +50,7 @@ fun ScreenHome(
         Text(
             text = "Emergency Police Help Needed ?",
             style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .constrainAs(textMainTitle) {
@@ -105,7 +105,7 @@ fun ScreenHome(
         Text(
             text = "Need other quick emergency actions?",
             style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .constrainAs(textHeaderTitle) {

@@ -12,6 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.th3pl4gu3.mes.ui.navigation.MesDestinations
 import com.th3pl4gu3.mes.ui.theme.MesTheme
+import com.th3pl4gu3.mes.ui.theme.Red50
 
 @Composable
 @ExperimentalMaterial3Api
@@ -27,43 +28,40 @@ fun MesDrawer(
     modifier: Modifier = Modifier
 ) {
     ModalDrawerSheet(
-        modifier = modifier.background(MaterialTheme.colorScheme.surface),
+        drawerContainerColor = MaterialTheme.colorScheme.background
     ) {
+
         MesLogo(
             modifier = Modifier.padding(horizontal = 28.dp, vertical = 24.dp),
         )
-        NavigationDrawerItem(
-            label = { Text(text = "Home") },
+        MesNavigationDrawerItem(
+            label = "Home",
             icon = { MesIcon(Icons.Outlined.Home, contentDescription = null) },
             selected = currentRoute == MesDestinations.SCREEN_HOME,
             onClick = { navigateToHome(); closeDrawer() },
-            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
         )
-        NavigationDrawerItem(
-            label = { Text(text = "Services") },
+        MesNavigationDrawerItem(
+            label = "Services",
             icon = { MesIcon(Icons.Outlined.Phone, contentDescription = null) },
             selected = currentRoute == MesDestinations.SCREEN_SERVICES,
             onClick = { navigateToServices(); closeDrawer() },
-            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
         )
-        NavigationDrawerItem(
-            label = { Text(text = "About") },
+        MesNavigationDrawerItem(
+            label = "About",
             icon = { MesIcon(Icons.Outlined.Info, contentDescription = null) },
             selected = currentRoute == MesDestinations.SCREEN_ABOUT,
             onClick = { navigateToAbout(); closeDrawer() },
-            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
         )
-        NavigationDrawerItem(
-            label = { Text(text = "Settings") },
+        MesNavigationDrawerItem(
+            label = "Settings",
             icon = { MesIcon(Icons.Outlined.Settings, contentDescription = null) },
             selected = currentRoute == MesDestinations.SCREEN_SETTINGS,
             onClick = { navigateToSettings(); closeDrawer() },
-            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
         )
 
         Divider(
             thickness = 0.7.dp,
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(
                 top = 16.dp,
                 bottom = 16.dp,
@@ -72,20 +70,19 @@ fun MesDrawer(
             )
         )
 
-        NavigationDrawerItem(
-            label = { Text(text = "Choose Theme") },
+        MesNavigationDrawerItem(
+            label = "Choose Theme",
             icon = { MesIcon(Icons.Outlined.Brightness4, contentDescription = null) },
             selected = currentRoute == MesDestinations.SCREEN_THEME,
-            onClick = { toggleThemeDialog() },
-            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+            onClick = { toggleThemeDialog() }
         )
 
-        NavigationDrawerItem(
-            label = { Text(text = "Contact Us") },
+        MesNavigationDrawerItem(
+            label = "Contact Us",
             icon = { MesIcon(Icons.Outlined.Email, contentDescription = null) },
             selected = currentRoute == MesDestinations.SCREEN_CONTACTUS,
             onClick = { navigateToContactUs() },
-            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+            badge = { MesIcon(Icons.Outlined.OpenInNew, contentDescription = null) }
         )
     }
 }

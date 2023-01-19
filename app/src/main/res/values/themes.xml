@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Allows us to override platform level specific attributes in their
-         respective values-vXX folder. -->
-    <style name="Platform.Theme.Mes" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">#FFE8F4FA</item>
-        <item name="android:windowLightStatusBar">true</item>
+    <style name="Theme.Mes" parent="android:Theme.Material.Light.NoActionBar">
     </style>
-
-    <!-- The actual theme we use. This varies for light theme (here),
-         and values-night for dark theme. -->
-    <style name="Theme.Mes" parent="Platform.Theme.Mes" />
-
 
 </resources>

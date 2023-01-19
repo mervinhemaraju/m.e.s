@@ -2,9 +2,9 @@
 
 <resources>
     <!-- Colors -->
-    <color name="blue_light_50">#E3F2FD</color>
-    <color name="blue_a_100">#003964</color>
+    <color name="background">#F2F9FC</color>
+    <color name="onBackground">#003964</color>
 
     <!-- Launcher Icon Colors -->
-    <color name="ic_launcher_background">@color/blue_light_50</color>
+    <color name="ic_launcher_background">@color/background</color>
 </resources>

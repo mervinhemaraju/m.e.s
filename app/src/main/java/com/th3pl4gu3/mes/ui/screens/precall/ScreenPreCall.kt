@@ -1,8 +1,10 @@
 package com.th3pl4gu3.mes.ui.screens.precall
 
+import android.app.Activity
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.util.Log
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,29 +18,38 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.th3pl4gu3.mes.MainActivity
 import com.th3pl4gu3.mes.models.Service
 import com.th3pl4gu3.mes.ui.components.MesAsyncRoundedImage
 import com.th3pl4gu3.mes.ui.theme.MesTheme
+import com.th3pl4gu3.mes.ui.theme.Orange500
+import com.th3pl4gu3.mes.ui.theme.Red50
+import com.th3pl4gu3.mes.ui.theme.Red500
 
 @Composable
 @ExperimentalComposeUiApi
 fun ScreenPreCall(
-    viewModel: PreCallViewModel,
+    preCallUiState: PreCallUiState,
+    countdown: String?,
+    startCall: Boolean?,
     closeScreen: () -> Unit,
 ) {
-
-    // Get service
-    val preCallUiState: PreCallUiState by viewModel.service.collectAsState()
-
     // Load the UI
     when (preCallUiState) {
         is PreCallUiState.Success -> PreCallContent(
-            service = (preCallUiState as PreCallUiState.Success).service,
+            service = preCallUiState.service,
+            countdown = if(countdown.isNullOrEmpty()) "ERROR" else countdown,
             closeScreen = closeScreen
         )
         is PreCallUiState.Error -> PreCallError()
@@ -71,6 +82,7 @@ fun PreCallError(modifier: Modifier = Modifier) {
 @Composable
 fun PreCallContent(
     service: Service,
+    countdown: String,
     closeScreen: () -> Unit,
 ) {
 
@@ -80,8 +92,33 @@ fun PreCallContent(
         "Service obtained on pre-call. service_identifier: ${service.identifier}"
     )
 
+    /**
+     * Change the System Bar colors to match
+     * this new design color
+     **/
+    with(rememberSystemUiController()){
+
+        setStatusBarColor(
+            Orange500
+        )
+
+        setNavigationBarColor(
+            Red500
+        )
+    }
+
     ConstraintLayout(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Orange500,
+                        Red500
+                    ),
+                    tileMode = TileMode.Clamp
+                )
+            )
     ) {
 
         val (
@@ -101,6 +138,7 @@ fun PreCallContent(
             },
             text = "Starting a call to",
             style = MaterialTheme.typography.labelSmall,
+            color = Color.White
         )
 
         Text(
@@ -111,7 +149,8 @@ fun PreCallContent(
             },
             text = service.name,
             style = MaterialTheme.typography.headlineLarge,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            color = Color.White
         )
 
         Text(
@@ -121,8 +160,9 @@ fun PreCallContent(
                 end.linkTo(parent.end, margin = 16.dp)
             },
             text = service.number.toString(),
-            style = MaterialTheme.typography.headlineSmall,
-            textAlign = TextAlign.Center
+            style = MaterialTheme.typography.headlineMedium,
+            textAlign = TextAlign.Center,
+            color = Color.White
         )
 
         MesAsyncRoundedImage(
@@ -135,8 +175,8 @@ fun PreCallContent(
                     end.linkTo(parent.end, margin = 16.dp)
                 }
                 .border(
-                    width = 2.dp,
-                    color = MaterialTheme.colorScheme.primary,
+                    width = 4.dp,
+                    color = Red500,
                     shape = RoundedCornerShape(50)
                 )
                 .padding(8.dp)
@@ -149,9 +189,10 @@ fun PreCallContent(
                 start.linkTo(parent.start, margin = 16.dp)
                 end.linkTo(parent.end, margin = 16.dp)
             },
-            text = "N",
-            style = MaterialTheme.typography.headlineMedium,
-            textAlign = TextAlign.Center
+            text = countdown,
+            style = MaterialTheme.typography.titleLarge,
+            textAlign = TextAlign.Center,
+            color = Color.White
         )
 
         FloatingActionButton(
@@ -165,9 +206,9 @@ fun PreCallContent(
                     end.linkTo(parent.end, margin = 16.dp)
                 }
                 .size(80.dp),
-            containerColor = MaterialTheme.colorScheme.primary
+            containerColor = Color.Black
         ) {
-            Icon(imageVector = Icons.Outlined.Close, contentDescription = "Cancel button")
+            Icon(imageVector = Icons.Outlined.Close, contentDescription = "Cancel button", tint = Color.White)
         }
     }
 }
@@ -187,6 +228,6 @@ fun PreviewScreenPreCall() {
     )
 
     MesTheme {
-        PreCallContent(service = mockData, closeScreen = {})
+        PreCallContent(service = mockData, closeScreen = {}, countdown = "N")
     }
 }

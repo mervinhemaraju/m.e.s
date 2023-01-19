@@ -6,6 +6,7 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
@@ -16,7 +17,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.th3pl4gu3.mes.R
 import com.th3pl4gu3.mes.ui.theme.MesTheme
 
@@ -51,8 +54,9 @@ internal fun MesTopAppBar(
                 if(!isChecked){
                     IconButton(onClick = openDrawer) {
                         MesIcon(
-                            imageVector = Icons.Outlined.Menu,
+                            painterResource = R.drawable.ic_mes,
                             contentDescription = R.string.ctnt_desc_drawer_open,
+                            modifier = Modifier.size(32.dp)
                         )
                     }
                 }else{

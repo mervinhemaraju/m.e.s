@@ -1,22 +1,25 @@
 package com.th3pl4gu3.mes.ui.screens.services
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.th3pl4gu3.mes.R
 import com.th3pl4gu3.mes.models.Service
 import com.th3pl4gu3.mes.ui.components.MesServiceItem
+import com.th3pl4gu3.mes.ui.theme.MesTheme
 
 @Composable
 fun ScreenServices(
@@ -25,11 +28,21 @@ fun ScreenServices(
     navigateToPreCall: (service: Service) -> Unit,
     modifier: Modifier = Modifier
 ) {
+
+    // Define a modifier with the screen background color
+    val servicesModifier = modifier.background(MaterialTheme.colorScheme.background)
+
+    // Load the component to show based on the UI State
     when (servicesUiState) {
-        is ServicesUiState.Loading -> LoadingScreen(modifier)
-        is ServicesUiState.Success -> ServicesList((servicesUiState as ServicesUiState.Success).services, navigateToPreCall, modifier)
-        is ServicesUiState.Error -> ErrorScreen(retryAction, modifier)
+        is ServicesUiState.Loading -> LoadingScreen(servicesModifier)
+        is ServicesUiState.Success -> ServicesList(
+            servicesUiState.services,
+            navigateToPreCall,
+            servicesModifier
+        )
+        is ServicesUiState.Error -> ErrorScreen(retryAction, servicesModifier)
     }
+
 }
 
 /**
@@ -42,7 +55,22 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Loading...")
+
+        CircularProgressIndicator(
+            color = MaterialTheme.colorScheme.primary,
+            strokeWidth = 12.dp,
+            modifier = Modifier
+                .size(120.dp)
+                .padding(16.dp)
+        )
+
+        Text(
+            text = "Getting services...",
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier
+                .padding(16.dp)
+        )
     }
 }
 
@@ -56,8 +84,17 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Loading failed")
-        Button(onClick = retryAction) {
+
+        Image(
+            painter = painterResource(id = R.drawable.il_error),
+            contentDescription = "",
+            modifier = Modifier.padding(32.dp)
+        )
+
+        Button(
+            onClick = retryAction,
+            modifier = Modifier.padding(16.dp)
+        ) {
             Text("Retry")
         }
     }
@@ -72,44 +109,117 @@ fun ServicesList(
     navigateToPreCall: (service: Service) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(
-        modifier = modifier.background(MaterialTheme.colorScheme.background)
-    ){
-        // Load the services
-        items(services) { service ->
-            MesServiceItem(
-                service = service,
-                onClick = {
-                    Log.i("pre_call_service", "Launching PreCall with service identifier: ${service.identifier}")
-
-                    navigateToPreCall(service)
-                }
+    if (services.isEmpty()) {
+        Column(
+            modifier = modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.il_no_data),
+                contentDescription = "",
+                modifier = Modifier.padding(32.dp)
             )
+
+            Text(
+                text = "No services found",
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier
+                    .padding(16.dp)
+            )
+        }
+    } else {
+        LazyColumn(
+            modifier = modifier
+        ) {
+            // Load the services
+            items(services) { service ->
+                MesServiceItem(
+                    service = service,
+                    onClick = {
+                        Log.i(
+                            "pre_call_service",
+                            "Launching PreCall with service identifier: ${service.identifier}"
+                        )
+
+                        navigateToPreCall(service)
+                    }
+                )
+            }
         }
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun LoadingScreenPreview() {
-//    MesTheme {
-//        LoadingScreen()
-//    }
-//}
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun ErrorScreenPreview() {
-//    MesTheme {
-//        ErrorScreen({})
-//    }
-//}
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun PhotosGridScreenPreview() {
-//    MesTheme {
-//        val mockData = List(10) { MarsPhoto("$it", "") }
-//        ServicesList(mockData)
-//    }
-//}
+@Preview("Loading Light Preview", showBackground = true)
+@Preview("Loading Dark Preview", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun LoadingScreenPreview() {
+    MesTheme {
+        val modifier = Modifier.background(MaterialTheme.colorScheme.background)
+
+        LoadingScreen(
+            modifier = modifier
+        )
+    }
+}
+
+@Preview("Error Light Preview", showBackground = true)
+@Preview("Error Dark Preview", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun ErrorScreenPreview() {
+    MesTheme {
+        val modifier = Modifier.background(MaterialTheme.colorScheme.background)
+
+        ErrorScreen(
+            retryAction = {},
+            modifier = modifier
+        )
+    }
+}
+
+@Preview("Main Screen Light Preview", showBackground = true)
+@Preview("Main Screen Dark Preview", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun AllServicesScreenPreview() {
+    MesTheme {
+        val mockData = mutableListOf<Service>()
+        val modifier = Modifier.background(MaterialTheme.colorScheme.background)
+
+        for (x in 1..10) {
+            mockData.add(
+                Service(
+                    identifier = "id-$x",
+                    name = "Police Direct Line $x",
+                    type = "E",
+                    icon = "https://img.icons8.com/fluent/100/000000/policeman-male.png",
+                    number = x + x + x
+                )
+            )
+        }
+
+        ScreenServices(
+            servicesUiState = ServicesUiState.Success(services = mockData),
+            retryAction = {},
+            navigateToPreCall = {},
+            modifier = modifier
+        )
+    }
+}
+
+@Preview("Main Screen Empty List Light Preview", showBackground = true)
+@Preview("Main Screen Empty List Dark Preview", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun EmptyServicesScreenPreview() {
+    MesTheme {
+        val mockData = mutableListOf<Service>()
+        val modifier = Modifier.background(MaterialTheme.colorScheme.background)
+
+        ScreenServices(
+            servicesUiState = ServicesUiState.Success(services = mockData),
+            retryAction = {},
+            navigateToPreCall = {},
+            modifier = modifier
+        )
+    }
+}
