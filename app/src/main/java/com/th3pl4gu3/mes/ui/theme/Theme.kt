@@ -11,8 +11,10 @@ internal val MesColorDark = darkColorScheme(
     primary = Red200,
     onPrimary = Gray50,
     secondary = Red200,
+    tertiary = Red300,
 
     background = Gray500,
+    onBackground = Red200,
 
     surface = Gray600,
     onSurface = Gray50,
@@ -27,9 +29,11 @@ internal val MesColorLight = lightColorScheme(
     primary = BlueA100,
     onPrimary = WhiteBlue10,
     secondary = Red400,
+    tertiary = Blue900,
 
     // Background variants
     background = WhiteBlue10,
+    onBackground = BlueA100,
 
     // Surface variants
     surface = Blue20,

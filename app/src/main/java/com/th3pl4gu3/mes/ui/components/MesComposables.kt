@@ -4,64 +4,53 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.widget.Space
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandHorizontally
-import androidx.compose.animation.shrinkHorizontally
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowDownward
-import androidx.compose.material.icons.outlined.ArrowDropDown
-import androidx.compose.material.icons.outlined.Phone
+import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.th3pl4gu3.mes.R
-import com.th3pl4gu3.mes.models.Service
+import com.th3pl4gu3.mes.models.*
 import com.th3pl4gu3.mes.ui.theme.MesTheme
-import com.th3pl4gu3.mes.ui.theme.Orange500
-import com.th3pl4gu3.mes.ui.theme.Red500
 import com.th3pl4gu3.mes.ui.utils.capitalize
-
-@Composable
-fun MesAnimatedVisibilityExpandedHorizontallyContent(
-    visibility: Boolean,
-    content: @Composable () -> Unit
-){
-    val duration = 500
-    AnimatedVisibility(
-        visible = visibility,
-        enter = expandHorizontally(animationSpec = tween(durationMillis = duration)),
-        exit = shrinkHorizontally(animationSpec = tween(durationMillis = duration))
-    ){
-        content()
-    }
-}
 
 @Composable
 fun MesIcon(
@@ -112,185 +101,34 @@ fun MesAsyncRoundedImage(service: Service, size: Dp = 64.dp, modifier: Modifier 
 }
 
 @Composable
-fun MesLogo(modifier: Modifier = Modifier) {
-    Row(modifier = modifier) {
-
-        Spacer(Modifier.width(8.dp))
-
-        MesTitleLogo()
+fun MesDrawerHeader(
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
+        MesDrawerTitle(title = Pair("M", "auritius"))
+        MesDrawerTitle(title = Pair("E", "mergency"))
+        MesDrawerTitle(title = Pair("S", "ervices"))
     }
 }
 
 @Composable
-fun MesTitleLogo(modifier: Modifier = Modifier) {
+fun MesDrawerTitle(title: Pair<String, String>) {
     Text(
-        text = stringResource(id = R.string.app_name).lowercase(),
-        style = MaterialTheme.typography.titleLarge,
-        color = MaterialTheme.colorScheme.onSurface,
-        modifier = modifier
-    )
-}
-
-@Composable
-fun MesServiceItem(
-    service: Service,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-) {
-
-    Card(
-        modifier = modifier
-            .padding(4.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-    ) {
-
-        ConstraintLayout(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-
-            val (
-                textTitle,
-                textSubtitle,
-                iconEmergency,
-                iconDropDown,
-                iconCall,
-            ) = createRefs()
-
-            MesAsyncRoundedImage(
-                service = service,
-                modifier = Modifier
-                    .constrainAs(iconEmergency) {
-                        with(16.dp) {
-                            start.linkTo(parent.start, this)
-                            bottom.linkTo(parent.bottom, this)
-                            top.linkTo(parent.top, this)
-                        }
-                    }
-            )
-
-            Text(
-                text = service.name.capitalize(),
-                style = MaterialTheme.typography.headlineSmall,
-                softWrap = true,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier
-                    .constrainAs(textTitle) {
-                        top.linkTo(iconEmergency.top)
-                        bottom.linkTo(textSubtitle.top, 4.dp)
-                        linkTo(
-                            start = iconEmergency.end,
-                            end = iconCall.start,
-                            startMargin = 8.dp,
-                            endMargin = 16.dp,
-                            bias = 0f
-                        )
-                        width = Dimension.fillToConstraints
-                    }
-            )
-
-            Text(
-                text = service.number.toString(),
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier
-                    .constrainAs(textSubtitle) {
-                        top.linkTo(textTitle.bottom, 4.dp)
-                        bottom.linkTo(iconEmergency.bottom)
-                        linkTo(
-                            start = iconEmergency.end,
-                            end = iconCall.start,
-                            startMargin = 12.dp,
-                            endMargin = 16.dp,
-                            bias = 0f
-                        )
-                    }
-            )
-
-            MesIcon(
-                imageVector = Icons.Outlined.ArrowDropDown,
-                contentDescription = null,
-                modifier = Modifier
-                    .constrainAs(iconDropDown){
-                        top.linkTo(parent.top, 8.dp)
-                        end.linkTo(parent.end, 16.dp)
-                    }
-            )
-
-            IconButton(
-                onClick = onClick,
-                modifier = Modifier
-                    .constrainAs(iconCall) {
-                        bottom.linkTo(parent.bottom, 8.dp)
-                        end.linkTo(parent.end, 24.dp)
-                    }
-            ) {
-                MesIcon(
-                    imageVector = Icons.Outlined.Phone,
-                    contentDescription = R.string.ctnt_desc_phone_button
+        buildAnnotatedString {
+            append(title.first)
+            withStyle(
+                style = SpanStyle(
+                    fontWeight = FontWeight.Medium
                 )
+            ) {
+                append(title.second)
             }
-
-        }
-
-    }
-}
-
-@Composable
-@ExperimentalMaterial3Api
-fun MesEmergencyItem(
-    service: Service,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-
-    Card(
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        shape = MaterialTheme.shapes.medium,
-        onClick = onClick,
-        modifier = modifier.padding(8.dp)
-    ) {
-
-        ConstraintLayout(
-            modifier = modifier.width(240.dp)
-        ) {
-
-            val (
-                textTitle,
-                emergencyIcon
-            ) = createRefs()
-
-
-            Text(
-                text = service.name.capitalize(),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = modifier
-                    .constrainAs(textTitle) {
-                        with(16.dp) {
-                            top.linkTo(parent.top, this)
-                            start.linkTo(parent.start, this)
-                            end.linkTo(parent.end, this)
-                            bottom.linkTo(emergencyIcon.top, this)
-                        }
-                    },
-            )
-
-            MesAsyncRoundedImage(
-                service = service,
-                modifier = modifier
-                    .padding(8.dp)
-                    .constrainAs(emergencyIcon) {
-                        with(16.dp) {
-                            bottom.linkTo(parent.bottom, this)
-                            start.linkTo(parent.start, this)
-                            end.linkTo(parent.end, this)
-                        }
-                    },
-            )
-        }
-    }
-
+        },
+        style = MaterialTheme.typography.headlineLarge,
+        color = MaterialTheme.colorScheme.primary,
+        letterSpacing = 4.sp,
+        fontWeight = FontWeight.Bold
+    )
 }
 
 @Composable
@@ -316,6 +154,109 @@ fun MesEmergencyButton(
     }
 }
 
+@Composable
+@ExperimentalMaterial3Api
+fun MesAboutInfoCard(
+    title: String,
+    aboutInfo: List<AboutInfo>,
+    modifier: Modifier = Modifier
+) {
+
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.background
+        ),
+        elevation = CardDefaults.cardElevation(2.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(6.dp)
+    ) {
+        Column {
+
+            Text(
+                text = title.uppercase(),
+                color = MaterialTheme.colorScheme.onBackground,
+                style = MaterialTheme.typography.labelSmall,
+                modifier = Modifier
+                    .padding(
+                        top = 16.dp,
+                        start = 16.dp,
+                        bottom = 8.dp,
+                    )
+            )
+
+            aboutInfo.forEach {
+                MesAboutItem(
+                    aboutInfo = it,
+                    onClick = { }
+                )
+            }
+
+        }
+    }
+}
+
+@Composable
+@ExperimentalMaterial3Api
+fun MesAboutAppCard(
+    title: String,
+    aboutApp: List<AboutApp>,
+    modifier: Modifier = Modifier
+) {
+
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.background
+        ),
+        elevation = CardDefaults.cardElevation(2.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(6.dp)
+    ) {
+        Column {
+
+            Text(
+                text = title.uppercase(),
+                color = MaterialTheme.colorScheme.onBackground,
+                style = MaterialTheme.typography.labelSmall,
+                modifier = Modifier
+                    .padding(
+                        top = 16.dp,
+                        start = 16.dp,
+                        bottom = 8.dp,
+                    )
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            MesIcon(
+                painterResource = R.drawable.ic_mes,
+                modifier = Modifier
+                    .size(64.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            aboutApp.forEach {
+                MesAboutItem(
+                    aboutApp = it,
+                    onClick = {}
+                )
+            }
+
+            Text(
+                text = "Developed with ❤ in \uD83C\uDDF2\uD83C\uDDFA",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(16.dp)
+            )
+        }
+    }
+}
+
 
 @Preview(name = "Mes Composable Light", showBackground = true)
 @Preview(name = "Mes Composable Dark", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
@@ -324,7 +265,7 @@ fun MesEmergencyButton(
 @ExperimentalFoundationApi
 fun MesComposablePreview() {
 
-    val mockData = Service(
+    val mockDataService = Service(
         identifier = "security-police-direct-2",
         name = "Samu",
         type = "E",
@@ -332,32 +273,73 @@ fun MesComposablePreview() {
         number = 112
     )
 
-    MesTheme {
-        Column {
-            MesEmergencyItem(
-                service = mockData,
-                onClick = {}
+    val mockDataAboutInfoList = mutableListOf<AboutInfo>().apply {
+        add(
+            AboutInfo(
+                icon = Icons.Outlined.Star,
+                title = "Stars",
+                description = "This is the testing part of the favorite sections"
             )
+        )
+        add(
+            AboutInfo(
+                icon = Icons.Outlined.Favorite,
+                title = "Favorites",
+                description = "This is the testing part of the favorite sections"
+            )
+        )
+    }
 
-            Spacer(modifier = Modifier.height(24.dp))
+    val mockDataAboutAppList = mutableListOf<AboutApp>().apply {
+        add(
+            AboutApp(
+                icon = R.drawable.ic_lead_developer,
+                title = "Developer",
+                description = "This is the testing part of the favorite sections"
+            )
+        )
+        add(
+            AboutApp(
+                icon = R.drawable.ic_graphic_designer,
+                title = "Designer",
+                description = "This is the testing part of the favorite sections"
+            )
+        )
+    }
+
+    MesTheme {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(),
+            Arrangement.SpaceAround
+        ) {
 
             MesIcon(
                 painterResource = R.drawable.ic_image_broken,
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
-
             MesIcon(
                 imageVector = Icons.Outlined.Phone,
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            MesAsyncRoundedImage(service = mockDataService)
 
-            MesServiceItem(service = mockData){}
+            MesEmergencyButton(onClick = {}, modifier = Modifier.size(200.dp))
 
-            Spacer(modifier = Modifier.height(24.dp))
+            MesDrawerHeader()
 
-            MesEmergencyButton(onClick = { /*TODO*/ }, modifier = Modifier.size(200.dp))
+            MesDrawerTitle(title = Pair("T", "esting"))
+
+            MesAboutInfoCard(
+                title = "Title",
+                aboutInfo = mockDataAboutInfoList
+            )
+
+            MesAboutAppCard(
+                title = "Title",
+                aboutApp = mockDataAboutAppList
+            )
         }
     }
 }

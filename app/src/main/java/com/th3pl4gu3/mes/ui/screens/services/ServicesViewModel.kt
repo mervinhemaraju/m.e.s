@@ -73,9 +73,8 @@ class ServicesViewModel(
 
     fun search(query: String){
         viewModelScope.launch {
-            offlineServiceRepository.search(query).collect{
-                // TODO(Add new state for items that are not found)
-                _servicesUiState.value = ServicesUiState.Success(it)
+            offlineServiceRepository.search(query).collect{ services ->
+                _servicesUiState.value = ServicesUiState.Success(services.sortedBy { it.name })
             }
         }
     }

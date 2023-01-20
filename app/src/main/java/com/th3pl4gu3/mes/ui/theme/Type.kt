@@ -1,6 +1,7 @@
 package com.th3pl4gu3.mes.ui.theme
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.text.method.TextKeyListener.Capitalize
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -15,6 +16,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.th3pl4gu3.mes.R
@@ -81,7 +83,7 @@ private val MesBodyLarge = TextStyle(
     letterSpacing = 0.2.sp
 )
 private val MesBodyMedium = TextStyle(
-    fontWeight = FontWeight.Normal,
+    fontWeight = FontWeight.Medium,
     fontSize = 14.sp,
     letterSpacing = 0.1.sp,
     lineHeight = 20.sp
@@ -91,6 +93,18 @@ private val MesBodySmall = TextStyle(
     fontWeight = FontWeight.Normal,
     fontSize = 12.sp,
     letterSpacing = 0.1.sp
+)
+
+private val MesLabelMedium = TextStyle(
+    fontWeight = FontWeight.Normal,
+    fontSize = 12.sp,
+    letterSpacing = 0.3.sp,
+)
+
+private val MesLabelSmall = TextStyle(
+    fontWeight = FontWeight.Normal,
+    fontSize = 10.sp,
+    letterSpacing = 0.3.sp,
 )
 
 /**
@@ -105,7 +119,9 @@ val MesTypography = Typography(
     headlineSmall = MesHeadlineSmall,
     bodyLarge = MesBodyLarge,
     bodyMedium = MesBodyMedium,
-    bodySmall = MesBodySmall
+    bodySmall = MesBodySmall,
+    labelMedium = MesLabelMedium,
+    labelSmall = MesLabelSmall
 ).defaultFontFamily(
     primaryFontFamily = Montserrat,
     secondaryFontFamily = Montserrat_Alternates

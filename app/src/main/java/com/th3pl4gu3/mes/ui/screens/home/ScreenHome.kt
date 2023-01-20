@@ -208,7 +208,8 @@ fun MesEmergencyRow(
 ) {
     // Create the Lazy row
     LazyRow(
-        modifier = modifier
+        modifier = modifier,
+        contentPadding = PaddingValues(start = 8.dp, end = 8.dp)
     ) {
         // Load filtered services
         items(

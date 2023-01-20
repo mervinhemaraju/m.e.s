@@ -21,10 +21,10 @@ import com.th3pl4gu3.mes.MesApplication
 import com.th3pl4gu3.mes.data.AppContainer
 import com.th3pl4gu3.mes.datastore
 import com.th3pl4gu3.mes.models.MesAppSettings
-import com.th3pl4gu3.mes.ui.screens.ScreenAbout
 import com.th3pl4gu3.mes.ui.screens.home.ScreenHome
 import com.th3pl4gu3.mes.ui.screens.services.ScreenServices
 import com.th3pl4gu3.mes.ui.screens.ScreenSettings
+import com.th3pl4gu3.mes.ui.screens.about.ScreenAbout
 import com.th3pl4gu3.mes.ui.screens.home.HomeUiState
 import com.th3pl4gu3.mes.ui.screens.home.HomeViewModel
 import com.th3pl4gu3.mes.ui.screens.precall.PreCallUiState
@@ -80,6 +80,7 @@ fun MesNavGraph(
 
             ScreenServices(
                 servicesUiState = servicesUiState,
+                searchBarValue = searchBarValue,
                 retryAction = servicesViewModel::loadOnlineServices,
                 navigateToPreCall = navigationActions.navigateToPreCall
             )

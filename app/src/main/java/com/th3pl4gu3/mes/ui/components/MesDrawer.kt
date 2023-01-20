@@ -28,12 +28,14 @@ fun MesDrawer(
     modifier: Modifier = Modifier
 ) {
     ModalDrawerSheet(
-        drawerContainerColor = MaterialTheme.colorScheme.background
+        drawerContainerColor = MaterialTheme.colorScheme.background,
+        modifier = modifier
     ) {
 
-        MesLogo(
+        MesDrawerHeader(
             modifier = Modifier.padding(horizontal = 28.dp, vertical = 24.dp),
         )
+
         MesNavigationDrawerItem(
             label = "Home",
             icon = { MesIcon(Icons.Outlined.Home, contentDescription = null) },

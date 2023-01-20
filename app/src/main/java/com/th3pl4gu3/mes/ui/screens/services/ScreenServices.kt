@@ -2,15 +2,17 @@ package com.th3pl4gu3.mes.ui.screens.services
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowDropUp
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -18,12 +20,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.th3pl4gu3.mes.R
 import com.th3pl4gu3.mes.models.Service
+import com.th3pl4gu3.mes.ui.components.MesAnimatedVisibilitySlideHorizontallyContent
 import com.th3pl4gu3.mes.ui.components.MesServiceItem
 import com.th3pl4gu3.mes.ui.theme.MesTheme
+import kotlinx.coroutines.launch
 
 @Composable
+@ExperimentalFoundationApi
 fun ScreenServices(
     servicesUiState: ServicesUiState,
+    searchBarValue: String,
     retryAction: () -> Unit,
     navigateToPreCall: (service: Service) -> Unit,
     modifier: Modifier = Modifier
@@ -37,6 +43,7 @@ fun ScreenServices(
         is ServicesUiState.Loading -> LoadingScreen(servicesModifier)
         is ServicesUiState.Success -> ServicesList(
             servicesUiState.services,
+            searchBarValue,
             navigateToPreCall,
             servicesModifier
         )
@@ -104,8 +111,10 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
  * The home screen displaying photo grid.
  */
 @Composable
+@ExperimentalFoundationApi
 fun ServicesList(
     services: List<Service>,
+    searchBarValue: String,
     navigateToPreCall: (service: Service) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -130,23 +139,62 @@ fun ServicesList(
             )
         }
     } else {
-        LazyColumn(
-            modifier = modifier
-        ) {
-            // Load the services
-            items(services) { service ->
-                MesServiceItem(
-                    service = service,
-                    onClick = {
-                        Log.i(
-                            "pre_call_service",
-                            "Launching PreCall with service identifier: ${service.identifier}"
-                        )
 
-                        navigateToPreCall(service)
-                    }
-                )
+        val state = rememberLazyListState()
+        val coroutineScope = rememberCoroutineScope()
+
+        val showScrollToTopButton by remember {
+            derivedStateOf {
+                state.firstVisibleItemIndex > 0
             }
+        }
+
+        Box {
+            LazyColumn(
+                modifier = modifier,
+                state = state
+            ) {
+                items(
+                    services,
+                    key = { it.identifier }
+                ) { service ->
+                    MesServiceItem(
+                        service = service,
+                        onClick = {
+                            Log.i(
+                                "pre_call_service",
+                                "Launching PreCall with service identifier: ${service.identifier}"
+                            )
+
+                            navigateToPreCall(service)
+                        },
+                        modifier = Modifier.animateItemPlacement()
+                    )
+                }
+            }
+
+            MesAnimatedVisibilitySlideHorizontallyContent(
+                visibility = showScrollToTopButton,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(16.dp),
+            ) {
+                FloatingActionButton(
+                    onClick = {
+                        coroutineScope.launch {
+                            state.animateScrollToItem(0)
+                        }
+                    },
+                    containerColor = MaterialTheme.colorScheme.primary
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.ArrowDropUp,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+            }
+
         }
     }
 }
@@ -181,6 +229,7 @@ fun ErrorScreenPreview() {
 @Preview("Main Screen Light Preview", showBackground = true)
 @Preview("Main Screen Dark Preview", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
+@ExperimentalFoundationApi
 fun AllServicesScreenPreview() {
     MesTheme {
         val mockData = mutableListOf<Service>()
@@ -200,6 +249,7 @@ fun AllServicesScreenPreview() {
 
         ScreenServices(
             servicesUiState = ServicesUiState.Success(services = mockData),
+            searchBarValue = "",
             retryAction = {},
             navigateToPreCall = {},
             modifier = modifier
@@ -210,6 +260,7 @@ fun AllServicesScreenPreview() {
 @Preview("Main Screen Empty List Light Preview", showBackground = true)
 @Preview("Main Screen Empty List Dark Preview", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
+@ExperimentalFoundationApi
 fun EmptyServicesScreenPreview() {
     MesTheme {
         val mockData = mutableListOf<Service>()
@@ -217,6 +268,7 @@ fun EmptyServicesScreenPreview() {
 
         ScreenServices(
             servicesUiState = ServicesUiState.Success(services = mockData),
+            searchBarValue = "",
             retryAction = {},
             navigateToPreCall = {},
             modifier = modifier

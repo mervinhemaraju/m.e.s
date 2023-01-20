@@ -84,9 +84,14 @@ fun MesApp(
          * Restore System Bars color which can change
          * later in the app when launching Pre Call Screen
          **/
-        if(activity.window.statusBarColor != activity.window.navigationBarColor){
+        if(activity.window.statusBarColor != activity.window.navigationBarColor)
             systemUiController.setSystemBarsColor(MaterialTheme.colorScheme.background)
-        }
+
+        /**
+         * Clear the search bar if we are no more in the services screen
+         **/
+        if(currentRoute != MesDestinations.SCREEN_SERVICES)
+            searchBarValue = ""
 
         /**
          * Composable
