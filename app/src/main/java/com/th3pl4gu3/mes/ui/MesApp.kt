@@ -27,7 +27,6 @@ import com.th3pl4gu3.mes.ui.navigation.MesDestinations
 import com.th3pl4gu3.mes.ui.navigation.MesNavGraph
 import com.th3pl4gu3.mes.ui.navigation.MesNavigationActions
 import com.th3pl4gu3.mes.ui.screens.theme_selector.ScreenThemeSelector
-import com.th3pl4gu3.mes.ui.theme.MesColorDark
 import com.th3pl4gu3.mes.ui.theme.MesTheme
 import com.th3pl4gu3.mes.ui.utils.launchContactUsIntent
 import kotlinx.coroutines.launch

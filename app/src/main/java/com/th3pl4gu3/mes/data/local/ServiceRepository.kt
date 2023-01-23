@@ -5,11 +5,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface ServiceRepository {
 
-    suspend fun insertAll(services: List<Service>)
+    suspend fun forceRefresh(services: List<Service>)
 
     suspend fun count(): Int
-
-    suspend fun wipe()
 
     fun getAllServices(): Flow<List<Service>>
 

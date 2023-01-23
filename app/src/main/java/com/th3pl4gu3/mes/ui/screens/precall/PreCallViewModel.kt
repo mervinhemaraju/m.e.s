@@ -1,6 +1,5 @@
 package com.th3pl4gu3.mes.ui.screens.precall
 
-import java.util.concurrent.TimeUnit
 import android.os.CountDownTimer
 import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.initializer
@@ -8,6 +7,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.th3pl4gu3.mes.data.AppContainer
 import com.th3pl4gu3.mes.models.Service
 import kotlinx.coroutines.flow.*
+import java.util.concurrent.TimeUnit
 
 class PreCallViewModel(
     private val serviceIdentifier: String?,

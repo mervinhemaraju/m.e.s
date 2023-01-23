@@ -3,10 +3,7 @@ package com.th3pl4gu3.mes.models
 import androidx.annotation.DrawableRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import com.th3pl4gu3.mes.BuildConfig
 import com.th3pl4gu3.mes.R
 

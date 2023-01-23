@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.th3pl4gu3.mes.data.AppContainer
-import com.th3pl4gu3.mes.models.Service
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -22,12 +21,13 @@ class HomeViewModel(
     private val offlineServiceRepository: com.th3pl4gu3.mes.data.local.ServiceRepository
 ) : ViewModel() {
 
-    val homeUiState: StateFlow<HomeUiState> = offlineServiceRepository.getEmergencyServices().map { HomeUiState.Success(it) }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = HomeUiState.Loading
-        )
+    val homeUiState: StateFlow<HomeUiState> =
+        offlineServiceRepository.getEmergencyServices().map { HomeUiState.Success(it) }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+                initialValue = HomeUiState.Loading
+            )
 
     companion object {
 
@@ -50,21 +50,19 @@ class HomeViewModel(
         loadOnlineServices()
     }
 
-
-    fun loadOnlineServices() {
+    fun loadOnlineServices() =
         viewModelScope.launch(Dispatchers.IO) {
             try {
 
-                if(!doesServicesExists()) {
+                if (!doesServicesExists()) {
 
                     // Logging for information
                     Log.i("api_services", "No services found. Fetching data from the API")
 
-                    // First we wipe the existing data
-                    wipeServices()
-
-                    // Then we save the services locally in Room
-                    saveServicesLocally(onlineServiceRepository.getMesServices().services)
+                    // Force refresh the data
+                    offlineServiceRepository.forceRefresh(
+                        services = onlineServiceRepository.getMesServices().services
+                    )
                 }
 
             } catch (e: IOException) {
@@ -73,19 +71,6 @@ class HomeViewModel(
                 HomeUiState.Error
             }
         }
-    }
 
-    private suspend fun doesServicesExists(): Boolean{
-        return offlineServiceRepository.count() > 0
-    }
-
-    private suspend fun wipeServices(){
-        offlineServiceRepository.wipe()
-    }
-
-    private suspend fun saveServicesLocally(services: List<Service>){
-        if(services.isNotEmpty()){
-            offlineServiceRepository.insertAll(services = services)
-        }
-    }
+    private suspend fun doesServicesExists(): Boolean = offlineServiceRepository.count() > 0
 }

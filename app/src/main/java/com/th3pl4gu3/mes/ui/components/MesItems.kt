@@ -7,21 +7,28 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.PhoneInTalk
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
+import androidx.compose.ui.text.font.FontWeight.Companion.Medium
+import androidx.compose.ui.text.font.FontWeight.Companion.Normal
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.th3pl4gu3.mes.R
-import com.th3pl4gu3.mes.models.*
+import com.th3pl4gu3.mes.models.AboutApp
+import com.th3pl4gu3.mes.models.AboutInfo
+import com.th3pl4gu3.mes.models.Service
 import com.th3pl4gu3.mes.ui.theme.MesTheme
 import com.th3pl4gu3.mes.ui.utils.capitalize
 
@@ -78,6 +85,7 @@ fun MesServiceItem(
         MesAsyncRoundedImage(
             service = service,
             modifier = Modifier
+                .size(54.dp)
                 .constrainAs(iconEmergency) {
                     with(16.dp) {
                         start.linkTo(parent.start, this)
@@ -89,9 +97,10 @@ fun MesServiceItem(
 
         Text(
             text = service.name.capitalize(),
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.bodyLarge,
             softWrap = true,
             color = MaterialTheme.colorScheme.onSurface,
+            fontWeight = Medium,
             modifier = Modifier
                 .constrainAs(textTitle) {
                     top.linkTo(iconEmergency.top)
@@ -109,11 +118,12 @@ fun MesServiceItem(
 
         Text(
             text = service.number.toString(),
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontWeight = Normal,
             modifier = Modifier
                 .constrainAs(textSubtitle) {
-                    top.linkTo(textTitle.bottom, 4.dp)
+                    top.linkTo(textTitle.bottom)
                     bottom.linkTo(iconEmergency.bottom)
                     linkTo(
                         start = iconEmergency.end,

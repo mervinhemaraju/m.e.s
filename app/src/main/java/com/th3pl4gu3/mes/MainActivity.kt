@@ -19,8 +19,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        /** Set the screen's window decor **/
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
+        /** Launch the Compose App **/
         setContent {
             MesApp(
                 application = (application as MesApplication),
@@ -28,6 +30,5 @@ class MainActivity : ComponentActivity() {
             )
         }
     }
-
 }
 

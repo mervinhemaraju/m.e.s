@@ -1,6 +1,5 @@
 package com.th3pl4gu3.mes.ui.navigation
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -12,24 +11,18 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import com.th3pl4gu3.mes.MesApplication
 import com.th3pl4gu3.mes.data.AppContainer
-import com.th3pl4gu3.mes.datastore
-import com.th3pl4gu3.mes.models.MesAppSettings
-import com.th3pl4gu3.mes.ui.screens.home.ScreenHome
-import com.th3pl4gu3.mes.ui.screens.services.ScreenServices
 import com.th3pl4gu3.mes.ui.screens.ScreenSettings
 import com.th3pl4gu3.mes.ui.screens.about.ScreenAbout
 import com.th3pl4gu3.mes.ui.screens.home.HomeUiState
 import com.th3pl4gu3.mes.ui.screens.home.HomeViewModel
-import com.th3pl4gu3.mes.ui.screens.precall.PreCallUiState
+import com.th3pl4gu3.mes.ui.screens.home.ScreenHome
 import com.th3pl4gu3.mes.ui.screens.precall.PreCallViewModel
 import com.th3pl4gu3.mes.ui.screens.precall.ScreenPreCall
+import com.th3pl4gu3.mes.ui.screens.services.ScreenServices
 import com.th3pl4gu3.mes.ui.screens.services.ServicesViewModel
 
 @Composable

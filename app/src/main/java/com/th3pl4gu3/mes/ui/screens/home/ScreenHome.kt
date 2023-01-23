@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.th3pl4gu3.mes.data.DummyData
 import com.th3pl4gu3.mes.models.Service
 import com.th3pl4gu3.mes.ui.components.MesEmergencyButton
 import com.th3pl4gu3.mes.ui.components.MesEmergencyItem
@@ -171,9 +172,21 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Center,
         modifier = modifier
     ) {
+
+        CircularProgressIndicator(
+            color = MaterialTheme.colorScheme.primary,
+            strokeWidth = 8.dp,
+            modifier = Modifier
+                .size(54.dp)
+                .padding(16.dp)
+        )
+
         Text(
-            text = "Loading...",
-            modifier = modifier
+            text = "Getting services...",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier
+                .padding(16.dp)
         )
     }
 }
@@ -236,7 +249,39 @@ fun ScreenHomePreview() {
         ScreenHome(
             retryAction = {},
             navigateToPreCall = {},
+            homeUiState = HomeUiState.Success(DummyData.services)
+        )
+    }
+}
+
+@Preview("Home Screen Light")
+@Preview("Home Screen Dark", uiMode = UI_MODE_NIGHT_YES)
+@Composable
+@ExperimentalMaterial3Api
+@ExperimentalFoundationApi
+fun HomeLoadingPreview() {
+
+    MesTheme {
+        ScreenHome(
+            retryAction = {},
+            navigateToPreCall = {},
             homeUiState = HomeUiState.Loading
+        )
+    }
+}
+
+@Preview("Home Screen Light")
+@Preview("Home Screen Dark", uiMode = UI_MODE_NIGHT_YES)
+@Composable
+@ExperimentalMaterial3Api
+@ExperimentalFoundationApi
+fun HomeErrorPreview() {
+
+    MesTheme {
+        ScreenHome(
+            retryAction = {},
+            navigateToPreCall = {},
+            homeUiState = HomeUiState.Error
         )
     }
 }

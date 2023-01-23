@@ -5,11 +5,17 @@ import kotlinx.coroutines.flow.Flow
 
 class OfflineServiceRepository(private val serviceDao: ServiceDao) : ServiceRepository {
 
-    override suspend fun insertAll(services: List<Service>) = serviceDao.insertAll(services)
+    override suspend fun forceRefresh(services: List<Service>){
+        /**
+         * Force refresh the services by
+         * 1. Deleting the existing ones
+         * 2. Inserting the updated ones
+         **/
+        serviceDao.wipe()
+        serviceDao.insertAll(services)
+    }
 
     override suspend fun count(): Int = serviceDao.count()
-
-    override suspend fun wipe() = serviceDao.wipe()
 
     override fun getAllServices(): Flow<List<Service>> = serviceDao.getAllServices()
 

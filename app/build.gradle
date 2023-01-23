@@ -69,6 +69,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.28.0"
+    implementation "androidx.work:work-runtime-ktx:2.7.1"
 
     implementation "androidx.room:room-runtime:$room_version"
     ksp "androidx.room:room-compiler:$room_version"

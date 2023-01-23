@@ -6,11 +6,11 @@ import com.th3pl4gu3.mes.api.MesApiService
 import com.th3pl4gu3.mes.data.local.MesDatabase
 import com.th3pl4gu3.mes.data.local.OfflineServiceRepository
 import com.th3pl4gu3.mes.data.network.MesApiServiceRepository
-import com.th3pl4gu3.mes.data.network.ServiceRepository as NetworkServiceRepository
-import com.th3pl4gu3.mes.data.local.ServiceRepository as LocalServiceRepository
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
+import com.th3pl4gu3.mes.data.local.ServiceRepository as LocalServiceRepository
+import com.th3pl4gu3.mes.data.network.ServiceRepository as NetworkServiceRepository
 
 /**
  * Dependency Injection container at the application level.

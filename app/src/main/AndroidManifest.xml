@@ -5,6 +5,7 @@
     package="com.th3pl4gu3.mes">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".MesApplication"
@@ -17,6 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Mes"
         tools:targetApi="31">
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
