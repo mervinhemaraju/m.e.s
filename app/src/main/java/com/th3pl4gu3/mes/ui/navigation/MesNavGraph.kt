@@ -14,6 +14,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.th3pl4gu3.mes.data.AppContainer
 import com.th3pl4gu3.mes.ui.screens.ScreenSettings
 import com.th3pl4gu3.mes.ui.screens.about.ScreenAbout
@@ -24,6 +25,7 @@ import com.th3pl4gu3.mes.ui.screens.precall.PreCallViewModel
 import com.th3pl4gu3.mes.ui.screens.precall.ScreenPreCall
 import com.th3pl4gu3.mes.ui.screens.services.ScreenServices
 import com.th3pl4gu3.mes.ui.screens.services.ServicesViewModel
+import com.th3pl4gu3.mes.ui.screens.starter.ScreenStarter
 
 @Composable
 @ExperimentalMaterial3Api
@@ -73,12 +75,13 @@ fun MesNavGraph(
 
             ScreenServices(
                 servicesUiState = servicesUiState,
-                searchBarValue = searchBarValue,
                 retryAction = servicesViewModel::loadOnlineServices,
                 navigateToPreCall = navigationActions.navigateToPreCall
             )
         }
-        composable(MesDestinations.SCREEN_PRE_CALL) { backStackEntry ->
+        composable(
+            MesDestinations.SCREEN_PRE_CALL,
+        ) { backStackEntry ->
             val preCallViewModel: PreCallViewModel = viewModel(
                 factory = PreCallViewModel.provideFactory(
                     serviceIdentifier = backStackEntry.arguments?.getString("serviceIdentifier"),

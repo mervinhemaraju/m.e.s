@@ -26,7 +26,6 @@ class ServiceWorker(
 
             return@withContext try {
 
-                delay(5000)
                 // Get the container from the application
                 val container = (applicationContext as MesApplication).container
 

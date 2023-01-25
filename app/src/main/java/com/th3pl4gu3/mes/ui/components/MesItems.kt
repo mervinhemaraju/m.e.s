@@ -51,7 +51,10 @@ fun MesNavigationDrawerItem(
         colors = NavigationDrawerItemDefaults.colors(
             selectedContainerColor = MaterialTheme.colorScheme.primary,
             selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+            selectedIconColor = MaterialTheme.colorScheme.onPrimary,
             unselectedContainerColor = MaterialTheme.colorScheme.background,
+            unselectedTextColor = MaterialTheme.colorScheme.primary,
+            unselectedIconColor = MaterialTheme.colorScheme.primary
         ),
         badge = badge,
         shape = RoundedCornerShape(topEnd = 32.dp, bottomEnd = 32.dp)

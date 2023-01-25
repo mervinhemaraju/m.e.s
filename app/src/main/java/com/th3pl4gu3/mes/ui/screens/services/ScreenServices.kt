@@ -29,7 +29,6 @@ import kotlinx.coroutines.launch
 @ExperimentalFoundationApi
 fun ScreenServices(
     servicesUiState: ServicesUiState,
-    searchBarValue: String,
     retryAction: () -> Unit,
     navigateToPreCall: (service: Service) -> Unit,
     modifier: Modifier = Modifier
@@ -43,7 +42,6 @@ fun ScreenServices(
         is ServicesUiState.Loading -> LoadingScreen(servicesModifier)
         is ServicesUiState.Success -> ServicesList(
             servicesUiState.services,
-            searchBarValue,
             navigateToPreCall,
             servicesModifier
         )
@@ -114,7 +112,6 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
 @ExperimentalFoundationApi
 fun ServicesList(
     services: List<Service>,
-    searchBarValue: String,
     navigateToPreCall: (service: Service) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -171,6 +168,8 @@ fun ServicesList(
                         modifier = Modifier.animateItemPlacement()
                     )
                 }
+                
+                item { Spacer(modifier = Modifier.height(54.dp)) }
             }
 
             MesAnimatedVisibilitySlideHorizontallyContent(
@@ -249,7 +248,6 @@ fun AllServicesScreenPreview() {
 
         ScreenServices(
             servicesUiState = ServicesUiState.Success(services = mockData),
-            searchBarValue = "",
             retryAction = {},
             navigateToPreCall = {},
             modifier = modifier
@@ -268,7 +266,6 @@ fun EmptyServicesScreenPreview() {
 
         ScreenServices(
             servicesUiState = ServicesUiState.Success(services = mockData),
-            searchBarValue = "",
             retryAction = {},
             navigateToPreCall = {},
             modifier = modifier

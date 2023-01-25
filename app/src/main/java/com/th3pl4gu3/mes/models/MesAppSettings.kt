@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MesAppSettings (
     val appTheme: AppTheme = AppTheme.FOLLOW_SYSTEM,
-    val servicesRefreshDate: String = ""
+    val isFirstTimeLogging: Boolean = true
 )
 
 enum class AppTheme {

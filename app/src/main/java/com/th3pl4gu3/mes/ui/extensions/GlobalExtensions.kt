@@ -1,18 +1,25 @@
 package com.th3pl4gu3.mes.ui.utils
 
+import android.Manifest
 import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.font.FontFamily
+import androidx.core.content.ContextCompat
 import androidx.work.WorkManager
 import com.th3pl4gu3.mes.MesApplication
 import com.th3pl4gu3.mes.models.NotificationChannels
 
-fun Typography.defaultFontFamily(primaryFontFamily: FontFamily, secondaryFontFamily: FontFamily): Typography {
+fun Typography.defaultFontFamily(
+    primaryFontFamily: FontFamily,
+    secondaryFontFamily: FontFamily
+): Typography {
     return this.copy(
         displayLarge = this.displayLarge.copy(fontFamily = primaryFontFamily),
         displayMedium = this.displayMedium.copy(fontFamily = primaryFontFamily),
@@ -33,8 +40,7 @@ fun Typography.defaultFontFamily(primaryFontFamily: FontFamily, secondaryFontFam
 }
 
 fun String.capitalize(): String =
-    split(" ").joinToString(" ") { w -> w.replaceFirstChar { c ->  c.uppercaseChar() } }
-
+    split(" ").joinToString(" ") { w -> w.replaceFirstChar { c -> c.uppercaseChar() } }
 
 
 fun Activity.launchContactUsIntent() {
@@ -45,7 +51,10 @@ fun Activity.launchContactUsIntent() {
             arrayOf("th3pl4gu33@gmail.com")
         )
         putExtra(Intent.EXTRA_SUBJECT, "M.E.S :: User Request")
-        putExtra(Intent.EXTRA_TEXT, "Dear M.E.S team,\n [ADD YOUR MESSAGE] \n\n Regards, \n [ADD YOUR NAME]")
+        putExtra(
+            Intent.EXTRA_TEXT,
+            "Dear M.E.S team,\n [ADD YOUR MESSAGE] \n\n Regards, \n [ADD YOUR NAME]"
+        )
     }
     startActivity(intent)
 }
@@ -76,3 +85,21 @@ fun MesApplication.createNotificationChannels() {
 
 val MesApplication.MesWorkManager
     get() = WorkManager.getInstance(this)
+
+val Context.HasNecessaryPermissions: Boolean
+    get() = ContextCompat.checkSelfPermission(
+        this,
+        Manifest.permission.CALL_PHONE
+    ) == PackageManager.PERMISSION_GRANTED
+
+val GetRuntimePermissions: Array<String>
+    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        arrayOf(
+            Manifest.permission.CALL_PHONE,
+            Manifest.permission.POST_NOTIFICATIONS
+        )
+    } else {
+        arrayOf(
+            Manifest.permission.CALL_PHONE
+        )
+    }

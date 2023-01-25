@@ -8,7 +8,6 @@ import androidx.datastore.dataStore
 import androidx.work.*
 import com.th3pl4gu3.mes.data.AppContainer
 import com.th3pl4gu3.mes.data.DefaultAppContainer
-import com.th3pl4gu3.mes.models.AppTheme
 import com.th3pl4gu3.mes.models.MesAppSettingsSerializer
 import com.th3pl4gu3.mes.models.ServiceWorker
 import com.th3pl4gu3.mes.ui.extensions.NotificationBuilderServiceUpdating
@@ -59,16 +58,6 @@ class MesApplication : Application() {
         )
     }
 
-    internal suspend fun updateTheme(theme: AppTheme) {
-
-        /** Updates the app theme **/
-        datastore.updateData {
-            it.copy(
-                appTheme = theme
-            )
-        }
-    }
-
     private fun runServiceWorkerObserver(
         serviceWorkerId: UUID
     ) {
@@ -81,6 +70,10 @@ class MesApplication : Application() {
                 when (it.state) {
                     WorkInfo.State.ENQUEUED -> {
                         Log.i("service_worker_test", "Work has been enqueued")
+
+                        with(NotificationManagerCompat.from(this@MesApplication)) {
+                            cancel(100)
+                        }
                     }
                     WorkInfo.State.RUNNING -> {
                         Log.i("service_worker_test", "Work is now running")
@@ -111,7 +104,7 @@ class MesApplication : Application() {
              * Create the periodic work
              **/
             MesWorkManager.enqueueUniquePeriodicWork(
-                "worker_test",
+                "service_worker_update",
                 ExistingPeriodicWorkPolicy.REPLACE, // If duplicate requests are found, it will keep previous one and delete new one
                 serviceWorkerRequest
             )

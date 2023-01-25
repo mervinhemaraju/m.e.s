@@ -36,25 +36,25 @@ fun MesDrawer(
 
         MesNavigationDrawerItem(
             label = "Home",
-            icon = { MesIcon(Icons.Outlined.Home, contentDescription = null) },
+            icon = { Icon(Icons.Outlined.Home, contentDescription = null) },
             selected = currentRoute == MesDestinations.SCREEN_HOME,
             onClick = { navigateToHome(); closeDrawer() },
         )
         MesNavigationDrawerItem(
             label = "Services",
-            icon = { MesIcon(Icons.Outlined.Phone, contentDescription = null) },
+            icon = { Icon(Icons.Outlined.Phone, contentDescription = null) },
             selected = currentRoute == MesDestinations.SCREEN_SERVICES,
             onClick = { navigateToServices(); closeDrawer() },
         )
         MesNavigationDrawerItem(
             label = "About",
-            icon = { MesIcon(Icons.Outlined.Info, contentDescription = null) },
+            icon = { Icon(Icons.Outlined.Info, contentDescription = null) },
             selected = currentRoute == MesDestinations.SCREEN_ABOUT,
             onClick = { navigateToAbout(); closeDrawer() },
         )
         MesNavigationDrawerItem(
             label = "Settings",
-            icon = { MesIcon(Icons.Outlined.Settings, contentDescription = null) },
+            icon = { Icon(Icons.Outlined.Settings, contentDescription = null) },
             selected = currentRoute == MesDestinations.SCREEN_SETTINGS,
             onClick = { navigateToSettings(); closeDrawer() },
         )
@@ -72,14 +72,14 @@ fun MesDrawer(
 
         MesNavigationDrawerItem(
             label = "Choose Theme",
-            icon = { MesIcon(Icons.Outlined.Brightness4, contentDescription = null) },
+            icon = { Icon(Icons.Outlined.Brightness4, contentDescription = null) },
             selected = currentRoute == MesDestinations.SCREEN_THEME,
             onClick = { toggleThemeDialog() }
         )
 
         MesNavigationDrawerItem(
             label = "Contact Us",
-            icon = { MesIcon(Icons.Outlined.Email, contentDescription = null) },
+            icon = { Icon(Icons.Outlined.Email, contentDescription = null) },
             selected = currentRoute == MesDestinations.SCREEN_CONTACTUS,
             onClick = { navigateToContactUs() },
             badge = { MesIcon(Icons.Outlined.OpenInNew, contentDescription = null) }
