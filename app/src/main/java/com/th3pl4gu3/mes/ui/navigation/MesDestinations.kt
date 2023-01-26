@@ -14,6 +14,7 @@ object MesDestinationArguments {
  * Destinations used in the [MesApp].
  */
 object MesDestinations {
+    const val SCREEN_WELCOME = "welcome"
     const val SCREEN_HOME = "home"
     const val SCREEN_SERVICES = "services"
     const val SCREEN_ABOUT = "about"

@@ -1,0 +1,45 @@
+package com.th3pl4gu3.mes.ui
+
+import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
+import androidx.datastore.core.DataStore
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.th3pl4gu3.mes.MesApplication
+import com.th3pl4gu3.mes.datastore
+import com.th3pl4gu3.mes.models.MesAppSettings
+import com.th3pl4gu3.mes.ui.navigation.MesDestinations
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+class SplashViewModel @Inject constructor(
+    private val application: MesApplication
+) : ViewModel() {
+
+    private val _isLoading: MutableState<Boolean> = mutableStateOf(true)
+    val isLoading: State<Boolean> = _isLoading
+
+    private val _startDestination: MutableState<String?> = mutableStateOf(null)
+    val startDestination: State<String?> = _startDestination
+
+    init {
+        viewModelScope.launch {
+            application.datastore.data.collect {
+                _startDestination.value = if (it.isFirstTimeLogging) {
+                    MesDestinations.SCREEN_WELCOME
+                } else {
+                    MesDestinations.SCREEN_HOME
+                }
+            }
+            _isLoading.value = false
+        }
+    }
+
+}

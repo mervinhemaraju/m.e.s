@@ -1,9 +1,8 @@
-package com.th3pl4gu3.mes.ui.screens.starter
+package com.th3pl4gu3.mes.ui.screens.welcome
 
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -29,11 +28,10 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.google.accompanist.pager.*
 import com.th3pl4gu3.mes.MainActivity
-import com.th3pl4gu3.mes.MesApplication
-import com.th3pl4gu3.mes.R
-import com.th3pl4gu3.mes.ui.extensions.unsetFirstTimeLogging
+import com.th3pl4gu3.mes.models.WelcomeInfo
 import com.th3pl4gu3.mes.ui.utils.GetRuntimePermissions
 import com.th3pl4gu3.mes.ui.utils.HasNecessaryPermissions
+import com.th3pl4gu3.mes.ui.utils.ShouldShowRationale
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
@@ -42,9 +40,8 @@ import kotlin.math.absoluteValue
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
-fun ScreenStarter(
-    requestMultiplePermissions: ActivityResultLauncher<Array<String>>,
-    application: MesApplication
+fun ScreenWelcome(
+    unsetFirstTimeLogging: suspend () -> Unit
 ) {
 
     val context = LocalContext.current
@@ -55,7 +52,7 @@ fun ScreenStarter(
     val pagerState = rememberPagerState()
     val showRationale = remember { mutableStateOf(false) }
     val shouldShowRationale =
-        if (activity?.shouldShowRationale() == null) false else activity.shouldShowRationale()
+        if (activity?.ShouldShowRationale == null) false else activity.ShouldShowRationale
 
     ConstraintLayout(
         modifier = Modifier
@@ -119,13 +116,14 @@ fun ScreenStarter(
                     end.linkTo(pager.end)
                     top.linkTo(pager.bottom, 16.dp)
                 },
+            activeColor = MaterialTheme.colorScheme.primary
         )
 
         Button(
             onClick = {
                 coroutineScope.launch {
                     if (context.HasNecessaryPermissions) {
-                        application.unsetFirstTimeLogging()
+                        unsetFirstTimeLogging()
                     } else {
                         if (shouldShowRationale) {
                             openDialog(showRationale)
@@ -173,7 +171,7 @@ fun ScreenStarter(
 
                 closeDialog(openDialog)
 
-                requestMultiplePermissions.launch(
+                activity?.requestMultiplePermissions?.launch(
                     GetRuntimePermissions
                 )
             },
@@ -279,8 +277,10 @@ fun SliderPager(
     pagerState: PagerState,
     modifier: Modifier = Modifier
 ) {
+    val pages = WelcomeInfo.pages
+
     HorizontalPager(
-        count = 4,
+        count = pages.size,
         state = pagerState,
         modifier = modifier
             .background(Color.Transparent)
@@ -318,40 +318,12 @@ fun SliderPager(
                     .background(Color.Transparent)
                     .padding(16.dp)
             ) {
-                when (page + 1) {
-                    1 -> {
-                        SliderPageBody(
-                            image = R.drawable.im_mes_services_list,
-                            title = "Services List.",
-                            description = "Make calls directly from the services list by clicking on the phone on the left.",
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
-                        )
-                    }
-                    2 -> {
-                        SliderPageBody(
-                            image = R.drawable.im_mes_emergency_button,
-                            title = "Emergency Button.",
-                            description = "Make a direct call to your favorite emergency service by clicking on the gigantic red button.",
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
-                        )
-                    }
-                    3 -> {
-                        SliderPageBody(
-                            image = R.drawable.im_mes_emergency_actions,
-                            title = "Emergency Actions",
-                            description = "Make calls to your emergency services right from the home screen.",
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
-                        )
-                    }
-                    4 -> {
-                        SliderPageBody(
-                            image = R.drawable.im_mes_theme,
-                            title = "Enjoy the Experience",
-                            description = "MES has been designed using Minimalistic design so that it is usable by everyone.",
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
-                        )
-                    }
-                }
+                SliderPageBody(
+                    image = pages[page].image,
+                    title = pages[page].title,
+                    description = pages[page].description,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
             }
         }
     }

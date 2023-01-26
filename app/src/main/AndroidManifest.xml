@@ -27,13 +27,13 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Mes"
-        tools:targetApi="31">
+        android:theme="@style/Theme.Mes.Starting"
+        tools:targetApi="s">
 
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Mes">
+            android:theme="@style/Theme.Mes.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

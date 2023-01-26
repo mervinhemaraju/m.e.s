@@ -1,5 +1,6 @@
 package com.th3pl4gu3.mes.ui.navigation
 
+import android.app.Application
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -15,7 +16,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.th3pl4gu3.mes.MesApplication
 import com.th3pl4gu3.mes.data.AppContainer
+import com.th3pl4gu3.mes.ui.extensions.unsetFirstTimeLogging
 import com.th3pl4gu3.mes.ui.screens.ScreenSettings
 import com.th3pl4gu3.mes.ui.screens.about.ScreenAbout
 import com.th3pl4gu3.mes.ui.screens.home.HomeUiState
@@ -25,19 +28,20 @@ import com.th3pl4gu3.mes.ui.screens.precall.PreCallViewModel
 import com.th3pl4gu3.mes.ui.screens.precall.ScreenPreCall
 import com.th3pl4gu3.mes.ui.screens.services.ScreenServices
 import com.th3pl4gu3.mes.ui.screens.services.ServicesViewModel
-import com.th3pl4gu3.mes.ui.screens.starter.ScreenStarter
+import com.th3pl4gu3.mes.ui.screens.welcome.ScreenWelcome
 
 @Composable
 @ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
 @ExperimentalFoundationApi
+@ExperimentalPagerApi
 fun MesNavGraph(
-    appContainer: AppContainer,
+    application: MesApplication,
     searchBarValue: String,
     isExpandedScreen: Boolean,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = MesDestinations.SCREEN_HOME,
+    startDestination: String,
     openDrawer: () -> Unit = {}
 ) {
 
@@ -48,11 +52,16 @@ fun MesNavGraph(
         startDestination = startDestination,
         modifier = modifier
     ) {
+        composable(MesDestinations.SCREEN_WELCOME) {
+            ScreenWelcome(
+                unsetFirstTimeLogging = { application.unsetFirstTimeLogging() }
+            )
+        }
         composable(MesDestinations.SCREEN_HOME) {
 
             val homeViewModel: HomeViewModel = viewModel(
                 factory = HomeViewModel.provideFactory(
-                    appContainer = appContainer
+                    appContainer = application.container
                 )
             )
 
@@ -67,7 +76,7 @@ fun MesNavGraph(
         composable(MesDestinations.SCREEN_SERVICES) {
 
             val servicesViewModel: ServicesViewModel = viewModel(
-                factory = ServicesViewModel.provideFactory(appContainer = appContainer)
+                factory = ServicesViewModel.provideFactory(appContainer = application.container)
             )
             servicesViewModel.search(searchBarValue)
 
@@ -85,7 +94,7 @@ fun MesNavGraph(
             val preCallViewModel: PreCallViewModel = viewModel(
                 factory = PreCallViewModel.provideFactory(
                     serviceIdentifier = backStackEntry.arguments?.getString("serviceIdentifier"),
-                    appContainer = appContainer
+                    appContainer = application.container
                 )
             )
 

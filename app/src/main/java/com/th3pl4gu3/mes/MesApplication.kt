@@ -13,29 +13,27 @@ import com.th3pl4gu3.mes.models.ServiceWorker
 import com.th3pl4gu3.mes.ui.extensions.NotificationBuilderServiceUpdating
 import com.th3pl4gu3.mes.ui.utils.MesWorkManager
 import com.th3pl4gu3.mes.ui.utils.createNotificationChannels
+import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.UUID
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 /**
  * Load the datastore from context using the [MesAppSettingsSerializer] class
  **/
 val Context.datastore by dataStore(fileName = "app-settings.json", MesAppSettingsSerializer)
 
+@HiltAndroidApp
 class MesApplication : Application() {
 
     /** [AppContainer] instance used by the rest of classes to obtain dependencies **/
-    lateinit var container: AppContainer
+    @Inject lateinit var container: AppContainer
 
     override fun onCreate() {
         super.onCreate()
-
-        /** Instantiate the app container from [DefaultAppContainer] **/
-        container = DefaultAppContainer(
-            context = applicationContext
-        )
 
         /** Create all Notification Channels **/
         createNotificationChannels()
@@ -45,17 +43,18 @@ class MesApplication : Application() {
          * send a periodic request to fetch updated services
          * from the service API
          */
-        val serviceWorker = createServiceRefreshWork()
+        with(createServiceRefreshWork()) {
 
-        /** Instantiate observers **/
-        runServiceWorkerObserver(
-            serviceWorkerId = serviceWorker.id
-        )
+            /** Instantiate observers **/
+            runServiceWorkerObserver(
+                serviceWorkerId = this.id
+            )
 
-        /** Runs in a queue to prevent delaying app launch **/
-        runDelayedConfigs(
-            serviceWorkerRequest = serviceWorker
-        )
+            /** Runs in a queue to prevent delaying app launch **/
+            runDelayedConfigs(
+                serviceWorkerRequest = this
+            )
+        }
     }
 
     private fun runServiceWorkerObserver(

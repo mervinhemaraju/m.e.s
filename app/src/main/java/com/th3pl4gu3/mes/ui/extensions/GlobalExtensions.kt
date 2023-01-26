@@ -11,8 +11,10 @@ import android.net.Uri
 import android.os.Build
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.font.FontFamily
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.work.WorkManager
+import com.th3pl4gu3.mes.MainActivity
 import com.th3pl4gu3.mes.MesApplication
 import com.th3pl4gu3.mes.models.NotificationChannels
 
@@ -103,3 +105,9 @@ val GetRuntimePermissions: Array<String>
             Manifest.permission.CALL_PHONE
         )
     }
+
+val MainActivity.ShouldShowRationale: Boolean
+    get() = ActivityCompat.shouldShowRequestPermissionRationale(
+        this,
+        Manifest.permission.CALL_PHONE
+    )
