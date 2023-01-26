@@ -14,6 +14,7 @@ import com.th3pl4gu3.mes.models.AppTheme
 import com.th3pl4gu3.mes.models.MesAppSettings
 import com.th3pl4gu3.mes.ui.screens.starter.ScreenStarter
 import com.th3pl4gu3.mes.ui.theme.MesTheme
+import okhttp3.internal.wait
 
 @Composable
 @ExperimentalMaterial3Api
@@ -44,17 +45,18 @@ fun MesApp(
         darkTheme = darkTheme // Load the app theme
     ) {
 
+
         /** Determine screen content **/
-        if (appSettings.isFirstTimeLogging) {
-            ScreenStarter(
-                application = application,
-                requestMultiplePermissions = requestMultiplePermissions
-            )
-        } else {
+        if (!appSettings.isFirstTimeLogging) {
             AppContent(
                 application = application,
                 appSettings = appSettings,
                 widthSizeClass = widthSizeClass
+            )
+        } else {
+            ScreenStarter(
+                application = application,
+                requestMultiplePermissions = requestMultiplePermissions
             )
         }
 

@@ -14,8 +14,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -231,10 +233,16 @@ fun SliderPageBody(
     modifier: Modifier = Modifier
 ) {
 
+    Spacer(
+        modifier = Modifier.height(16.dp)
+    )
+
     Image(
         painter = painterResource(id = image),
         contentDescription = description,
         modifier = modifier
+            .clip(MaterialTheme.shapes.medium),
+        contentScale = ContentScale.Crop
     )
 
     Spacer(
@@ -280,7 +288,7 @@ fun SliderPager(
 
         Card(
             colors = CardDefaults.cardColors(
-                containerColor = Color.White
+                containerColor = MaterialTheme.colorScheme.surface
             ),
             modifier = Modifier
                 .padding(16.dp)
