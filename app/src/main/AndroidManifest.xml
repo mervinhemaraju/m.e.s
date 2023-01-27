@@ -31,7 +31,7 @@
         tools:targetApi="s">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".MesActivity"
             android:exported="true"
             android:theme="@style/Theme.Mes.Starting">
             <intent-filter>

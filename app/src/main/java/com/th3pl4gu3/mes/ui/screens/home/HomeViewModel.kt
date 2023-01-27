@@ -7,6 +7,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.th3pl4gu3.mes.data.AppContainer
+import com.th3pl4gu3.mes.models.MesAppSettings
+import com.th3pl4gu3.mes.ui.utils.TIMEOUT_MILLIS
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -15,36 +18,29 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
+import javax.inject.Inject
 
-class HomeViewModel(
-    private val onlineServiceRepository: com.th3pl4gu3.mes.data.network.ServiceRepository,
-    private val offlineServiceRepository: com.th3pl4gu3.mes.data.local.ServiceRepository
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val container: AppContainer
 ) : ViewModel() {
 
     val homeUiState: StateFlow<HomeUiState> =
-        offlineServiceRepository.getEmergencyServices().map { HomeUiState.Success(it) }
+        container.offlineServiceRepository.getEmergencyServices().map { HomeUiState.Success(it) }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
                 initialValue = HomeUiState.Loading
             )
 
-    companion object {
 
-        private const val TIMEOUT_MILLIS = 5_000L
-
-        fun provideFactory(
-            appContainer: AppContainer
-        ): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                HomeViewModel(
-                    onlineServiceRepository = appContainer.onlineServiceRepository,
-                    offlineServiceRepository = appContainer.offlineServiceRepository
-                )
-            }
-        }
-    }
-
+    val mesAppSettings: StateFlow<MesAppSettings> =
+        container.dataStoreServiceRepository.fetch().map { it }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+                initialValue = MesAppSettings()
+            )
 
     init {
         loadOnlineServices()
@@ -60,8 +56,8 @@ class HomeViewModel(
                     Log.i("api_services", "No services found. Fetching data from the API")
 
                     // Force refresh the data
-                    offlineServiceRepository.forceRefresh(
-                        services = onlineServiceRepository.getMesServices().services
+                    container.offlineServiceRepository.forceRefresh(
+                        services = container.onlineServiceRepository.getMesServices().services
                     )
                 }
 
@@ -72,5 +68,5 @@ class HomeViewModel(
             }
         }
 
-    private suspend fun doesServicesExists(): Boolean = offlineServiceRepository.count() > 0
+    private suspend fun doesServicesExists(): Boolean = container.offlineServiceRepository.count() > 0
 }

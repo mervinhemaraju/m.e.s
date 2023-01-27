@@ -20,8 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.th3pl4gu3.mes.R
 import com.th3pl4gu3.mes.models.Service
-import com.th3pl4gu3.mes.ui.components.MesAnimatedVisibilitySlideHorizontallyContent
-import com.th3pl4gu3.mes.ui.components.MesServiceItem
+import com.th3pl4gu3.mes.ui.components.*
 import com.th3pl4gu3.mes.ui.theme.MesTheme
 import kotlinx.coroutines.launch
 
@@ -39,70 +38,22 @@ fun ScreenServices(
 
     // Load the component to show based on the UI State
     when (servicesUiState) {
-        is ServicesUiState.Loading -> LoadingScreen(servicesModifier)
+        is ServicesUiState.Loading -> MesScreenLoading(
+            loadingMessage = "Getting services...",
+            modifier = servicesModifier
+        )
         is ServicesUiState.Success -> ServicesList(
             servicesUiState.services,
             navigateToPreCall,
             servicesModifier
         )
-        is ServicesUiState.Error -> ErrorScreen(retryAction, servicesModifier)
-    }
-
-}
-
-/**
- * The home screen displaying the loading message.
- */
-@Composable
-fun LoadingScreen(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        CircularProgressIndicator(
-            color = MaterialTheme.colorScheme.primary,
-            strokeWidth = 12.dp,
-            modifier = Modifier
-                .size(120.dp)
-                .padding(16.dp)
-        )
-
-        Text(
-            text = "Getting services...",
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier
-                .padding(16.dp)
+        is ServicesUiState.Error -> MesScreenError(
+            retryAction = retryAction,
+            errorMessage = "Unable to load services",
+            modifier = servicesModifier
         )
     }
-}
 
-/**
- * The home screen displaying error message with re-attempt button.
- */
-@Composable
-fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Image(
-            painter = painterResource(id = R.drawable.il_error),
-            contentDescription = "",
-            modifier = Modifier.padding(32.dp)
-        )
-
-        Button(
-            onClick = retryAction,
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text("Retry")
-        }
-    }
 }
 
 /**
@@ -201,12 +152,13 @@ fun ServicesList(
 @Preview("Loading Light Preview", showBackground = true)
 @Preview("Loading Dark Preview", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
+@ExperimentalFoundationApi
 fun LoadingScreenPreview() {
     MesTheme {
-        val modifier = Modifier.background(MaterialTheme.colorScheme.background)
-
-        LoadingScreen(
-            modifier = modifier
+        ScreenServices(
+            servicesUiState = ServicesUiState.Loading ,
+            retryAction = {},
+            navigateToPreCall = {}
         )
     }
 }
@@ -214,13 +166,13 @@ fun LoadingScreenPreview() {
 @Preview("Error Light Preview", showBackground = true)
 @Preview("Error Dark Preview", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
+@ExperimentalFoundationApi
 fun ErrorScreenPreview() {
     MesTheme {
-        val modifier = Modifier.background(MaterialTheme.colorScheme.background)
-
-        ErrorScreen(
+        ScreenServices(
+            servicesUiState = ServicesUiState.Error ,
             retryAction = {},
-            modifier = modifier
+            navigateToPreCall = {}
         )
     }
 }

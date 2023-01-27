@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.th3pl4gu3.mes.R
-import com.th3pl4gu3.mes.ui.utils.defaultFontFamily
+import com.th3pl4gu3.mes.ui.extensions.defaultFontFamily
 
 
 /**

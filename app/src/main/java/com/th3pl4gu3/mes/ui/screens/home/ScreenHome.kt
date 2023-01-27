@@ -17,10 +17,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.th3pl4gu3.mes.data.DummyData
+import com.th3pl4gu3.mes.models.MesAppSettings
 import com.th3pl4gu3.mes.models.Service
 import com.th3pl4gu3.mes.ui.components.MesEmergencyButton
 import com.th3pl4gu3.mes.ui.components.MesEmergencyItem
+import com.th3pl4gu3.mes.ui.components.MesTextButton
 import com.th3pl4gu3.mes.ui.theme.MesTheme
+
 
 @Composable
 @ExperimentalMaterial3Api
@@ -29,24 +32,21 @@ fun ScreenHome(
     homeUiState: HomeUiState,
     retryAction: () -> Unit,
     navigateToPreCall: (service: Service) -> Unit,
+    mesAppSettings: MesAppSettings,
     modifier: Modifier = Modifier
 ) {
 
-    ConstraintLayout(
-        modifier
+    Column(
+        modifier = modifier
+            .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .fillMaxHeight()
-            .verticalScroll(rememberScrollState()),
+            .padding(
+                top = 16.dp,
+                bottom = 16.dp
+            ),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-
-        val (
-            textMainTitle,
-            textMainSubtitle,
-            textHeaderTitle,
-            textHeaderSubtitle,
-            buttonEmergency,
-            contentDynamic
-        ) = createRefs()
 
         Text(
             text = "Emergency Police Help Needed ?",
@@ -54,14 +54,7 @@ fun ScreenHome(
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
             modifier = Modifier
-                .constrainAs(textMainTitle) {
-                    with(16.dp) {
-                        top.linkTo(parent.top, this)
-                        start.linkTo(parent.start, this)
-                        end.linkTo(parent.end, this)
-                    }
-                }
-                .fillMaxWidth()
+                .padding(8.dp)
         )
 
         Text(
@@ -70,38 +63,33 @@ fun ScreenHome(
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
             modifier = Modifier
-                .constrainAs(textMainSubtitle) {
-                    top.linkTo(textMainTitle.bottom, 8.dp)
-                    start.linkTo(parent.start, 16.dp)
-                    end.linkTo(parent.end, 16.dp)
-                }
+                .padding(8.dp)
         )
 
-        MesEmergencyButton(
-            onClick = {
-                when (homeUiState) {
-                    is HomeUiState.Success -> {
-                        // Launch the pre-call screen
-                        navigateToPreCall(
-                            homeUiState.services.first {
-                                it.identifier == "security-police-direct-1"
-                            }
-                        )
-                    }
-                    else -> {}
-                }
-            },
+        Box(
             modifier = Modifier
-                .size(200.dp)
-                .constrainAs(buttonEmergency) {
-                    with(16.dp) {
-                        top.linkTo(textMainSubtitle.bottom, this)
-                        start.linkTo(parent.start, this)
-                        end.linkTo(parent.end, this)
-                        bottom.linkTo(textHeaderTitle.top, this)
+                .wrapContentSize()
+                .weight(10f)
+                .padding(8.dp)
+        ) {
+            MesEmergencyButton(
+                onClick = {
+                    when (homeUiState) {
+                        is HomeUiState.Success -> {
+                            // Launch the pre-call screen
+                            navigateToPreCall(
+                                homeUiState.services.first {
+                                    it.identifier == mesAppSettings.emergencyButtonActionIdentifier
+                                }
+                            )
+                        }
+                        else -> {}
                     }
-                }
-        )
+                },
+                modifier = Modifier
+                    .size(200.dp)
+            )
+        }
 
         Text(
             text = "Need other quick emergency actions?",
@@ -109,11 +97,7 @@ fun ScreenHome(
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
             modifier = Modifier
-                .constrainAs(textHeaderTitle) {
-                    bottom.linkTo(textHeaderSubtitle.top, 8.dp)
-                    start.linkTo(parent.start, 16.dp)
-                    end.linkTo(parent.end, 16.dp)
-                }
+                .padding(8.dp)
         )
 
         Text(
@@ -122,11 +106,9 @@ fun ScreenHome(
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
             modifier = Modifier
-                .constrainAs(textHeaderSubtitle) {
-                    start.linkTo(parent.start, 16.dp)
-                    end.linkTo(parent.end, 16.dp)
-                    bottom.linkTo(contentDynamic.top, 24.dp)
-                }
+                .padding(
+                    bottom = 16.dp
+                )
         )
 
         DynamicContent(
@@ -134,13 +116,7 @@ fun ScreenHome(
             navigateToPreCall = navigateToPreCall,
             retryAction = retryAction,
             modifier = Modifier
-                .constrainAs(contentDynamic) {
-                    bottom.linkTo(parent.bottom, 24.dp)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
         )
-
     }
 }
 
@@ -198,17 +174,15 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Center,
         modifier = modifier
     ) {
+
         Text(
             text = "Loading failed",
-            modifier = modifier
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.padding(8.dp)
         )
 
-        Button(
-            onClick = retryAction,
-            modifier = modifier
-        ) {
-            Text("Retry")
-        }
+        MesTextButton(text = "Retry", onClick = retryAction)
     }
 }
 
@@ -226,7 +200,7 @@ fun MesEmergencyRow(
     ) {
         // Load filtered services
         items(
-            services.filterNot { it.identifier == "security-police-direct-1" }
+            services
         ) { service ->
             MesEmergencyItem(
                 service = service,
@@ -249,7 +223,8 @@ fun ScreenHomePreview() {
         ScreenHome(
             retryAction = {},
             navigateToPreCall = {},
-            homeUiState = HomeUiState.Success(DummyData.services)
+            homeUiState = HomeUiState.Success(DummyData.services),
+            mesAppSettings = MesAppSettings()
         )
     }
 }
@@ -265,7 +240,8 @@ fun HomeLoadingPreview() {
         ScreenHome(
             retryAction = {},
             navigateToPreCall = {},
-            homeUiState = HomeUiState.Loading
+            homeUiState = HomeUiState.Loading,
+            mesAppSettings = MesAppSettings()
         )
     }
 }
@@ -281,7 +257,8 @@ fun HomeErrorPreview() {
         ScreenHome(
             retryAction = {},
             navigateToPreCall = {},
-            homeUiState = HomeUiState.Error
+            homeUiState = HomeUiState.Error,
+            mesAppSettings = MesAppSettings()
         )
     }
 }

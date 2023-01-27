@@ -1,6 +1,7 @@
 package com.th3pl4gu3.mes.ui.screens.welcome
 
 import android.content.Intent
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.net.Uri
 import android.provider.Settings
 import androidx.annotation.DrawableRes
@@ -8,6 +9,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,17 +23,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.google.accompanist.pager.*
-import com.th3pl4gu3.mes.MainActivity
+import com.th3pl4gu3.mes.MesActivity
 import com.th3pl4gu3.mes.models.WelcomeInfo
-import com.th3pl4gu3.mes.ui.utils.GetRuntimePermissions
-import com.th3pl4gu3.mes.ui.utils.HasNecessaryPermissions
-import com.th3pl4gu3.mes.ui.utils.ShouldShowRationale
+import com.th3pl4gu3.mes.ui.components.MesIcon
+import com.th3pl4gu3.mes.ui.components.MesTextButton
+import com.th3pl4gu3.mes.ui.extensions.GetRuntimePermissions
+import com.th3pl4gu3.mes.ui.extensions.HasNecessaryPermissions
+import com.th3pl4gu3.mes.ui.extensions.ShouldShowRationale
+import com.th3pl4gu3.mes.ui.theme.MesTheme
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
@@ -45,7 +51,7 @@ fun ScreenWelcome(
 ) {
 
     val context = LocalContext.current
-    val activity = (context as? MainActivity)
+    val activity = (context as? MesActivity)
 
     val coroutineScope = rememberCoroutineScope()
     val openDialog = remember { mutableStateOf(false) }
@@ -75,7 +81,7 @@ fun ScreenWelcome(
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
                 .constrainAs(mainTitle) {
-                    top.linkTo(parent.top, 24.dp)
+                    top.linkTo(parent.top, 16.dp)
                     start.linkTo(parent.start, 16.dp)
                     end.linkTo(parent.end, 16.dp)
                 }
@@ -87,7 +93,7 @@ fun ScreenWelcome(
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
                 .constrainAs(titleMes) {
-                    top.linkTo(mainTitle.bottom, 24.dp)
+                    top.linkTo(mainTitle.bottom, 8.dp)
                     start.linkTo(parent.start, 16.dp)
                     end.linkTo(parent.end, 16.dp)
                 },
@@ -103,7 +109,8 @@ fun ScreenWelcome(
                         start = parent.start,
                         end = parent.end,
                         bottom = button.top,
-                        topMargin = 24.dp
+                        topMargin = 24.dp,
+                        bottomMargin = 24.dp,
                     )
                 }
         )
@@ -119,7 +126,8 @@ fun ScreenWelcome(
             activeColor = MaterialTheme.colorScheme.primary
         )
 
-        Button(
+        MesTextButton(
+            text = "Launch Mes",
             onClick = {
                 coroutineScope.launch {
                     if (context.HasNecessaryPermissions) {
@@ -133,18 +141,13 @@ fun ScreenWelcome(
                     }
                 }
             },
-            shape = MaterialTheme.shapes.medium,
             modifier = Modifier
                 .constrainAs(button) {
                     end.linkTo(parent.end)
                     start.linkTo(parent.start)
                     bottom.linkTo(parent.bottom, 24.dp)
                 }
-        ) {
-            Text(
-                text = "Launch Mes"
-            )
-        }
+        )
 
     }
 
@@ -235,23 +238,30 @@ fun SliderPageBody(
         modifier = Modifier.height(16.dp)
     )
 
-    Image(
-        painter = painterResource(id = image),
-        contentDescription = description,
+    Box(
         modifier = modifier
-            .clip(MaterialTheme.shapes.medium),
-        contentScale = ContentScale.Crop
-    )
-
+            .clip(RoundedCornerShape(50))
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(56.dp)
+    ) {
+        MesIcon(
+            painterResource = image,
+            modifier = Modifier
+                .size(120.dp)
+                .align(Alignment.Center)
+        )
+    }
     Spacer(
-        modifier = Modifier.height(32.dp)
+        modifier = Modifier.height(48.dp)
     )
 
     Text(
         text = title,
-        style = MaterialTheme.typography.bodyLarge,
+        style = MaterialTheme.typography.headlineSmall,
         color = MaterialTheme.colorScheme.primary,
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center,
+        modifier = modifier
     )
 
     Spacer(
@@ -260,8 +270,10 @@ fun SliderPageBody(
 
     Text(
         text = description,
-        style = MaterialTheme.typography.bodySmall,
-        color = MaterialTheme.colorScheme.primary
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.primary,
+        textAlign = TextAlign.Center,
+        modifier = modifier
     )
 
     Spacer(
@@ -288,7 +300,7 @@ fun SliderPager(
 
         Card(
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface
+                containerColor = Color.Transparent
             ),
             modifier = Modifier
                 .padding(16.dp)
@@ -322,7 +334,8 @@ fun SliderPager(
                     image = pages[page].image,
                     title = pages[page].title,
                     description = pages[page].description,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
                 )
             }
         }
@@ -351,22 +364,21 @@ private fun openDialog(dialog: MutableState<Boolean>) {
     dialog.value = true
 }
 
-//@Preview("Starter Screen Light Preview", showBackground = true)
-//@Preview(
-//    "Starter Screen Dark Preview",
-//    showBackground = true,
-//    uiMode = Configuration.UI_MODE_NIGHT_YES
-//)
-//@Composable
-//@ExperimentalPagerApi
-//@ExperimentalFoundationApi
-//@ExperimentalMaterial3Api
-//@ExperimentalComposeUiApi
-//@ExperimentalPermissionsApi
-//fun StarterScreenPreview() {
-//    MesTheme {
-//        ScreenStarter(
-//            application = MesApplication()
-//        )
-//    }
-//}
+@Preview("Starter Screen Light Preview", showBackground = true)
+@Preview(
+    "Starter Screen Dark Preview",
+    showBackground = true,
+    uiMode = UI_MODE_NIGHT_YES
+)
+@Composable
+@ExperimentalPagerApi
+@ExperimentalFoundationApi
+@ExperimentalMaterial3Api
+@ExperimentalComposeUiApi
+fun WelcomeScreenPreview() {
+    MesTheme {
+        ScreenWelcome(
+            unsetFirstTimeLogging = {}
+        )
+    }
+}

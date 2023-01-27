@@ -1,17 +1,22 @@
 package com.th3pl4gu3.mes.ui.screens.precall
 
 import android.os.CountDownTimer
+import android.util.Log
 import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.th3pl4gu3.mes.data.AppContainer
 import com.th3pl4gu3.mes.models.Service
+import com.th3pl4gu3.mes.ui.utils.TIMEOUT_MILLIS
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class PreCallViewModel(
-    private val serviceIdentifier: String?,
-    private val offlineServiceRepository: com.th3pl4gu3.mes.data.local.ServiceRepository
+@HiltViewModel
+class PreCallViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
+    private val container: AppContainer
 ) : ViewModel() {
 
     /**
@@ -56,26 +61,6 @@ class PreCallViewModel(
     )
 
     /**
-     * Companion constant objects
-     **/
-    companion object {
-
-        private const val TIMEOUT_MILLIS = 5_000L
-
-        fun provideFactory(
-            serviceIdentifier: String?,
-            appContainer: AppContainer
-        ): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                PreCallViewModel(
-                    serviceIdentifier = serviceIdentifier,
-                    offlineServiceRepository = appContainer.offlineServiceRepository
-                )
-            }
-        }
-    }
-
-    /**
      * Init clause
      **/
     init {
@@ -90,10 +75,13 @@ class PreCallViewModel(
     }
 
     private fun getService(): Flow<List<Service>> {
+
+        val serviceIdentifier: String? = savedStateHandle["serviceIdentifier"]
+
         return if (serviceIdentifier.isNullOrEmpty()) {
-            offlineServiceRepository.getAllServices()
+            container.offlineServiceRepository.getAllServices()
         } else {
-            offlineServiceRepository.getService(identifier = serviceIdentifier)
+            container.offlineServiceRepository.getService(identifier = serviceIdentifier)
         }
     }
 }

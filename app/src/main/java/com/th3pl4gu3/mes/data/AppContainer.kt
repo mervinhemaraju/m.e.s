@@ -2,10 +2,13 @@ package com.th3pl4gu3.mes.data
 
 import android.content.Context
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.th3pl4gu3.mes.MesApplication
 import com.th3pl4gu3.mes.api.MesApiService
 import com.th3pl4gu3.mes.data.local.MesDatabase
 import com.th3pl4gu3.mes.data.local.OfflineServiceRepository
 import com.th3pl4gu3.mes.data.network.MesApiServiceRepository
+import com.th3pl4gu3.mes.data.store.DataStoreRepository
+import com.th3pl4gu3.mes.data.store.StoreRepository
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
@@ -18,6 +21,7 @@ import com.th3pl4gu3.mes.data.network.ServiceRepository as NetworkServiceReposit
 interface AppContainer {
     val onlineServiceRepository: NetworkServiceRepository
     val offlineServiceRepository: LocalServiceRepository
+    val dataStoreServiceRepository: StoreRepository
 }
 
 /**
@@ -49,5 +53,9 @@ class DefaultAppContainer(private val context: Context): AppContainer {
 
     override val offlineServiceRepository: LocalServiceRepository by lazy {
         OfflineServiceRepository(MesDatabase.getDatabase(context).serviceDao())
+    }
+
+    override val dataStoreServiceRepository: StoreRepository by lazy {
+        DataStoreRepository(context as MesApplication)
     }
 }

@@ -8,30 +8,27 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.core.app.ActivityCompat
-import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.th3pl4gu3.mes.ui.MesApp
 import com.th3pl4gu3.mes.ui.SplashViewModel
-import com.th3pl4gu3.mes.ui.extensions.unsetFirstTimeLogging
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MesActivity : ComponentActivity() {
 
     /** DI to get the [SplashViewModel] **/
-    @Inject lateinit var splashViewModel: SplashViewModel
+    private val splashViewModel: SplashViewModel by viewModels()
 
     /**
      * Activity result for
@@ -50,7 +47,7 @@ class MainActivity : ComponentActivity() {
             if (it.value) {
                 Toast.makeText(this, "Welcome to MES", Toast.LENGTH_SHORT).show()
                 lifecycleScope.launch {
-                    (application as MesApplication).unsetFirstTimeLogging()
+                    (application as MesApplication).container.dataStoreServiceRepository.unsetFirstTimeLogging()
                 }
             } else {
                 finishAffinity()

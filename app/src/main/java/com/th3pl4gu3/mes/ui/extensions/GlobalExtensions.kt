@@ -1,4 +1,4 @@
-package com.th3pl4gu3.mes.ui.utils
+package com.th3pl4gu3.mes.ui.extensions
 
 import android.Manifest
 import android.app.Activity
@@ -14,7 +14,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.work.WorkManager
-import com.th3pl4gu3.mes.MainActivity
+import com.th3pl4gu3.mes.MesActivity
 import com.th3pl4gu3.mes.MesApplication
 import com.th3pl4gu3.mes.models.NotificationChannels
 
@@ -87,27 +87,3 @@ fun MesApplication.createNotificationChannels() {
 
 val MesApplication.MesWorkManager
     get() = WorkManager.getInstance(this)
-
-val Context.HasNecessaryPermissions: Boolean
-    get() = ContextCompat.checkSelfPermission(
-        this,
-        Manifest.permission.CALL_PHONE
-    ) == PackageManager.PERMISSION_GRANTED
-
-val GetRuntimePermissions: Array<String>
-    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        arrayOf(
-            Manifest.permission.CALL_PHONE,
-            Manifest.permission.POST_NOTIFICATIONS
-        )
-    } else {
-        arrayOf(
-            Manifest.permission.CALL_PHONE
-        )
-    }
-
-val MainActivity.ShouldShowRationale: Boolean
-    get() = ActivityCompat.shouldShowRequestPermissionRationale(
-        this,
-        Manifest.permission.CALL_PHONE
-    )

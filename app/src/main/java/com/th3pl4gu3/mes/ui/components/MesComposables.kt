@@ -5,6 +5,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -244,6 +245,29 @@ fun MesAboutAppCard(
     }
 }
 
+@Composable
+fun MesTextButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    
+    Button(
+        onClick = onClick,
+        shape = MaterialTheme.shapes.small,
+        colors = ButtonDefaults.buttonColors(
+            MaterialTheme.colorScheme.primary
+        ),
+        elevation = ButtonDefaults.buttonElevation(2.dp),
+        modifier = modifier
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+    }
+}
 
 @Preview(name = "Mes Composable Light", showBackground = true)
 @Preview(name = "Mes Composable Dark", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
@@ -311,6 +335,8 @@ fun MesComposablePreview() {
             )
 
             MesAsyncRoundedImage(service = mockDataService)
+            
+            MesTextButton(text = "Test", onClick = {})
 
             MesEmergencyButton(onClick = {}, modifier = Modifier.size(200.dp))
 

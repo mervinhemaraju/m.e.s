@@ -7,17 +7,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.PhoneInTalk
-import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.font.FontWeight.Companion.Medium
 import androidx.compose.ui.text.font.FontWeight.Companion.Normal
 import androidx.compose.ui.text.style.TextAlign
@@ -29,8 +25,9 @@ import com.th3pl4gu3.mes.R
 import com.th3pl4gu3.mes.models.AboutApp
 import com.th3pl4gu3.mes.models.AboutInfo
 import com.th3pl4gu3.mes.models.Service
+import com.th3pl4gu3.mes.models.SettingsItem
+import com.th3pl4gu3.mes.ui.extensions.capitalize
 import com.th3pl4gu3.mes.ui.theme.MesTheme
-import com.th3pl4gu3.mes.ui.utils.capitalize
 
 @Composable
 @ExperimentalMaterial3Api
@@ -65,6 +62,7 @@ fun MesNavigationDrawerItem(
 fun MesServiceItem(
     service: Service,
     modifier: Modifier = Modifier,
+    actionVisible: Boolean = true,
     onClick: () -> Unit,
 ) {
 
@@ -73,7 +71,7 @@ fun MesServiceItem(
             .fillMaxWidth()
             .background(Color.Transparent)
             .clickable(
-                onClick = {}
+                onClick = if(actionVisible){ {} } else {onClick}
             )
 
     ) {
@@ -110,7 +108,7 @@ fun MesServiceItem(
                     bottom.linkTo(textSubtitle.top, 4.dp)
                     linkTo(
                         start = iconEmergency.end,
-                        end = iconCall.start,
+                        end = if(actionVisible) iconCall.start else parent.end,
                         startMargin = 8.dp,
                         endMargin = 16.dp,
                         bias = 0f
@@ -130,7 +128,7 @@ fun MesServiceItem(
                     bottom.linkTo(iconEmergency.bottom)
                     linkTo(
                         start = iconEmergency.end,
-                        end = iconCall.start,
+                        end = if(actionVisible) iconCall.start else parent.end,
                         startMargin = 12.dp,
                         endMargin = 16.dp,
                         bias = 0f
@@ -138,24 +136,27 @@ fun MesServiceItem(
                 }
         )
 
-        IconButton(
-            onClick = onClick,
-            modifier = Modifier
-                .constrainAs(iconCall) {
-                    bottom.linkTo(parent.bottom, 8.dp)
-                    top.linkTo(parent.top, 8.dp)
-                    end.linkTo(parent.end, 24.dp)
-                }
-        ) {
-            MesIcon(
-                imageVector = Icons.Outlined.PhoneInTalk,
-                contentDescription = R.string.ctnt_desc_phone_button,
+        if(actionVisible) {
+
+            IconButton(
+                onClick = onClick,
                 modifier = Modifier
-                    .size(32.dp)
-                    .graphicsLayer {
-                        rotationZ = -100f
+                    .constrainAs(iconCall) {
+                        bottom.linkTo(parent.bottom, 8.dp)
+                        top.linkTo(parent.top, 8.dp)
+                        end.linkTo(parent.end, 24.dp)
                     }
-            )
+            ) {
+                MesIcon(
+                    imageVector = Icons.Outlined.PhoneInTalk,
+                    contentDescription = R.string.ctnt_desc_phone_button,
+                    modifier = Modifier
+                        .size(32.dp)
+                        .graphicsLayer {
+                            rotationZ = -100f
+                        }
+                )
+            }
         }
 
     }
@@ -371,6 +372,81 @@ fun MesAboutItem(
     }
 }
 
+@Composable
+@ExperimentalMaterial3Api
+fun MesSettingsItem(
+    settingsItem: SettingsItem,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        color = Color.Transparent,
+        onClick = onClick,
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
+        ConstraintLayout(
+            modifier = modifier
+                .background(Color.Transparent)
+                .fillMaxWidth()
+        ) {
+
+            val (
+                icon,
+                title,
+                description
+            ) = createRefs()
+
+            MesIcon(
+                imageVector = settingsItem.icon,
+                contentDescription = null,
+                modifier = Modifier
+                    .constrainAs(icon) {
+                        bottom.linkTo(parent.bottom, 16.dp)
+                        top.linkTo(parent.top, 16.dp)
+                        start.linkTo(parent.start, 16.dp)
+                    },
+                tint = MaterialTheme.colorScheme.inversePrimary
+            )
+
+            Text(
+                text = settingsItem.title,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.constrainAs(title) {
+                    bottom.linkTo(description.top)
+                    top.linkTo(icon.top)
+                    linkTo(
+                        start = icon.end,
+                        end = parent.end,
+                        startMargin = 32.dp,
+                        endMargin = 32.dp,
+                        bias = 0F,
+                    )
+                }
+            )
+
+            Text(
+                text = settingsItem.description,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.constrainAs(description) {
+                    bottom.linkTo(icon.bottom)
+                    top.linkTo(title.bottom, 4.dp)
+                    linkTo(
+                        start = title.start,
+                        end = parent.end,
+                        endMargin = 32.dp,
+                        bias = 0F,
+                    )
+                    width = Dimension.fillToConstraints
+                }
+            )
+
+        }
+    }
+}
+
 @Preview("Item Light", showBackground = true)
 @Preview("Dark Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
@@ -435,6 +511,11 @@ fun MesNavigationDrawerItemPreview() {
             MesAboutItem(
                 aboutApp = mockDataAboutInfo2,
                 onClick = {}
+            )
+
+            MesSettingsItem(
+                settingsItem = SettingsItem.ResetCache,
+                onClick = {},
             )
         }
     }

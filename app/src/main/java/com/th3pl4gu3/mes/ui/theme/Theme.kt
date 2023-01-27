@@ -5,11 +5,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 internal val MesColorDark = darkColorScheme(
     primary = Red200,
     onPrimary = Gray50,
+    inversePrimary = Color.White,
+
     secondary = Red200,
     tertiary = Red300,
 
@@ -28,6 +31,8 @@ internal val MesColorLight = lightColorScheme(
     // Main color palettes
     primary = BlueA100,
     onPrimary = WhiteBlue10,
+    inversePrimary = Gray600,
+
     secondary = Red400,
     tertiary = Blue900,
 

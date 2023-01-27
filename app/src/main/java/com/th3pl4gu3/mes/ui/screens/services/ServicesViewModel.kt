@@ -7,16 +7,18 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.th3pl4gu3.mes.data.AppContainer
 import com.th3pl4gu3.mes.ui.screens.home.HomeUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
+import javax.inject.Inject
 
-class ServicesViewModel(
-    private val onlineServiceRepository: com.th3pl4gu3.mes.data.network.ServiceRepository,
-    private val offlineServiceRepository: com.th3pl4gu3.mes.data.local.ServiceRepository
+@HiltViewModel
+class ServicesViewModel @Inject constructor(
+    private val container: AppContainer
 ) : ViewModel() {
 
     /**
@@ -38,19 +40,6 @@ class ServicesViewModel(
         loadOfflineServices()
     }
 
-    companion object {
-        fun provideFactory(
-            appContainer: AppContainer
-        ): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                ServicesViewModel(
-                    onlineServiceRepository = appContainer.onlineServiceRepository,
-                    offlineServiceRepository = appContainer.offlineServiceRepository
-                )
-            }
-        }
-    }
-
     /**
      * Public Functions
      **/
@@ -59,8 +48,8 @@ class ServicesViewModel(
             try {
 
                 // Force refresh the services
-                offlineServiceRepository.forceRefresh(
-                    services = onlineServiceRepository.getMesServices().services
+                container.offlineServiceRepository.forceRefresh(
+                    services = container.onlineServiceRepository.getMesServices().services
                 )
 
             } catch (e: IOException) {
@@ -72,7 +61,7 @@ class ServicesViewModel(
 
     fun search(query: String) =
         viewModelScope.launch {
-            offlineServiceRepository.search(query).collect { services ->
+            container.offlineServiceRepository.search(query).collect { services ->
                 _servicesUiState.value = ServicesUiState.Success(services.sortedBy { it.name })
             }
         }
@@ -82,7 +71,7 @@ class ServicesViewModel(
      * Private Functions
      **/
     private fun loadOfflineServices() = viewModelScope.launch {
-        offlineServiceRepository.getAllServices().collect {
+        container.offlineServiceRepository.getAllServices().collect {
             _servicesUiState.value = if (it.isNotEmpty()) {
                 ServicesUiState.Success(it)
             } else {

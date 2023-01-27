@@ -2,6 +2,7 @@ package com.th3pl4gu3.mes.ui
 
 import android.app.Activity
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Row
@@ -19,18 +20,18 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.th3pl4gu3.mes.MesApplication
-import com.th3pl4gu3.mes.datastore
 import com.th3pl4gu3.mes.models.AppTheme
 import com.th3pl4gu3.mes.models.MesAppSettings
+import com.th3pl4gu3.mes.ui.components.MesAnimatedVisibilitySlideHorizontallyContent
+import com.th3pl4gu3.mes.ui.components.MesAnimatedVisibilitySlideVerticallyContent
 import com.th3pl4gu3.mes.ui.components.MesDrawer
 import com.th3pl4gu3.mes.ui.components.MesTopAppBar
-import com.th3pl4gu3.mes.ui.extensions.updateMesTheme
+import com.th3pl4gu3.mes.ui.extensions.launchContactUsIntent
 import com.th3pl4gu3.mes.ui.navigation.MesDestinations
 import com.th3pl4gu3.mes.ui.navigation.MesNavGraph
 import com.th3pl4gu3.mes.ui.navigation.MesNavigationActions
 import com.th3pl4gu3.mes.ui.screens.theme_selector.ScreenThemeSelector
 import com.th3pl4gu3.mes.ui.theme.MesTheme
-import com.th3pl4gu3.mes.ui.utils.launchContactUsIntent
 import kotlinx.coroutines.launch
 
 @Composable
@@ -49,7 +50,7 @@ fun MesApp(
      **/
 
     /** Load the app settings from datastore **/
-    val appSettings = application.datastore.data.collectAsState(initial = MesAppSettings()).value
+    val appSettings = application.container.dataStoreServiceRepository.fetch().collectAsState(initial = MesAppSettings()).value
 
     /** Set the correct app theme that the user has set **/
     val darkTheme = when (appSettings.appTheme) {
@@ -61,7 +62,6 @@ fun MesApp(
     MesTheme(
         darkTheme = darkTheme // Load the app theme
     ) {
-
 
         /**
          * Define a variable to know if the screen has been expanded
@@ -88,17 +88,28 @@ fun MesApp(
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topAppBarState)
         val activity = LocalContext.current as Activity
 
-        /**
-         * Restore System Bars color which can change
-         * later in the app when launching Pre Call Screen
-         **/
-        if(activity.window.statusBarColor != activity.window.navigationBarColor)
-            systemUiController.setSystemBarsColor(MaterialTheme.colorScheme.background)
+        val gesturesEnabled: Boolean = !listOf(
+            currentRoute == MesDestinations.SCREEN_WELCOME,
+            currentRoute == MesDestinations.SCREEN_PRE_CALL,
+            widthSizeClass == WindowWidthSizeClass.Expanded
+        ).any { it }
+
+        val topAppBarVisible: Boolean = !listOf(
+            currentRoute == MesDestinations.SCREEN_PRE_CALL,
+            currentRoute == MesDestinations.SCREEN_WELCOME
+        ).any { it }
+//
+//        /**
+//         * Restore System Bars color which can change
+//         * later in the app when launching Pre Call Screen
+//         **/
+//        if (activity.window.statusBarColor != activity.window.navigationBarColor)
+//            systemUiController.setSystemBarsColor(MaterialTheme.colorScheme.background)
 
         /**
          * Clear the search bar if we are no more in the services screen
          **/
-        if(currentRoute != MesDestinations.SCREEN_SERVICES)
+        if (currentRoute != MesDestinations.SCREEN_SERVICES)
             searchBarValue = ""
 
         /**
@@ -119,11 +130,11 @@ fun MesApp(
             },
             drawerState = sizeAwareDrawerState,
             // Only enable opening the drawer via gestures if the screen is not expanded
-            gesturesEnabled = !isExpandedScreen
+            gesturesEnabled = gesturesEnabled
         ) {
             Scaffold(
                 topBar = {
-                    if (currentRoute != MesDestinations.SCREEN_PRE_CALL) {
+                    MesAnimatedVisibilitySlideVerticallyContent(visibility = topAppBarVisible) {
                         MesTopAppBar(
                             openDrawer = { coroutineScope.launch { sizeAwareDrawerState.open() } },
                             showSearchIcon = currentRoute == MesDestinations.SCREEN_SERVICES,
@@ -163,7 +174,7 @@ fun MesApp(
         if (showDialog) {
             ScreenThemeSelector(
                 dialogState = { coroutineScope.launch { showDialog = !showDialog } },
-                updateTheme = { coroutineScope.launch { application.updateMesTheme(it) } },
+                updateTheme = { coroutineScope.launch { application.container.dataStoreServiceRepository.updateTheme(it) } },
                 currentAppTheme = appSettings.appTheme
             )
         }
@@ -198,7 +209,7 @@ private fun rememberSizeAwareDrawerState(isExpandedScreen: Boolean): DrawerState
  * Application Previews
  **/
 @Preview("Mes App Light")
-@Preview("Mes App Dark", uiMode =  UI_MODE_NIGHT_YES)
+@Preview("Mes App Dark", uiMode = UI_MODE_NIGHT_YES)
 @Composable
 @ExperimentalMaterial3Api
 @ExperimentalComposeUiApi

@@ -7,24 +7,19 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.datastore.dataStore
 import androidx.work.*
 import com.th3pl4gu3.mes.data.AppContainer
-import com.th3pl4gu3.mes.data.DefaultAppContainer
 import com.th3pl4gu3.mes.models.MesAppSettingsSerializer
 import com.th3pl4gu3.mes.models.ServiceWorker
+import com.th3pl4gu3.mes.ui.extensions.MesWorkManager
 import com.th3pl4gu3.mes.ui.extensions.NotificationBuilderServiceUpdating
-import com.th3pl4gu3.mes.ui.utils.MesWorkManager
-import com.th3pl4gu3.mes.ui.utils.createNotificationChannels
+import com.th3pl4gu3.mes.ui.extensions.createNotificationChannels
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-/**
- * Load the datastore from context using the [MesAppSettingsSerializer] class
- **/
-val Context.datastore by dataStore(fileName = "app-settings.json", MesAppSettingsSerializer)
 
 @HiltAndroidApp
 class MesApplication : Application() {

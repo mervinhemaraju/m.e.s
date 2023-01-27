@@ -9,27 +9,27 @@ sealed class WelcomeInfo(
     val description: String
 ) {
     private object First : WelcomeInfo(
-        image = R.drawable.im_mes_services_list,
-        title = "Services List.",
-        description = "Make calls directly from the services list by clicking on the phone on the left.",
+        image = R.drawable.ic_ambulance,
+        title = "Services List",
+        description = "Get a list of all emergency and non-emergency contacts right from your phone.",
     )
 
     private object Second : WelcomeInfo(
-        image = R.drawable.im_mes_emergency_button,
-        title = "Emergency Button.",
-        description = "Make a direct call to your favorite emergency service by clicking on the gigantic red button.",
+        image = R.drawable.ic_emergency,
+        title = "Emergency Actions",
+        description = "Get a dedicated corner on your dashboard just for emergency services",
     )
 
     private object Third : WelcomeInfo(
-        image = R.drawable.im_mes_emergency_actions,
-        title = "Emergency Actions",
-        description = "Make calls to your emergency services right from the home screen.",
+        image = R.drawable.ic_police_car,
+        title = "SOS",
+        description = "Call for urgent help right from the app using the big red button",
     )
 
     private object Fourth : WelcomeInfo(
-        image = R.drawable.im_mes_theme,
-        title = "Enjoy the Experience",
-        description = "MES has been designed using Minimalistic design so that it is usable by everyone.",
+        image = R.drawable.ic_offline,
+        title = "Offline",
+        description = "Get all your services available to you offline. You just need to be connected online once for MES to download the services.",
     )
 
     companion object {

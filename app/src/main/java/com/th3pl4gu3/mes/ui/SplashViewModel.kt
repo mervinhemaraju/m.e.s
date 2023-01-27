@@ -11,14 +11,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.th3pl4gu3.mes.MesApplication
-import com.th3pl4gu3.mes.datastore
-import com.th3pl4gu3.mes.models.MesAppSettings
 import com.th3pl4gu3.mes.ui.navigation.MesDestinations
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class SplashViewModel @Inject constructor(
     private val application: MesApplication
 ) : ViewModel() {
@@ -31,7 +30,7 @@ class SplashViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            application.datastore.data.collect {
+            application.container.dataStoreServiceRepository.fetch().collect {
                 _startDestination.value = if (it.isFirstTimeLogging) {
                     MesDestinations.SCREEN_WELCOME
                 } else {

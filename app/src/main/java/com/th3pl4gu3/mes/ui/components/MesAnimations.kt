@@ -49,3 +49,19 @@ fun MesAnimatedVisibilitySlideHorizontallyContent(
         content()
     }
 }
+@Composable
+fun MesAnimatedVisibilitySlideVerticallyContent(
+    visibility: Boolean,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
+    val duration = 500
+    AnimatedVisibility(
+        visible = visibility,
+        enter = expandVertically(),
+        exit = shrinkVertically(),
+        modifier = modifier
+    ) {
+        content()
+    }
+}
