@@ -11,6 +11,7 @@ import com.th3pl4gu3.mes.models.MesAppSettingsSerializer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 @Module

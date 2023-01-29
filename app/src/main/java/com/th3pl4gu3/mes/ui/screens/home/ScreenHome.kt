@@ -1,21 +1,20 @@
 package com.th3pl4gu3.mes.ui.screens.home
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.th3pl4gu3.mes.R
 import com.th3pl4gu3.mes.data.DummyData
 import com.th3pl4gu3.mes.models.MesAppSettings
 import com.th3pl4gu3.mes.models.Service
@@ -33,7 +32,8 @@ fun ScreenHome(
     retryAction: () -> Unit,
     navigateToPreCall: (service: Service) -> Unit,
     mesAppSettings: MesAppSettings,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    scrollState: ScrollState = rememberScrollState()
 ) {
 
     Column(
@@ -43,13 +43,14 @@ fun ScreenHome(
             .padding(
                 top = 16.dp,
                 bottom = 16.dp
-            ),
+            )
+            .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
 
         Text(
-            text = "Emergency Police Help Needed ?",
+            text = stringResource(id = R.string.headline_home_main),
             style = MaterialTheme.typography.headlineLarge,
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,

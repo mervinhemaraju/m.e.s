@@ -3,7 +3,10 @@ package com.th3pl4gu3.mes.ui.navigation
 import android.app.Application
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -13,7 +16,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.hilt.navigation.HiltViewModelFactory
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.get
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -35,11 +44,14 @@ import com.th3pl4gu3.mes.ui.screens.settings.ScreenSettings
 import com.th3pl4gu3.mes.ui.screens.settings.SettingsViewModel
 import com.th3pl4gu3.mes.ui.screens.welcome.ScreenWelcome
 
+const val TAG = "MES_NAV_GRAPH"
+
 @Composable
 @ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
 @ExperimentalFoundationApi
 @ExperimentalPagerApi
+@ExperimentalAnimationApi
 fun MesNavGraph(
     application: MesApplication,
     searchBarValue: String,
@@ -47,8 +59,12 @@ fun MesNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     startDestination: String,
+    listState: LazyListState,
+    scrollState: ScrollState,
     openDrawer: () -> Unit = {}
 ) {
+    // Log info
+    Log.i(TAG, "Starting Navigation Host")
 
     val navigationActions = remember(navController) { MesNavigationActions(navController) }
 
@@ -58,11 +74,16 @@ fun MesNavGraph(
         modifier = modifier
     ) {
         composable(MesDestinations.SCREEN_WELCOME) {
+            // Log info
+            Log.i(TAG, "Starting composable ${MesDestinations.SCREEN_WELCOME}")
+
             ScreenWelcome(
                 unsetFirstTimeLogging = { application.container.dataStoreServiceRepository.unsetFirstTimeLogging() }
             )
         }
         composable(MesDestinations.SCREEN_HOME) {
+            // Log info
+            Log.i(TAG, "Starting composable ${MesDestinations.SCREEN_HOME}")
 
             val homeViewModel = hiltViewModel<HomeViewModel>()
 
@@ -70,14 +91,18 @@ fun MesNavGraph(
 
             val mesAppSettings = homeViewModel.mesAppSettings.collectAsState(initial = MesAppSettings()).value
 
+            Log.i("MESAPPAS", "iden -> ${mesAppSettings.emergencyButtonActionIdentifier}")
             ScreenHome(
                 homeUiState = homeUiState,
                 retryAction = homeViewModel::loadOnlineServices,
                 navigateToPreCall = navigationActions.navigateToPreCall,
-                mesAppSettings = mesAppSettings
+                mesAppSettings = mesAppSettings,
+                scrollState = scrollState
             )
         }
         composable(MesDestinations.SCREEN_SERVICES) {
+            // Log info
+            Log.i(TAG, "Starting composable ${MesDestinations.SCREEN_SERVICES}")
 
             val servicesViewModel = hiltViewModel<ServicesViewModel>()
 
@@ -88,18 +113,19 @@ fun MesNavGraph(
             ScreenServices(
                 servicesUiState = servicesUiState,
                 retryAction = servicesViewModel::loadOnlineServices,
+                listState = listState,
                 navigateToPreCall = navigationActions.navigateToPreCall
             )
         }
-        composable(
-            MesDestinations.SCREEN_PRE_CALL,
-        ) {
+        composable(MesDestinations.SCREEN_PRE_CALL) {
+            // Log info
+            Log.i(TAG, "Starting composable ${MesDestinations.SCREEN_PRE_CALL}")
 
             val preCallViewModel = hiltViewModel<PreCallViewModel>()
 
             val preCallUiState by preCallViewModel.service.collectAsState()
 
-            val countdown by preCallViewModel.tick.observeAsState()
+            val countdown by preCallViewModel.seconds.collectAsState(initial = 5)
 
             val startCall by preCallViewModel.startCall.observeAsState()
 
@@ -107,13 +133,20 @@ fun MesNavGraph(
                 preCallUiState = preCallUiState,
                 startCall = startCall,
                 closeScreen = navController::popBackStack,
-                countdown = countdown
+                countdown = countdown.toString()
             )
         }
         composable(MesDestinations.SCREEN_ABOUT) {
-            ScreenAbout()
+            // Log info
+            Log.i(TAG, "Starting composable ${MesDestinations.SCREEN_ABOUT}")
+
+            ScreenAbout(
+                scrollState = scrollState
+            )
         }
         composable(MesDestinations.SCREEN_SETTINGS) {
+            // Log info
+            Log.i(TAG, "Starting composable ${MesDestinations.SCREEN_SETTINGS}")
 
             val settingsViewModel = hiltViewModel<SettingsViewModel>()
 
@@ -137,7 +170,8 @@ fun MesNavGraph(
                 forceRefreshServices = {
                     settingsViewModel.forceRefreshServices()
                 },
-                updateEmergencyButtonAction = { settingsViewModel.updateEmergencyButtonAction(it) }
+                updateEmergencyButtonAction = { settingsViewModel.updateEmergencyButtonAction(it) },
+                scrollState = scrollState
             )
         }
     }

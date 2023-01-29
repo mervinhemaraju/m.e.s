@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Search
@@ -16,6 +17,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
@@ -34,6 +36,7 @@ internal fun MesTopAppBar(
     modifier: Modifier = Modifier,
     searchValue: String,
     searchValueChange: (String) -> Unit,
+    hasScrolled: Boolean,
     topAppBarState: TopAppBarState = rememberTopAppBarState(),
     scrollBehavior: TopAppBarScrollBehavior? =
         TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
@@ -43,7 +46,10 @@ internal fun MesTopAppBar(
     }
 
     CenterAlignedTopAppBar(
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.background),
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.background,
+            scrolledContainerColor = MaterialTheme.colorScheme.surface
+        ),
         title = {
             AppBarTitleContent(
                 isSearchBarActivate = searchActivated && showSearchIcon,
@@ -54,7 +60,7 @@ internal fun MesTopAppBar(
         },
         navigationIcon = {
             Crossfade(targetState = searchActivated && showSearchIcon) { isChecked ->
-                if(!isChecked){
+                if (!isChecked) {
                     IconButton(onClick = openDrawer) {
                         MesIcon(
                             painterResource = R.drawable.ic_mes,
@@ -62,7 +68,7 @@ internal fun MesTopAppBar(
                             modifier = Modifier.size(32.dp)
                         )
                     }
-                }else{
+                } else {
                     IconButton(enabled = false, onClick = {}) {
                         MesIcon(
                             imageVector = Icons.Outlined.Search,
@@ -86,7 +92,12 @@ internal fun MesTopAppBar(
             }
         },
         scrollBehavior = scrollBehavior,
-        modifier = modifier
+        modifier = if (hasScrolled) {
+            modifier
+                .shadow(AppBarDefaults.TopAppBarElevation)
+        } else {
+            modifier
+        }
     )
 }
 
@@ -97,7 +108,7 @@ fun AppBarTitleContent(
     searchValue: String,
     focusManager: FocusManager,
     searchValueChange: (String) -> Unit
-){
+) {
 
     MesAnimatedVisibilityExpandedHorizontallyContent(visibility = isSearchBarActivate) {
         OutlinedTextField(
@@ -122,7 +133,7 @@ fun AppBarTitleContent(
                         stiffness = Spring.StiffnessLow
                     )
                 ),
-            keyboardActions = KeyboardActions(onDone = {focusManager.clearFocus()}),
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         )
     }
@@ -132,7 +143,7 @@ fun AppBarTitleContent(
             text = stringResource(id = R.string.app_name).lowercase(),
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface,
-            modifier =  Modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentWidth(align = Alignment.CenterHorizontally)
         )
@@ -149,7 +160,8 @@ fun PreviewTopAppBar() {
             openDrawer = { },
             showSearchIcon = true,
             searchValue = "",
-            searchValueChange = {}
+            searchValueChange = {},
+            hasScrolled = false
         )
     }
 }

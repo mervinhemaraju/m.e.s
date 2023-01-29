@@ -9,6 +9,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
@@ -25,7 +27,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MesActivity : ComponentActivity() {
+class MesActivity : AppCompatActivity() {
 
     /** DI to get the [SplashViewModel] **/
     private val splashViewModel: SplashViewModel by viewModels()
@@ -61,7 +63,7 @@ class MesActivity : ComponentActivity() {
     @OptIn(
         ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class,
         ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class,
-        ExperimentalPagerApi::class
+        ExperimentalPagerApi::class, ExperimentalAnimationApi::class
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

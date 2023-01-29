@@ -1,6 +1,7 @@
 package com.th3pl4gu3.mes.ui.screens.about
 
 import android.content.res.Configuration
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,13 +20,15 @@ import com.th3pl4gu3.mes.ui.theme.MesTheme
 
 @Composable
 @ExperimentalMaterial3Api
-fun ScreenAbout() {
+fun ScreenAbout(
+    scrollState: ScrollState = rememberScrollState()
+) {
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(scrollState)
     ) {
 
         MesAboutAppCard(

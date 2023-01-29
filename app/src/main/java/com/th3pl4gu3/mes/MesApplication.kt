@@ -99,7 +99,7 @@ class MesApplication : Application() {
              **/
             MesWorkManager.enqueueUniquePeriodicWork(
                 "service_worker_update",
-                ExistingPeriodicWorkPolicy.REPLACE, // If duplicate requests are found, it will keep previous one and delete new one
+                ExistingPeriodicWorkPolicy.KEEP, // If duplicate requests are found, it will keep previous one and delete new one
                 serviceWorkerRequest
             )
         }
@@ -109,6 +109,7 @@ class MesApplication : Application() {
         // If all defined constraints are matched, worker will do the work
         val constraints = Constraints
             .Builder()
+            .setRequiresDeviceIdle(true)
             .setRequiresBatteryNotLow(true) // Battery must not be low
             .setRequiredNetworkType(NetworkType.CONNECTED) // Must be connected to the network
             .setRequiredNetworkType(NetworkType.UNMETERED) // Connection type must be un-metered

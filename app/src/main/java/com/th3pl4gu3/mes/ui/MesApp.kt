@@ -3,10 +3,13 @@ package com.th3pl4gu3.mes.ui
 import android.app.Activity
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.util.Log
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.*
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
@@ -34,11 +37,14 @@ import com.th3pl4gu3.mes.ui.screens.theme_selector.ScreenThemeSelector
 import com.th3pl4gu3.mes.ui.theme.MesTheme
 import kotlinx.coroutines.launch
 
+const val TAG = "MES_APP_COMPOSE"
+
 @Composable
 @ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
 @ExperimentalFoundationApi
 @ExperimentalPagerApi
+@ExperimentalAnimationApi
 fun MesApp(
     application: MesApplication,
     startDestination: String,
@@ -71,7 +77,8 @@ fun MesApp(
         /**
          * Define remember state variables
          **/
-        val systemUiController = rememberSystemUiController()
+        val listState = rememberLazyListState()
+        val scrollState = rememberScrollState()
         val navController = rememberNavController()
         val navigationActions = remember(navController) { MesNavigationActions(navController) }
         val coroutineScope = rememberCoroutineScope()
@@ -98,13 +105,7 @@ fun MesApp(
             currentRoute == MesDestinations.SCREEN_PRE_CALL,
             currentRoute == MesDestinations.SCREEN_WELCOME
         ).any { it }
-//
-//        /**
-//         * Restore System Bars color which can change
-//         * later in the app when launching Pre Call Screen
-//         **/
-//        if (activity.window.statusBarColor != activity.window.navigationBarColor)
-//            systemUiController.setSystemBarsColor(MaterialTheme.colorScheme.background)
+        
 
         /**
          * Clear the search bar if we are no more in the services screen
@@ -139,7 +140,8 @@ fun MesApp(
                             openDrawer = { coroutineScope.launch { sizeAwareDrawerState.open() } },
                             showSearchIcon = currentRoute == MesDestinations.SCREEN_SERVICES,
                             searchValue = searchBarValue,
-                            searchValueChange = { searchBarValue = it }
+                            searchValueChange = { searchBarValue = it },
+                            hasScrolled = listState.firstVisibleItemIndex > 0 || scrollState.value > 0
                         )
                     }
                 },
@@ -163,6 +165,8 @@ fun MesApp(
                         isExpandedScreen = isExpandedScreen,
                         modifier = contentModifier,
                         navController = navController,
+                        listState = listState,
+                        scrollState = scrollState,
                         openDrawer = { coroutineScope.launch { sizeAwareDrawerState.open() } },
                         startDestination = startDestination
                     )
@@ -215,6 +219,7 @@ private fun rememberSizeAwareDrawerState(isExpandedScreen: Boolean): DrawerState
 @ExperimentalComposeUiApi
 @ExperimentalFoundationApi
 @ExperimentalPagerApi
+@ExperimentalAnimationApi
 fun PreviewTopAppBarMediumSize() {
 
     MesTheme {
@@ -233,6 +238,7 @@ fun PreviewTopAppBarMediumSize() {
 @ExperimentalComposeUiApi
 @ExperimentalFoundationApi
 @ExperimentalPagerApi
+@ExperimentalAnimationApi
 fun PreviewTopAppBarExpandedSize() {
     MesTheme {
         MesApp(

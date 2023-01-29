@@ -2,45 +2,39 @@ package com.th3pl4gu3.mes.ui.screens.precall
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.util.Log
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.SizeTransform
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.outlined.CallEnd
+import androidx.compose.material.icons.outlined.KeyboardDoubleArrowLeft
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TileMode
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.th3pl4gu3.mes.models.Service
-import com.th3pl4gu3.mes.ui.components.MesAsyncRoundedImage
-import com.th3pl4gu3.mes.ui.components.MesIcon
-import com.th3pl4gu3.mes.ui.components.MesScreenError
-import com.th3pl4gu3.mes.ui.components.MesScreenLoading
+import com.th3pl4gu3.mes.ui.components.*
 import com.th3pl4gu3.mes.ui.theme.MesTheme
-import com.th3pl4gu3.mes.ui.theme.Orange500
 import com.th3pl4gu3.mes.ui.theme.Red500
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
-import me.saket.swipe.rememberSwipeableActionsState
 
 @Composable
 @ExperimentalComposeUiApi
+@ExperimentalAnimationApi
 fun ScreenPreCall(
     preCallUiState: PreCallUiState,
     countdown: String?,
@@ -66,6 +60,7 @@ fun ScreenPreCall(
 }
 
 @Composable
+@ExperimentalAnimationApi
 fun PreCallContent(
     service: Service,
     countdown: String,
@@ -143,13 +138,23 @@ fun PreCallContent(
             contentAlignment = Alignment.Center
         ) {
 
-            Text(
-                text = countdown,
-                style = MaterialTheme.typography.titleLarge,
-                textAlign = TextAlign.Center,
-                color = Red500,
-                fontWeight = FontWeight.Bold
-            )
+            AnimatedContent(
+                targetState = countdown,
+                transitionSpec = {
+                    MesCountDownAnimation().using(
+                        SizeTransform(clip = false)
+                    )
+                }
+            ) { targetCount ->
+
+                Text(
+                    text = targetCount,
+                    style = MaterialTheme.typography.titleLarge,
+                    textAlign = TextAlign.Center,
+                    color = Red500,
+                    fontWeight = FontWeight.Bold
+                )
+            }
 
         }
 
@@ -224,6 +229,7 @@ fun SwipeToCancel(
 @Preview("PreCall Screen Dark", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 @ExperimentalComposeUiApi
+@ExperimentalAnimationApi
 fun PreviewScreenPreCallContent() {
 
     val mockData = Service(
@@ -248,6 +254,7 @@ fun PreviewScreenPreCallContent() {
 @Preview("PreCall Screen Loading Dark", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 @ExperimentalComposeUiApi
+@ExperimentalAnimationApi
 fun PreviewScreenPreCallLoading() {
     MesTheme {
         ScreenPreCall(
@@ -263,6 +270,7 @@ fun PreviewScreenPreCallLoading() {
 @Preview("PreCall Screen Error Dark", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 @ExperimentalComposeUiApi
+@ExperimentalAnimationApi
 fun PreviewScreenPreCallError() {
     MesTheme {
         ScreenPreCall(

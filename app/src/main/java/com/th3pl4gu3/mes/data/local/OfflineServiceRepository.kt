@@ -1,11 +1,19 @@
 package com.th3pl4gu3.mes.data.local
 
+import android.util.Log
 import com.th3pl4gu3.mes.models.Service
 import kotlinx.coroutines.flow.Flow
 
 class OfflineServiceRepository(private val serviceDao: ServiceDao) : ServiceRepository {
 
+    companion object {
+        const val TAG = "OFFLINE_SERVICE_REPOSITORY"
+    }
+
     override suspend fun forceRefresh(services: List<Service>){
+        // Log info
+        Log.i(TAG, "Force refreshing services...")
+
         /**
          * Force refresh the services by
          * 1. Deleting the existing ones

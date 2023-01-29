@@ -10,7 +10,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 internal val MesColorDark = darkColorScheme(
     primary = Red200,
-    onPrimary = Gray50,
+    onPrimary = Gray500,
     inversePrimary = Color.White,
 
     secondary = Red200,

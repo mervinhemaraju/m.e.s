@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -24,12 +25,15 @@ import com.th3pl4gu3.mes.ui.components.*
 import com.th3pl4gu3.mes.ui.theme.MesTheme
 import kotlinx.coroutines.launch
 
+const val TAG = "SCREEN_SERVICES"
+
 @Composable
 @ExperimentalFoundationApi
 fun ScreenServices(
     servicesUiState: ServicesUiState,
     retryAction: () -> Unit,
     navigateToPreCall: (service: Service) -> Unit,
+    listState: LazyListState,
     modifier: Modifier = Modifier
 ) {
 
@@ -43,9 +47,10 @@ fun ScreenServices(
             modifier = servicesModifier
         )
         is ServicesUiState.Success -> ServicesList(
-            servicesUiState.services,
-            navigateToPreCall,
-            servicesModifier
+            services = servicesUiState.services,
+            navigateToPreCall = navigateToPreCall,
+            listState = listState,
+            modifier = servicesModifier,
         )
         is ServicesUiState.Error -> MesScreenError(
             retryAction = retryAction,
@@ -64,6 +69,7 @@ fun ScreenServices(
 fun ServicesList(
     services: List<Service>,
     navigateToPreCall: (service: Service) -> Unit,
+    listState: LazyListState,
     modifier: Modifier = Modifier
 ) {
     if (services.isEmpty()) {
@@ -87,20 +93,18 @@ fun ServicesList(
             )
         }
     } else {
-
-        val state = rememberLazyListState()
         val coroutineScope = rememberCoroutineScope()
 
         val showScrollToTopButton by remember {
             derivedStateOf {
-                state.firstVisibleItemIndex > 0
+                listState.firstVisibleItemIndex > 0
             }
         }
 
         Box {
             LazyColumn(
                 modifier = modifier,
-                state = state
+                state = listState
             ) {
                 items(
                     services,
@@ -132,7 +136,7 @@ fun ServicesList(
                 FloatingActionButton(
                     onClick = {
                         coroutineScope.launch {
-                            state.animateScrollToItem(0)
+                            listState.animateScrollToItem(0)
                         }
                     },
                     containerColor = MaterialTheme.colorScheme.primary
@@ -158,7 +162,8 @@ fun LoadingScreenPreview() {
         ScreenServices(
             servicesUiState = ServicesUiState.Loading ,
             retryAction = {},
-            navigateToPreCall = {}
+            navigateToPreCall = {},
+            listState = rememberLazyListState()
         )
     }
 }
@@ -172,7 +177,8 @@ fun ErrorScreenPreview() {
         ScreenServices(
             servicesUiState = ServicesUiState.Error ,
             retryAction = {},
-            navigateToPreCall = {}
+            navigateToPreCall = {},
+            listState = rememberLazyListState()
         )
     }
 }
@@ -202,7 +208,8 @@ fun AllServicesScreenPreview() {
             servicesUiState = ServicesUiState.Success(services = mockData),
             retryAction = {},
             navigateToPreCall = {},
-            modifier = modifier
+            modifier = modifier,
+            listState = rememberLazyListState()
         )
     }
 }
@@ -220,6 +227,7 @@ fun EmptyServicesScreenPreview() {
             servicesUiState = ServicesUiState.Success(services = mockData),
             retryAction = {},
             navigateToPreCall = {},
+            listState = rememberLazyListState(),
             modifier = modifier
         )
     }

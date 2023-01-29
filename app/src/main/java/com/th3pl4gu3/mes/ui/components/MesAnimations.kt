@@ -6,6 +6,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 
+@ExperimentalAnimationApi
+fun MesCountDownAnimation(duration: Int = 800): ContentTransform {
+    return slideInVertically(animationSpec = tween(durationMillis = duration)) { height -> height } + fadeIn(
+        animationSpec = tween(durationMillis = duration)
+    ) with slideOutVertically(animationSpec = tween(durationMillis = duration)) { height -> -height } + fadeOut(
+        animationSpec = tween(durationMillis = duration)
+    )
+}
+
 @Composable
 fun MesAnimatedVisibilityExpandedHorizontallyContent(
     visibility: Boolean,

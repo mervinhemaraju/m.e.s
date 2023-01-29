@@ -25,6 +25,10 @@ class HomeViewModel @Inject constructor(
     private val container: AppContainer
 ) : ViewModel() {
 
+    companion object {
+        const val TAG = "HOME_VIEW_MODEL_TAG"
+    }
+
     val homeUiState: StateFlow<HomeUiState> =
         container.offlineServiceRepository.getEmergencyServices().map { HomeUiState.Success(it) }
             .stateIn(
@@ -43,21 +47,37 @@ class HomeViewModel @Inject constructor(
             )
 
     init {
+        // Log info
+        Log.i(TAG, "Starting HomeViewModel Init")
+
         loadOnlineServices()
     }
 
     fun loadOnlineServices() =
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                // Log info
+                Log.i(TAG, "Loading online services. Services exists -> ${doesServicesExists()}")
 
                 if (!doesServicesExists()) {
 
                     // Logging for information
-                    Log.i("api_services", "No services found. Fetching data from the API")
+                    Log.i(TAG, "No services found. Fetching data from the API")
+
+                    // Get services from API
+                    val services = container.onlineServiceRepository.getMesServices().services
 
                     // Force refresh the data
                     container.offlineServiceRepository.forceRefresh(
-                        services = container.onlineServiceRepository.getMesServices().services
+                        services = services
+                    )
+
+                    // Get a default service for the action button
+                    val defaultService = services.first { it.type == "E" && it.name.lowercase().contains("police") }.identifier
+
+                    // Update emergency button action
+                    container.dataStoreServiceRepository.updateEmergencyButtonActionIdentifier(
+                        defaultService
                     )
                 }
 

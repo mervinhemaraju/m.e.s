@@ -9,6 +9,7 @@ import com.th3pl4gu3.mes.data.AppContainer
 import com.th3pl4gu3.mes.models.Service
 import com.th3pl4gu3.mes.ui.utils.TIMEOUT_MILLIS
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -22,26 +23,23 @@ class PreCallViewModel @Inject constructor(
     /**
      * Private properties
      **/
-
-    private val mTick = MutableLiveData("")
-
     private val mStartCall = MutableLiveData(false)
 
-    private val mCountDown = object: CountDownTimer(4000, 1000) {
-        override fun onTick(millisUntilFinished: Long) {
-            mTick.value = TimeUnit.SECONDS.convert(millisUntilFinished, TimeUnit.MILLISECONDS).toString()
+    val seconds: Flow<Int> = (5 downTo 0)
+        .asSequence()
+        .asFlow()
+        .map {
+            it
         }
-        override fun onFinish() {
-            mStartCall.value = true
+        .onEach {
+            if(it != 5){
+                delay(1000)
+            }
         }
-    }
 
     /**
      * Public properties
      **/
-    val tick: LiveData<String> = Transformations.map(mTick) {
-        "${it}s"
-    }
 
     val startCall: LiveData<Boolean>
         get() = mStartCall
@@ -61,19 +59,8 @@ class PreCallViewModel @Inject constructor(
     )
 
     /**
-     * Init clause
-     **/
-    init {
-        startCountDown()
-    }
-
-    /**
      * Private functions
      **/
-    private fun startCountDown(){
-        mCountDown.start()
-    }
-
     private fun getService(): Flow<List<Service>> {
 
         val serviceIdentifier: String? = savedStateHandle["serviceIdentifier"]

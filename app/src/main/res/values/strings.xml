@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Mes</string>
 
+    <string name="headline_home_main">Emergency Police Help Needed ?</string>
+
     <!-- Content Descriptions -->
     <string name="ctnt_desc_drawer_open">Open Navigation Drawer</string>
     <string name="ctnt_desc_phone_button">Phone Button</string>
