@@ -1,13 +1,14 @@
 package com.th3pl4gu3.mes.ui.navigation
 
 import com.th3pl4gu3.mes.ui.MesApp
+import com.th3pl4gu3.mes.ui.utils.KEYWORD_SERVICE_IDENTIFIER_ARGUMENT
 
 
 /**
  * Arguments placeholders used in [MesDestinations].
  */
 object MesDestinationArguments {
-    const val ARG_PRE_CALL_SERVICE_IDENTIFIER = "{serviceIdentifier}"
+    const val ARG_PRE_CALL_SERVICE_IDENTIFIER = "{$KEYWORD_SERVICE_IDENTIFIER_ARGUMENT}"
 }
 
 /**

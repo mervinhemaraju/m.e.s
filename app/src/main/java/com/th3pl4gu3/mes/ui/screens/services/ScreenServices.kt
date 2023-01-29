@@ -17,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.th3pl4gu3.mes.R
@@ -43,7 +44,7 @@ fun ScreenServices(
     // Load the component to show based on the UI State
     when (servicesUiState) {
         is ServicesUiState.Loading -> MesScreenLoading(
-            loadingMessage = "Getting services...",
+            loadingMessage = stringResource(id = R.string.message_loading_services),
             modifier = servicesModifier
         )
         is ServicesUiState.Success -> ServicesList(
@@ -54,7 +55,7 @@ fun ScreenServices(
         )
         is ServicesUiState.Error -> MesScreenError(
             retryAction = retryAction,
-            errorMessage = "Unable to load services",
+            errorMessage = stringResource(id = R.string.message_error_loading_services_failed),
             modifier = servicesModifier
         )
     }
@@ -85,7 +86,7 @@ fun ServicesList(
             )
 
             Text(
-                text = "No services found",
+                text = stringResource(id = R.string.message_services_not_found),
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier

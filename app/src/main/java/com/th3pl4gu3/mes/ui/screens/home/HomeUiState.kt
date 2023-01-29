@@ -7,5 +7,3 @@ sealed interface HomeUiState {
     object Error : HomeUiState
     object Loading : HomeUiState
 }
-
-//data class HomeUiState(val services: List<Service> = listOf())

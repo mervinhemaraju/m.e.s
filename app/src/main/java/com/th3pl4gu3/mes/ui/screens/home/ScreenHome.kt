@@ -13,7 +13,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
 import com.th3pl4gu3.mes.R
 import com.th3pl4gu3.mes.data.DummyData
 import com.th3pl4gu3.mes.models.MesAppSettings
@@ -50,7 +49,7 @@ fun ScreenHome(
     ) {
 
         Text(
-            text = stringResource(id = R.string.headline_home_main),
+            text = stringResource(id = R.string.headline_home_primary),
             style = MaterialTheme.typography.headlineLarge,
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
@@ -59,7 +58,7 @@ fun ScreenHome(
         )
 
         Text(
-            text = "Click the button to quick call",
+            text = stringResource(id = R.string.headline_home_secondary),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
@@ -93,7 +92,7 @@ fun ScreenHome(
         }
 
         Text(
-            text = "Need other quick emergency actions?",
+            text = stringResource(id = R.string.headline_home_tertiary),
             style = MaterialTheme.typography.headlineLarge,
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
@@ -102,7 +101,7 @@ fun ScreenHome(
         )
 
         Text(
-            text = "Click one below to call",
+            text = stringResource(id = R.string.headline_home_quaternary),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
@@ -159,7 +158,7 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
         )
 
         Text(
-            text = "Getting services...",
+            text = stringResource(id = R.string.message_loading_services),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
@@ -177,13 +176,16 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
     ) {
 
         Text(
-            text = "Loading failed",
+            text = stringResource(id = R.string.message_error_loading_failed),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.padding(8.dp)
         )
 
-        MesTextButton(text = "Retry", onClick = retryAction)
+        MesTextButton(
+            text = stringResource(id = R.string.action_retry),
+            onClick = retryAction
+        )
     }
 }
 

@@ -1,8 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="headline_home_main">Besoin d\'aide?</string>
-    <string name="app_name">Mes</string>
-    <string name="ctnt_desc_phone_button">Telephone</string>
-    <string name="ctnt_desc_emergency_button">Urgence</string>
-    <string name="ctnt_desc_drawer_open">Navigation</string>
 </resources>

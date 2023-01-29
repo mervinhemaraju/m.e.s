@@ -47,7 +47,7 @@ data class AboutInfo(
                 AboutInfo(
                     icon = Icons.Outlined.Copyright,
                     title = "Open Source Licenses",
-                    description = "Open Source Licenses"
+                    description = "Open Source Licenses used in Mes."
                 )
             )
             add(
@@ -61,7 +61,7 @@ data class AboutInfo(
                 AboutInfo(
                     icon = Icons.Outlined.Info,
                     title = "Version",
-                    description = BuildConfig.VERSION_CODE.toString()
+                    description = BuildConfig.VERSION_NAME
                 )
             )
         }

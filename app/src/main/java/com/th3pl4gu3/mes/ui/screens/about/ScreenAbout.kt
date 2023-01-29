@@ -11,7 +11,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.th3pl4gu3.mes.R
 import com.th3pl4gu3.mes.models.AboutApp
 import com.th3pl4gu3.mes.models.AboutInfo
 import com.th3pl4gu3.mes.ui.components.MesAboutAppCard
@@ -32,17 +34,17 @@ fun ScreenAbout(
     ) {
 
         MesAboutAppCard(
-            title = "About",
+            title = stringResource(id = R.string.section_about_title_about),
             aboutApp = AboutApp.designers
         )
 
         MesAboutInfoCard(
-            title = "Support & Development",
+            title = stringResource(id = R.string.section_about_title_support_and_dev),
             aboutInfo = AboutInfo.supportAndDevelopment
         )
 
         MesAboutInfoCard(
-            title = "Other",
+            title = stringResource(id = R.string.section_about_title_other),
             aboutInfo = AboutInfo.other
         )
 

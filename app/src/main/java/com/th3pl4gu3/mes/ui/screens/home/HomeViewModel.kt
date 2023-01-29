@@ -2,12 +2,11 @@ package com.th3pl4gu3.mes.ui.screens.home
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.th3pl4gu3.mes.data.AppContainer
 import com.th3pl4gu3.mes.models.MesAppSettings
+import com.th3pl4gu3.mes.ui.utils.MES_EMERGENCY_TYPE
+import com.th3pl4gu3.mes.ui.utils.MES_KEYWORD_DEFAULT_EB_ACTION
 import com.th3pl4gu3.mes.ui.utils.TIMEOUT_MILLIS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -65,20 +64,20 @@ class HomeViewModel @Inject constructor(
                     Log.i(TAG, "No services found. Fetching data from the API")
 
                     // Get services from API
-                    val services = container.onlineServiceRepository.getMesServices().services
+                    with(container.onlineServiceRepository.getMesServices().services){
+                        // Force refresh the data
+                        container.offlineServiceRepository.forceRefresh(
+                            services = this
+                        )
 
-                    // Force refresh the data
-                    container.offlineServiceRepository.forceRefresh(
-                        services = services
-                    )
+                        // Get a default service for the action button
+                        val defaultService = this.first { it.type == MES_EMERGENCY_TYPE && it.name.lowercase().contains(MES_KEYWORD_DEFAULT_EB_ACTION) }.identifier
 
-                    // Get a default service for the action button
-                    val defaultService = services.first { it.type == "E" && it.name.lowercase().contains("police") }.identifier
-
-                    // Update emergency button action
-                    container.dataStoreServiceRepository.updateEmergencyButtonActionIdentifier(
-                        defaultService
-                    )
+                        // Update emergency button action
+                        container.dataStoreServiceRepository.updateEmergencyButtonActionIdentifier(
+                            defaultService
+                        )
+                    }
                 }
 
             } catch (e: IOException) {

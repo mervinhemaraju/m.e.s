@@ -1,12 +1,72 @@
 <resources>
-    <string name="app_name">Mes</string>
 
-    <string name="headline_home_main">Emergency Police Help Needed ?</string>
+    <!-- App Specific -->
+    <string name="app_name" translatable="false">mes</string>
+
+    <!-- Shared -->
+
+    <!-- Actions -->
+    <string name="action_retry">Retry</string>
+    <string name="action_close">Close</string>
+    <string name="action_slide_cancel">Slide to Cancel</string>
+
+    <!-- Titles -->
+    <string name="title_about_data_rate_mes">Rate Mes</string>
+    <string name="title_about_data_bug_report">Report a Bug</string>
+    <string name="title_about_data_share_mes">Share Mes</string>
+    <string name="title_about_data_licenses">Open Source Licenses</string>
+    <string name="title_about_data_api">Developer API</string>
+    <string name="title_about_version">Version</string>
+    <string name="title_about_lead_developer" translatable="false">Mervin Hemaraju</string>
+    <string name="title_about_graphic_designer" translatable="false">Nick Foo Kune</string>
+
+    <string name="title_theme_selector_dialog">Choose a Theme</string>
+
+    <!-- Descriptions -->
+    <string name="description_about_data_rate_mes">
+        If you love the app, let us know in the Google Play Store and we can make it even better.
+    </string>
+    <string name="description_about_data_bug_report">
+        Any issues that you came across while navigating MES, please let us know.
+    </string>
+    <string name="description_about_data_share_mes">
+        Do not forget to share Mes with your friends and families.
+    </string>
+    <string name="description_about_data_licenses">
+        Open Source Licenses used in Mes.
+    </string>
+    <string name="description_about_data_api">
+        Application Program Interface (API) used in MES
+    </string>
+    <string name="description_about_lead_developer">Lead Developer &amp; Designer</string>
+    <string name="description_about_graphic_designer">Play Store Banner &amp; Images</string>
+
+    <!-- Messages: Basic -->
+    <string name="message_loading_services">Getting Services…</string>
+    <string name="message_loading_call_in_progress">Call in progress…</string>
+    <string name="message_services_not_found">No services found</string>
+    <!-- Message: Error -->
+    <string name="message_error_loading_countdown" translatable="false">X</string>
+    <string name="message_error_loading_failed">Loading Failed</string>
+    <string name="message_error_loading_services_failed">Unable to load services.</string>
+    <string name="message_error_call_startup_failed">Unable to perform the phone call at the moment. Please try again.</string>
+
+    <!-- Headlines -->
+    <string name="headline_home_primary">Emergency police help needed ?</string>
+    <string name="headline_home_secondary">Click the button to quick call</string>
+    <string name="headline_home_tertiary">Need other quick emergency actions ?</string>
+    <string name="headline_home_quaternary">Click one below to call</string>
+
+    <string name="headline_pre_call_primary">Starting a call to</string>
+
+    <!-- Sections -->
+    <string name="section_about_title_about">About</string>
+    <string name="section_about_title_support_and_dev">Support &amp; Development</string>
+    <string name="section_about_title_other">Other</string>
 
     <!-- Content Descriptions -->
     <string name="ctnt_desc_drawer_open">Open Navigation Drawer</string>
     <string name="ctnt_desc_phone_button">Phone Button</string>
-
     <string name="ctnt_desc_emergency_button">Emergency Button</string>
 
 </resources>

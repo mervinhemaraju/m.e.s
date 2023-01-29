@@ -21,6 +21,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,6 +30,7 @@ import com.th3pl4gu3.mes.models.Service
 import com.th3pl4gu3.mes.ui.components.*
 import com.th3pl4gu3.mes.ui.theme.MesTheme
 import com.th3pl4gu3.mes.ui.theme.Red500
+import com.th3pl4gu3.mes.R
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
 
@@ -45,16 +47,16 @@ fun ScreenPreCall(
     when (preCallUiState) {
         is PreCallUiState.Success -> PreCallContent(
             service = preCallUiState.service,
-            countdown = if (countdown.isNullOrEmpty()) "ERROR" else countdown,
+            countdown = if (countdown.isNullOrEmpty()) stringResource(id = R.string.message_error_loading_countdown) else countdown,
             closeScreen = closeScreen
         )
         is PreCallUiState.Error -> MesScreenError(
             retryAction = closeScreen,
-            errorMessage = "Unable to perform the phone call at the moment. Please try again.",
-            errorButtonText = "Close"
+            errorMessage = stringResource(id = R.string.message_error_call_startup_failed),
+            errorButtonText = stringResource(id = R.string.action_close)
         )
         is PreCallUiState.Loading -> MesScreenLoading(
-            loadingMessage = "Phone call in process..."
+            loadingMessage = stringResource(id = R.string.message_loading_call_in_progress)
         )
     }
 }
@@ -88,7 +90,7 @@ fun PreCallContent(
             modifier = Modifier
                 .wrapContentSize()
                 .weight(1f),
-            text = "Starting a call to",
+            text = stringResource(id = R.string.headline_pre_call_primary),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center
@@ -206,7 +208,7 @@ fun SwipeToCancel(
         ) {
 
             Text(
-                text = "Slide to Cancel",
+                text = stringResource(id = R.string.action_slide_cancel),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimary
             )

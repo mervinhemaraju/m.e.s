@@ -1,17 +1,14 @@
 package com.th3pl4gu3.mes.ui.screens.precall
 
-import android.os.CountDownTimer
-import android.util.Log
 import androidx.lifecycle.*
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.th3pl4gu3.mes.data.AppContainer
 import com.th3pl4gu3.mes.models.Service
+import com.th3pl4gu3.mes.ui.utils.KEYWORD_SERVICE_IDENTIFIER_ARGUMENT
+import com.th3pl4gu3.mes.ui.utils.PRE_CALL_COUNTDOWN_RANGE
 import com.th3pl4gu3.mes.ui.utils.TIMEOUT_MILLIS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,15 +22,15 @@ class PreCallViewModel @Inject constructor(
      **/
     private val mStartCall = MutableLiveData(false)
 
-    val seconds: Flow<Int> = (5 downTo 0)
+    val seconds: Flow<Int> = (PRE_CALL_COUNTDOWN_RANGE)
         .asSequence()
         .asFlow()
         .map {
             it
         }
         .onEach {
-            if(it != 5){
-                delay(1000)
+            if(it != PRE_CALL_COUNTDOWN_RANGE.first){
+                delay(500)
             }
         }
 
@@ -63,7 +60,7 @@ class PreCallViewModel @Inject constructor(
      **/
     private fun getService(): Flow<List<Service>> {
 
-        val serviceIdentifier: String? = savedStateHandle["serviceIdentifier"]
+        val serviceIdentifier: String? = savedStateHandle[KEYWORD_SERVICE_IDENTIFIER_ARGUMENT]
 
         return if (serviceIdentifier.isNullOrEmpty()) {
             container.offlineServiceRepository.getAllServices()
