@@ -9,6 +9,7 @@ import com.th3pl4gu3.mes.data.local.OfflineServiceRepository
 import com.th3pl4gu3.mes.data.network.MesApiServiceRepository
 import com.th3pl4gu3.mes.data.store.DataStoreRepository
 import com.th3pl4gu3.mes.data.store.StoreRepository
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
@@ -35,6 +36,7 @@ class DefaultAppContainer(private val context: Context): AppContainer {
     /**
      * Use the Retrofit builder to build a retrofit object using a kotlinx.serialization converter
      */
+    @OptIn(ExperimentalSerializationApi::class)
     private val retrofit: Retrofit = Retrofit.Builder()
         .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
         .baseUrl(BASE_URL)

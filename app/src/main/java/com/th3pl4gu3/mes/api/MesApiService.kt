@@ -4,7 +4,7 @@ import com.th3pl4gu3.mes.models.MesResponse
 import retrofit2.http.GET
 
 /**
- * A public interface that exposes the [getServices] method
+ * A public interface that exposes the [getMesServices] method
  */
 interface MesApiService {
     /**
@@ -13,5 +13,5 @@ interface MesApiService {
      * HTTP method
      */
     @GET("services")
-    suspend fun getServices(): MesResponse
+    suspend fun getMesServices(): MesResponse
 }

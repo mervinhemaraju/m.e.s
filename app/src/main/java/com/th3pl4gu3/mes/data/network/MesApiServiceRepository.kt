@@ -12,5 +12,5 @@ class MesApiServiceRepository(
 
 ) : ServiceRepository {
     /** Fetches list of Services from Mes API */
-    override suspend fun getMesServices(): MesResponse = mesApiService.getServices()
+    override suspend fun getMesServices(): MesResponse = mesApiService.getMesServices()
 }

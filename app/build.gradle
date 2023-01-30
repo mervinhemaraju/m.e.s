@@ -3,20 +3,24 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'org.jetbrains.kotlin.plugin.serialization'
     id 'com.google.devtools.ksp' version "$com_google_devtools_ksp_version"
-    id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'kotlinx-serialization'
+    id 'kotlin-kapt'
 }
 
 android {
+    signingConfigs {
+        release
+    }
     namespace app_id
     compileSdk 33
 
     defaultConfig {
-        applicationId app_id
+        applicationId "$app_id"
         minSdk 29
         targetSdk 33
-        versionCode versionCode
-        versionName versionName
+        versionCode version_code
+        versionName "$version_name"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -30,17 +34,27 @@ android {
 //            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 //        }
         release {
-            // Enables code shrinking, obfuscation, and optimization for only
-            // your project's release build type.
             minifyEnabled true
-
-            // Enables resource shrinking, which is performed by the
-            // Android Gradle plugin.
             shrinkResources true
-
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
-//            signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
+        }
+        preprod {
+            versionNameSuffix version_suffix_preprod
+            debuggable true
+            minifyEnabled true
+            shrinkResources true
+            signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            matchingFallbacks = ['debug']
+        }
+        debug {
+            versionNameSuffix version_suffix_dev
+            debuggable true
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
         }
     }
     compileOptions {
@@ -61,6 +75,31 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+    buildToolsVersion '33.0.1'
+}
+
+// Create a variable called keystorePropertiesFile, and initialize it to your
+// keystore.properties file, in the rootProject folder.
+def props = new Properties()
+def propFile = new File("keystore.properties")
+
+// Check if we can read the file
+if (propFile.canRead()) {
+    props.load(new FileInputStream(propFile))
+
+    // Before assigning, we check if key is present
+    if (props != null && props.containsKey('STORE_FILE') && props.containsKey('STORE_PASSWORD') && props.containsKey('KEY_ALIAS') && props.containsKey('KEY_PASSWORD')) {
+        android.signingConfigs.release.storeFile = file(props['STORE_FILE'])
+        android.signingConfigs.release.storePassword = props['STORE_PASSWORD']
+        android.signingConfigs.release.keyAlias = props['KEY_ALIAS']
+        android.signingConfigs.release.keyPassword = props['KEY_PASSWORD']
+    } else {
+        println 'signing.properties found but some entries are missing'
+        android.buildTypes.release.signingConfig = null
+    }
+} else {
+    println 'signing.properties not found'
+    android.buildTypes.release.signingConfig = null
 }
 
 dependencies {

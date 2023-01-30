@@ -1,5 +1,7 @@
 package com.th3pl4gu3.mes.ui.components
 
+import android.app.Activity
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.th3pl4gu3.mes.BuildConfig
 import com.th3pl4gu3.mes.R
 import com.th3pl4gu3.mes.models.AboutInfoDrawable
 import com.th3pl4gu3.mes.models.AboutInfoVector
@@ -359,7 +362,7 @@ fun MesAboutItem(
             )
 
             Text(
-                text = stringResource(id = aboutInfo.description),
+                text = if(aboutInfo.title != R.string.title_about_version) stringResource(id = aboutInfo.description) else BuildConfig.VERSION_NAME,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.constrainAs(description) {
