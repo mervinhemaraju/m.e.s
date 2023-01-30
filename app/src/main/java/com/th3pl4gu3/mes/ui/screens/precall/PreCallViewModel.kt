@@ -1,6 +1,8 @@
 package com.th3pl4gu3.mes.ui.screens.precall
 
-import androidx.lifecycle.*
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.th3pl4gu3.mes.data.AppContainer
 import com.th3pl4gu3.mes.models.Service
 import com.th3pl4gu3.mes.ui.utils.KEYWORD_SERVICE_IDENTIFIER_ARGUMENT
@@ -20,7 +22,11 @@ class PreCallViewModel @Inject constructor(
     /**
      * Private properties
      **/
-    private val mStartCall = MutableLiveData(false)
+    private val mStartCall = MutableStateFlow(false)
+
+    /**
+     * Public properties
+     **/
 
     val seconds: Flow<Int> = (PRE_CALL_COUNTDOWN_RANGE)
         .asSequence()
@@ -30,15 +36,11 @@ class PreCallViewModel @Inject constructor(
         }
         .onEach {
             if(it != PRE_CALL_COUNTDOWN_RANGE.first){
-                delay(500)
+                delay(1000)
             }
         }
 
-    /**
-     * Public properties
-     **/
-
-    val startCall: LiveData<Boolean>
+    val startCall: StateFlow<Boolean>
         get() = mStartCall
 
     val service: StateFlow<PreCallUiState> = getService().map {

@@ -10,7 +10,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -118,7 +117,7 @@ fun MesNavGraph(
 
             val countdown by preCallViewModel.seconds.collectAsState(initial = 5)
 
-            val startCall by preCallViewModel.startCall.observeAsState()
+            val startCall by preCallViewModel.startCall.collectAsState()
 
             ScreenPreCall(
                 preCallUiState = preCallUiState,
