@@ -1,6 +1,5 @@
 package com.th3pl4gu3.mes.ui.navigation
 
-import android.app.Application
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -16,19 +15,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.hilt.navigation.HiltViewModelFactory
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
-import androidx.lifecycle.get
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.th3pl4gu3.mes.MesApplication
 import com.th3pl4gu3.mes.models.MesAppSettings
@@ -91,7 +83,6 @@ fun MesNavGraph(
 
             val mesAppSettings = homeViewModel.mesAppSettings.collectAsState(initial = MesAppSettings()).value
 
-            Log.i("MESAPPAS", "iden -> ${mesAppSettings.emergencyButtonActionIdentifier}")
             ScreenHome(
                 homeUiState = homeUiState,
                 retryAction = homeViewModel::loadOnlineServices,
@@ -150,15 +141,19 @@ fun MesNavGraph(
 
             val settingsViewModel = hiltViewModel<SettingsViewModel>()
 
-            val message= settingsViewModel.messageQueue.collectAsState(initial = null).value
+            val message = settingsViewModel.messageQueue.collectAsState(initial = null).value
 
             val services = settingsViewModel.services.collectAsState(initial = listOf()).value
 
-            if (!message.isNullOrEmpty()) {
+            if (message != null) {
 
                 Toast.makeText(
                     LocalContext.current,
-                    message,
+                    if(!message.first.isNullOrEmpty()){
+                        stringResource(id = message.second, message.first!!)
+                    }else{
+                        stringResource(id = message.second)
+                    },
                     Toast.LENGTH_SHORT
                 ).show()
 

@@ -12,6 +12,7 @@ import com.th3pl4gu3.mes.models.ServiceWorker
 import com.th3pl4gu3.mes.ui.extensions.MesWorkManager
 import com.th3pl4gu3.mes.ui.extensions.NotificationBuilderServiceUpdating
 import com.th3pl4gu3.mes.ui.extensions.createNotificationChannels
+import com.th3pl4gu3.mes.ui.utils.KEYWORD_SERVICE_WORKER_UNIQUE
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -98,7 +99,7 @@ class MesApplication : Application() {
              * Create the periodic work
              **/
             MesWorkManager.enqueueUniquePeriodicWork(
-                "service_worker_update",
+                KEYWORD_SERVICE_WORKER_UNIQUE,
                 ExistingPeriodicWorkPolicy.KEEP, // If duplicate requests are found, it will keep previous one and delete new one
                 serviceWorkerRequest
             )

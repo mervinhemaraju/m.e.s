@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -19,7 +20,7 @@ import com.th3pl4gu3.mes.ui.theme.MesTheme
 
 @Composable
 fun MesScreenLoading(
-    loadingMessage: String = "Loading",
+    loadingMessage: String = stringResource(id = R.string.message_loading_basic),
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -53,8 +54,8 @@ fun MesScreenLoading(
 @Composable
 fun MesScreenError(
     retryAction: () -> Unit,
-    errorMessage: String = "Error getting content",
-    errorButtonText: String = "Retry",
+    errorMessage: String = stringResource(id = R.string.message_error_content_failed),
+    errorButtonText: String = stringResource(id = R.string.action_retry),
     modifier: Modifier = Modifier
 ) {
     Column(

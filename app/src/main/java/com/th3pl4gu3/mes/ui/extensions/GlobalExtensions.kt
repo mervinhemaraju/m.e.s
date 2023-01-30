@@ -1,20 +1,14 @@
 package com.th3pl4gu3.mes.ui.extensions
 
-import android.Manifest
 import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.font.FontFamily
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.work.WorkManager
-import com.th3pl4gu3.mes.MesActivity
 import com.th3pl4gu3.mes.MesApplication
 import com.th3pl4gu3.mes.models.NotificationChannels
 

@@ -85,7 +85,7 @@ internal fun MesTopAppBar(
                     }) {
                         MesIcon(
                             imageVector = if (isChecked) Icons.Outlined.Close else Icons.Outlined.Search,
-                            contentDescription = R.string.ctnt_desc_drawer_open,
+                            contentDescription = null,
                         )
                     }
                 }
@@ -116,7 +116,7 @@ fun AppBarTitleContent(
             onValueChange = searchValueChange,
             singleLine = true,
             placeholder = {
-                Text(text = "Search")
+                Text(text = stringResource(id = R.string.action_search))
             },
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color.Transparent,
@@ -140,7 +140,7 @@ fun AppBarTitleContent(
 
     MesAnimatedVisibilityExpandedHorizontallyContent(visibility = !isSearchBarActivate) {
         Text(
-            text = stringResource(id = R.string.app_name).lowercase(),
+            text = stringResource(id = R.string.app_name_short).lowercase(),
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier

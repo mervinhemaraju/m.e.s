@@ -1,95 +1,83 @@
 package com.th3pl4gu3.mes.models
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.th3pl4gu3.mes.BuildConfig
 import com.th3pl4gu3.mes.R
+import java.util.Objects
 
-sealed class AboutData(
-    open val title: String,
-    open val description: String
-)
-
-data class AboutInfo(
+sealed class AboutInfoVector(
     val icon: ImageVector,
-    override val title: String,
-    override val description: String
-) : AboutData(title, description) {
-    companion object {
-        val supportAndDevelopment: MutableList<AboutInfo> = mutableListOf<AboutInfo>().apply {
-            add(
-                AboutInfo(
-                    icon = Icons.Outlined.Grade,
-                    title = "Rate Mes",
-                    description = "If you love the app, let us know in the Google Play Store and we can make it even better."
-                )
-            )
-            add(
-                AboutInfo(
-                    icon = Icons.Outlined.BugReport,
-                    title = "Report a Bug",
-                    description = "Any issues that you came across while navigating MES, please let us know."
-                )
-            )
-            add(
-                AboutInfo(
-                    icon = Icons.Outlined.Share,
-                    title = "Share Mes",
-                    description = "Do not forget to share Mes with your friends and families."
-                )
-            )
-        }
+    @StringRes val title: Int,
+    @StringRes val description: Int
+){
+    private object RateApp: AboutInfoVector(
+        icon = Icons.Outlined.Grade,
+        title = R.string.title_about_data_rate_mes,
+        description = R.string.description_about_data_rate_mes
+    )
 
-        val other: MutableList<AboutInfo> = mutableListOf<AboutInfo>().apply {
-            add(
-                AboutInfo(
-                    icon = Icons.Outlined.Copyright,
-                    title = "Open Source Licenses",
-                    description = "Open Source Licenses used in Mes."
-                )
-            )
-            add(
-                AboutInfo(
-                    icon = Icons.Outlined.Api,
-                    title = "Developer API",
-                    description = "Application Program Interface (API) used in MES"
-                )
-            )
-            add(
-                AboutInfo(
-                    icon = Icons.Outlined.Info,
-                    title = "Version",
-                    description = BuildConfig.VERSION_NAME
-                )
-            )
-        }
+    private object ShareApp: AboutInfoVector(
+        icon = Icons.Outlined.Share,
+        title = R.string.title_about_data_share_mes,
+        description = R.string.description_about_data_share_mes
+    )
+
+    private object OpenSourceLicenses: AboutInfoVector(
+        icon = Icons.Outlined.Copyright,
+        title = R.string.title_about_data_licenses,
+        description = R.string.description_about_data_licenses
+    )
+
+    private object Api: AboutInfoVector(
+        icon = Icons.Outlined.Api,
+        title = R.string.title_about_data_api,
+        description = R.string.description_about_data_api
+    )
+
+    private object Version: AboutInfoVector(
+        icon = Icons.Outlined.Info,
+        title = R.string.title_about_version,
+        description = R.string.title_about_version
+    )
+
+    companion object {
+        val supportAndDevelopment = listOf(
+            RateApp,
+            ShareApp
+        )
+        val others = listOf(
+            OpenSourceLicenses,
+            Api,
+            Version
+        )
     }
 }
 
-data class AboutApp(
+sealed class AboutInfoDrawable(
     @DrawableRes val icon: Int,
-    override val title: String,
-    override val description: String
-) : AboutData(title, description){
+    @StringRes val title: Int,
+    @StringRes val description: Int
+){
+    private object LeadDeveloper: AboutInfoDrawable(
+        icon = R.drawable.ic_lead_developer,
+        title = R.string.title_about_lead_developer,
+        description = R.string.description_about_lead_developer
+    )
+
+    private object LeadDesigner: AboutInfoDrawable(
+        icon = R.drawable.ic_graphic_designer,
+        title = R.string.title_about_graphic_designer,
+        description = R.string.description_about_graphic_designer
+    )
 
     companion object {
-        val designers: MutableList<AboutApp> = mutableListOf<AboutApp>().apply {
-            add(
-                AboutApp(
-                    icon = R.drawable.ic_lead_developer,
-                    title = "Mervin Hemaraju",
-                    description = "Lead Developer & Designer"
-                )
-            )
-            add(
-                AboutApp(
-                    icon = R.drawable.ic_graphic_designer,
-                    title = "Nick Foo Kune",
-                    description = "Play Store Banner & Images"
-                )
-            )
-        }
+        val developers = listOf(
+            LeadDeveloper,
+            LeadDesigner
+        )
     }
 }

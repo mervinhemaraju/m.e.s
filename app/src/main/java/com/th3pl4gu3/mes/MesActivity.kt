@@ -16,6 +16,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.res.stringResource
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
@@ -47,7 +48,7 @@ class MesActivity : AppCompatActivity() {
 
         permissions.entries.first { it.key == Manifest.permission.CALL_PHONE }.also {
             if (it.value) {
-                Toast.makeText(this, "Welcome to MES", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, resources.getText(R.string.message_welcome_mes), Toast.LENGTH_SHORT).show()
                 lifecycleScope.launch {
                     (application as MesApplication).container.dataStoreServiceRepository.unsetFirstTimeLogging()
                 }

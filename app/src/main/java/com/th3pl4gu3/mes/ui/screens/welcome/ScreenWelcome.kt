@@ -6,7 +6,6 @@ import android.net.Uri
 import android.provider.Settings
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,9 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,6 +29,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.google.accompanist.pager.*
 import com.th3pl4gu3.mes.MesActivity
+import com.th3pl4gu3.mes.R
 import com.th3pl4gu3.mes.models.WelcomeInfo
 import com.th3pl4gu3.mes.ui.components.MesIcon
 import com.th3pl4gu3.mes.ui.components.MesTextButton
@@ -76,7 +75,7 @@ fun ScreenWelcome(
         ) = createRefs()
 
         Text(
-            text = "Welcome to",
+            text = stringResource(id = R.string.headline_welcome_primary),
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
@@ -88,7 +87,7 @@ fun ScreenWelcome(
         )
 
         Text(
-            text = "Mauritius Emergency Services",
+            text = stringResource(id = R.string.app_name_long),
             style = MaterialTheme.typography.headlineLarge,
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
@@ -127,7 +126,7 @@ fun ScreenWelcome(
         )
 
         MesTextButton(
-            text = "Launch Mes",
+            text = stringResource(id = R.string.action_launch_mes),
             onClick = {
                 coroutineScope.launch {
                     if (context.HasNecessaryPermissions) {
@@ -153,8 +152,8 @@ fun ScreenWelcome(
 
     if (showRationale.value) {
         PermissionDialog(
-            title = "Enable Phone Call in Settings",
-            description = "bla bla",
+            title = stringResource(id = R.string.title_welcome_mes_permissions_rationale_dialog),
+            description = stringResource(id = R.string.description_welcome_mes_permissions_rationale_dialog),
             confirmAction = {
                 val intent = Intent().apply {
                     action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
@@ -168,8 +167,8 @@ fun ScreenWelcome(
         )
     } else if (openDialog.value) {
         PermissionDialog(
-            title = "Permissions needed for Notifications",
-            description = "bla bla",
+            title = stringResource(id = R.string.title_welcome_mes_permissions_needed_dialog),
+            description = stringResource(id = R.string.description_welcome_mes_permissions_needed_dialog),
             confirmAction = {
 
                 closeDialog(openDialog)
@@ -213,14 +212,14 @@ fun PermissionDialog(
             Button(
                 onClick = denyAction,
             ) {
-                Text(text = "No")
+                Text(text = stringResource(id = R.string.action_cancel))
             }
         },
         confirmButton = {
             Button(
                 onClick = confirmAction,
             ) {
-                Text(text = "Yes")
+                Text(text = stringResource(id = R.string.action_proceed))
             }
         }
     )
@@ -332,8 +331,8 @@ fun SliderPager(
             ) {
                 SliderPageBody(
                     image = pages[page].image,
-                    title = pages[page].title,
-                    description = pages[page].description,
+                    title = stringResource(id = pages[page].title),
+                    description = stringResource(id = pages[page].description),
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                 )

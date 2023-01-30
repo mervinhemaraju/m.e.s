@@ -12,7 +12,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowDropUp
-import androidx.compose.material3.*
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,7 +25,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.th3pl4gu3.mes.R
 import com.th3pl4gu3.mes.models.Service
-import com.th3pl4gu3.mes.ui.components.*
+import com.th3pl4gu3.mes.ui.components.MesAnimatedVisibilitySlideHorizontallyContent
+import com.th3pl4gu3.mes.ui.components.MesScreenError
+import com.th3pl4gu3.mes.ui.components.MesScreenLoading
+import com.th3pl4gu3.mes.ui.components.MesServiceItem
 import com.th3pl4gu3.mes.ui.theme.MesTheme
 import kotlinx.coroutines.launch
 

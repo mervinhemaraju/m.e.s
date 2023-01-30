@@ -5,14 +5,11 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Phone
-import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,8 +32,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.th3pl4gu3.mes.R
-import com.th3pl4gu3.mes.models.AboutApp
-import com.th3pl4gu3.mes.models.AboutInfo
+import com.th3pl4gu3.mes.models.AboutInfoDrawable
+import com.th3pl4gu3.mes.models.AboutInfoVector
 import com.th3pl4gu3.mes.models.Service
 import com.th3pl4gu3.mes.ui.theme.MesTheme
 
@@ -146,7 +143,7 @@ fun MesEmergencyButton(
 @ExperimentalMaterial3Api
 fun MesAboutInfoCard(
     title: String,
-    aboutInfo: List<AboutInfo>,
+    aboutInfo: List<AboutInfoVector>,
     modifier: Modifier = Modifier
 ) {
 
@@ -188,7 +185,7 @@ fun MesAboutInfoCard(
 @ExperimentalMaterial3Api
 fun MesAboutAppCard(
     title: String,
-    aboutApp: List<AboutApp>,
+    aboutApp: List<AboutInfoDrawable>,
     modifier: Modifier = Modifier
 ) {
 
@@ -234,7 +231,7 @@ fun MesAboutAppCard(
             }
 
             Text(
-                text = "Developed with ❤ in \uD83C\uDDF2\uD83C\uDDFA",
+                text = stringResource(id = R.string.app_development_sweet_message),
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
@@ -284,39 +281,9 @@ fun MesComposablePreview() {
         number = 112
     )
 
-    val mockDataAboutInfoList = mutableListOf<AboutInfo>().apply {
-        add(
-            AboutInfo(
-                icon = Icons.Outlined.Star,
-                title = "Stars",
-                description = "This is the testing part of the favorite sections"
-            )
-        )
-        add(
-            AboutInfo(
-                icon = Icons.Outlined.Favorite,
-                title = "Favorites",
-                description = "This is the testing part of the favorite sections"
-            )
-        )
-    }
+    val mockDataAboutInfoList = AboutInfoVector.supportAndDevelopment
 
-    val mockDataAboutAppList = mutableListOf<AboutApp>().apply {
-        add(
-            AboutApp(
-                icon = R.drawable.ic_lead_developer,
-                title = "Developer",
-                description = "This is the testing part of the favorite sections"
-            )
-        )
-        add(
-            AboutApp(
-                icon = R.drawable.ic_graphic_designer,
-                title = "Designer",
-                description = "This is the testing part of the favorite sections"
-            )
-        )
-    }
+    val mockDataAboutAppList = AboutInfoDrawable.developers
 
     MesTheme {
         Column(

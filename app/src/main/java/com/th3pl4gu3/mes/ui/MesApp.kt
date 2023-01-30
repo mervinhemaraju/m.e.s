@@ -2,7 +2,6 @@ package com.th3pl4gu3.mes.ui
 
 import android.app.Activity
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -21,11 +20,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.th3pl4gu3.mes.MesApplication
 import com.th3pl4gu3.mes.models.AppTheme
 import com.th3pl4gu3.mes.models.MesAppSettings
-import com.th3pl4gu3.mes.ui.components.MesAnimatedVisibilitySlideHorizontallyContent
 import com.th3pl4gu3.mes.ui.components.MesAnimatedVisibilitySlideVerticallyContent
 import com.th3pl4gu3.mes.ui.components.MesDrawer
 import com.th3pl4gu3.mes.ui.components.MesTopAppBar

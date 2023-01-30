@@ -8,3 +8,7 @@ const val MES_KEYWORD_DEFAULT_EB_ACTION = "police"
 val PRE_CALL_COUNTDOWN_RANGE = 5 downTo 0
 
 const val KEYWORD_SERVICE_IDENTIFIER_ARGUMENT = "serviceIdentifier"
+
+const val KEYWORD_LOCALE_DEFAULT = "default"
+
+const val KEYWORD_SERVICE_WORKER_UNIQUE = "service_worker_update"

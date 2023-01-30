@@ -26,11 +26,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.th3pl4gu3.mes.R
 import com.th3pl4gu3.mes.models.Service
 import com.th3pl4gu3.mes.ui.components.*
 import com.th3pl4gu3.mes.ui.theme.MesTheme
 import com.th3pl4gu3.mes.ui.theme.Red500
-import com.th3pl4gu3.mes.R
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
 

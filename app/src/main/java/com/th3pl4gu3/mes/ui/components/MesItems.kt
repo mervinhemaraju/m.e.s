@@ -7,13 +7,16 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.PhoneInTalk
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Medium
 import androidx.compose.ui.text.font.FontWeight.Companion.Normal
 import androidx.compose.ui.text.style.TextAlign
@@ -22,8 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.th3pl4gu3.mes.R
-import com.th3pl4gu3.mes.models.AboutApp
-import com.th3pl4gu3.mes.models.AboutInfo
+import com.th3pl4gu3.mes.models.AboutInfoDrawable
+import com.th3pl4gu3.mes.models.AboutInfoVector
 import com.th3pl4gu3.mes.models.Service
 import com.th3pl4gu3.mes.models.SettingsItem
 import com.th3pl4gu3.mes.ui.extensions.capitalize
@@ -71,7 +74,11 @@ fun MesServiceItem(
             .fillMaxWidth()
             .background(Color.Transparent)
             .clickable(
-                onClick = if(actionVisible){ {} } else {onClick}
+                onClick = if (actionVisible) {
+                    {}
+                } else {
+                    onClick
+                }
             )
 
     ) {
@@ -225,7 +232,7 @@ fun MesEmergencyItem(
 @Composable
 @ExperimentalMaterial3Api
 fun MesAboutItem(
-    aboutApp: AboutApp,
+    aboutApp: AboutInfoDrawable,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -260,7 +267,7 @@ fun MesAboutItem(
             )
 
             Text(
-                text = aboutApp.title,
+                text = stringResource(id = aboutApp.title),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.constrainAs(title) {
@@ -277,7 +284,7 @@ fun MesAboutItem(
             )
 
             Text(
-                text = aboutApp.description,
+                text = stringResource(id = aboutApp.description),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.constrainAs(description) {
@@ -300,7 +307,7 @@ fun MesAboutItem(
 @Composable
 @ExperimentalMaterial3Api
 fun MesAboutItem(
-    aboutInfo: AboutInfo,
+    aboutInfo: AboutInfoVector,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -335,7 +342,7 @@ fun MesAboutItem(
             )
 
             Text(
-                text = aboutInfo.title,
+                text = stringResource(id = aboutInfo.title),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.constrainAs(title) {
@@ -352,7 +359,7 @@ fun MesAboutItem(
             )
 
             Text(
-                text = aboutInfo.description,
+                text = stringResource(id = aboutInfo.description),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.constrainAs(description) {
@@ -410,7 +417,7 @@ fun MesSettingsItem(
             )
 
             Text(
-                text = settingsItem.title,
+                text = stringResource(id = settingsItem.title),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.constrainAs(title) {
@@ -427,7 +434,7 @@ fun MesSettingsItem(
             )
 
             Text(
-                text = settingsItem.description,
+                text = stringResource(id = settingsItem.description),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.constrainAs(description) {
@@ -460,17 +467,9 @@ fun MesNavigationDrawerItemPreview() {
         number = 999
     )
 
-    val mockDataAboutInfo1 = AboutInfo(
-        icon = Icons.Outlined.Star,
-        title = "Favorites",
-        description = "This is the testing part of the favorite sections asdasd asda dasd asd"
-    )
+    val mockDataAboutInfo1 = AboutInfoVector.supportAndDevelopment.first()
 
-    val mockDataAboutInfo2 = AboutApp(
-        icon = R.drawable.ic_lead_developer,
-        title = "Favorites",
-        description = "This is the testing part of the favorite sections asd asd asd asd as"
-    )
+    val mockDataAboutInfo2 = AboutInfoDrawable.developers.first()
 
     MesTheme {
         Column(

@@ -7,8 +7,10 @@ import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.th3pl4gu3.mes.R
 import com.th3pl4gu3.mes.ui.navigation.MesDestinations
 import com.th3pl4gu3.mes.ui.theme.MesTheme
 
@@ -35,25 +37,25 @@ fun MesDrawer(
         )
 
         MesNavigationDrawerItem(
-            label = "Home",
+            label = stringResource(id = R.string.title_drawer_page_home),
             icon = { Icon(Icons.Outlined.Home, contentDescription = null) },
             selected = currentRoute == MesDestinations.SCREEN_HOME,
             onClick = { navigateToHome(); closeDrawer() },
         )
         MesNavigationDrawerItem(
-            label = "Services",
+            label = stringResource(id = R.string.title_drawer_page_services),
             icon = { Icon(Icons.Outlined.Phone, contentDescription = null) },
             selected = currentRoute == MesDestinations.SCREEN_SERVICES,
             onClick = { navigateToServices(); closeDrawer() },
         )
         MesNavigationDrawerItem(
-            label = "About",
+            label = stringResource(id = R.string.title_drawer_page_about),
             icon = { Icon(Icons.Outlined.Info, contentDescription = null) },
             selected = currentRoute == MesDestinations.SCREEN_ABOUT,
             onClick = { navigateToAbout(); closeDrawer() },
         )
         MesNavigationDrawerItem(
-            label = "Settings",
+            label = stringResource(id = R.string.title_drawer_page_settings),
             icon = { Icon(Icons.Outlined.Settings, contentDescription = null) },
             selected = currentRoute == MesDestinations.SCREEN_SETTINGS,
             onClick = { navigateToSettings(); closeDrawer() },
@@ -71,14 +73,14 @@ fun MesDrawer(
         )
 
         MesNavigationDrawerItem(
-            label = "Choose Theme",
+            label = stringResource(id = R.string.title_drawer_page_choose_theme),
             icon = { Icon(Icons.Outlined.Brightness4, contentDescription = null) },
             selected = currentRoute == MesDestinations.SCREEN_THEME,
             onClick = { toggleThemeDialog() }
         )
 
         MesNavigationDrawerItem(
-            label = "Contact Us",
+            label = stringResource(id = R.string.title_drawer_page_contact_us),
             icon = { Icon(Icons.Outlined.Email, contentDescription = null) },
             selected = currentRoute == MesDestinations.SCREEN_CONTACTUS,
             onClick = { navigateToContactUs() },

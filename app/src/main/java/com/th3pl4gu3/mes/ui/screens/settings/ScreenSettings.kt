@@ -1,8 +1,6 @@
 package com.th3pl4gu3.mes.ui.screens.settings
 
-import android.app.LocaleManager
 import android.content.res.Configuration
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -14,17 +12,19 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.LocaleListCompat
+import com.th3pl4gu3.mes.R
 import com.th3pl4gu3.mes.models.MesLocale
 import com.th3pl4gu3.mes.models.Service
 import com.th3pl4gu3.mes.models.SettingsItem
 import com.th3pl4gu3.mes.ui.components.MesServiceItem
 import com.th3pl4gu3.mes.ui.components.MesSettingsItem
 import com.th3pl4gu3.mes.ui.theme.MesTheme
-import java.util.*
+import com.th3pl4gu3.mes.ui.utils.KEYWORD_LOCALE_DEFAULT
 
 const val TAG = "SCREEN_SETTINGS_TAG"
 
@@ -49,7 +49,7 @@ fun ScreenSettings(
     ) {
 
         SettingsLabel(
-            text = "Feature"
+            text = stringResource(id = R.string.title_settings_feature)
         )
 
         MesSettingsItem(
@@ -58,7 +58,7 @@ fun ScreenSettings(
         )
 
         SettingsLabel(
-            text = "Language"
+            text = stringResource(id = R.string.title_settings_language)
         )
 
         MesSettingsItem(
@@ -67,7 +67,7 @@ fun ScreenSettings(
         )
 
         SettingsLabel(
-            text = "Cache"
+            text = stringResource(id = R.string.title_settings_cache)
         )
 
         MesSettingsItem(
@@ -95,7 +95,7 @@ fun ScreenSettings(
             },
             updateLanguageAction = {
                 AppCompatDelegate.setApplicationLocales(
-                    if(it.lowercase() == "default"){
+                    if(it.lowercase() == KEYWORD_LOCALE_DEFAULT){
                         LocaleListCompat.getEmptyLocaleList()
                     }else{
                         LocaleListCompat.forLanguageTags(it)
@@ -133,7 +133,7 @@ fun AppLanguageDialog(
         title = {
             Column {
                 Text(
-                    text = "Choose a Language"
+                    text = stringResource(id = R.string.title_language_selector_dialog)
                 )
             }
         },
@@ -158,7 +158,7 @@ fun AppLanguageDialog(
         confirmButton = {
             TextButton(onClick = dismissAction) {
                 Text(
-                    "Close"
+                    stringResource(id = R.string.action_close)
                 )
             }
         }
@@ -176,7 +176,7 @@ fun EmergencyButtonItemDialog(
         title = {
             Column {
                 Text(
-                    text = "Emergency Button Action"
+                    text = stringResource(id = R.string.title_language_emergency_button_action_dialog)
                 )
             }
         },
@@ -201,7 +201,7 @@ fun EmergencyButtonItemDialog(
         confirmButton = {
             TextButton(onClick = dismissAction) {
                 Text(
-                    "Close"
+                    stringResource(id = R.string.action_close)
                 )
             }
         }
