@@ -11,6 +11,7 @@ plugins {
 android {
     signingConfigs {
         release
+        beta
     }
     namespace app_id
     compileSdk 33
@@ -29,15 +30,19 @@ android {
     }
 
     buildTypes {
-//        release {
-//            minifyEnabled false
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//        }
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+        }
+        beta {
+            versionNameSuffix version_suffix_beta
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            matchingFallbacks = ['debug']
         }
         preprod {
             versionNameSuffix version_suffix_preprod
@@ -89,17 +94,26 @@ if (propFile.canRead()) {
 
     // Before assigning, we check if key is present
     if (props != null && props.containsKey('STORE_FILE') && props.containsKey('STORE_PASSWORD') && props.containsKey('KEY_ALIAS') && props.containsKey('KEY_PASSWORD')) {
+        // Load release configs
         android.signingConfigs.release.storeFile = file(props['STORE_FILE'])
         android.signingConfigs.release.storePassword = props['STORE_PASSWORD']
         android.signingConfigs.release.keyAlias = props['KEY_ALIAS']
         android.signingConfigs.release.keyPassword = props['KEY_PASSWORD']
+
+        // Load beta configs
+        android.signingConfigs.beta.storeFile = file(props['STORE_FILE'])
+        android.signingConfigs.beta.storePassword = props['STORE_PASSWORD']
+        android.signingConfigs.beta.keyAlias = props['KEY_ALIAS']
+        android.signingConfigs.beta.keyPassword = props['KEY_PASSWORD']
     } else {
         println 'signing.properties found but some entries are missing'
         android.buildTypes.release.signingConfig = null
+        android.buildTypes.beta.signingConfig = null
     }
 } else {
     println 'signing.properties not found'
     android.buildTypes.release.signingConfig = null
+    android.buildTypes.beta.signingConfig = null
 }
 
 dependencies {
