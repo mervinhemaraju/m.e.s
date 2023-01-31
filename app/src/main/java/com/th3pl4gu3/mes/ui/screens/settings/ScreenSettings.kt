@@ -1,6 +1,9 @@
 package com.th3pl4gu3.mes.ui.screens.settings
 
+import android.app.LocaleManager
 import android.content.res.Configuration
+import android.os.LocaleList
+import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -12,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,6 +29,8 @@ import com.th3pl4gu3.mes.ui.components.MesServiceItem
 import com.th3pl4gu3.mes.ui.components.MesSettingsItem
 import com.th3pl4gu3.mes.ui.theme.MesTheme
 import com.th3pl4gu3.mes.ui.utils.KEYWORD_LOCALE_DEFAULT
+import java.util.*
+
 
 const val TAG = "SCREEN_SETTINGS_TAG"
 
@@ -38,6 +44,7 @@ fun ScreenSettings(
     scrollState: ScrollState = rememberScrollState()
 ) {
 
+    val context = LocalContext.current
     var openEmergencyButtonItemDialog by remember { mutableStateOf(false) }
     var openAppLanguageDialog by remember { mutableStateOf(false) }
 
@@ -96,11 +103,26 @@ fun ScreenSettings(
             updateLanguageAction = {
                 AppCompatDelegate.setApplicationLocales(
                     if(it.lowercase() == KEYWORD_LOCALE_DEFAULT){
+                        Log.i(TAG, "Setting default locale")
+
                         LocaleListCompat.getEmptyLocaleList()
                     }else{
+                        Log.i(TAG, "Setting locale: $it")
                         LocaleListCompat.forLanguageTags(it)
                     }
                 )
+
+//                context.getSystemService(
+//                    LocaleManager::class.java
+//                ).applicationLocales = LocaleList(
+//                    if(it.lowercase() == KEYWORD_LOCALE_DEFAULT){
+//                        Locale.ENGLISH
+//                    }else{
+//                        Locale.forLanguageTag(it)
+//                    }
+//                )
+
+                forceRefreshServices()
             }
         )
     }

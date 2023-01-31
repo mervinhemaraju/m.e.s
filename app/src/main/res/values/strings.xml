@@ -19,7 +19,7 @@
     <!-- Titles -->
     <string name="title_about_data_rate_mes">Rate Mes</string>
     <string name="title_about_data_share_mes">Share Mes</string>
-    <string name="title_about_data_licenses">Open Source Licenses</string>
+    <string name="title_about_data_about_mes">About Mes</string>
     <string name="title_about_data_api">Developer API</string>
     <string name="title_about_version">Version</string>
     <string name="title_about_lead_developer" translatable="false">Mervin Hemaraju</string>
@@ -59,8 +59,8 @@
     <string name="description_about_data_share_mes">
         Do not forget to share Mes with your friends and families.
     </string>
-    <string name="description_about_data_licenses">
-        Open Source Licenses used in Mes.
+    <string name="description_about_data_about_mes">
+        Check us out on our official website
     </string>
     <string name="description_about_data_api">
         Application Program Interface (API) used in MES

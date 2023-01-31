@@ -1,5 +1,6 @@
 package com.th3pl4gu3.mes.ui.components
 
+import android.content.Intent
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -19,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -31,11 +33,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.th3pl4gu3.mes.MesActivity
 import com.th3pl4gu3.mes.R
 import com.th3pl4gu3.mes.models.AboutInfoDrawable
 import com.th3pl4gu3.mes.models.AboutInfoVector
 import com.th3pl4gu3.mes.models.Service
 import com.th3pl4gu3.mes.ui.theme.MesTheme
+import com.th3pl4gu3.mes.ui.utils.URI_APP_PLAY_STORE
+import com.th3pl4gu3.mes.ui.utils.URI_MES_API
+import com.th3pl4gu3.mes.ui.utils.URI_MES_WEBSITE
 
 @Composable
 fun MesIcon(
@@ -147,6 +153,9 @@ fun MesAboutInfoCard(
     modifier: Modifier = Modifier
 ) {
 
+    val localUriHandler = LocalUriHandler.current
+    val activity = LocalContext.current as MesActivity
+
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.background
@@ -173,7 +182,31 @@ fun MesAboutInfoCard(
             aboutInfo.forEach {
                 MesAboutItem(
                     aboutInfo = it,
-                    onClick = { }
+                    onClick = {
+                        when(it) {
+                            AboutInfoVector.RateApp -> {
+                                localUriHandler.openUri(URI_APP_PLAY_STORE)
+                            }
+                            AboutInfoVector.Api -> {
+                                localUriHandler.openUri(URI_MES_API)
+                            }
+                            AboutInfoVector.AboutUs -> {
+                                localUriHandler.openUri(URI_MES_WEBSITE)
+                            }
+                            AboutInfoVector.ShareApp -> {
+                                val intent = Intent().apply {
+                                    action = Intent.ACTION_SEND
+                                    putExtra(Intent.EXTRA_TEXT, URI_APP_PLAY_STORE)
+                                    type = "text/plain"
+
+                                    Intent.createChooser(this@apply, null)
+                                }
+
+                                activity.startActivity(intent)
+                            }
+                            else -> {}
+                        }
+                    }
                 )
             }
 
@@ -188,6 +221,8 @@ fun MesAboutAppCard(
     aboutApp: List<AboutInfoDrawable>,
     modifier: Modifier = Modifier
 ) {
+
+    val localUriHandler = LocalUriHandler.current
 
     Card(
         colors = CardDefaults.cardColors(
@@ -226,7 +261,9 @@ fun MesAboutAppCard(
             aboutApp.forEach {
                 MesAboutItem(
                     aboutApp = it,
-                    onClick = {}
+                    onClick = {
+                        localUriHandler.openUri(it.uri)
+                    }
                 )
             }
 

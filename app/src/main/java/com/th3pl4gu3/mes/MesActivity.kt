@@ -1,6 +1,7 @@
 package com.th3pl4gu3.mes
 
 import android.Manifest
+import android.app.LocaleManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -10,6 +11,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,14 +23,20 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.th3pl4gu3.mes.data.DefaultAppContainer
 import com.th3pl4gu3.mes.ui.MesApp
 import com.th3pl4gu3.mes.ui.SplashViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MesActivity : AppCompatActivity() {
+
+    companion object {
+        private const val TAG = "MAIN_ACTIVITY_LOGS"
+    }
 
     /** DI to get the [SplashViewModel] **/
     private val splashViewModel: SplashViewModel by viewModels()
@@ -48,7 +56,11 @@ class MesActivity : AppCompatActivity() {
 
         permissions.entries.first { it.key == Manifest.permission.CALL_PHONE }.also {
             if (it.value) {
-                Toast.makeText(this, resources.getText(R.string.message_welcome_mes), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    resources.getText(R.string.message_welcome_mes),
+                    Toast.LENGTH_SHORT
+                ).show()
                 lifecycleScope.launch {
                     (application as MesApplication).container.dataStoreServiceRepository.unsetFirstTimeLogging()
                 }
@@ -68,6 +80,12 @@ class MesActivity : AppCompatActivity() {
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Log.i(
+            TAG, "Starting app with app compat ${
+                AppCompatDelegate.getApplicationLocales()
+            }"
+        )
 
         /**
          * Installs the custom splash screen and

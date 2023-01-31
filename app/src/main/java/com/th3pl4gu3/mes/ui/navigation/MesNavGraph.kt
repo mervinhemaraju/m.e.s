@@ -27,6 +27,7 @@ import com.th3pl4gu3.mes.ui.screens.about.ScreenAbout
 import com.th3pl4gu3.mes.ui.screens.home.HomeUiState
 import com.th3pl4gu3.mes.ui.screens.home.HomeViewModel
 import com.th3pl4gu3.mes.ui.screens.home.ScreenHome
+import com.th3pl4gu3.mes.ui.screens.precall.PreCallUiState
 import com.th3pl4gu3.mes.ui.screens.precall.PreCallViewModel
 import com.th3pl4gu3.mes.ui.screens.precall.ScreenPreCall
 import com.th3pl4gu3.mes.ui.screens.services.ScreenServices
@@ -117,12 +118,13 @@ fun MesNavGraph(
 
             val countdown by preCallViewModel.seconds.collectAsState(initial = 5)
 
-            val startCall by preCallViewModel.startCall.collectAsState()
+            val startCall: Boolean by preCallViewModel.startCall.collectAsState()
+
 
             ScreenPreCall(
                 preCallUiState = preCallUiState,
                 startCall = startCall,
-                closeScreen = navController::popBackStack,
+                closeScreen = navController::navigateUp,
                 countdown = countdown.toString()
             )
         }

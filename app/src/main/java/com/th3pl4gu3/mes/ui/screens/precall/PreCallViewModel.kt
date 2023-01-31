@@ -38,6 +38,9 @@ class PreCallViewModel @Inject constructor(
             if(it != PRE_CALL_COUNTDOWN_RANGE.first){
                 delay(1000)
             }
+            if(it == PRE_CALL_COUNTDOWN_RANGE.last){
+                mStartCall.value = true
+            }
         }
 
     val startCall: StateFlow<Boolean>

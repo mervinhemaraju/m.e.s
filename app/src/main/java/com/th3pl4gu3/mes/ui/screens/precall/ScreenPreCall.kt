@@ -1,6 +1,8 @@
 package com.th3pl4gu3.mes.ui.screens.precall
 
+import android.content.Intent
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.net.Uri
 import android.util.Log
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -21,11 +23,14 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
+import com.th3pl4gu3.mes.MesActivity
 import com.th3pl4gu3.mes.R
 import com.th3pl4gu3.mes.models.Service
 import com.th3pl4gu3.mes.ui.components.*
@@ -34,22 +39,36 @@ import com.th3pl4gu3.mes.ui.theme.Red500
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
 
+private const val TAG = "PRE_CALL_SCREEN"
+
 @Composable
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
 fun ScreenPreCall(
     preCallUiState: PreCallUiState,
     countdown: String?,
-    startCall: Boolean?,
+    startCall: Boolean,
     closeScreen: () -> Unit,
 ) {
     // Load the UI
     when (preCallUiState) {
-        is PreCallUiState.Success -> PreCallContent(
-            service = preCallUiState.service,
-            countdown = if (countdown.isNullOrEmpty()) stringResource(id = R.string.message_error_loading_countdown) else countdown,
-            closeScreen = closeScreen
-        )
+        is PreCallUiState.Success ->
+        {
+            if(startCall){
+                val activity = LocalContext.current as MesActivity
+                with(Intent(Intent.ACTION_CALL)){
+                    data = Uri.parse("tel:${preCallUiState.service.number}")
+                    closeScreen()
+                    activity.startActivity(this)
+                }
+            }
+
+            PreCallContent(
+                service = preCallUiState.service,
+                countdown = if (countdown.isNullOrEmpty()) stringResource(id = R.string.message_error_loading_countdown) else countdown,
+                closeScreen = closeScreen
+            )
+        }
         is PreCallUiState.Error -> MesScreenError(
             retryAction = closeScreen,
             errorMessage = stringResource(id = R.string.message_error_call_startup_failed),
