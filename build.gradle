@@ -2,9 +2,9 @@ buildscript {
     ext {
         // Application Dependencies
         app_id = 'com.th3pl4gu3.mauritius_emergency_services'
-        version_code = 1
+        version_code = 2
         version_name = "1.0.0"
-        version_equalizer = "01"
+        version_equalizer = "02"
         version_suffix_beta = ".beta:$version_equalizer"
         version_suffix_preprod = ".preprod:$version_equalizer"
         version_suffix_dev = ".dev:$version_equalizer"

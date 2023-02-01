@@ -1,7 +1,7 @@
 <resources>
 
     <!-- App Specific -->
-    <string name="app_name_short" translatable="false">mes</string>
+    <string name="app_name_short" translatable="false">Mes</string>
     <string name="app_name_long" translatable="false">Mauritius Emergency Services</string>
     <string name="app_development_sweet_message">Developed with ❤ in 🇲🇺</string>
 
