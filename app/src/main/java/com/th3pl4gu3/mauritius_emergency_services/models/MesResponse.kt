@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Keep
 @Serializable
 data class MesResponse(
-    var services: List<Service>,
-    var message: String,
-    var success: Boolean
+    val services: List<Service>,
+    val message: String,
+    val success: Boolean
 )

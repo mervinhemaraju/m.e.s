@@ -9,7 +9,7 @@ import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 internal val MesColorDark = darkColorScheme(
-    primary = Red200,
+    primary = Red100,
     onPrimary = Gray500,
     inversePrimary = Color.White,
 

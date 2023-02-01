@@ -1,7 +1,11 @@
 package com.th3pl4gu3.mauritius_emergency_services
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
+import android.telephony.SubscriptionManager
+import android.telephony.TelephonyManager
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.setContent
@@ -24,6 +28,7 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.MesApp
 import com.th3pl4gu3.mauritius_emergency_services.ui.SplashViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class MesActivity : AppCompatActivity() {
@@ -67,6 +72,7 @@ class MesActivity : AppCompatActivity() {
     val requestMultiplePermissions: ActivityResultLauncher<Array<String>>
         get() = mRequestMultiplePermissions
 
+    @SuppressLint("MissingPermission")
     @OptIn(
         ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class,
         ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class,
