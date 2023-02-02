@@ -39,9 +39,9 @@ import com.th3pl4gu3.mauritius_emergency_services.models.AboutInfoDrawable
 import com.th3pl4gu3.mauritius_emergency_services.models.AboutInfoVector
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
-import com.th3pl4gu3.mauritius_emergency_services.ui.utils.URI_APP_PLAY_STORE
-import com.th3pl4gu3.mauritius_emergency_services.ui.utils.URI_MES_API
-import com.th3pl4gu3.mauritius_emergency_services.ui.utils.URI_MES_WEBSITE
+import com.th3pl4gu3.mauritius_emergency_services.utils.URI_APP_PLAY_STORE
+import com.th3pl4gu3.mauritius_emergency_services.utils.URI_MES_API
+import com.th3pl4gu3.mauritius_emergency_services.utils.URI_MES_WEBSITE
 
 @Composable
 fun MesIcon(
@@ -183,7 +183,7 @@ fun MesAboutInfoCard(
                 MesAboutItem(
                     aboutInfo = it,
                     onClick = {
-                        when(it) {
+                        when (it) {
                             AboutInfoVector.RateApp -> {
                                 localUriHandler.openUri(URI_APP_PLAY_STORE)
                             }
@@ -285,7 +285,7 @@ fun MesTextButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    
+
     Button(
         onClick = onClick,
         shape = MaterialTheme.shapes.small,
@@ -315,7 +315,9 @@ fun MesComposablePreview() {
         name = "Samu",
         type = "E",
         icon = "https://img.icons8.com/fluent/100/000000/policeman-male.png",
-        number = 112
+        main_contact = 112,
+        emails = listOf(),
+        other_contacts = listOf()
     )
 
     val mockDataAboutInfoList = AboutInfoVector.supportAndDevelopment
@@ -339,7 +341,7 @@ fun MesComposablePreview() {
             )
 
             MesAsyncRoundedImage(service = mockDataService)
-            
+
             MesTextButton(text = "Test", onClick = {})
 
             MesEmergencyButton(onClick = {}, modifier = Modifier.size(200.dp))

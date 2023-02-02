@@ -56,7 +56,7 @@ fun ScreenPreCall(
             if(startCall){
                 val activity = LocalContext.current as MesActivity
                 with(Intent(Intent.ACTION_CALL)){
-                    data = Uri.parse("tel:${preCallUiState.service.number}")
+                    data = Uri.parse("tel:${preCallUiState.service.main_contact}")
                     closeScreen()
                     activity.startActivity(this)
                 }
@@ -129,7 +129,7 @@ fun PreCallContent(
             modifier = Modifier
                 .wrapContentSize()
                 .weight(1f),
-            text = service.number.toString(),
+            text = service.main_contact.toString(),
             style = MaterialTheme.typography.headlineMedium,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurface,
@@ -257,7 +257,9 @@ fun PreviewScreenPreCallContent() {
         name = "Police Direct Line 1",
         type = "E",
         icon = "https://img.icons8.com/fluent/100/000000/policeman-male.png",
-        number = 999
+        main_contact = 999,
+        emails = listOf(),
+        other_contacts = listOf()
     )
 
     MesTheme {

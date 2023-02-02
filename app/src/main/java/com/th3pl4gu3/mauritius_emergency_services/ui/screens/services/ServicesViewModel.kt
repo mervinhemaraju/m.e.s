@@ -46,7 +46,7 @@ class ServicesViewModel @Inject constructor(
 
                 // Force refresh the services
                 container.offlineServiceRepository.forceRefresh(
-                    services = container.onlineServiceRepository.getMesServices().services
+                    services = container.onlineServiceRepository.getAllServices().services
                 )
 
             } catch (e: IOException) {

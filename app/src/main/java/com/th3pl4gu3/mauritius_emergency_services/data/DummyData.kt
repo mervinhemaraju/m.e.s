@@ -9,22 +9,29 @@ object DummyData {
             identifier = "id-01",
             name = "Police",
             type = "E",
-            number = 999,
-            icon = "http://www.google.com"
+            main_contact = 999,
+            icon = "http://www.google.com",
+            emails = listOf(),
+            other_contacts = listOf()
         ),
         Service(
             identifier = "id-02",
             name = "SAMU",
             type = "E",
-            number = 999,
-            icon = "http://www.google.com"
+            main_contact = 999,
+            icon = "http://www.google.com",
+            emails = listOf(),
+            other_contacts = listOf()
+
         ),
         Service(
             identifier = "id-03",
             name = "Hospital",
             type = "N",
-            number = 999,
-            icon = "http://www.google.com"
+            main_contact = 999,
+            icon = "http://www.google.com",
+            emails = listOf(),
+            other_contacts = listOf()
         ),
     )
 }

@@ -26,7 +26,7 @@ import com.th3pl4gu3.mauritius_emergency_services.models.SettingsItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesServiceItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesSettingsItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
-import com.th3pl4gu3.mauritius_emergency_services.ui.utils.KEYWORD_LOCALE_DEFAULT
+import com.th3pl4gu3.mauritius_emergency_services.utils.KEYWORD_LOCALE_DEFAULT
 
 
 const val TAG = "SCREEN_SETTINGS_TAG"

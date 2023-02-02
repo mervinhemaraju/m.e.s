@@ -7,9 +7,9 @@ import androidx.room.Query
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import kotlinx.coroutines.flow.Flow
 
-/*
+/**
  * CRUD for the Service Object
-*/
+ **/
 @Dao
 interface ServiceDao {
 
@@ -31,7 +31,12 @@ interface ServiceDao {
     @Query("SELECT * FROM service_table WHERE type = 'E'")
     fun getEmergencyServices(): Flow<List<Service>>
 
-    @Query("SELECT * FROM service_table WHERE name LIKE :search OR type LIKE :search OR number LIKE :search")
+    @Query(
+        "SELECT * FROM service_table WHERE " +
+                "name LIKE :search " +
+                "OR type LIKE :search " +
+                "OR main_contact LIKE :search"
+    )
     fun search(search: String): Flow<List<Service>>
 
 }

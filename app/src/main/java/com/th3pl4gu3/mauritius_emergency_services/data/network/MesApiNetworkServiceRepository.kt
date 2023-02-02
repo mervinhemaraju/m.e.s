@@ -6,11 +6,11 @@ import com.th3pl4gu3.mauritius_emergency_services.models.MesResponse
 /**
  * Network Implementation of Repository that fetch services from Mes API.
  */
-class MesApiServiceRepository(
+class MesApiNetworkServiceRepository(
 
     private val mesApiService: MesApiService
 
-) : ServiceRepository {
+) : NetworkServiceRepository {
     /** Fetches list of Services from Mes API */
-    override suspend fun getMesServices(): MesResponse = mesApiService.getMesServices()
+    override suspend fun getAllServices(): MesResponse = mesApiService.getAllServices()
 }

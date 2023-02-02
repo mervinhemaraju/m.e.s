@@ -4,7 +4,7 @@ import android.util.Log
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import kotlinx.coroutines.flow.Flow
 
-class OfflineServiceRepository(private val serviceDao: ServiceDao) : ServiceRepository {
+class OfflineLocalServiceRepository(private val serviceDao: ServiceDao) : LocalServiceRepository {
 
     companion object {
         const val TAG = "OFFLINE_SERVICE_REPOSITORY"

@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.th3pl4gu3.mauritius_emergency_services.data.AppContainer
 import com.th3pl4gu3.mauritius_emergency_services.models.MesAppSettings
-import com.th3pl4gu3.mauritius_emergency_services.ui.utils.MES_EMERGENCY_TYPE
-import com.th3pl4gu3.mauritius_emergency_services.ui.utils.MES_KEYWORD_DEFAULT_EB_ACTION
-import com.th3pl4gu3.mauritius_emergency_services.ui.utils.TIMEOUT_MILLIS
+import com.th3pl4gu3.mauritius_emergency_services.utils.MES_EMERGENCY_TYPE
+import com.th3pl4gu3.mauritius_emergency_services.utils.MES_KEYWORD_DEFAULT_EB_ACTION
+import com.th3pl4gu3.mauritius_emergency_services.utils.TIMEOUT_MILLIS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
@@ -64,7 +64,7 @@ class HomeViewModel @Inject constructor(
                     Log.i(TAG, "No services found. Fetching data from the API")
 
                     // Get services from API
-                    with(container.onlineServiceRepository.getMesServices().services){
+                    with(container.onlineServiceRepository.getAllServices().services){
                         // Force refresh the data
                         container.offlineServiceRepository.forceRefresh(
                             services = this

@@ -9,7 +9,7 @@ import com.th3pl4gu3.mauritius_emergency_services.models.ServiceWorker
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.MesWorkManager
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.NotificationBuilderServiceUpdating
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.createNotificationChannels
-import com.th3pl4gu3.mauritius_emergency_services.ui.utils.KEYWORD_SERVICE_WORKER_UNIQUE
+import com.th3pl4gu3.mauritius_emergency_services.utils.KEYWORD_SERVICE_WORKER_UNIQUE
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

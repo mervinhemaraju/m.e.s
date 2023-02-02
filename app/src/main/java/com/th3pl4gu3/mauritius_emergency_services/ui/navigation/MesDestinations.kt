@@ -1,7 +1,7 @@
 package com.th3pl4gu3.mauritius_emergency_services.ui.navigation
 
 import com.th3pl4gu3.mauritius_emergency_services.ui.MesApp
-import com.th3pl4gu3.mauritius_emergency_services.ui.utils.KEYWORD_SERVICE_IDENTIFIER_ARGUMENT
+import com.th3pl4gu3.mauritius_emergency_services.utils.KEYWORD_SERVICE_IDENTIFIER_ARGUMENT
 
 
 /**

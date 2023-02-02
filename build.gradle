@@ -2,7 +2,7 @@ buildscript {
     ext {
         // Application Dependencies
         app_id = 'com.th3pl4gu3.mauritius_emergency_services'
-        version_code = 3
+        version_code = 4
         version_name = "1.0.0"
         version_equalizer = "03"
         version_suffix_beta = ".beta:$version_equalizer"
@@ -35,6 +35,7 @@ buildscript {
         // Google Libraries
         accompanists_version = "0.28.0"
         dagger_hilt_version = "2.43.2"
+        gson_version = "2.10.1"
 
         // Kotlin Libraries
         kotlin_version = "1.7.20"

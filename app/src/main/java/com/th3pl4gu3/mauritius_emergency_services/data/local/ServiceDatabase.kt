@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.th3pl4gu3.mauritius_emergency_services.data.Converters
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 
 /**
@@ -16,6 +18,7 @@ import com.th3pl4gu3.mauritius_emergency_services.models.Service
     version = 1,
     exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class MesDatabase : RoomDatabase() {
 
     /*

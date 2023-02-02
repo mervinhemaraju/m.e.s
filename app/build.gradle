@@ -136,7 +136,6 @@ dependencies {
     implementation "androidx.work:work-runtime-ktx:$work_manager_version"
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
-
     ksp "androidx.room:room-compiler:$room_version"
 
     // Android Components
@@ -155,6 +154,9 @@ dependencies {
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanists_version"
     implementation "com.google.accompanist:accompanist-pager:$accompanists_version"
     implementation "com.google.accompanist:accompanist-pager-indicators:$accompanists_version"
+
+    // Google Libraries
+    implementation "com.google.code.gson:gson:$gson_version"
 
     // External Libraries
     // Retrofit

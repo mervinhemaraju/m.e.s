@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.th3pl4gu3.mauritius_emergency_services.data.AppContainer
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
-import com.th3pl4gu3.mauritius_emergency_services.ui.utils.KEYWORD_SERVICE_IDENTIFIER_ARGUMENT
-import com.th3pl4gu3.mauritius_emergency_services.ui.utils.PRE_CALL_COUNTDOWN_RANGE
-import com.th3pl4gu3.mauritius_emergency_services.ui.utils.TIMEOUT_MILLIS
+import com.th3pl4gu3.mauritius_emergency_services.utils.KEYWORD_SERVICE_IDENTIFIER_ARGUMENT
+import com.th3pl4gu3.mauritius_emergency_services.utils.PRE_CALL_COUNTDOWN_RANGE
+import com.th3pl4gu3.mauritius_emergency_services.utils.TIMEOUT_MILLIS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*

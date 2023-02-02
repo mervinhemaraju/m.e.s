@@ -126,7 +126,7 @@ fun MesServiceItem(
         )
 
         Text(
-            text = service.number.toString(),
+            text = service.main_contact.toString(),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontWeight = Normal,
@@ -465,7 +465,9 @@ fun MesNavigationDrawerItemPreview() {
         name = "Police Direct Line 1",
         type = "E",
         icon = "https://img.icons8.com/fluent/100/000000/policeman-male.png",
-        number = 999
+        main_contact = 999,
+        emails = listOf(),
+        other_contacts = listOf()
     )
 
     val mockDataAboutInfo1 = AboutInfoVector.supportAndDevelopment.first()

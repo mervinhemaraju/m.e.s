@@ -3,7 +3,7 @@ package com.th3pl4gu3.mauritius_emergency_services.data.local
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import kotlinx.coroutines.flow.Flow
 
-interface ServiceRepository {
+interface LocalServiceRepository {
 
     suspend fun forceRefresh(services: List<Service>)
 

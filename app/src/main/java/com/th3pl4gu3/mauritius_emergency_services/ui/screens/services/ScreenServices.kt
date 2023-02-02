@@ -206,7 +206,9 @@ fun AllServicesScreenPreview() {
                     name = "Police Direct Line $x",
                     type = "E",
                     icon = "https://img.icons8.com/fluent/100/000000/policeman-male.png",
-                    number = x + x + x
+                    main_contact = x + x + x,
+                    emails = listOf(),
+                    other_contacts = listOf()
                 )
             )
         }

@@ -1,5 +1,8 @@
-package com.th3pl4gu3.mauritius_emergency_services.ui.utils
+package com.th3pl4gu3.mauritius_emergency_services.utils
 
+/**
+ * UI Constants
+ **/
 const val TIMEOUT_MILLIS = 5_000L
 
 const val MES_EMERGENCY_TYPE = "E"
@@ -18,3 +21,8 @@ const val URI_MES_API = "https://github.com/mervinhemaraju/mauritius-emergency-s
 const val URI_MES_WEBSITE = "https://mes.mervinhemaraju.com/web/"
 const val URI_DEVELOPER_PROFILE = "https://www.mervinhemaraju.com/"
 const val URI_DESIGNER_PROFILE = "https://www.nickfookune.com/"
+
+/**
+ * Data Constants
+ **/
+const val DEFAULT_LOCALE = "en"

@@ -6,8 +6,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.th3pl4gu3.mauritius_emergency_services.R
-import com.th3pl4gu3.mauritius_emergency_services.ui.utils.URI_DESIGNER_PROFILE
-import com.th3pl4gu3.mauritius_emergency_services.ui.utils.URI_DEVELOPER_PROFILE
+import com.th3pl4gu3.mauritius_emergency_services.utils.URI_DESIGNER_PROFILE
+import com.th3pl4gu3.mauritius_emergency_services.utils.URI_DEVELOPER_PROFILE
 
 sealed class AboutInfoVector(
     val icon: ImageVector,
