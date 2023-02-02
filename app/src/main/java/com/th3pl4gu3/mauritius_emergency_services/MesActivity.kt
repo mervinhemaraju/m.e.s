@@ -33,9 +33,9 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MesActivity : AppCompatActivity() {
 
-    // TODO("Determine toll free numbers and add label")
+    // TODO("Fix links in About")
     // TODO("Complete localization")
-    // TODO("Check phone permision before launching call")
+    // TODO("Check phone permission before launching call")
     companion object {
         private const val TAG = "MAIN_ACTIVITY_LOGS"
     }

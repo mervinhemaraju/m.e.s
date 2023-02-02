@@ -81,3 +81,6 @@ fun MesApplication.createNotificationChannels() {
 
 val MesApplication.MesWorkManager
     get() = WorkManager.getInstance(this)
+
+val Int.isTollFree : Boolean
+    get() = this.toString().count() < 5 || this.toString().startsWith("8", true)

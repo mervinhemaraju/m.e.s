@@ -12,10 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowDropUp
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +33,7 @@ const val TAG = "SCREEN_SERVICES"
 
 @Composable
 @ExperimentalFoundationApi
+@ExperimentalMaterial3Api
 fun ScreenServices(
     servicesUiState: ServicesUiState,
     retryAction: () -> Unit,
@@ -73,6 +71,7 @@ fun ScreenServices(
  */
 @Composable
 @ExperimentalFoundationApi
+@ExperimentalMaterial3Api
 fun ServicesList(
     services: List<Service>,
     navigateToPreCall: (service: Service) -> Unit,
@@ -164,6 +163,7 @@ fun ServicesList(
 @Preview("Loading Dark Preview", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 @ExperimentalFoundationApi
+@ExperimentalMaterial3Api
 fun LoadingScreenPreview() {
     MesTheme {
         ScreenServices(
@@ -179,6 +179,7 @@ fun LoadingScreenPreview() {
 @Preview("Error Dark Preview", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 @ExperimentalFoundationApi
+@ExperimentalMaterial3Api
 fun ErrorScreenPreview() {
     MesTheme {
         ScreenServices(
@@ -194,6 +195,7 @@ fun ErrorScreenPreview() {
 @Preview("Main Screen Dark Preview", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 @ExperimentalFoundationApi
+@ExperimentalMaterial3Api
 fun AllServicesScreenPreview() {
     MesTheme {
         val mockData = mutableListOf<Service>()
@@ -227,6 +229,7 @@ fun AllServicesScreenPreview() {
 @Preview("Main Screen Empty List Dark Preview", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 @ExperimentalFoundationApi
+@ExperimentalMaterial3Api
 fun EmptyServicesScreenPreview() {
     MesTheme {
         val mockData = mutableListOf<Service>()

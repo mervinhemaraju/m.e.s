@@ -3,22 +3,16 @@ package com.th3pl4gu3.mauritius_emergency_services.ui.components
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.PhoneInTalk
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight.Companion.Medium
-import androidx.compose.ui.text.font.FontWeight.Companion.Normal
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -60,116 +54,6 @@ fun MesNavigationDrawerItem(
         badge = badge,
         shape = RoundedCornerShape(topEnd = 32.dp, bottomEnd = 32.dp)
     )
-}
-
-@Composable
-fun MesServiceItem(
-    service: Service,
-    modifier: Modifier = Modifier,
-    actionVisible: Boolean = true,
-    onClick: () -> Unit,
-) {
-
-    ConstraintLayout(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(Color.Transparent)
-            .clickable(
-                onClick = if (actionVisible) {
-                    {}
-                } else {
-                    onClick
-                }
-            )
-
-    ) {
-
-        val (
-            textTitle,
-            textSubtitle,
-            iconEmergency,
-            iconCall,
-        ) = createRefs()
-
-        MesAsyncRoundedImage(
-            service = service,
-            modifier = Modifier
-                .size(54.dp)
-                .constrainAs(iconEmergency) {
-                    with(16.dp) {
-                        start.linkTo(parent.start, this)
-                        bottom.linkTo(parent.bottom, this)
-                        top.linkTo(parent.top, this)
-                    }
-                }
-        )
-
-        Text(
-            text = service.name.capitalize(),
-            style = MaterialTheme.typography.bodyLarge,
-            softWrap = true,
-            color = MaterialTheme.colorScheme.onSurface,
-            fontWeight = Medium,
-            modifier = Modifier
-                .constrainAs(textTitle) {
-                    top.linkTo(iconEmergency.top)
-                    bottom.linkTo(textSubtitle.top, 4.dp)
-                    linkTo(
-                        start = iconEmergency.end,
-                        end = if(actionVisible) iconCall.start else parent.end,
-                        startMargin = 8.dp,
-                        endMargin = 16.dp,
-                        bias = 0f
-                    )
-                    width = Dimension.fillToConstraints
-                }
-        )
-
-        Text(
-            text = service.main_contact.toString(),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontWeight = Normal,
-            modifier = Modifier
-                .constrainAs(textSubtitle) {
-                    top.linkTo(textTitle.bottom)
-                    bottom.linkTo(iconEmergency.bottom)
-                    linkTo(
-                        start = iconEmergency.end,
-                        end = if(actionVisible) iconCall.start else parent.end,
-                        startMargin = 12.dp,
-                        endMargin = 16.dp,
-                        bias = 0f
-                    )
-                }
-        )
-
-        if(actionVisible) {
-
-            IconButton(
-                onClick = onClick,
-                modifier = Modifier
-                    .constrainAs(iconCall) {
-                        bottom.linkTo(parent.bottom, 8.dp)
-                        top.linkTo(parent.top, 8.dp)
-                        end.linkTo(parent.end, 24.dp)
-                    }
-            ) {
-                MesIcon(
-                    imageVector = Icons.Outlined.PhoneInTalk,
-                    contentDescription = R.string.ctnt_desc_phone_button,
-                    modifier = Modifier
-                        .size(32.dp)
-                        .graphicsLayer {
-                            rotationZ = -100f
-                        }
-                )
-            }
-        }
-
-    }
-
-
 }
 
 @Composable
@@ -360,7 +244,7 @@ fun MesAboutItem(
             )
 
             Text(
-                text = if(aboutInfo.title != R.string.title_about_version) stringResource(id = aboutInfo.description) else BuildConfig.VERSION_NAME,
+                text = if (aboutInfo.title != R.string.title_about_version) stringResource(id = aboutInfo.description) else BuildConfig.VERSION_NAME,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.constrainAs(description) {
@@ -455,8 +339,8 @@ fun MesSettingsItem(
     }
 }
 
-@Preview("Item Light", showBackground = true)
-@Preview("Dark Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview("Items Light", showBackground = true)
+@Preview("Items Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 @ExperimentalMaterial3Api
 fun MesNavigationDrawerItemPreview() {
@@ -492,11 +376,6 @@ fun MesNavigationDrawerItemPreview() {
                 label = "About",
                 icon = { MesIcon(imageVector = Icons.Outlined.Info) },
                 selected = true,
-                onClick = {}
-            )
-
-            MesServiceItem(
-                service = mockDataService,
                 onClick = {}
             )
 

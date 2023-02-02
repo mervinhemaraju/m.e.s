@@ -127,6 +127,7 @@
     <string name="message_services_not_found">No services found</string>
     <string name="message_cache_reset_successfully">Cache reset successfully</string>
     <string name="message_action_emergency_button_configured">%1$s has been set as the emergency button action</string>
+    <string name="message_toll_free">Toll Free</string>
     <!-- Message: Error -->
     <string name="message_error_content_failed">Error getting content.</string>
     <string name="message_error_loading_countdown" translatable="false">X</string>
@@ -137,7 +138,6 @@
 
     <!-- Content Descriptions -->
     <string name="ctnt_desc_drawer_open">Open Navigation Drawer</string>
-    <string name="ctnt_desc_phone_button">Phone Button</string>
     <string name="ctnt_desc_emergency_button">Emergency Button</string>
 
 </resources>

@@ -5,6 +5,8 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.FlingBehavior
+import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -173,6 +175,7 @@ fun AppLanguageDialog(
 }
 
 @Composable
+@ExperimentalMaterial3Api
 fun EmergencyButtonItemDialog(
     emergencyServices: List<Service>,
     updateEmergencyButtonAction: (service: Service) -> Unit,

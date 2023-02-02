@@ -193,7 +193,7 @@ fun SwipeToCancel(
 
     val shape = MaterialTheme.shapes.medium
 
-    val archive = SwipeAction(
+    val close = SwipeAction(
         onSwipe = {
             closeScreen()
         },
@@ -209,7 +209,7 @@ fun SwipeToCancel(
 
     SwipeableActionsBox(
         swipeThreshold = 120.dp,
-        endActions = listOf(archive),
+        endActions = listOf(close),
         backgroundUntilSwipeThreshold = MaterialTheme.colorScheme.surface,
         modifier = modifier
             .clip(shape)

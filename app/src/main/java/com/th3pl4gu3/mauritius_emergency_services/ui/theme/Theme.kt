@@ -20,8 +20,12 @@ internal val MesColorDark = darkColorScheme(
     onBackground = Red100,
 
     surface = Gray600,
+    surfaceVariant = Gray600,
     onSurface = Gray50,
     onSurfaceVariant = Gray200,
+
+    inverseSurface = Gray50,
+    inverseOnSurface = Gray600,
 
     // Outline Variants
     outlineVariant = Red300
@@ -42,8 +46,12 @@ internal val MesColorLight = lightColorScheme(
 
     // Surface variants
     surface = Blue20,
+    surfaceVariant = Blue200,
     onSurface = BlueA100,
     onSurfaceVariant = Gray600,
+
+    inverseSurface = Gray600,
+    inverseOnSurface = Gray50,
 
     // Outline Variants
     outlineVariant = Red500,

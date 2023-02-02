@@ -99,7 +99,7 @@ private val MesLabelMedium = TextStyle(
 
 private val MesLabelSmall = TextStyle(
     fontWeight = FontWeight.Normal,
-    fontSize = 10.sp,
+    fontSize = 8.sp,
     letterSpacing = 0.3.sp,
 )
 
