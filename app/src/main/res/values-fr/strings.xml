@@ -73,6 +73,7 @@
     <string name="message_services_not_found">Aucun service trouvé</string>
     <string name="message_cache_reset_successfully">Réinitialisation du cache réussie</string>
     <string name="message_action_emergency_button_configured">%1$s a été défini comme action du bouton d\'urgence</string>
+    <string name="message_emergency_button_action_updated">Action du bouton d\'urgence mise à jour</string>
     <string name="message_error_content_failed">Erreur lors de l\'obtention du contenu</string>
     <string name="message_error_loading_failed">Échec du chargement</string>
     <string name="message_error_loading_services_failed">Échec du chargement des services.</string>
@@ -89,4 +90,5 @@
     <string name="title_about_privacy_policy">Politique de confidentialité</string>
     <string name="description_about_privacy_policy">Afficher la politique de confidentialité de Mes</string>
     <string name="message_internet_connection_needed">Vous devez être connecté à Internet pour que Mes puisse télécharger les services. Veuillez vous connecter et réessayer</string>
+    <string name="message_app_language_updated">Langue mise à jour</string>
 </resources>

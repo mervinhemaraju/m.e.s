@@ -2,6 +2,7 @@ package com.th3pl4gu3.mauritius_emergency_services.ui
 
 import android.app.Activity
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -63,6 +64,8 @@ fun MesApp(
     MesTheme(
         darkTheme = darkTheme // Load the app theme
     ) {
+
+        Log.i(TAG, "Settings -> ${appSettings.emergencyButtonActionIdentifier}")
 
         /**
          * Define the start destination
@@ -171,6 +174,7 @@ fun MesApp(
                         isExpandedScreen = isExpandedScreen,
                         modifier = contentModifier,
                         navController = navController,
+                        navigationActions = navigationActions,
                         listState = listState,
                         scrollState = scrollState,
                         openDrawer = { coroutineScope.launch { sizeAwareDrawerState.open() } },

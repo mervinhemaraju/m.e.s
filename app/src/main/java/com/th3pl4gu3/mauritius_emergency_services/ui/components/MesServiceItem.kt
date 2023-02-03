@@ -102,6 +102,7 @@ fun MesServiceItem(
             expanded = false,
             actionVisible = false,
             modifier = Modifier
+                .fillMaxWidth()
         )
     }
 }

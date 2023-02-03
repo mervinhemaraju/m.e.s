@@ -137,6 +137,8 @@
     <string name="message_internet_connection_needed">
         You need to be connected to the internet for Mes to download the services. Please connect and try again
     </string>
+    <string name="message_emergency_button_action_updated">Emergency button action updated</string>
+    <string name="message_app_language_updated">Language updated</string>
     <!-- Message: Error -->
     <string name="message_error_content_failed">Error getting content</string>
     <string name="message_error_loading_countdown" translatable="false">X</string>

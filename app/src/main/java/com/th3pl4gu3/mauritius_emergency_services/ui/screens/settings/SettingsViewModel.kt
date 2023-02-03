@@ -1,6 +1,7 @@
 package com.th3pl4gu3.mauritius_emergency_services.ui.screens.settings
 
 import android.util.Log
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.th3pl4gu3.mauritius_emergency_services.R
@@ -22,29 +23,29 @@ class SettingsViewModel @Inject constructor(
 
     private val mMessageQueue: MutableStateFlow<Pair<String?, Int>?> = MutableStateFlow(null)
 
-    val services: StateFlow<List<Service>> =
-        container.offlineServiceRepository.getEmergencyServices().map { it }
+    val services: StateFlow<List<Service>> = container.offlineServiceRepository.getEmergencyServices().map { it }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
                 initialValue = listOf()
             )
 
-    val messageQueue: StateFlow<Pair<String?, Int>?> = mMessageQueue
+    val messageQueue: StateFlow<Pair<String?, Int>?>
+        get() = mMessageQueue
 
     /**
      * Public Functions
      **/
-    fun forceRefreshServices() =
+    fun forceRefreshServices(silent: Boolean = false) =
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                
+
                 // Force refresh the services
                 container.offlineServiceRepository.forceRefresh(
                     services = container.onlineServiceRepository.getAllServices(language = GetAppLocale).services
                 )
 
-                mMessageQueue.value = Pair(null, R.string.message_cache_reset_successfully)
+                if(!silent) mMessageQueue.value = Pair(null, R.string.message_cache_reset_successfully)
 
             } catch (e: Exception) {
                 Log.e(TAG, "Error while resetting cache: ${e.message}")
@@ -53,14 +54,18 @@ class SettingsViewModel @Inject constructor(
             }
         }
 
-    fun clearMessageQueue(){
+    fun clearMessageQueue() {
         mMessageQueue.value = null
     }
 
-    fun updateEmergencyButtonAction(service: Service){
+    fun sendMessageInQueue(@StringRes message: Int){
+        mMessageQueue.value = Pair(null, message)
+    }
+
+    fun updateEmergencyButtonAction(service: Service) {
         viewModelScope.launch {
             container.dataStoreServiceRepository.updateEmergencyButtonActionIdentifier(identifier = service.identifier)
-            mMessageQueue.value = Pair(service.name, R.string.message_cache_reset_successfully)
+            mMessageQueue.value = Pair(service.name, R.string.message_emergency_button_action_updated)
         }
     }
 }

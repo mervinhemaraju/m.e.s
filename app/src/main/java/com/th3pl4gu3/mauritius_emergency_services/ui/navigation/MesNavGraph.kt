@@ -35,7 +35,7 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.screens.settings.ScreenSett
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.settings.SettingsViewModel
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.welcome.ScreenWelcome
 
-const val TAG = "MES_NAV_GRAPH"
+private const val TAG = "MES_NAV_GRAPH"
 
 @Composable
 @ExperimentalMaterial3Api
@@ -49,15 +49,14 @@ fun MesNavGraph(
     isExpandedScreen: Boolean,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
+    navigationActions: MesNavigationActions,
     startDestination: String,
     listState: LazyListState,
     scrollState: ScrollState,
     openDrawer: () -> Unit = {}
 ) {
-    // Log info
+    /** Log information **/
     Log.i(TAG, "Starting Navigation Host")
-
-    val navigationActions = remember(navController) { MesNavigationActions(navController) }
 
     NavHost(
         navController = navController,
@@ -65,7 +64,7 @@ fun MesNavGraph(
         modifier = modifier
     ) {
         composable(MesDestinations.SCREEN_WELCOME) {
-            // Log info
+            /** Log information **/
             Log.i(TAG, "Starting composable ${MesDestinations.SCREEN_WELCOME}")
 
             ScreenWelcome(
@@ -73,99 +72,67 @@ fun MesNavGraph(
             )
         }
         composable(MesDestinations.SCREEN_HOME) {
-            // Log info
+            /** Log information **/
             Log.i(TAG, "Starting composable ${MesDestinations.SCREEN_HOME}")
 
+            /** Create the view model **/
             val homeViewModel = hiltViewModel<HomeViewModel>()
 
-            val homeUiState: HomeUiState by homeViewModel.homeUiState.collectAsState()
-
-            val mesAppSettings = homeViewModel.mesAppSettings.collectAsState(initial = MesAppSettings()).value
-
+            /** Launch the screen UI **/
             ScreenHome(
-                homeUiState = homeUiState,
-                retryAction = homeViewModel::refresh,
+                homeViewModel = homeViewModel,
                 navigateToPreCall = navigationActions.navigateToPreCall,
-                mesAppSettings = mesAppSettings,
                 scrollState = scrollState
             )
         }
         composable(MesDestinations.SCREEN_SERVICES) {
-            // Log info
+            /** Log information **/
             Log.i(TAG, "Starting composable ${MesDestinations.SCREEN_SERVICES}")
 
+            /** Create the view model **/
             val servicesViewModel = hiltViewModel<ServicesViewModel>()
 
-            servicesViewModel.search(searchBarValue)
-
-            val servicesUiState by servicesViewModel.servicesUiState.collectAsState()
-
+            /** Launch the screen UI **/
             ScreenServices(
-                servicesUiState = servicesUiState,
+                servicesViewModel = servicesViewModel,
                 retryAction = servicesViewModel::loadOnlineServices,
                 listState = listState,
+                searchBarValue = searchBarValue,
                 navigateToPreCall = navigationActions.navigateToPreCall
             )
         }
         composable(MesDestinations.SCREEN_PRE_CALL) {
-            // Log info
+            /** Log information **/
             Log.i(TAG, "Starting composable ${MesDestinations.SCREEN_PRE_CALL}")
 
+            /** Create the view model **/
             val preCallViewModel = hiltViewModel<PreCallViewModel>()
 
-            val preCallUiState by preCallViewModel.service.collectAsState()
-
-            val countdown by preCallViewModel.seconds.collectAsState(initial = 5)
-
-            val startCall: Boolean by preCallViewModel.startCall.collectAsState()
-
-
+            /** Launch the screen UI **/
             ScreenPreCall(
-                preCallUiState = preCallUiState,
-                startCall = startCall,
+                preCallViewModel = preCallViewModel,
                 closeScreen = navController::navigateUp,
-                countdown = countdown.toString()
             )
         }
         composable(MesDestinations.SCREEN_ABOUT) {
-            // Log info
+            /** Log information **/
             Log.i(TAG, "Starting composable ${MesDestinations.SCREEN_ABOUT}")
 
+            /** Launch the screen UI **/
             ScreenAbout(
                 scrollState = scrollState
             )
         }
         composable(MesDestinations.SCREEN_SETTINGS) {
-            // Log info
+            /** Log information **/
             Log.i(TAG, "Starting composable ${MesDestinations.SCREEN_SETTINGS}")
 
+            /** Create the view model **/
             val settingsViewModel = hiltViewModel<SettingsViewModel>()
 
-            val message = settingsViewModel.messageQueue.collectAsState(initial = null).value
-
-            val services = settingsViewModel.services.collectAsState(initial = listOf()).value
-
-            if (message != null) {
-
-                Toast.makeText(
-                    LocalContext.current,
-                    if(!message.first.isNullOrEmpty()){
-                        stringResource(id = message.second, message.first!!)
-                    }else{
-                        stringResource(id = message.second)
-                    },
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                settingsViewModel.clearMessageQueue()
-            }
-
+            /** Launch the screen UI **/
             ScreenSettings(
-                emergencyServices = services,
-                forceRefreshServices = {
-                    settingsViewModel.forceRefreshServices()
-                },
-                updateEmergencyButtonAction = { settingsViewModel.updateEmergencyButtonAction(it) },
+                settingsViewModel = settingsViewModel,
                 scrollState = scrollState
             )
         }

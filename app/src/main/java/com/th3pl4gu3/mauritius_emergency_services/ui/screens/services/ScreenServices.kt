@@ -3,20 +3,24 @@ package com.th3pl4gu3.mauritius_emergency_services.ui.screens.services
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowDropUp
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,45 +30,73 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.components.*
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 import kotlinx.coroutines.launch
 
-const val TAG = "SCREEN_SERVICES"
+private const val TAG = "SCREEN_SERVICES"
 
 @Composable
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
 fun ScreenServices(
-    servicesUiState: ServicesUiState,
+    servicesViewModel: ServicesViewModel,
+    searchBarValue: String,
     retryAction: () -> Unit,
     navigateToPreCall: (service: Service) -> Unit,
     listState: LazyListState,
     modifier: Modifier = Modifier
 ) {
 
-    // Define a modifier with the screen background color
+    /** Get the UI State from the view model **/
+    val servicesUiState by servicesViewModel.servicesUiState.collectAsState()
+
+    /** Define a modifier with the screen background color **/
     val servicesModifier = modifier.background(MaterialTheme.colorScheme.background)
 
-    // Load the component to show based on the UI State
+    /** Search for the value in the tob bar **/
+    servicesViewModel.search(searchBarValue)
+
+    /** Launch UI State decisions **/
+    ServicesUiStateDecisions(
+        servicesUiState = servicesUiState,
+        retryAction = retryAction,
+        navigateToPreCall = navigateToPreCall,
+        listState = listState,
+        modifier = servicesModifier
+    )
+}
+
+/**
+ * The decision make for Ui State
+ **/
+@Composable
+@ExperimentalFoundationApi
+@ExperimentalMaterial3Api
+fun ServicesUiStateDecisions(
+    servicesUiState: ServicesUiState,
+    retryAction: () -> Unit,
+    navigateToPreCall: (service: Service) -> Unit,
+    listState: LazyListState,
+    modifier: Modifier = Modifier
+){
     when (servicesUiState) {
         is ServicesUiState.Loading -> MesScreenLoading(
             loadingMessage = stringResource(id = R.string.message_loading_services),
-            modifier = servicesModifier
+            modifier = modifier
         )
         is ServicesUiState.Success -> ServicesList(
             services = servicesUiState.services,
             navigateToPreCall = navigateToPreCall,
             listState = listState,
-            modifier = servicesModifier,
+            modifier = modifier,
         )
         is ServicesUiState.Error -> MesScreenError(
             retryAction = retryAction,
             errorMessage = stringResource(id = R.string.message_error_loading_services_failed),
-            modifier = servicesModifier
+            modifier = modifier
         )
         is ServicesUiState.NoContent -> MesScreenNoContent(
             message = stringResource(id = R.string.message_services_not_found),
-            modifier = servicesModifier
+            modifier = modifier
         )
     }
-
 }
 
 /**
@@ -138,37 +170,6 @@ fun ServicesList(
     }
 }
 
-@Preview("Loading Light Preview", showBackground = true)
-@Preview("Loading Dark Preview", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
-@Composable
-@ExperimentalFoundationApi
-@ExperimentalMaterial3Api
-fun LoadingScreenPreview() {
-    MesTheme {
-        ScreenServices(
-            servicesUiState = ServicesUiState.Loading ,
-            retryAction = {},
-            navigateToPreCall = {},
-            listState = rememberLazyListState()
-        )
-    }
-}
-
-@Preview("Error Light Preview", showBackground = true)
-@Preview("Error Dark Preview", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
-@Composable
-@ExperimentalFoundationApi
-@ExperimentalMaterial3Api
-fun ErrorScreenPreview() {
-    MesTheme {
-        ScreenServices(
-            servicesUiState = ServicesUiState.Error ,
-            retryAction = {},
-            navigateToPreCall = {},
-            listState = rememberLazyListState()
-        )
-    }
-}
 
 @Preview("Main Screen Light Preview", showBackground = true)
 @Preview("Main Screen Dark Preview", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
@@ -176,6 +177,7 @@ fun ErrorScreenPreview() {
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
 fun AllServicesScreenPreview() {
+
     MesTheme {
         val mockData = mutableListOf<Service>()
         val modifier = Modifier.background(MaterialTheme.colorScheme.background)
@@ -194,12 +196,50 @@ fun AllServicesScreenPreview() {
             )
         }
 
-        ScreenServices(
+        ServicesUiStateDecisions(
             servicesUiState = ServicesUiState.Success(services = mockData),
             retryAction = {},
             navigateToPreCall = {},
             modifier = modifier,
             listState = rememberLazyListState()
+        )
+    }
+}
+
+@Preview("Loading Light Preview", showBackground = true)
+@Preview("Loading Dark Preview", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@Composable
+@ExperimentalFoundationApi
+@ExperimentalMaterial3Api
+fun LoadingScreenPreview() {
+    val modifier = Modifier.background(MaterialTheme.colorScheme.background)
+
+    MesTheme {
+        ServicesUiStateDecisions(
+            servicesUiState = ServicesUiState.Loading ,
+            retryAction = {},
+            navigateToPreCall = {},
+            listState = rememberLazyListState(),
+            modifier = modifier
+        )
+    }
+}
+
+@Preview("Error Light Preview", showBackground = true)
+@Preview("Error Dark Preview", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@Composable
+@ExperimentalFoundationApi
+@ExperimentalMaterial3Api
+fun ErrorScreenPreview() {
+    val modifier = Modifier.background(MaterialTheme.colorScheme.background)
+
+    MesTheme {
+        ServicesUiStateDecisions(
+            servicesUiState = ServicesUiState.Error ,
+            retryAction = {},
+            navigateToPreCall = {},
+            listState = rememberLazyListState(),
+            modifier = modifier
         )
     }
 }
@@ -211,11 +251,10 @@ fun AllServicesScreenPreview() {
 @ExperimentalMaterial3Api
 fun EmptyServicesScreenPreview() {
     MesTheme {
-        val mockData = mutableListOf<Service>()
         val modifier = Modifier.background(MaterialTheme.colorScheme.background)
 
-        ScreenServices(
-            servicesUiState = ServicesUiState.Success(services = mockData),
+        ServicesUiStateDecisions(
+            servicesUiState = ServicesUiState.NoContent,
             retryAction = {},
             navigateToPreCall = {},
             listState = rememberLazyListState(),

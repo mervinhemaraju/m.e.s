@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 @Entity(tableName = "service_table")
 data class Service(
-    @PrimaryKey(autoGenerate = false) @ColumnInfo(name = "identifier")  val identifier: String,
+    @PrimaryKey(autoGenerate = false) @ColumnInfo(name = "identifier") var identifier: String,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "type") val type: String,
     @ColumnInfo(name = "icon") val icon: String,

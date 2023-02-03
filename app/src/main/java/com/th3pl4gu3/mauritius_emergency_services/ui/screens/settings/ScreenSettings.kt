@@ -2,11 +2,10 @@ package com.th3pl4gu3.mauritius_emergency_services.ui.screens.settings
 
 import android.content.res.Configuration
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.FlingBehavior
-import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,6 +14,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.LocaleListCompat
 import com.th3pl4gu3.mauritius_emergency_services.R
+import com.th3pl4gu3.mauritius_emergency_services.data.DummyData
 import com.th3pl4gu3.mauritius_emergency_services.models.MesLocale
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.models.SettingsItem
@@ -36,15 +37,87 @@ const val TAG = "SCREEN_SETTINGS_TAG"
 @Composable
 @ExperimentalMaterial3Api
 fun ScreenSettings(
-    emergencyServices: List<Service>,
-    forceRefreshServices: () -> Unit,
-    updateEmergencyButtonAction: (service: Service) -> Unit,
+    settingsViewModel: SettingsViewModel,
     modifier: Modifier = Modifier,
     scrollState: ScrollState = rememberScrollState()
 ) {
+
+    val context = LocalContext.current
+    val message = settingsViewModel.messageQueue.collectAsState(initial = null).value
+    val services = settingsViewModel.services.collectAsState(initial = listOf()).value
     var openEmergencyButtonItemDialog by remember { mutableStateOf(false) }
     var openAppLanguageDialog by remember { mutableStateOf(false) }
 
+    if (message != null) {
+        Toast.makeText(
+            context,
+            if (!message.first.isNullOrEmpty()) {
+                stringResource(id = message.second, message.first!!)
+            } else {
+                stringResource(id = message.second)
+            },
+            Toast.LENGTH_SHORT
+        ).show()
+
+        settingsViewModel.clearMessageQueue()
+    }
+
+    SettingsContent(
+        scrollState = scrollState,
+        modifier = modifier,
+        emergencyButtonAction = { openEmergencyButtonItemDialog = !openEmergencyButtonItemDialog },
+        appLanguageAction = { openAppLanguageDialog = !openAppLanguageDialog },
+        resetCacheAction = { settingsViewModel.forceRefreshServices() }
+    )
+
+
+    if (openEmergencyButtonItemDialog) {
+        EmergencyButtonItemDialog(
+            emergencyServices = services,
+            dismissAction = {
+                openEmergencyButtonItemDialog = !openEmergencyButtonItemDialog
+            },
+            updateEmergencyButtonAction = { settingsViewModel.updateEmergencyButtonAction(it) }
+        )
+    }
+
+    if (openAppLanguageDialog) {
+        AppLanguageDialog(
+            languages = MesLocale.Load,
+            dismissAction = {
+                openAppLanguageDialog = !openAppLanguageDialog
+            },
+            updateLanguageAction = {
+                AppCompatDelegate.setApplicationLocales(
+                    if (it.lowercase() == KEYWORD_LOCALE_DEFAULT) {
+                        Log.i(TAG, "Setting default locale")
+
+                        LocaleListCompat.getEmptyLocaleList()
+                    } else {
+                        Log.i(TAG, "Setting locale: $it")
+                        LocaleListCompat.forLanguageTags(it)
+                    }
+                )
+
+                settingsViewModel.forceRefreshServices(silent = true)
+
+                settingsViewModel.sendMessageInQueue(
+                    R.string.message_app_language_updated
+                )
+            }
+        )
+    }
+}
+
+@Composable
+@ExperimentalMaterial3Api
+fun SettingsContent(
+    emergencyButtonAction: () -> Unit,
+    appLanguageAction: () -> Unit,
+    resetCacheAction: () -> Unit,
+    scrollState: ScrollState,
+    modifier: Modifier = Modifier
+){
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -58,7 +131,7 @@ fun ScreenSettings(
 
         MesSettingsItem(
             settingsItem = SettingsItem.EmergencyButton,
-            onClick = { openEmergencyButtonItemDialog = !openEmergencyButtonItemDialog }
+            onClick = emergencyButtonAction
         )
 
         SettingsLabel(
@@ -67,7 +140,7 @@ fun ScreenSettings(
 
         MesSettingsItem(
             settingsItem = SettingsItem.AppLanguage,
-            onClick = { openAppLanguageDialog = !openAppLanguageDialog }
+            onClick = appLanguageAction
         )
 
         SettingsLabel(
@@ -76,41 +149,7 @@ fun ScreenSettings(
 
         MesSettingsItem(
             settingsItem = SettingsItem.ResetCache,
-            onClick = forceRefreshServices
-        )
-    }
-
-    if (openEmergencyButtonItemDialog) {
-
-        EmergencyButtonItemDialog(
-            emergencyServices = emergencyServices,
-            dismissAction = {
-                openEmergencyButtonItemDialog = !openEmergencyButtonItemDialog
-            },
-            updateEmergencyButtonAction = updateEmergencyButtonAction
-        )
-    }
-
-    if (openAppLanguageDialog) {
-        AppLanguageDialog(
-            languages = MesLocale.Load,
-            dismissAction = {
-                openAppLanguageDialog = !openAppLanguageDialog
-            },
-            updateLanguageAction = {
-                AppCompatDelegate.setApplicationLocales(
-                    if(it.lowercase() == KEYWORD_LOCALE_DEFAULT){
-                        Log.i(TAG, "Setting default locale")
-
-                        LocaleListCompat.getEmptyLocaleList()
-                    }else{
-                        Log.i(TAG, "Setting locale: $it")
-                        LocaleListCompat.forLanguageTags(it)
-                    }
-                )
-
-                forceRefreshServices()
-            }
+            onClick = resetCacheAction
         )
     }
 }
@@ -228,10 +267,47 @@ fun EmergencyButtonItemDialog(
 @ExperimentalMaterial3Api
 fun SettingsScreenPreview() {
     MesTheme {
-        ScreenSettings(
-            emergencyServices = listOf(),
-            forceRefreshServices = {},
-            updateEmergencyButtonAction = {}
+        SettingsContent(
+            emergencyButtonAction = {},
+            appLanguageAction = {},
+            resetCacheAction = {},
+            scrollState = rememberScrollState(),
+        )
+    }
+}
+
+@Preview("Settings App Language Dialog Light Preview", showBackground = true)
+@Preview(
+    "Settings App Language Dialog Dark Preview",
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+@ExperimentalMaterial3Api
+fun AppLanguageDialogPreview() {
+    MesTheme {
+        AppLanguageDialog(
+            languages = MesLocale.Load,
+            updateLanguageAction = {},
+            dismissAction = {}
+        )
+    }
+}
+
+@Preview("Settings Emergency Button  Dialog Light Preview", showBackground = true)
+@Preview(
+    "Settings Emergency Button Dialog Dark Preview",
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+@ExperimentalMaterial3Api
+fun EmergencyButtonDialogPreview() {
+    MesTheme {
+        EmergencyButtonItemDialog(
+            emergencyServices = DummyData.services,
+            updateEmergencyButtonAction = {},
+            dismissAction = {}
         )
     }
 }

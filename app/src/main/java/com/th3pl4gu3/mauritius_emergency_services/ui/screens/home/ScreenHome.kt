@@ -7,6 +7,8 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -25,13 +27,41 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 @ExperimentalMaterial3Api
 @ExperimentalFoundationApi
 fun ScreenHome(
+    homeViewModel: HomeViewModel,
+    navigateToPreCall: (service: Service) -> Unit,
+    scrollState: ScrollState = rememberScrollState(),
+    modifier: Modifier = Modifier,
+) {
+
+    // Get the HomeUiState from the view model
+    val homeUiState: HomeUiState by homeViewModel.homeUiState.collectAsState()
+
+    // Get the mes app settings from view model
+    val mesAppSettings =
+        homeViewModel.mesAppSettings.collectAsState(initial = MesAppSettings()).value
+
+    // Launch the Home UI Decisions
+    HomeUiStateDecisions(
+        homeUiState = homeUiState,
+        mesAppSettings = mesAppSettings,
+        retryAction = { homeViewModel.refresh(mesAppSettings.emergencyButtonActionIdentifier) },
+        navigateToPreCall = navigateToPreCall,
+        scrollState = scrollState,
+        modifier = modifier
+    )
+}
+
+@Composable
+@ExperimentalMaterial3Api
+@ExperimentalFoundationApi
+fun HomeUiStateDecisions(
     homeUiState: HomeUiState,
+    mesAppSettings: MesAppSettings,
     retryAction: () -> Unit,
     navigateToPreCall: (service: Service) -> Unit,
-    mesAppSettings: MesAppSettings,
+    scrollState: ScrollState,
     modifier: Modifier = Modifier,
-    scrollState: ScrollState = rememberScrollState()
-) {
+){
     when (homeUiState) {
         is HomeUiState.Success -> {
             HomeContent(
@@ -121,17 +151,11 @@ fun HomeContent(
         ) {
             MesEmergencyButton(
                 onClick = {
-                    when (homeUiState) {
-                        is HomeUiState.Success -> {
-                            // Launch the pre-call screen
-                            navigateToPreCall(
-                                homeUiState.services.first {
-                                    it.identifier == mesAppSettings.emergencyButtonActionIdentifier
-                                }
-                            )
+                    navigateToPreCall(
+                        homeUiState.services.first {
+                            it.identifier == mesAppSettings.emergencyButtonActionIdentifier
                         }
-                        else -> {}
-                    }
+                    )
                 },
                 modifier = Modifier
                     .size(200.dp)
@@ -164,54 +188,6 @@ fun HomeContent(
         )
     }
 }
-
-//@Composable
-//fun LoadingScreen(modifier: Modifier = Modifier) {
-//    Column(
-//        horizontalAlignment = Alignment.CenterHorizontally,
-//        verticalArrangement = Arrangement.Center,
-//        modifier = modifier
-//    ) {
-//
-//        CircularProgressIndicator(
-//            color = MaterialTheme.colorScheme.primary,
-//            strokeWidth = 8.dp,
-//            modifier = Modifier
-//                .size(54.dp)
-//                .padding(16.dp)
-//        )
-//
-//        Text(
-//            text = stringResource(id = R.string.message_loading_services),
-//            style = MaterialTheme.typography.bodyLarge,
-//            color = MaterialTheme.colorScheme.onSurface,
-//            modifier = Modifier
-//                .padding(16.dp)
-//        )
-//    }
-//}
-
-//@Composable
-//fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
-//    Column(
-//        horizontalAlignment = Alignment.CenterHorizontally,
-//        verticalArrangement = Arrangement.Center,
-//        modifier = modifier
-//    ) {
-//
-//        Text(
-//            text = stringResource(id = R.string.message_error_loading_failed),
-//            style = MaterialTheme.typography.bodyMedium,
-//            color = MaterialTheme.colorScheme.onBackground,
-//            modifier = Modifier.padding(8.dp)
-//        )
-//
-//        MesTextButton(
-//            text = stringResource(id = R.string.action_retry),
-//            onClick = retryAction
-//        )
-//    }
-//}
 
 @Composable
 @ExperimentalMaterial3Api
@@ -247,45 +223,66 @@ fun MesEmergencyRow(
 fun ScreenHomePreview() {
 
     MesTheme {
-        ScreenHome(
-            retryAction = {},
-            navigateToPreCall = {},
+        HomeUiStateDecisions(
             homeUiState = HomeUiState.Success(DummyData.services),
-            mesAppSettings = MesAppSettings()
+            mesAppSettings = MesAppSettings(),
+            navigateToPreCall = {},
+            retryAction = {},
+            scrollState = rememberScrollState()
         )
     }
 }
 
-@Preview("Home Screen Light")
-@Preview("Home Screen Dark", uiMode = UI_MODE_NIGHT_YES)
+@Preview("Home Screen Loading Light")
+@Preview("Home Screen Loading Dark", uiMode = UI_MODE_NIGHT_YES)
 @Composable
 @ExperimentalMaterial3Api
 @ExperimentalFoundationApi
 fun HomeLoadingPreview() {
 
     MesTheme {
-        ScreenHome(
-            retryAction = {},
-            navigateToPreCall = {},
+        HomeUiStateDecisions(
             homeUiState = HomeUiState.Loading,
-            mesAppSettings = MesAppSettings()
+            mesAppSettings = MesAppSettings(),
+            navigateToPreCall = {},
+            retryAction = {},
+            scrollState = rememberScrollState()
         )
     }
 }
 
-@Preview("Home Screen Light")
-@Preview("Home Screen Dark", uiMode = UI_MODE_NIGHT_YES)
+@Preview("Home Screen Error Light")
+@Preview("Home Screen Error Dark", uiMode = UI_MODE_NIGHT_YES)
 @Composable
 @ExperimentalMaterial3Api
 @ExperimentalFoundationApi
 fun HomeErrorPreview() {
 
     MesTheme {
-        ScreenHome(
-            retryAction = {},
-            navigateToPreCall = {},
+        HomeUiStateDecisions(
             homeUiState = HomeUiState.Error,
-            mesAppSettings = MesAppSettings()
+            mesAppSettings = MesAppSettings(),
+            navigateToPreCall = {},
+            retryAction = {},
+            scrollState = rememberScrollState()
+        )
+    }
+}
+
+@Preview("Home Screen Not Network Light")
+@Preview("Home Screen Not Network Dark", uiMode = UI_MODE_NIGHT_YES)
+@Composable
+@ExperimentalMaterial3Api
+@ExperimentalFoundationApi
+fun HomeNoNetworkPreview() {
+
+    MesTheme {
+        HomeUiStateDecisions(
+            homeUiState = HomeUiState.NoNetwork,
+            mesAppSettings = MesAppSettings(),
+            navigateToPreCall = {},
+            retryAction = {},
+            scrollState = rememberScrollState()
         )
     }
 }
