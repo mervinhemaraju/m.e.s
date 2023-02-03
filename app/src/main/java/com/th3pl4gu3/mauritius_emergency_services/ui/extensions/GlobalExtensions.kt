@@ -6,11 +6,13 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.font.FontFamily
 import androidx.work.WorkManager
 import com.th3pl4gu3.mauritius_emergency_services.MesApplication
 import com.th3pl4gu3.mauritius_emergency_services.models.NotificationChannels
+import com.th3pl4gu3.mauritius_emergency_services.utils.DEFAULT_LOCALE
 
 fun Typography.defaultFontFamily(
     primaryFontFamily: FontFamily,
@@ -82,5 +84,12 @@ fun MesApplication.createNotificationChannels() {
 val MesApplication.MesWorkManager
     get() = WorkManager.getInstance(this)
 
-val Int.isTollFree : Boolean
+val Int.isTollFree: Boolean
     get() = this.toString().count() < 5 || this.toString().startsWith("8", true)
+
+val GetAppLocale: String
+    get() = if (!AppCompatDelegate.getApplicationLocales().isEmpty) {
+        AppCompatDelegate.getApplicationLocales()[0].toString()
+    } else {
+        DEFAULT_LOCALE
+    }

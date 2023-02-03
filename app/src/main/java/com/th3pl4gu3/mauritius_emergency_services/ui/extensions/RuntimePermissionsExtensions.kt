@@ -8,6 +8,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.th3pl4gu3.mauritius_emergency_services.MesActivity
 
+val Context.HasNotificationPermission: Boolean
+    get() = ContextCompat.checkSelfPermission(
+        this,
+        Manifest.permission.POST_NOTIFICATIONS
+    ) == PackageManager.PERMISSION_GRANTED
+
 val Context.HasNecessaryPermissions: Boolean
     get() = ContextCompat.checkSelfPermission(
         this,

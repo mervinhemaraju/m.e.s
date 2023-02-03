@@ -2,6 +2,7 @@ package com.th3pl4gu3.mauritius_emergency_services.api
 
 import com.th3pl4gu3.mauritius_emergency_services.models.MesResponse
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 /**
  * A public interface that exposes the [getAllServices] method
@@ -12,6 +13,6 @@ interface MesApiService {
      * The @GET annotation indicates that the "services" endpoint will be requested with the GET
      * HTTP method
      */
-    @GET("services")
-    suspend fun getAllServices(): MesResponse
+    @GET("{language}/services")
+    suspend fun getAllServices(@Path("language") language: String): MesResponse
 }

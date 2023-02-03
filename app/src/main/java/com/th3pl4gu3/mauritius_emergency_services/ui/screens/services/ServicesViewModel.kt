@@ -3,6 +3,7 @@ package com.th3pl4gu3.mauritius_emergency_services.ui.screens.services
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.th3pl4gu3.mauritius_emergency_services.data.AppContainer
+import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.GetAppLocale
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.home.HomeUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -46,7 +47,7 @@ class ServicesViewModel @Inject constructor(
 
                 // Force refresh the services
                 container.offlineServiceRepository.forceRefresh(
-                    services = container.onlineServiceRepository.getAllServices().services
+                    services = container.onlineServiceRepository.getAllServices(language = GetAppLocale).services
                 )
 
             } catch (e: IOException) {

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.data.AppContainer
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
+import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.GetAppLocale
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.home.HomeUiState
 import com.th3pl4gu3.mauritius_emergency_services.utils.TIMEOUT_MILLIS
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,10 +38,10 @@ class SettingsViewModel @Inject constructor(
     fun forceRefreshServices() =
         viewModelScope.launch(Dispatchers.IO) {
             try {
-
+                
                 // Force refresh the services
                 container.offlineServiceRepository.forceRefresh(
-                    services = container.onlineServiceRepository.getAllServices().services
+                    services = container.onlineServiceRepository.getAllServices(language = GetAppLocale).services
                 )
 
                 mMessageQueue.value = Pair(null, R.string.message_cache_reset_successfully)

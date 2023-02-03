@@ -2,10 +2,7 @@ package com.th3pl4gu3.mauritius_emergency_services
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
-import android.telephony.SubscriptionManager
-import android.telephony.TelephonyManager
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.setContent
@@ -33,7 +30,6 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MesActivity : AppCompatActivity() {
 
-    // TODO("Fix services localization")
     // TODO("Check phone permission before launching call")
     companion object {
         private const val TAG = "MAIN_ACTIVITY_LOGS"

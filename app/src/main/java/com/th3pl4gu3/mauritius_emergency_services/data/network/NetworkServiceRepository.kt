@@ -7,5 +7,5 @@ import com.th3pl4gu3.mauritius_emergency_services.models.MesResponse
  */
 interface NetworkServiceRepository {
     /** Fetches list of services from Mes API */
-    suspend fun getAllServices(): MesResponse
+    suspend fun getAllServices(language: String): MesResponse
 }

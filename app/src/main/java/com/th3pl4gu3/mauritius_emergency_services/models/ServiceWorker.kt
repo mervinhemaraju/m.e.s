@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.th3pl4gu3.mauritius_emergency_services.MesApplication
+import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.GetAppLocale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -29,7 +30,7 @@ class ServiceWorker(
                 val container = (applicationContext as MesApplication).container
 
                 // Get the services from the MES API
-                val mesResponse = container.onlineServiceRepository.getAllServices()
+                val mesResponse = container.onlineServiceRepository.getAllServices(language = GetAppLocale)
 
                 // Verify if the request is successful
                 if (!mesResponse.success) throw Exception("Error getting the services from the MES API. Message: ${mesResponse.message}")
