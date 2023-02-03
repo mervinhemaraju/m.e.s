@@ -32,7 +32,6 @@
     <string name="title_settings_page_change_language">Change Language</string>
 
     <string name="title_language_selector_dialog">Choose a Language</string>
-    <string name="title_language_emergency_button_action_dialog">Emergency Button Action</string>
     <string name="title_settings_feature">Feature</string>
     <string name="title_settings_language">Language</string>
     <string name="title_settings_cache">Cache</string>
@@ -52,6 +51,8 @@
     <string name="title_drawer_page_choose_theme">Choose Theme</string>
     <string name="title_drawer_page_contact_us">Contact Us</string>
 
+    <string name="title_services_page_other_contacts">Other Contacts</string>
+
     <!-- Descriptions -->
     <string name="description_about_data_rate_mes">
         If you love the app, let us know in the Google Play Store and we can make it even better.
@@ -70,7 +71,6 @@
 
 
     <string name="description_welcome_mes_permissions_needed_dialog">
-        The permissions for Notifications and Phone Call are needed for MES to function properly.
         Notifications are optional permissions that can be allowed to notify the users for activities in MES.
         However, phone call is a MANDATORY permission needed for MES to work. This is because MES will need to be able to launch
         phone call for you directly from the app. You won\'t be able to proceed without enabling the phone call permission.
@@ -104,7 +104,7 @@
     </string>
 
     <!-- Headlines -->
-    <string name="headline_home_primary">Emergency police help needed ?</string>
+    <string name="headline_home_primary">Emergency call help needed ?</string>
     <string name="headline_home_secondary">Click the button to quick call</string>
     <string name="headline_home_tertiary">Need other quick emergency actions ?</string>
     <string name="headline_home_quaternary">Click one below to call</string>
@@ -128,10 +128,11 @@
     <string name="message_cache_reset_successfully">Cache reset successfully</string>
     <string name="message_action_emergency_button_configured">%1$s has been set as the emergency button action</string>
     <string name="message_toll_free">Toll Free</string>
+    <string name="message_no_other_contacts_found">No other contacts found</string>
     <!-- Message: Error -->
-    <string name="message_error_content_failed">Error getting content.</string>
+    <string name="message_error_content_failed">Error getting content</string>
     <string name="message_error_loading_countdown" translatable="false">X</string>
-    <string name="message_error_loading_failed">Loading Failed</string>
+    <string name="message_error_loading_failed">Change To French Test</string>
     <string name="message_error_loading_services_failed">Unable to load services.</string>
     <string name="message_error_call_startup_failed">Unable to perform the phone call at the moment. Please try again.</string>
     <string name="message_error_cache_reset">Error occurred while resetting cache: %1$s</string>

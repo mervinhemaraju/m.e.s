@@ -10,6 +10,7 @@ import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -25,6 +26,7 @@ import com.th3pl4gu3.mauritius_emergency_services.models.AboutInfoVector
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.models.SettingsItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.capitalize
+import com.th3pl4gu3.mauritius_emergency_services.ui.theme.Blue200
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 
 @Composable
@@ -67,8 +69,12 @@ fun MesEmergencyItem(
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         shape = MaterialTheme.shapes.medium,
+        elevation = CardDefaults.outlinedCardElevation(
+            0.7.dp
+        ),
         onClick = onClick,
-        modifier = modifier.padding(8.dp)
+        modifier = modifier
+            .padding(8.dp)
     ) {
 
         ConstraintLayout(

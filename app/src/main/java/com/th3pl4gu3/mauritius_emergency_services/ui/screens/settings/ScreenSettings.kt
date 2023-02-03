@@ -186,7 +186,7 @@ fun EmergencyButtonItemDialog(
         title = {
             Column {
                 Text(
-                    text = stringResource(id = R.string.title_language_emergency_button_action_dialog)
+                    text = stringResource(id = R.string.title_settings_page_emergency_button_action)
                 )
             }
         },

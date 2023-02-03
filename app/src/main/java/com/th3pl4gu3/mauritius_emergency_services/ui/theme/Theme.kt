@@ -41,12 +41,12 @@ internal val MesColorLight = lightColorScheme(
     tertiary = Blue900,
 
     // Background variants
-    background = WhiteBlue10,
+    background = Color.White,
     onBackground = BlueA100,
 
     // Surface variants
     surface = Blue20,
-    surfaceVariant = Blue200,
+    surfaceVariant = Blue20,
     onSurface = BlueA100,
     onSurfaceVariant = Gray600,
 

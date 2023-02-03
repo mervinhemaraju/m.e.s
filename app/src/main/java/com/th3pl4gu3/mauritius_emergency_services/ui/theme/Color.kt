@@ -4,8 +4,8 @@ import androidx.compose.ui.graphics.Color
 
 // Blue Shades
 val WhiteBlue10 = Color(0xFFF2F9FC)
-val Blue20 = Color(0xFFE5F1F8)
-val Blue200 = Color(0xFFB1DCFF)
+val Blue20 = Color(0xFFF1FAFF)
+val Blue200 = Color(0xFFADC4FF)
 val Blue900 = Color(0xFF0D47A1)
 val BlueA100 = Color(0xFF003964)
 

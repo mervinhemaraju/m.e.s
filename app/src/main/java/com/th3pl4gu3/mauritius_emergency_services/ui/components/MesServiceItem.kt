@@ -7,17 +7,15 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,26 +27,24 @@ import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.capitalize
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.isTollFree
-import com.th3pl4gu3.mauritius_emergency_services.ui.theme.Gray500
-import com.th3pl4gu3.mauritius_emergency_services.ui.theme.Gray600
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
-import kotlin.math.exp
 
 @Composable
 @ExperimentalMaterial3Api
 fun MesServiceItem(
     service: Service,
-    modifier: Modifier = Modifier,
     actionVisible: Boolean = true,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
 
     var expanded by remember {
         mutableStateOf(false)
     }
 
-    val baseModifier = Modifier
+    val baseModifier = modifier
+        .fillMaxWidth()
         .background(
             if (expanded) {
                 MaterialTheme.colorScheme.surfaceVariant
@@ -103,7 +99,8 @@ fun MesServiceItem(
             dropDownClick = {},
             onClick = onClick,
             expanded = false,
-            actionVisible = false
+            actionVisible = false,
+            modifier = Modifier
         )
     }
 }
@@ -116,7 +113,7 @@ fun MesServiceItemLayout(
     onClick: () -> Unit,
     expanded: Boolean,
     actionVisible: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier
 ) {
 
     Column(
@@ -127,10 +124,6 @@ fun MesServiceItemLayout(
 
         ConstraintLayout(
             modifier = modifier
-                .fillMaxWidth()
-//                .background(
-//                    if (actionVisible) MaterialTheme.colorScheme.background else Color.Transparent
-//                )
                 .clickable(
                     onClick = if (actionVisible) {
                         {}
@@ -247,28 +240,47 @@ fun MesServiceItemLayout(
 @ExperimentalMaterial3Api
 fun MesServiceItemExtras(
     service: Service,
-    modifier: Modifier = Modifier
+    modifier: Modifier
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
+    // Create a list of other contacts
+    // from emails and other_contacts
+    val contacts: MutableList<Pair<ImageVector, String>> =
+        mutableListOf<Pair<ImageVector, String>>().apply {
+            addAll(
+                service.emails.map { Pair(Icons.Outlined.Email, it) }
+            )
+
+            addAll(
+                service.other_contacts.map { Pair(Icons.Outlined.Phone, it.toString()) }
+            )
+        }
+
+    if (contacts.size > 0) {
         Text(
-            text = "Other Contacts",
+            text = stringResource(id = R.string.title_services_page_other_contacts),
             style = MaterialTheme.typography.bodyLarge,
             softWrap = true,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Medium,
+            modifier = modifier
+                .padding(
+                    top = 16.dp,
+                    start = 16.dp,
+                    end = 16.dp,
+                    bottom = 8.dp
+                )
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
-
         FlowRow(
-            modifier = Modifier
-                .background(Color.Transparent)
+            modifier = modifier
+                .padding(
+                    top = 8.dp,
+                    start = 16.dp,
+                    end = 16.dp,
+                    bottom = 8.dp
+                )
         ) {
-            service.emails.forEach {
+            contacts.forEach {
 
                 TextButton(
                     onClick = {},
@@ -279,14 +291,14 @@ fun MesServiceItemExtras(
                         .padding(end = 8.dp)
                 ) {
                     Icon(
-                        imageVector = Icons.Outlined.Email,
+                        imageVector = it.first,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.size(14.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = it,
+                        text = it.second,
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
@@ -294,37 +306,14 @@ fun MesServiceItemExtras(
 
             }
         }
-
-        FlowRow(
-            modifier = Modifier
-                .background(Color.Transparent)
-        ) {
-            service.other_contacts.forEach {
-
-                TextButton(
-                    onClick = {},
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = MaterialTheme.colorScheme.primary
-                    ),
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Phone,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.size(14.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = it.toString(),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
-
-            }
-        }
+    } else {
+        Text(
+            stringResource(id = R.string.message_no_other_contacts_found),
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.inversePrimary,
+            modifier = modifier
+                .padding(16.dp)
+        )
     }
 }
 
@@ -351,6 +340,9 @@ fun MesServiceItemPreview() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        MesServiceItemExtras(service = mockDataService)
+        MesServiceItemExtras(
+            service = mockDataService,
+            modifier = Modifier
+        )
     }
 }
