@@ -6,4 +6,5 @@ sealed interface HomeUiState {
     data class Success(val services: List<Service>) : HomeUiState
     object Error : HomeUiState
     object Loading : HomeUiState
+    object NoNetwork: HomeUiState
 }

@@ -22,10 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesAnimatedVisibilitySlideHorizontallyContent
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenError
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenLoading
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesServiceItem
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.*
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 import kotlinx.coroutines.launch
 
@@ -62,6 +59,10 @@ fun ScreenServices(
             errorMessage = stringResource(id = R.string.message_error_loading_services_failed),
             modifier = servicesModifier
         )
+        is ServicesUiState.NoContent -> MesScreenNoContent(
+            message = stringResource(id = R.string.message_services_not_found),
+            modifier = servicesModifier
+        )
     }
 
 }
@@ -78,84 +79,62 @@ fun ServicesList(
     listState: LazyListState,
     modifier: Modifier = Modifier
 ) {
-    if (services.isEmpty()) {
-        Column(
-            modifier = modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+    val coroutineScope = rememberCoroutineScope()
+
+    val showScrollToTopButton by remember {
+        derivedStateOf {
+            listState.firstVisibleItemIndex > 0
+        }
+    }
+
+    Box {
+        LazyColumn(
+            modifier = modifier,
+            state = listState
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.il_no_data),
-                contentDescription = "",
-                modifier = Modifier.padding(32.dp)
-            )
-
-            Text(
-                text = stringResource(id = R.string.message_services_not_found),
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier
-                    .padding(16.dp)
-            )
-        }
-    } else {
-        val coroutineScope = rememberCoroutineScope()
-
-        val showScrollToTopButton by remember {
-            derivedStateOf {
-                listState.firstVisibleItemIndex > 0
-            }
-        }
-
-        Box {
-            LazyColumn(
-                modifier = modifier,
-                state = listState
-            ) {
-                items(
-                    services,
-                    key = { it.identifier }
-                ) { service ->
-                    MesServiceItem(
-                        service = service,
-                        onClick = {
-                            Log.i(
-                                "pre_call_service",
-                                "Launching PreCall with service identifier: ${service.identifier}"
-                            )
-
-                            navigateToPreCall(service)
-                        },
-                        modifier = Modifier.animateItemPlacement()
-                    )
-                }
-                
-                item { Spacer(modifier = Modifier.height(54.dp)) }
-            }
-
-            MesAnimatedVisibilitySlideHorizontallyContent(
-                visibility = showScrollToTopButton,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(16.dp),
-            ) {
-                FloatingActionButton(
+            items(
+                services,
+                key = { it.identifier }
+            ) { service ->
+                MesServiceItem(
+                    service = service,
                     onClick = {
-                        coroutineScope.launch {
-                            listState.animateScrollToItem(0)
-                        }
+                        Log.i(
+                            "pre_call_service",
+                            "Launching PreCall with service identifier: ${service.identifier}"
+                        )
+
+                        navigateToPreCall(service)
                     },
-                    containerColor = MaterialTheme.colorScheme.primary
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.ArrowDropUp,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
+                    modifier = Modifier.animateItemPlacement()
+                )
             }
 
+            item { Spacer(modifier = Modifier.height(54.dp)) }
         }
+
+        MesAnimatedVisibilitySlideHorizontallyContent(
+            visibility = showScrollToTopButton,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp),
+        ) {
+            FloatingActionButton(
+                onClick = {
+                    coroutineScope.launch {
+                        listState.animateScrollToItem(0)
+                    }
+                },
+                containerColor = MaterialTheme.colorScheme.primary
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.ArrowDropUp,
+                    contentDescription = stringResource(id = R.string.action_scroll_up),
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+        }
+
     }
 }
 

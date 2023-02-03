@@ -83,4 +83,10 @@
     <string name="title_services_page_other_contacts">Autres contacts</string>
     <string name="message_toll_free">Gratuit</string>
     <string name="message_no_other_contacts_found">Action du bouton d\'urgence</string>
+    <string name="action_call_end">Fin d\'appel</string>
+    <string name="action_swipe">Glisser</string>
+    <string name="action_scroll_up">Remonter</string>
+    <string name="title_about_privacy_policy">Politique de confidentialité</string>
+    <string name="description_about_privacy_policy">Afficher la politique de confidentialité de Mes</string>
+    <string name="message_internet_connection_needed">Vous devez être connecté à Internet pour que Mes puisse télécharger les services. Veuillez vous connecter et réessayer</string>
 </resources>

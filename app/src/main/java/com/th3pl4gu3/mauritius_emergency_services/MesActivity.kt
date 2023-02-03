@@ -23,6 +23,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.th3pl4gu3.mauritius_emergency_services.ui.MesApp
 import com.th3pl4gu3.mauritius_emergency_services.ui.SplashViewModel
+import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.IsConnectedToNetwork
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -30,6 +31,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MesActivity : AppCompatActivity() {
 
+    // TODO(Internet check before downloading services)
     // TODO("Check phone permission before launching call")
     companion object {
         private const val TAG = "MAIN_ACTIVITY_LOGS"
@@ -76,6 +78,7 @@ class MesActivity : AppCompatActivity() {
         ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class,
         ExperimentalPagerApi::class, ExperimentalAnimationApi::class
     )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -83,6 +86,10 @@ class MesActivity : AppCompatActivity() {
             TAG, "Starting app with app compat ${
                 AppCompatDelegate.getApplicationLocales()
             }"
+        )
+
+        Log.i(
+            TAG, "Is connected to network $IsConnectedToNetwork"
         )
 
         /**

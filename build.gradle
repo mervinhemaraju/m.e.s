@@ -4,7 +4,7 @@ buildscript {
         app_id = 'com.th3pl4gu3.mauritius_emergency_services'
         version_code = 4
         version_name = "1.0.0"
-        version_equalizer = "03"
+        version_equalizer = "04"
         version_suffix_beta = ".beta:$version_equalizer"
         version_suffix_preprod = ".preprod:$version_equalizer"
         version_suffix_dev = ".dev:$version_equalizer"

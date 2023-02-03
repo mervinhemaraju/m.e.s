@@ -5,6 +5,9 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.net.Uri
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.material3.Typography
@@ -93,3 +96,17 @@ val GetAppLocale: String
     } else {
         DEFAULT_LOCALE
     }
+
+val Context.IsConnectedToNetwork: Boolean
+get() {
+    val connectivityManager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+    val activeNetwork = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) ?: return false
+
+    return when {
+        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+        else -> false
+    }
+}

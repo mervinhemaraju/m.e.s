@@ -39,6 +39,12 @@ sealed class AboutInfoVector(
         description = R.string.description_about_data_api
     )
 
+    object PrivacyPolicy : AboutInfoVector(
+        icon = Icons.Outlined.PrivacyTip,
+        title = R.string.title_about_privacy_policy,
+        description = R.string.description_about_privacy_policy
+    )
+
     private object Version : AboutInfoVector(
         icon = Icons.Outlined.Info,
         title = R.string.title_about_version,
@@ -53,6 +59,7 @@ sealed class AboutInfoVector(
         val others = listOf(
             AboutUs,
             Api,
+            PrivacyPolicy,
             Version
         )
     }

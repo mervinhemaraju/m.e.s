@@ -42,6 +42,7 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 import com.th3pl4gu3.mauritius_emergency_services.utils.URI_APP_PLAY_STORE
 import com.th3pl4gu3.mauritius_emergency_services.utils.URI_MES_API
 import com.th3pl4gu3.mauritius_emergency_services.utils.URI_MES_WEBSITE
+import com.th3pl4gu3.mauritius_emergency_services.utils.URI_MES_WEBSITE_PRIVACY
 
 @Composable
 fun MesIcon(
@@ -192,6 +193,9 @@ fun MesAboutInfoCard(
                             }
                             AboutInfoVector.AboutUs -> {
                                 localUriHandler.openUri(URI_MES_WEBSITE)
+                            }
+                            AboutInfoVector.PrivacyPolicy -> {
+                                localUriHandler.openUri(URI_MES_WEBSITE_PRIVACY)
                             }
                             AboutInfoVector.ShareApp -> {
                                 val intent = Intent().apply {

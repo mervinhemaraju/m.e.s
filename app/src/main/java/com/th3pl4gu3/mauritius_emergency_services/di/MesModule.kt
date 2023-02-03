@@ -1,6 +1,7 @@
 package com.th3pl4gu3.mauritius_emergency_services.di
 
 import android.content.Context
+import android.net.ConnectivityManager
 import com.th3pl4gu3.mauritius_emergency_services.MesApplication
 import com.th3pl4gu3.mauritius_emergency_services.data.AppContainer
 import com.th3pl4gu3.mauritius_emergency_services.data.DefaultAppContainer

@@ -84,7 +84,7 @@ fun MesNavGraph(
 
             ScreenHome(
                 homeUiState = homeUiState,
-                retryAction = homeViewModel::loadOnlineServices,
+                retryAction = homeViewModel::refresh,
                 navigateToPreCall = navigationActions.navigateToPreCall,
                 mesAppSettings = mesAppSettings,
                 scrollState = scrollState

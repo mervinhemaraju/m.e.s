@@ -121,7 +121,7 @@ fun PreCallContent(
             text = service.name,
             style = MaterialTheme.typography.headlineLarge,
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
         )
 
 
@@ -201,7 +201,8 @@ fun SwipeToCancel(
             MesIcon(
                 imageVector = Icons.Outlined.CallEnd,
                 modifier = Modifier.padding(start = 16.dp),
-                tint = MaterialTheme.colorScheme.primary
+                tint = MaterialTheme.colorScheme.primary,
+                contentDescription = R.string.action_call_end
             )
         },
         background = Red500,
@@ -212,12 +213,14 @@ fun SwipeToCancel(
         endActions = listOf(close),
         backgroundUntilSwipeThreshold = MaterialTheme.colorScheme.surface,
         modifier = modifier
+            .height(80.dp)
             .clip(shape)
             .background(MaterialTheme.colorScheme.background)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .fillMaxHeight()
                 .clip(shape)
                 .background(MaterialTheme.colorScheme.primary)
                 .padding(4.dp),
@@ -235,10 +238,12 @@ fun SwipeToCancel(
 
             Icon(
                 imageVector = Icons.Outlined.KeyboardDoubleArrowLeft,
-                contentDescription = null,
+                contentDescription = stringResource(id = R.string.action_swipe),
                 Modifier
+                    .fillMaxHeight()
+                    .width(48.dp)
                     .clip(RoundedCornerShape(12.dp))
-                    .size(48.dp)
+//                    .size(54.dp)
                     .background(MaterialTheme.colorScheme.background)
             )
         }
@@ -263,11 +268,10 @@ fun PreviewScreenPreCallContent() {
     )
 
     MesTheme {
-        ScreenPreCall(
-            preCallUiState = PreCallUiState.Success(mockData),
+        PreCallContent(
+            service = mockData,
             closeScreen = {},
             countdown = "N",
-            startCall = true,
         )
     }
 }
