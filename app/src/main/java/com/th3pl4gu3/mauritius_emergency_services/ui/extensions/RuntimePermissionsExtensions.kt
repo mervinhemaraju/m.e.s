@@ -6,7 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.th3pl4gu3.mauritius_emergency_services.MesActivity
+import com.th3pl4gu3.mauritius_emergency_services.activity.MesActivity
 
 val Context.HasNotificationPermission: Boolean
     get() = ContextCompat.checkSelfPermission(

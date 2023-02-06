@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,7 +31,7 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.components.*
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 import kotlinx.coroutines.launch
 
-private const val TAG = "SCREEN_SERVICES"
+private const val TAG: String = "SCREEN_SERVICES"
 
 @Composable
 @ExperimentalFoundationApi
@@ -95,6 +96,11 @@ fun ServicesUiStateDecisions(
         is ServicesUiState.NoContent -> MesScreenNoContent(
             message = stringResource(id = R.string.message_services_not_found),
             modifier = modifier
+        )
+        is ServicesUiState.NoNetwork -> MesScreenError(
+            retryAction = retryAction,
+            errorMessage = stringResource(id = R.string.message_internet_connection_needed),
+            image = painterResource(id = R.drawable.il_no_network)
         )
     }
 }

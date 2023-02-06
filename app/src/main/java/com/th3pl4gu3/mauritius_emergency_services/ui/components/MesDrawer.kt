@@ -38,25 +38,45 @@ fun MesDrawer(
 
         MesNavigationDrawerItem(
             label = stringResource(id = R.string.title_drawer_page_home),
-            icon = { Icon(Icons.Outlined.Home, contentDescription = null) },
+            icon = {
+                Icon(
+                    imageVector = Icons.Outlined.Home,
+                    contentDescription = stringResource(id = R.string.title_drawer_page_home)
+                )
+            },
             selected = currentRoute == MesDestinations.SCREEN_HOME,
             onClick = { navigateToHome(); closeDrawer() },
         )
         MesNavigationDrawerItem(
             label = stringResource(id = R.string.title_drawer_page_services),
-            icon = { Icon(Icons.Outlined.Phone, contentDescription = null) },
+            icon = {
+                Icon(
+                    imageVector = Icons.Outlined.Phone,
+                    contentDescription = stringResource(id = R.string.title_drawer_page_services)
+                )
+            },
             selected = currentRoute == MesDestinations.SCREEN_SERVICES,
             onClick = { navigateToServices(); closeDrawer() },
         )
         MesNavigationDrawerItem(
             label = stringResource(id = R.string.title_drawer_page_about),
-            icon = { Icon(Icons.Outlined.Info, contentDescription = null) },
+            icon = {
+                Icon(
+                    imageVector = Icons.Outlined.Info,
+                    contentDescription = stringResource(id = R.string.title_drawer_page_about)
+                )
+            },
             selected = currentRoute == MesDestinations.SCREEN_ABOUT,
             onClick = { navigateToAbout(); closeDrawer() },
         )
         MesNavigationDrawerItem(
             label = stringResource(id = R.string.title_drawer_page_settings),
-            icon = { Icon(Icons.Outlined.Settings, contentDescription = null) },
+            icon = {
+                Icon(
+                    imageVector = Icons.Outlined.Settings,
+                    contentDescription = stringResource(id = R.string.title_drawer_page_settings)
+                )
+            },
             selected = currentRoute == MesDestinations.SCREEN_SETTINGS,
             onClick = { navigateToSettings(); closeDrawer() },
         )
@@ -74,17 +94,33 @@ fun MesDrawer(
 
         MesNavigationDrawerItem(
             label = stringResource(id = R.string.title_drawer_page_choose_theme),
-            icon = { Icon(Icons.Outlined.Brightness4, contentDescription = null) },
+            icon = {
+                Icon(
+                    imageVector = Icons.Outlined.Brightness4,
+                    contentDescription = stringResource(id = R.string.title_drawer_page_choose_theme)
+                )
+            },
             selected = currentRoute == MesDestinations.SCREEN_THEME,
             onClick = { toggleThemeDialog() }
         )
 
         MesNavigationDrawerItem(
             label = stringResource(id = R.string.title_drawer_page_contact_us),
-            icon = { Icon(Icons.Outlined.Email, contentDescription = null) },
+            icon = {
+                Icon(
+                    imageVector = Icons.Outlined.Email,
+                    contentDescription = stringResource(id = R.string.title_drawer_page_contact_us)
+                )
+            },
             selected = currentRoute == MesDestinations.SCREEN_CONTACTUS,
             onClick = { navigateToContactUs() },
-            badge = { MesIcon(Icons.Outlined.OpenInNew, contentDescription = null) }
+            badge = {
+                MesIcon(
+                    imageVector = Icons.Outlined.OpenInNew, contentDescription = stringResource(
+                        id = R.string.message_external_link
+                    )
+                )
+            }
         )
     }
 }

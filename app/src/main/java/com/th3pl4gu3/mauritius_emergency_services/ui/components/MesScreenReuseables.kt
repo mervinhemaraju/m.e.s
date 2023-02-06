@@ -1,7 +1,6 @@
 package com.th3pl4gu3.mauritius_emergency_services.ui.components
 
 import android.content.res.Configuration
-import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -22,8 +21,8 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 
 @Composable
 fun MesScreenLoading(
-    loadingMessage: String = stringResource(id = R.string.message_loading_basic),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    loadingMessage: String = stringResource(id = R.string.message_loading_basic)
 ) {
     Column(
         modifier = modifier
@@ -55,11 +54,11 @@ fun MesScreenLoading(
 
 @Composable
 fun MesScreenError(
+    modifier: Modifier = Modifier,
     retryAction: () -> Unit,
     image: Painter = painterResource(id = R.drawable.il_error),
     errorMessage: String = stringResource(id = R.string.message_error_content_failed),
-    errorButtonText: String = stringResource(id = R.string.action_retry),
-    modifier: Modifier = Modifier
+    errorButtonText: String = stringResource(id = R.string.action_retry)
 ) {
     Column(
         modifier = modifier

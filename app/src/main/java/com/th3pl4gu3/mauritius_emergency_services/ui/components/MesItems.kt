@@ -6,11 +6,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -26,7 +26,6 @@ import com.th3pl4gu3.mauritius_emergency_services.models.AboutInfoVector
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.models.SettingsItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.capitalize
-import com.th3pl4gu3.mauritius_emergency_services.ui.theme.Blue200
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 
 @Composable

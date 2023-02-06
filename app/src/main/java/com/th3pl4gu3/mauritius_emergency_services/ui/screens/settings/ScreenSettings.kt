@@ -1,8 +1,6 @@
 package com.th3pl4gu3.mauritius_emergency_services.ui.screens.settings
 
 import android.content.res.Configuration
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -14,8 +12,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,6 +26,7 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesServiceItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesSettingsItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 import com.th3pl4gu3.mauritius_emergency_services.utils.KEYWORD_LOCALE_DEFAULT
+import kotlinx.coroutines.launch
 
 
 const val TAG = "SCREEN_SETTINGS_TAG"
@@ -38,26 +35,31 @@ const val TAG = "SCREEN_SETTINGS_TAG"
 @ExperimentalMaterial3Api
 fun ScreenSettings(
     settingsViewModel: SettingsViewModel,
+    snackBarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     scrollState: ScrollState = rememberScrollState()
 ) {
-
-    val context = LocalContext.current
     val message = settingsViewModel.messageQueue.collectAsState(initial = null).value
     val services = settingsViewModel.services.collectAsState(initial = listOf()).value
     var openEmergencyButtonItemDialog by remember { mutableStateOf(false) }
     var openAppLanguageDialog by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
 
     if (message != null) {
-        Toast.makeText(
-            context,
-            if (!message.first.isNullOrEmpty()) {
-                stringResource(id = message.second, message.first!!)
-            } else {
-                stringResource(id = message.second)
-            },
-            Toast.LENGTH_SHORT
-        ).show()
+
+        val displayMessage = if (!message.first.isNullOrEmpty()) {
+            stringResource(id = message.second, message.first!!)
+        } else {
+            stringResource(id = message.second)
+        }
+
+        LaunchedEffect(Unit){
+            scope.launch {
+                snackBarHostState.showSnackbar(
+                    displayMessage
+                )
+            }
+        }
 
         settingsViewModel.clearMessageQueue()
     }
@@ -90,11 +92,8 @@ fun ScreenSettings(
             updateLanguageAction = {
                 AppCompatDelegate.setApplicationLocales(
                     if (it.lowercase() == KEYWORD_LOCALE_DEFAULT) {
-                        Log.i(TAG, "Setting default locale")
-
                         LocaleListCompat.getEmptyLocaleList()
                     } else {
-                        Log.i(TAG, "Setting locale: $it")
                         LocaleListCompat.forLanguageTags(it)
                     }
                 )

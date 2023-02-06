@@ -1,6 +1,7 @@
 package com.th3pl4gu3.mauritius_emergency_services.ui.screens.theme_selector
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -34,26 +35,33 @@ fun ScreenThemeSelector(
         text = {
             Column {
                 AppTheme.values().forEach {
-                    Surface(
-                        onClick = { updateTheme(it) },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            RadioButton(
-                                selected = it == currentAppTheme,
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable(
                                 onClick = { updateTheme(it) },
-                                modifier = Modifier.weight(0.1f)
+                                onClickLabel = it.toReadableText()
                             )
+                    ) {
+                        RadioButton(
+                            selected = it == currentAppTheme,
+                            onClick = null,
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(8.dp),
+                        )
 
-                            Spacer(modifier = Modifier.width(12.dp))
+                        Spacer(modifier = Modifier
+                            .width(8.dp))
 
-                            Text(
-                                text = it.toReadableText(),
-                                modifier = Modifier.weight(0.9f)
-                            )
-                        }
+                        Text(
+                            text = it.toReadableText(),
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier
+                                .weight(9f)
+                                .padding(8.dp)
+                        )
                     }
                 }
             }
@@ -75,7 +83,7 @@ fun PreviewScreenPreCallLoading() {
     MesTheme {
         ScreenThemeSelector(
             dialogState = {},
-            updateTheme = {} ,
+            updateTheme = {},
             currentAppTheme = AppTheme.LIGHT
         )
     }

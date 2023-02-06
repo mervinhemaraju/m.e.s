@@ -3,7 +3,7 @@ package com.th3pl4gu3.mauritius_emergency_services.ui.screens.precall
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.th3pl4gu3.mauritius_emergency_services.data.AppContainer
+import com.th3pl4gu3.mauritius_emergency_services.data.local.LocalServiceRepository
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.utils.KEYWORD_SERVICE_IDENTIFIER_ARGUMENT
 import com.th3pl4gu3.mauritius_emergency_services.utils.PRE_CALL_COUNTDOWN_RANGE
@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PreCallViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val container: AppContainer
+    private val offlineServiceRepository: LocalServiceRepository
 ) : ViewModel() {
 
     /**
@@ -35,10 +35,10 @@ class PreCallViewModel @Inject constructor(
             it
         }
         .onEach {
-            if(it != PRE_CALL_COUNTDOWN_RANGE.first){
+            if (it != PRE_CALL_COUNTDOWN_RANGE.first) {
                 delay(1000)
             }
-            if(it == PRE_CALL_COUNTDOWN_RANGE.last){
+            if (it == PRE_CALL_COUNTDOWN_RANGE.last) {
                 mStartCall.value = true
             }
         }
@@ -48,9 +48,9 @@ class PreCallViewModel @Inject constructor(
 
     val service: StateFlow<PreCallUiState> = getService().map {
 
-        if(it.isNotEmpty()){
+        if (it.isNotEmpty()) {
             PreCallUiState.Success(it[0])
-        }else{
+        } else {
             PreCallUiState.Error
         }
 
@@ -68,9 +68,9 @@ class PreCallViewModel @Inject constructor(
         val serviceIdentifier: String? = savedStateHandle[KEYWORD_SERVICE_IDENTIFIER_ARGUMENT]
 
         return if (serviceIdentifier.isNullOrEmpty()) {
-            container.offlineServiceRepository.getAllServices()
+            offlineServiceRepository.getAllServices()
         } else {
-            container.offlineServiceRepository.getService(identifier = serviceIdentifier)
+            offlineServiceRepository.getService(identifier = serviceIdentifier)
         }
     }
 }

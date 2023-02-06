@@ -7,4 +7,5 @@ sealed interface ServicesUiState {
     object Error : ServicesUiState
     object Loading : ServicesUiState
     object NoContent: ServicesUiState
+    object NoNetwork: ServicesUiState
 }

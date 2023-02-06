@@ -2,14 +2,15 @@ package com.th3pl4gu3.mauritius_emergency_services.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.th3pl4gu3.mauritius_emergency_services.MesApplication
-import com.th3pl4gu3.mauritius_emergency_services.data.AppContainer
+import com.th3pl4gu3.mauritius_emergency_services.data.local.LocalServiceRepository
+import com.th3pl4gu3.mauritius_emergency_services.data.store.StoreRepository
 import com.th3pl4gu3.mauritius_emergency_services.models.MesAppSettings
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
+import com.th3pl4gu3.mauritius_emergency_services.ui.wrappers.NetworkRequests
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.GetAppLocale
-import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.IsConnectedToNetwork
 import com.th3pl4gu3.mauritius_emergency_services.utils.MES_EMERGENCY_TYPE
 import com.th3pl4gu3.mauritius_emergency_services.utils.MES_KEYWORD_DEFAULT_EB_ACTION
+import com.th3pl4gu3.mauritius_emergency_services.utils.NetworkRequestException
 import com.th3pl4gu3.mauritius_emergency_services.utils.TIMEOUT_MILLIS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,8 +22,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val mesApplication: MesApplication,
-    private val container: AppContainer
+    private val offlineServiceRepository: LocalServiceRepository,
+    private val dataStoreRepository: StoreRepository,
+    private val onlineServiceRequests: NetworkRequests
 ) : ViewModel() {
 
     companion object {
@@ -30,7 +32,7 @@ class HomeViewModel @Inject constructor(
     }
 
     val homeUiState: StateFlow<HomeUiState> =
-        container.offlineServiceRepository.getEmergencyServices().map {
+        offlineServiceRepository.getEmergencyServices().map {
             if (it.isEmpty()) {
                 reloadServices(currentEmergencyButtonIdentifier = null)
             } else {
@@ -44,7 +46,7 @@ class HomeViewModel @Inject constructor(
 
 
     val mesAppSettings: StateFlow<MesAppSettings> =
-        container.dataStoreServiceRepository.fetch().map { it }
+        dataStoreRepository.fetch().map { it }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
@@ -58,7 +60,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private suspend fun reloadServices(currentEmergencyButtonIdentifier: String?): HomeUiState {
-        return if (mesApplication.applicationContext.IsConnectedToNetwork) {
+        return try{
             // Load service online
             with(loadOnlineServices()) {
 
@@ -77,8 +79,11 @@ class HomeViewModel @Inject constructor(
 
                 HomeUiState.Success(this)
             }
-        } else {
+
+        }catch (e: NetworkRequestException){
             HomeUiState.NoNetwork
+        }catch (e: java.lang.Exception){
+            HomeUiState.Error
         }
     }
 
@@ -95,7 +100,7 @@ class HomeViewModel @Inject constructor(
         services: List<Service>
     ) {
         // Recreate services
-        container.offlineServiceRepository.forceRefresh(
+        offlineServiceRepository.forceRefresh(
             services = services
         )
     }
@@ -103,12 +108,12 @@ class HomeViewModel @Inject constructor(
     private suspend fun updateEmergencyButtonAction(
         identifier: String
     ) {
-        container.dataStoreServiceRepository.updateEmergencyButtonActionIdentifier(
+        dataStoreRepository.updateEmergencyButtonActionIdentifier(
             identifier
         )
     }
 
     private suspend fun loadOnlineServices(): List<Service> {
-        return container.onlineServiceRepository.getAllServices(language = GetAppLocale).services
+        return onlineServiceRequests.getMesServices(language = GetAppLocale).services
     }
 }

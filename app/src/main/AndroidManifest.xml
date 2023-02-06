@@ -27,7 +27,7 @@
         tools:targetApi="tiramisu">
 
         <activity
-            android:name=".MesActivity"
+            android:name=".activity.MesActivity"
             android:exported="true"
             android:theme="@style/Theme.Mes.Starting">
             <intent-filter>

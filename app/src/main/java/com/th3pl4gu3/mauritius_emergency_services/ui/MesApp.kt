@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -84,6 +85,7 @@ fun MesApp(
         /**
          * Define remember state variables
          **/
+        val snackBarHostState = remember { SnackbarHostState() }
         val listState = rememberLazyListState()
         val scrollState = rememberScrollState()
         val navController = rememberNavController()
@@ -154,8 +156,24 @@ fun MesApp(
                         )
                     }
                 },
+                snackbarHost = {
+                    SnackbarHost(snackBarHostState) { data ->
+                        Snackbar(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                            modifier = Modifier
+                                .padding(12.dp),
+                            action = {
+                                TextButton(
+                                    onClick = { data.dismiss() }
+                                ) { Text(data.visuals.actionLabel ?: "") }
+                            }
+                        ) {
+                            Text(data.visuals.message)
+                        }
+                    }
+                }
             ) { innerPadding ->
-
                 val contentModifier = Modifier
                     .padding(innerPadding)
                     .nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -171,6 +189,7 @@ fun MesApp(
                     MesNavGraph(
                         application = application,
                         searchBarValue = searchBarValue,
+                        snackBarHostState = snackBarHostState,
                         isExpandedScreen = isExpandedScreen,
                         modifier = contentModifier,
                         navController = navController,

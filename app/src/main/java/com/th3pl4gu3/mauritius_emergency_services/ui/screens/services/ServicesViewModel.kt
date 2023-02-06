@@ -2,9 +2,10 @@ package com.th3pl4gu3.mauritius_emergency_services.ui.screens.services
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.th3pl4gu3.mauritius_emergency_services.data.AppContainer
+import com.th3pl4gu3.mauritius_emergency_services.data.local.LocalServiceRepository
+import com.th3pl4gu3.mauritius_emergency_services.ui.wrappers.NetworkRequests
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.GetAppLocale
-import com.th3pl4gu3.mauritius_emergency_services.ui.screens.home.HomeUiState
+import com.th3pl4gu3.mauritius_emergency_services.utils.NetworkRequestException
 import com.th3pl4gu3.mauritius_emergency_services.utils.TIMEOUT_MILLIS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ServicesViewModel @Inject constructor(
-    private val container: AppContainer
+    private val offlineServiceRepository: LocalServiceRepository,
+    private val onlineServiceRequests: NetworkRequests
 ) : ViewModel() {
 
     /**
@@ -51,21 +53,27 @@ class ServicesViewModel @Inject constructor(
      **/
     fun loadOnlineServices() =
         viewModelScope.launch(Dispatchers.IO) {
-            try {
+            mServicesUiState.value = try {
+                val services = onlineServiceRequests.getMesServices(language = GetAppLocale).services
+
                 // Force refresh the services
-                container.offlineServiceRepository.forceRefresh(
-                    services = container.onlineServiceRepository.getAllServices(language = GetAppLocale).services
+                offlineServiceRepository.forceRefresh(
+                    services = services
                 )
-            } catch (e: IOException) {
-                HomeUiState.Error
+                ServicesUiState.Success(services.sortedBy { it.name })
+            } catch (e: NetworkRequestException) {
+                ServicesUiState.NoNetwork
+            }
+            catch (e: IOException) {
+                ServicesUiState.Error
             } catch (e: HttpException) {
-                HomeUiState.Error
+                ServicesUiState.Error
             }
         }
 
     fun search(query: String) =
         viewModelScope.launch {
-            container.offlineServiceRepository.search(query).collect { services ->
+            offlineServiceRepository.search(query).collect { services ->
                 mServicesUiState.value = if(services.isEmpty()){
                     ServicesUiState.NoContent
                 }else{
@@ -79,7 +87,7 @@ class ServicesViewModel @Inject constructor(
      * Private Functions
      **/
     private fun loadOfflineServices() = viewModelScope.launch {
-        container.offlineServiceRepository.getAllServices().collect {
+        offlineServiceRepository.getAllServices().collect {
             mServicesUiState.value = if (it.isNotEmpty()) {
                 ServicesUiState.Success(it)
             } else {

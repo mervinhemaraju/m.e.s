@@ -16,8 +16,9 @@
     <string name="action_cancel">Cancel</string>
     <string name="action_search">Search</string>
     <string name="action_call_end">End Call</string>
-    <string name="action_swipe">Swipe</string>
+    <string name="action_swipe_cancel">Swipe to cancel the call</string>
     <string name="action_scroll_up">Scroll Up</string>
+    <string name="action_drop_down">Drop Down for %1$s</string>
 
     <!-- Titles -->
     <string name="title_about_data_rate_mes">Rate Mes</string>
@@ -139,6 +140,7 @@
     </string>
     <string name="message_emergency_button_action_updated">Emergency button action updated</string>
     <string name="message_app_language_updated">Language updated</string>
+    <string name="message_external_link">External Link</string>
     <!-- Message: Error -->
     <string name="message_error_content_failed">Error getting content</string>
     <string name="message_error_loading_countdown" translatable="false">X</string>
@@ -149,6 +151,6 @@
 
     <!-- Content Descriptions -->
     <string name="ctnt_desc_drawer_open">Open Navigation Drawer</string>
-    <string name="ctnt_desc_emergency_button">Emergency Button</string>
+    <string name="ctnt_desc_emergency_button">Make a quick emergency call</string>
 
 </resources>

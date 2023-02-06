@@ -24,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -33,12 +32,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.th3pl4gu3.mauritius_emergency_services.MesActivity
+import com.th3pl4gu3.mauritius_emergency_services.activity.MesActivity
 import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.*
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
-import com.th3pl4gu3.mauritius_emergency_services.ui.theme.Red500
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
 
@@ -171,7 +169,7 @@ fun PreCallContent(
             modifier = Modifier
                 .border(
                     width = 4.dp,
-                    color = Red500,
+                    color = MaterialTheme.colorScheme.tertiary,
                     shape = RoundedCornerShape(50)
                 )
                 .padding(8.dp)
@@ -231,10 +229,10 @@ fun SwipeToCancel(
                 imageVector = Icons.Outlined.CallEnd,
                 modifier = Modifier.padding(start = 16.dp),
                 tint = MaterialTheme.colorScheme.primary,
-                contentDescription = R.string.action_call_end
+                contentDescription = stringResource(R.string.action_call_end)
             )
         },
-        background = Red500,
+        background = MaterialTheme.colorScheme.error,
     )
 
     SwipeableActionsBox(
@@ -267,7 +265,7 @@ fun SwipeToCancel(
 
             Icon(
                 imageVector = Icons.Outlined.KeyboardDoubleArrowLeft,
-                contentDescription = stringResource(id = R.string.action_swipe),
+                contentDescription = stringResource(id = R.string.action_swipe_cancel),
                 Modifier
                     .fillMaxHeight()
                     .width(48.dp)

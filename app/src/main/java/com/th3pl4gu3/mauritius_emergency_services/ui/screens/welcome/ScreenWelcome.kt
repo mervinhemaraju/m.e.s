@@ -28,7 +28,7 @@ import androidx.compose.ui.util.lerp
 import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.google.accompanist.pager.*
-import com.th3pl4gu3.mauritius_emergency_services.MesActivity
+import com.th3pl4gu3.mauritius_emergency_services.activity.MesActivity
 import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.models.WelcomeInfo
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesIcon

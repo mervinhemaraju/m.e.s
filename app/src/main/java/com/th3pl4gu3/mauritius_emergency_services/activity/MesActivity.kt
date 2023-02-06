@@ -1,4 +1,4 @@
-package com.th3pl4gu3.mauritius_emergency_services
+package com.th3pl4gu3.mauritius_emergency_services.activity
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -21,8 +21,9 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.th3pl4gu3.mauritius_emergency_services.MesApplication
+import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.ui.MesApp
-import com.th3pl4gu3.mauritius_emergency_services.ui.SplashViewModel
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.IsConnectedToNetwork
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -96,7 +97,7 @@ class MesActivity : AppCompatActivity() {
          * Installs the custom splash screen and
          * waits for proper content to load
          **/
-        installSplashScreen().setKeepOnScreenCondition() {
+        installSplashScreen().setKeepOnScreenCondition {
             !splashViewModel.isLoading.value
         }
 

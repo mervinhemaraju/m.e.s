@@ -72,7 +72,7 @@ internal fun MesTopAppBar(
                     IconButton(enabled = false, onClick = {}) {
                         MesIcon(
                             imageVector = Icons.Outlined.Search,
-                            contentDescription = R.string.action_search
+                            contentDescription = stringResource(id = R.string.action_search)
                         )
                     }
                 }
@@ -86,7 +86,7 @@ internal fun MesTopAppBar(
                     }) {
                         MesIcon(
                             imageVector = if (isChecked) Icons.Outlined.Close else Icons.Outlined.Search,
-                            contentDescription = if (isChecked) R.string.action_close else R.string.action_search,
+                            contentDescription = stringResource(id = if (isChecked) R.string.action_close else R.string.action_search),
                         )
                     }
                 }

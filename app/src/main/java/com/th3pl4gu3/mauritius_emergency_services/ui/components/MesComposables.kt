@@ -33,11 +33,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.th3pl4gu3.mauritius_emergency_services.MesActivity
 import com.th3pl4gu3.mauritius_emergency_services.R
+import com.th3pl4gu3.mauritius_emergency_services.activity.MesActivity
 import com.th3pl4gu3.mauritius_emergency_services.models.AboutInfoDrawable
 import com.th3pl4gu3.mauritius_emergency_services.models.AboutInfoVector
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
+import com.th3pl4gu3.mauritius_emergency_services.ui.theme.EmergencyButton
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 import com.th3pl4gu3.mauritius_emergency_services.utils.URI_APP_PLAY_STORE
 import com.th3pl4gu3.mauritius_emergency_services.utils.URI_MES_API
@@ -46,14 +47,14 @@ import com.th3pl4gu3.mauritius_emergency_services.utils.URI_MES_WEBSITE_PRIVACY
 
 @Composable
 fun MesIcon(
+    modifier: Modifier = Modifier,
     imageVector: ImageVector,
     tint: Color = MaterialTheme.colorScheme.onSurface,
-    @StringRes contentDescription: Int? = null,
-    modifier: Modifier = Modifier
+    contentDescription: String? = null,
 ) {
     Icon(
         imageVector = imageVector,
-        contentDescription = if (contentDescription != null) stringResource(id = contentDescription) else null,
+        contentDescription = contentDescription,
         tint = tint,
         modifier = modifier
     )
@@ -61,10 +62,10 @@ fun MesIcon(
 
 @Composable
 fun MesIcon(
+    modifier: Modifier = Modifier,
     @DrawableRes painterResource: Int,
     @StringRes contentDescription: Int? = null,
-    tint: Color = MaterialTheme.colorScheme.onSurface,
-    modifier: Modifier = Modifier
+    tint: Color = MaterialTheme.colorScheme.onSurface
 ) {
     Icon(
         painter = painterResource(id = painterResource),
@@ -75,7 +76,11 @@ fun MesIcon(
 }
 
 @Composable
-fun MesAsyncRoundedImage(service: Service, size: Dp = 64.dp, modifier: Modifier = Modifier) {
+fun MesAsyncRoundedImage(
+    modifier: Modifier = Modifier,
+    service: Service,
+    size: Dp = 64.dp
+) {
     AsyncImage(
         modifier = modifier
             .size(size)
@@ -133,7 +138,7 @@ fun MesEmergencyButton(
         onClick = onClick,
         modifier = modifier,
         shape = CircleShape,
-        colors = ButtonDefaults.elevatedButtonColors(containerColor = MaterialTheme.colorScheme.secondary),
+        colors = ButtonDefaults.elevatedButtonColors(containerColor = EmergencyButton),
         border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.outlineVariant),
         elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 4.dp),
     ) {
@@ -141,7 +146,7 @@ fun MesEmergencyButton(
         MesIcon(
             painterResource = R.drawable.ic_emergency_beacons,
             contentDescription = R.string.ctnt_desc_emergency_button,
-            tint = MaterialTheme.colorScheme.onSecondary
+            tint = MaterialTheme.colorScheme.surface
         )
     }
 }
@@ -257,7 +262,8 @@ fun MesAboutAppCard(
                 painterResource = R.drawable.ic_mes,
                 modifier = Modifier
                     .size(64.dp)
-                    .align(Alignment.CenterHorizontally)
+                    .align(Alignment.CenterHorizontally),
+                contentDescription = R.string.app_name_short
             )
 
             Spacer(modifier = Modifier.height(32.dp))

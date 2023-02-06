@@ -29,15 +29,14 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.capitalize
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.isTollFree
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
-import me.saket.swipe.rememberSwipeableActionsState
 
 @Composable
 @ExperimentalMaterial3Api
 fun MesServiceItem(
+    modifier: Modifier = Modifier,
     service: Service,
     actionVisible: Boolean = true,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
+    onClick: () -> Unit
 ) {
 
     var expanded by remember {
@@ -228,7 +227,8 @@ fun MesServiceItemLayout(
                         }
                 ) {
                     MesIcon(
-                        imageVector = if (!expanded) Icons.Outlined.ArrowDropDown else Icons.Outlined.ArrowDropUp
+                        imageVector = if (!expanded) Icons.Outlined.ArrowDropDown else Icons.Outlined.ArrowDropUp,
+                        contentDescription = String.format(stringResource(id = R.string.action_drop_down), service.name)
                     )
                 }
             }

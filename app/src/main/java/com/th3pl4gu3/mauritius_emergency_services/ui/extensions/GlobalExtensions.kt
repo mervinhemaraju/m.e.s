@@ -1,20 +1,8 @@
 package com.th3pl4gu3.mauritius_emergency_services.ui.extensions
 
-import android.app.Activity
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
-import android.content.Intent
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.net.NetworkRequest
-import android.net.Uri
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.font.FontFamily
-import androidx.work.WorkManager
-import com.th3pl4gu3.mauritius_emergency_services.MesApplication
-import com.th3pl4gu3.mauritius_emergency_services.models.NotificationChannels
 import com.th3pl4gu3.mauritius_emergency_services.utils.DEFAULT_LOCALE
 
 fun Typography.defaultFontFamily(
@@ -43,49 +31,9 @@ fun Typography.defaultFontFamily(
 fun String.capitalize(): String =
     split(" ").joinToString(" ") { w -> w.replaceFirstChar { c -> c.uppercaseChar() } }
 
-
-fun Activity.launchContactUsIntent() {
-    val intent = Intent(Intent.ACTION_SENDTO).apply {
-        data = Uri.parse("mailto:")
-        putExtra(
-            Intent.EXTRA_EMAIL,
-            arrayOf("th3pl4gu33@gmail.com")
-        )
-        putExtra(Intent.EXTRA_SUBJECT, "M.E.S :: User Request")
-        putExtra(
-            Intent.EXTRA_TEXT,
-            "Dear M.E.S team,\n [ADD YOUR MESSAGE] \n\n Regards, \n [ADD YOUR NAME]"
-        )
-    }
-    startActivity(intent)
-}
-
 fun Enum<*>.toReadableText(): String {
     return this.name.lowercase().replace("_", " ").capitalize()
 }
-
-fun MesApplication.createNotificationChannels() {
-
-    // Load the channels
-    val notificationChannels = NotificationChannels.load()
-
-    // For each channel, register it
-    notificationChannels.forEach {
-
-        // Create the channel
-        val channel = NotificationChannel(it.id, it.name, it.importance).apply {
-            description = it.description
-        }
-
-        // Register the channel with the system
-        val notificationManager: NotificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
-    }
-}
-
-val MesApplication.MesWorkManager
-    get() = WorkManager.getInstance(this)
 
 val Int.isTollFree: Boolean
     get() = this.toString().count() < 5 || this.toString().startsWith("8", true)
@@ -96,17 +44,3 @@ val GetAppLocale: String
     } else {
         DEFAULT_LOCALE
     }
-
-val Context.IsConnectedToNetwork: Boolean
-get() {
-    val connectivityManager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-    val activeNetwork = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) ?: return false
-
-    return when {
-        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-        else -> false
-    }
-}

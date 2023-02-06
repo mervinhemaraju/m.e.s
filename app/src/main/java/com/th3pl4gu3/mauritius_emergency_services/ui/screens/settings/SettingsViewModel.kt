@@ -5,8 +5,10 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.th3pl4gu3.mauritius_emergency_services.R
-import com.th3pl4gu3.mauritius_emergency_services.data.AppContainer
+import com.th3pl4gu3.mauritius_emergency_services.data.local.LocalServiceRepository
+import com.th3pl4gu3.mauritius_emergency_services.data.store.StoreRepository
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
+import com.th3pl4gu3.mauritius_emergency_services.ui.wrappers.NetworkRequests
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.GetAppLocale
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.home.HomeUiState
 import com.th3pl4gu3.mauritius_emergency_services.utils.TIMEOUT_MILLIS
@@ -18,12 +20,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val container: AppContainer
+    private val offlineServiceRepository: LocalServiceRepository,
+    private val dataStoreRepository: StoreRepository,
+    private val onlineServiceRequests: NetworkRequests
 ) : ViewModel() {
 
     private val mMessageQueue: MutableStateFlow<Pair<String?, Int>?> = MutableStateFlow(null)
 
-    val services: StateFlow<List<Service>> = container.offlineServiceRepository.getEmergencyServices().map { it }
+    val services: StateFlow<List<Service>> = offlineServiceRepository.getEmergencyServices().map { it }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
@@ -41,8 +45,8 @@ class SettingsViewModel @Inject constructor(
             try {
 
                 // Force refresh the services
-                container.offlineServiceRepository.forceRefresh(
-                    services = container.onlineServiceRepository.getAllServices(language = GetAppLocale).services
+                offlineServiceRepository.forceRefresh(
+                    services = onlineServiceRequests.getMesServices(language = GetAppLocale).services
                 )
 
                 if(!silent) mMessageQueue.value = Pair(null, R.string.message_cache_reset_successfully)
@@ -64,7 +68,7 @@ class SettingsViewModel @Inject constructor(
 
     fun updateEmergencyButtonAction(service: Service) {
         viewModelScope.launch {
-            container.dataStoreServiceRepository.updateEmergencyButtonActionIdentifier(identifier = service.identifier)
+            dataStoreRepository.updateEmergencyButtonActionIdentifier(identifier = service.identifier)
             mMessageQueue.value = Pair(service.name, R.string.message_emergency_button_action_updated)
         }
     }

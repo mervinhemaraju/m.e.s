@@ -1,20 +1,15 @@
 package com.th3pl4gu3.mauritius_emergency_services.ui.navigation
 
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -22,9 +17,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.th3pl4gu3.mauritius_emergency_services.MesApplication
-import com.th3pl4gu3.mauritius_emergency_services.models.MesAppSettings
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.about.ScreenAbout
-import com.th3pl4gu3.mauritius_emergency_services.ui.screens.home.HomeUiState
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.home.HomeViewModel
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.home.ScreenHome
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.precall.PreCallViewModel
@@ -46,6 +39,7 @@ private const val TAG = "MES_NAV_GRAPH"
 fun MesNavGraph(
     application: MesApplication,
     searchBarValue: String,
+    snackBarHostState: SnackbarHostState,
     isExpandedScreen: Boolean,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
@@ -133,6 +127,7 @@ fun MesNavGraph(
             /** Launch the screen UI **/
             ScreenSettings(
                 settingsViewModel = settingsViewModel,
+                snackBarHostState = snackBarHostState,
                 scrollState = scrollState
             )
         }
