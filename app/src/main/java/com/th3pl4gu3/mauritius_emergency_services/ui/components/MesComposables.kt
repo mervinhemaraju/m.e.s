@@ -1,6 +1,5 @@
 package com.th3pl4gu3.mauritius_emergency_services.ui.components
 
-import android.content.Intent
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -34,16 +33,11 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.th3pl4gu3.mauritius_emergency_services.R
-import com.th3pl4gu3.mauritius_emergency_services.activity.MesActivity
 import com.th3pl4gu3.mauritius_emergency_services.models.AboutInfoDrawable
 import com.th3pl4gu3.mauritius_emergency_services.models.AboutInfoVector
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.EmergencyButton
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
-import com.th3pl4gu3.mauritius_emergency_services.utils.URI_APP_PLAY_STORE
-import com.th3pl4gu3.mauritius_emergency_services.utils.URI_MES_API
-import com.th3pl4gu3.mauritius_emergency_services.utils.URI_MES_WEBSITE
-import com.th3pl4gu3.mauritius_emergency_services.utils.URI_MES_WEBSITE_PRIVACY
 
 @Composable
 fun MesIcon(
@@ -122,7 +116,7 @@ fun MesDrawerTitle(title: Pair<String, String>) {
             }
         },
         style = MaterialTheme.typography.headlineLarge,
-        color = MaterialTheme.colorScheme.primary,
+        color = MaterialTheme.colorScheme.onPrimaryContainer,
         letterSpacing = 4.sp,
         fontWeight = FontWeight.Bold
     )
@@ -156,15 +150,13 @@ fun MesEmergencyButton(
 fun MesAboutInfoCard(
     title: String,
     aboutInfo: List<AboutInfoVector>,
+    onClick: (AboutInfoVector) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
-    val localUriHandler = LocalUriHandler.current
-    val activity = LocalContext.current as MesActivity
-
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.background
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(2.dp),
         modifier = modifier
@@ -188,34 +180,7 @@ fun MesAboutInfoCard(
             aboutInfo.forEach {
                 MesAboutItem(
                     aboutInfo = it,
-                    onClick = {
-                        when (it) {
-                            AboutInfoVector.RateApp -> {
-                                localUriHandler.openUri(URI_APP_PLAY_STORE)
-                            }
-                            AboutInfoVector.Api -> {
-                                localUriHandler.openUri(URI_MES_API)
-                            }
-                            AboutInfoVector.AboutUs -> {
-                                localUriHandler.openUri(URI_MES_WEBSITE)
-                            }
-                            AboutInfoVector.PrivacyPolicy -> {
-                                localUriHandler.openUri(URI_MES_WEBSITE_PRIVACY)
-                            }
-                            AboutInfoVector.ShareApp -> {
-                                val intent = Intent().apply {
-                                    action = Intent.ACTION_SEND
-                                    putExtra(Intent.EXTRA_TEXT, URI_APP_PLAY_STORE)
-                                    type = "text/plain"
-
-                                    Intent.createChooser(this@apply, null)
-                                }
-
-                                activity.startActivity(intent)
-                            }
-                            else -> {}
-                        }
-                    }
+                    onClick = { onClick(it) }
                 )
             }
 
@@ -235,7 +200,7 @@ fun MesAboutAppCard(
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.background
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(2.dp),
         modifier = modifier
@@ -350,8 +315,6 @@ fun MesComposablePreview() {
                 imageVector = Icons.Outlined.Phone,
             )
 
-            MesAsyncRoundedImage(service = mockDataService)
-
             MesTextButton(text = "Test", onClick = {})
 
             MesEmergencyButton(onClick = {}, modifier = Modifier.size(200.dp))
@@ -362,7 +325,8 @@ fun MesComposablePreview() {
 
             MesAboutInfoCard(
                 title = "Title",
-                aboutInfo = mockDataAboutInfoList
+                aboutInfo = mockDataAboutInfoList,
+                onClick = {}
             )
 
             MesAboutAppCard(

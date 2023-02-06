@@ -21,13 +21,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.text.isDigitsOnly
 import com.th3pl4gu3.mauritius_emergency_services.R
+import com.th3pl4gu3.mauritius_emergency_services.activity.MesActivity
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.*
+import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.launchEmailIntent
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 import kotlinx.coroutines.launch
 
@@ -40,7 +44,7 @@ fun ScreenServices(
     servicesViewModel: ServicesViewModel,
     searchBarValue: String,
     retryAction: () -> Unit,
-    navigateToPreCall: (service: Service) -> Unit,
+    navigateToPreCall: (service: Service, choseNumber: String) -> Unit,
     listState: LazyListState,
     modifier: Modifier = Modifier
 ) {
@@ -73,10 +77,10 @@ fun ScreenServices(
 fun ServicesUiStateDecisions(
     servicesUiState: ServicesUiState,
     retryAction: () -> Unit,
-    navigateToPreCall: (service: Service) -> Unit,
+    navigateToPreCall: (service: Service, chosenNumber: String) -> Unit,
     listState: LazyListState,
     modifier: Modifier = Modifier
-){
+) {
     when (servicesUiState) {
         is ServicesUiState.Loading -> MesScreenLoading(
             loadingMessage = stringResource(id = R.string.message_loading_services),
@@ -113,10 +117,11 @@ fun ServicesUiStateDecisions(
 @ExperimentalMaterial3Api
 fun ServicesList(
     services: List<Service>,
-    navigateToPreCall: (service: Service) -> Unit,
+    navigateToPreCall: (service: Service, chosenNumber: String) -> Unit,
     listState: LazyListState,
     modifier: Modifier = Modifier
 ) {
+    val activity = LocalContext.current as MesActivity
     val coroutineScope = rememberCoroutineScope()
 
     val showScrollToTopButton by remember {
@@ -142,9 +147,16 @@ fun ServicesList(
                             "Launching PreCall with service identifier: ${service.identifier}"
                         )
 
-                        navigateToPreCall(service)
+                        navigateToPreCall(service, service.main_contact.toString())
                     },
-                    modifier = Modifier.animateItemPlacement()
+                    modifier = Modifier.animateItemPlacement(),
+                    extrasClickAction = { contact: String ->
+                        if (contact.isDigitsOnly()) {
+                            navigateToPreCall(service, contact)
+                        } else {
+                            activity.launchEmailIntent(recipient = contact)
+                        }
+                    }
                 )
             }
 
@@ -205,7 +217,7 @@ fun AllServicesScreenPreview() {
         ServicesUiStateDecisions(
             servicesUiState = ServicesUiState.Success(services = mockData),
             retryAction = {},
-            navigateToPreCall = {},
+            navigateToPreCall = { _, _ -> },
             modifier = modifier,
             listState = rememberLazyListState()
         )
@@ -222,9 +234,9 @@ fun LoadingScreenPreview() {
 
     MesTheme {
         ServicesUiStateDecisions(
-            servicesUiState = ServicesUiState.Loading ,
+            servicesUiState = ServicesUiState.Loading,
             retryAction = {},
-            navigateToPreCall = {},
+            navigateToPreCall = { _, _ -> },
             listState = rememberLazyListState(),
             modifier = modifier
         )
@@ -241,9 +253,9 @@ fun ErrorScreenPreview() {
 
     MesTheme {
         ServicesUiStateDecisions(
-            servicesUiState = ServicesUiState.Error ,
+            servicesUiState = ServicesUiState.Error,
             retryAction = {},
-            navigateToPreCall = {},
+            navigateToPreCall = { _, _ -> },
             listState = rememberLazyListState(),
             modifier = modifier
         )
@@ -262,7 +274,7 @@ fun EmptyServicesScreenPreview() {
         ServicesUiStateDecisions(
             servicesUiState = ServicesUiState.NoContent,
             retryAction = {},
-            navigateToPreCall = {},
+            navigateToPreCall = { _, _ -> },
             listState = rememberLazyListState(),
             modifier = modifier
         )

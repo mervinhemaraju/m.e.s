@@ -122,7 +122,9 @@ fun AppBarTitleContent(
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color.Transparent,
                 focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
+                unfocusedIndicatorColor = Color.Transparent,
+                textColor = MaterialTheme.colorScheme.primary,
+                placeholderColor = MaterialTheme.colorScheme.secondary
             ),
             textStyle = MaterialTheme.typography.bodyLarge,
             modifier = Modifier

@@ -2,26 +2,6 @@ package com.th3pl4gu3.mauritius_emergency_services.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-/** Deprecated Colors **/
-// Blue Shades
-//val WhiteBlue10 = Color(0xFFF2F9FC)
-//val Blue20 = Color(0xFFF1FAFF)
-//val Blue200 = Color(0xFFADC4FF)
-//val Blue900 = Color(0xFF0D47A1)
-//val BlueA100 = Color(0xFF003964)
-//
-//// Red Shades
-//val Red400 = Color(0xFFEF5350)
-//val Red300 = Color(0xFFE57373)
-//val Red200 = Color(0xFFEF9A9A)
-//val Red100 = Color(0xFFFFC2C2)
-//
-//// Gray Shades
-//val Gray600 = Color(0xFF393939)
-//val Gray500 = Color(0xFF696969)
-//val Gray200 = Color(0xFFACACAC)
-//val Gray50 = Color(0xFFD3D3D3)
-
 
 val EmergencyButton = Color(0xFFEF5350)
 
@@ -45,8 +25,8 @@ val md_theme_light_background = Color(0xFFFDFCFF)
 val md_theme_light_onBackground = Color(0xFF1A1C1E)
 val md_theme_light_surface = Color(0xFFFDFCFF)
 val md_theme_light_onSurface = Color(0xFF1A1C1E)
-val md_theme_light_surfaceVariant = Color(0xFFDFE2EB)
-val md_theme_light_onSurfaceVariant = Color(0xFF43474E)
+val md_theme_light_surfaceVariant = Color(0xFF003964)
+val md_theme_light_onSurfaceVariant = Color(0xFFFDFCFF)
 val md_theme_light_outline = Color(0xFF73777F)
 val md_theme_light_inverseOnSurface = Color(0xFFF1F0F4)
 val md_theme_light_inverseSurface = Color(0xFF2F3033)
@@ -68,7 +48,7 @@ val md_theme_dark_tertiary = Color(0xFFB0C6FF)
 val md_theme_dark_onTertiary = Color(0xFF002D6E)
 val md_theme_dark_tertiaryContainer = Color(0xFF18438F)
 val md_theme_dark_onTertiaryContainer = Color(0xFFD9E2FF)
-val md_theme_dark_error = Color(0xFFFFB4AB)
+val md_theme_dark_error = Color(0xFFE57373)
 val md_theme_dark_errorContainer = Color(0xFF93000A)
 val md_theme_dark_onError = Color(0xFF690005)
 val md_theme_dark_onErrorContainer = Color(0xFFFFDAD6)
@@ -76,8 +56,8 @@ val md_theme_dark_background = Color(0xFF1A1C1E)
 val md_theme_dark_onBackground = Color(0xFFE2E2E6)
 val md_theme_dark_surface = Color(0xFF1A1C1E)
 val md_theme_dark_onSurface = Color(0xFFE2E2E6)
-val md_theme_dark_surfaceVariant = Color(0xFF43474E)
-val md_theme_dark_onSurfaceVariant = Color(0xFFC3C6CF)
+val md_theme_dark_surfaceVariant = Color(0xFF9FCAFF)
+val md_theme_dark_onSurfaceVariant = Color(0xFF003259)
 val md_theme_dark_outline = Color(0xFF8D9199)
 val md_theme_dark_inverseOnSurface = Color(0xFF1A1C1E)
 val md_theme_dark_inverseSurface = Color(0xFFE2E2E6)

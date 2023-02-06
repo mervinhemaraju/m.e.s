@@ -45,12 +45,12 @@ fun MesNavigationDrawerItem(
         onClick = onClick,
         modifier = modifier.padding(end = 16.dp),
         colors = NavigationDrawerItemDefaults.colors(
-            selectedContainerColor = MaterialTheme.colorScheme.primary,
-            selectedTextColor = MaterialTheme.colorScheme.onPrimary,
-            selectedIconColor = MaterialTheme.colorScheme.onPrimary,
+            selectedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+            selectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            selectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
             unselectedContainerColor = MaterialTheme.colorScheme.background,
-            unselectedTextColor = MaterialTheme.colorScheme.primary,
-            unselectedIconColor = MaterialTheme.colorScheme.primary
+            unselectedTextColor = MaterialTheme.colorScheme.surfaceVariant,
+            unselectedIconColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         badge = badge,
         shape = RoundedCornerShape(topEnd = 32.dp, bottomEnd = 32.dp)
@@ -159,7 +159,7 @@ fun MesAboutItem(
             Text(
                 text = stringResource(id = aboutApp.title),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MaterialTheme.colorScheme.surfaceVariant,
                 modifier = Modifier.constrainAs(title) {
                     bottom.linkTo(description.top)
                     top.linkTo(icon.top)
@@ -176,7 +176,7 @@ fun MesAboutItem(
             Text(
                 text = stringResource(id = aboutApp.description),
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier.constrainAs(description) {
                     bottom.linkTo(icon.bottom)
                     top.linkTo(title.bottom, 4.dp)
@@ -228,13 +228,13 @@ fun MesAboutItem(
                         start.linkTo(parent.start, 16.dp)
                     }
                     .size(20.dp),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                tint = MaterialTheme.colorScheme.surfaceVariant
             )
 
             Text(
                 text = stringResource(id = aboutInfo.title),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MaterialTheme.colorScheme.surfaceVariant,
                 modifier = Modifier.constrainAs(title) {
                     bottom.linkTo(icon.bottom)
                     top.linkTo(icon.top)
@@ -251,7 +251,7 @@ fun MesAboutItem(
             Text(
                 text = if (aboutInfo.title != R.string.title_about_version) stringResource(id = aboutInfo.description) else BuildConfig.VERSION_NAME,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier.constrainAs(description) {
                     bottom.linkTo(parent.bottom, 16.dp)
                     top.linkTo(title.bottom, 4.dp)
@@ -303,13 +303,13 @@ fun MesSettingsItem(
                         top.linkTo(parent.top, 16.dp)
                         start.linkTo(parent.start, 16.dp)
                     },
-                tint = MaterialTheme.colorScheme.inversePrimary
+                tint = MaterialTheme.colorScheme.surfaceVariant
             )
 
             Text(
                 text = stringResource(id = settingsItem.title),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MaterialTheme.colorScheme.surfaceVariant,
                 modifier = Modifier.constrainAs(title) {
                     bottom.linkTo(description.top)
                     top.linkTo(icon.top)
@@ -326,7 +326,7 @@ fun MesSettingsItem(
             Text(
                 text = stringResource(id = settingsItem.description),
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier.constrainAs(description) {
                     bottom.linkTo(icon.bottom)
                     top.linkTo(title.bottom, 4.dp)

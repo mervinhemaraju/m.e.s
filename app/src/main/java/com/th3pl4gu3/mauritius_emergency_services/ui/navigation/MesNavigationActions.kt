@@ -4,6 +4,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.ui.navigation.MesDestinationArguments.ARG_PRE_CALL_SERVICE_IDENTIFIER
+import com.th3pl4gu3.mauritius_emergency_services.ui.navigation.MesDestinationArguments.ARG_PRE_CALL_SERVICE_NUMBER
 
 /**
  * Models the navigation actions in the app.
@@ -51,8 +52,12 @@ class MesNavigationActions(navController: NavHostController) {
             restoreState = true
         }
     }
-    val navigateToPreCall: (service: Service) -> Unit = {
-        navController.navigate(MesDestinations.SCREEN_PRE_CALL.replace(ARG_PRE_CALL_SERVICE_IDENTIFIER, it.identifier)) {
+    val navigateToPreCall: (service: Service, chosenNumber: String) -> Unit = { service, chosenNumber ->
+        navController.navigate(
+            MesDestinations.SCREEN_PRE_CALL
+                .replace(ARG_PRE_CALL_SERVICE_IDENTIFIER, service.identifier)
+                .replace(ARG_PRE_CALL_SERVICE_NUMBER, chosenNumber)
+        ) {
             popUpTo(if(navController.previousBackStackEntry == null) MesDestinations.SCREEN_SERVICES else navController.previousBackStackEntry!!.id) {
                 saveState = true
             }

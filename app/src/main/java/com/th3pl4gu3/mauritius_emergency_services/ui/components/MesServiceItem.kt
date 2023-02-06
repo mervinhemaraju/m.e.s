@@ -36,7 +36,8 @@ fun MesServiceItem(
     modifier: Modifier = Modifier,
     service: Service,
     actionVisible: Boolean = true,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    extrasClickAction: (String) -> Unit
 ) {
 
     var expanded by remember {
@@ -47,7 +48,7 @@ fun MesServiceItem(
         .fillMaxWidth()
         .background(
             if (expanded) {
-                MaterialTheme.colorScheme.surfaceVariant
+                MaterialTheme.colorScheme.secondaryContainer
             } else {
                 MaterialTheme.colorScheme.background
             }
@@ -89,7 +90,8 @@ fun MesServiceItem(
                 onClick = onClick,
                 expanded = expanded,
                 actionVisible = true,
-                modifier = baseModifier
+                modifier = baseModifier,
+                extrasClickAction = extrasClickAction
             )
         }
 
@@ -101,7 +103,8 @@ fun MesServiceItem(
             expanded = false,
             actionVisible = false,
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            extrasClickAction = {}
         )
     }
 }
@@ -112,6 +115,7 @@ fun MesServiceItemLayout(
     service: Service,
     dropDownClick: () -> Unit,
     onClick: () -> Unit,
+    extrasClickAction: (String) -> Unit,
     expanded: Boolean,
     actionVisible: Boolean,
     modifier: Modifier
@@ -180,7 +184,7 @@ fun MesServiceItemLayout(
             Text(
                 text = service.main_contact.toString(),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MaterialTheme.colorScheme.secondary,
                 fontWeight = FontWeight.Normal,
                 modifier = Modifier
                     .constrainAs(textSubtitle) {
@@ -234,7 +238,7 @@ fun MesServiceItemLayout(
             }
         }
 
-        if (expanded) MesServiceItemExtras(service = service, modifier = modifier)
+        if (expanded) MesServiceItemExtras(service = service, modifier = modifier, extrasClickAction = extrasClickAction)
     }
 }
 
@@ -242,6 +246,7 @@ fun MesServiceItemLayout(
 @ExperimentalMaterial3Api
 fun MesServiceItemExtras(
     service: Service,
+    extrasClickAction: (String) -> Unit,
     modifier: Modifier
 ) {
     // Create a list of other contacts
@@ -285,7 +290,7 @@ fun MesServiceItemExtras(
             contacts.forEach {
 
                 TextButton(
-                    onClick = {},
+                    onClick = { extrasClickAction(it.second) },
                     colors = ButtonDefaults.buttonColors(
                         contentColor = MaterialTheme.colorScheme.primary
                     ),
@@ -312,7 +317,7 @@ fun MesServiceItemExtras(
         Text(
             stringResource(id = R.string.message_no_other_contacts_found),
             style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.inversePrimary,
+            color = MaterialTheme.colorScheme.onSecondaryContainer,
             modifier = modifier
                 .padding(16.dp)
         )
@@ -337,13 +342,15 @@ fun MesServiceItemPreview() {
     Column {
         MesServiceItem(
             service = mockDataService,
-            onClick = {}
+            onClick = {},
+            extrasClickAction = {}
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         MesServiceItemExtras(
             service = mockDataService,
+            extrasClickAction = {},
             modifier = Modifier
         )
     }

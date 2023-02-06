@@ -48,3 +48,14 @@ fun Activity.launchContactUsIntent() {
     }
     startActivity(intent)
 }
+
+fun Activity.launchEmailIntent(recipient: String) {
+    val intent = Intent(Intent.ACTION_SENDTO).apply {
+        data = Uri.parse("mailto:")
+        putExtra(
+            Intent.EXTRA_EMAIL,
+            arrayOf(recipient)
+        )
+    }
+    startActivity(intent)
+}

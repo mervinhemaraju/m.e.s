@@ -50,17 +50,24 @@ fun ScreenThemeSelector(
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(8.dp),
+                            colors = RadioButtonDefaults.colors(
+                                unselectedColor = MaterialTheme.colorScheme.secondary,
+                                selectedColor = MaterialTheme.colorScheme.primary
+                            )
                         )
 
-                        Spacer(modifier = Modifier
-                            .width(8.dp))
+                        Spacer(
+                            modifier = Modifier
+                                .width(8.dp)
+                        )
 
                         Text(
                             text = it.toReadableText(),
                             style = MaterialTheme.typography.bodyLarge,
                             modifier = Modifier
                                 .weight(9f)
-                                .padding(8.dp)
+                                .padding(8.dp),
+                            color = if (it == currentAppTheme) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
                         )
                     }
                 }

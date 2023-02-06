@@ -228,7 +228,7 @@ fun SwipeToCancel(
             MesIcon(
                 imageVector = Icons.Outlined.CallEnd,
                 modifier = Modifier.padding(start = 16.dp),
-                tint = MaterialTheme.colorScheme.primary,
+                tint = MaterialTheme.colorScheme.onError,
                 contentDescription = stringResource(R.string.action_call_end)
             )
         },

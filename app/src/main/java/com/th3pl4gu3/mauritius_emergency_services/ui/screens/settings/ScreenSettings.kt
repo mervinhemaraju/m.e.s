@@ -241,7 +241,8 @@ fun EmergencyButtonItemDialog(
                             updateEmergencyButtonAction(service)
                             dismissAction()
                         },
-                        actionVisible = false
+                        actionVisible = false,
+                        extrasClickAction = {}
                     )
                 }
             }

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.th3pl4gu3.mauritius_emergency_services.data.local.LocalServiceRepository
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.utils.KEYWORD_SERVICE_IDENTIFIER_ARGUMENT
+import com.th3pl4gu3.mauritius_emergency_services.utils.KEYWORD_SERVICE_NUMBER_ARGUMENT
 import com.th3pl4gu3.mauritius_emergency_services.utils.PRE_CALL_COUNTDOWN_RANGE
 import com.th3pl4gu3.mauritius_emergency_services.utils.TIMEOUT_MILLIS
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,6 +19,10 @@ class PreCallViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val offlineServiceRepository: LocalServiceRepository
 ) : ViewModel() {
+
+    companion object {
+        private const val TAG = "PRE_CALL_VIEW_MODEL"
+    }
 
     /**
      * Private properties
@@ -49,7 +54,17 @@ class PreCallViewModel @Inject constructor(
     val service: StateFlow<PreCallUiState> = getService().map {
 
         if (it.isNotEmpty()) {
-            PreCallUiState.Success(it[0])
+            // Get the first service
+            val service = it.first()
+
+            // Get the called number from saved state handle
+            val serviceNumber: String =
+                savedStateHandle[KEYWORD_SERVICE_NUMBER_ARGUMENT] ?: service.main_contact.toString()
+
+            // Replace main contact number to called number
+            PreCallUiState.Success(
+                service.copy(main_contact = serviceNumber.toInt())
+            )
         } else {
             PreCallUiState.Error
         }

@@ -28,7 +28,7 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 @ExperimentalFoundationApi
 fun ScreenHome(
     homeViewModel: HomeViewModel,
-    navigateToPreCall: (service: Service) -> Unit,
+    navigateToPreCall: (service: Service, chosenNumber: String) -> Unit,
     scrollState: ScrollState = rememberScrollState(),
     modifier: Modifier = Modifier,
 ) {
@@ -58,10 +58,10 @@ fun HomeUiStateDecisions(
     homeUiState: HomeUiState,
     mesAppSettings: MesAppSettings,
     retryAction: () -> Unit,
-    navigateToPreCall: (service: Service) -> Unit,
+    navigateToPreCall: (service: Service, chosenNumber: String) -> Unit,
     scrollState: ScrollState,
     modifier: Modifier = Modifier,
-){
+) {
     when (homeUiState) {
         is HomeUiState.Success -> {
             HomeContent(
@@ -96,7 +96,7 @@ fun HomeUiStateDecisions(
 @ExperimentalFoundationApi
 fun HomeContent(
     homeUiState: HomeUiState.Success,
-    navigateToPreCall: (service: Service) -> Unit,
+    navigateToPreCall: (service: Service, chosenNumber: String) -> Unit,
     mesAppSettings: MesAppSettings,
     modifier: Modifier = Modifier,
     scrollState: ScrollState = rememberScrollState()
@@ -132,7 +132,7 @@ fun HomeContent(
         Text(
             text = stringResource(id = R.string.headline_home_secondary),
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .padding(
@@ -154,7 +154,8 @@ fun HomeContent(
                     navigateToPreCall(
                         homeUiState.services.first {
                             it.identifier == mesAppSettings.emergencyButtonActionIdentifier
-                        }
+                        },
+                        homeUiState.services.first().main_contact.toString()
                     )
                 },
                 modifier = Modifier
@@ -174,7 +175,7 @@ fun HomeContent(
         Text(
             text = stringResource(id = R.string.headline_home_quaternary),
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .padding(
@@ -193,7 +194,7 @@ fun HomeContent(
 @ExperimentalMaterial3Api
 fun MesEmergencyRow(
     services: List<Service>,
-    navigateToPreCall: (service: Service) -> Unit,
+    navigateToPreCall: (service: Service, chosenNumber: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     // Create the Lazy row
@@ -208,7 +209,7 @@ fun MesEmergencyRow(
             MesEmergencyItem(
                 service = service,
                 onClick = {
-                    navigateToPreCall(service)
+                    navigateToPreCall(service, service.main_contact.toString())
                 }
             )
         }
@@ -226,7 +227,7 @@ fun ScreenHomePreview() {
         HomeUiStateDecisions(
             homeUiState = HomeUiState.Success(DummyData.services),
             mesAppSettings = MesAppSettings(),
-            navigateToPreCall = {},
+            navigateToPreCall = { _, _ -> },
             retryAction = {},
             scrollState = rememberScrollState()
         )
@@ -244,7 +245,7 @@ fun HomeLoadingPreview() {
         HomeUiStateDecisions(
             homeUiState = HomeUiState.Loading,
             mesAppSettings = MesAppSettings(),
-            navigateToPreCall = {},
+            navigateToPreCall = { _, _ -> },
             retryAction = {},
             scrollState = rememberScrollState()
         )
@@ -262,7 +263,7 @@ fun HomeErrorPreview() {
         HomeUiStateDecisions(
             homeUiState = HomeUiState.Error,
             mesAppSettings = MesAppSettings(),
-            navigateToPreCall = {},
+            navigateToPreCall = { _, _ -> },
             retryAction = {},
             scrollState = rememberScrollState()
         )
@@ -280,7 +281,7 @@ fun HomeNoNetworkPreview() {
         HomeUiStateDecisions(
             homeUiState = HomeUiState.NoNetwork,
             mesAppSettings = MesAppSettings(),
-            navigateToPreCall = {},
+            navigateToPreCall = { _, _ -> },
             retryAction = {},
             scrollState = rememberScrollState()
         )
