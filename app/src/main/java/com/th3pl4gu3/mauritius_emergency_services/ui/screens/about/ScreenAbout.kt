@@ -74,7 +74,10 @@ fun ScreenAbout(
 
         MesAboutAppCard(
             title = stringResource(id = R.string.section_about_title_about),
-            aboutApp = AboutInfoDrawable.developers
+            aboutApp = AboutInfoDrawable.developers,
+            onClick = {
+                localUriHandler.openUri(it)
+            }
         )
 
         MesAboutInfoCard(

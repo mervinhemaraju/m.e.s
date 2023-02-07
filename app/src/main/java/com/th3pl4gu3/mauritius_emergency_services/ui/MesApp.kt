@@ -27,6 +27,7 @@ import com.th3pl4gu3.mauritius_emergency_services.models.AppTheme
 import com.th3pl4gu3.mauritius_emergency_services.models.MesAppSettings
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesAnimatedVisibilitySlideVerticallyContent
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesDrawer
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesNavRail
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesTopAppBar
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.launchContactUsIntent
 import com.th3pl4gu3.mauritius_emergency_services.ui.navigation.MesDestinations
@@ -96,7 +97,7 @@ fun MesApp(
         var searchBarValue by remember { mutableStateOf("") }
         var showDialog by remember { mutableStateOf(value = false) }
 
-        val hasScrolled by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 || scrollState.value > 0 } }
+        val hasScrolled by remember { derivedStateOf { listState.firstVisibleItemScrollOffset > 0 }}
 
         /**
          * Define other variables for future use
@@ -114,7 +115,8 @@ fun MesApp(
 
         val topAppBarVisible: Boolean = !listOf(
             currentRoute == MesDestinations.SCREEN_PRE_CALL,
-            currentRoute == MesDestinations.SCREEN_WELCOME
+            currentRoute == MesDestinations.SCREEN_WELCOME,
+            widthSizeClass == WindowWidthSizeClass.Expanded
         ).any { it }
 
 
@@ -179,13 +181,22 @@ fun MesApp(
                     .nestedScroll(scrollBehavior.nestedScrollConnection)
 
                 Row {
-                    //                if (isExpandedScreen) {
-                    //                    AppNavRail(
-                    //                        currentRoute = currentRoute,
-                    //                        navigateToHome = navigationActions.navigateToHome,
-                    //                        navigateToInterests = navigationActions.navigateToInterests,
-                    //                    )
-                    //                }
+                    if (isExpandedScreen) {
+                        MesNavRail(
+                            currentRoute = currentRoute,
+                            navigateToHome = navigationActions.navigateToHome,
+                            navigateToServices = navigationActions.navigateToServices,
+                            navigateToAbout = navigationActions.navigateToAbout,
+                            navigateToSettings = navigationActions.navigateToSettings,
+                            toggleThemeDialog = {
+                                coroutineScope.launch {
+                                    showDialog = !showDialog
+                                }
+                            },
+                            navigateToContactUs = { activity.launchContactUsIntent() },
+                            scrollState = scrollState
+                        )
+                    }
                     MesNavGraph(
                         application = application,
                         searchBarValue = searchBarValue,
@@ -196,7 +207,6 @@ fun MesApp(
                         navigationActions = navigationActions,
                         listState = listState,
                         scrollState = scrollState,
-                        openDrawer = { coroutineScope.launch { sizeAwareDrawerState.open() } },
                         startDestination = startDestination
                     )
                 }

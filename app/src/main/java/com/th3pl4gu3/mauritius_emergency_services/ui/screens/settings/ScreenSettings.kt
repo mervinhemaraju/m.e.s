@@ -22,6 +22,7 @@ import com.th3pl4gu3.mauritius_emergency_services.data.DummyData
 import com.th3pl4gu3.mauritius_emergency_services.models.MesLocale
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.models.SettingsItem
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesOneActionDialog
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesServiceItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesSettingsItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
@@ -53,7 +54,7 @@ fun ScreenSettings(
             stringResource(id = message.second)
         }
 
-        LaunchedEffect(Unit){
+        LaunchedEffect(Unit) {
             scope.launch {
                 snackBarHostState.showSnackbar(
                     displayMessage
@@ -116,7 +117,7 @@ fun SettingsContent(
     resetCacheAction: () -> Unit,
     scrollState: ScrollState,
     modifier: Modifier = Modifier
-){
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -175,20 +176,14 @@ fun AppLanguageDialog(
     updateLanguageAction: (language: String) -> Unit,
     dismissAction: () -> Unit
 ) {
-    AlertDialog(
+    MesOneActionDialog(
+        title = stringResource(id = R.string.title_language_selector_dialog),
         onDismissRequest = dismissAction,
-        title = {
-            Column {
-                Text(
-                    text = stringResource(id = R.string.title_language_selector_dialog)
-                )
-            }
-        },
-        text = {
+        content = {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(220.dp)
+                    .height(200.dp)
             ) {
                 items(languages) { language ->
                     Surface(
@@ -202,13 +197,8 @@ fun AppLanguageDialog(
                 }
             }
         },
-        confirmButton = {
-            TextButton(onClick = dismissAction) {
-                Text(
-                    stringResource(id = R.string.action_close)
-                )
-            }
-        }
+        confirmButtonAction = dismissAction,
+        confirmButtonLabel = stringResource(id = R.string.action_close)
     )
 }
 
@@ -219,16 +209,10 @@ fun EmergencyButtonItemDialog(
     updateEmergencyButtonAction: (service: Service) -> Unit,
     dismissAction: () -> Unit
 ) {
-    AlertDialog(
+    MesOneActionDialog(
+        title = stringResource(id = R.string.title_theme_selector_dialog),
         onDismissRequest = dismissAction,
-        title = {
-            Column {
-                Text(
-                    text = stringResource(id = R.string.title_settings_page_emergency_button_action)
-                )
-            }
-        },
-        text = {
+        content = {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -247,13 +231,8 @@ fun EmergencyButtonItemDialog(
                 }
             }
         },
-        confirmButton = {
-            TextButton(onClick = dismissAction) {
-                Text(
-                    stringResource(id = R.string.action_close)
-                )
-            }
-        }
+        confirmButtonAction = dismissAction,
+        confirmButtonLabel = stringResource(id = R.string.action_close)
     )
 }
 

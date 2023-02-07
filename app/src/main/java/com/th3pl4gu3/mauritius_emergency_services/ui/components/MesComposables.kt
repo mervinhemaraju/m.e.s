@@ -193,11 +193,9 @@ fun MesAboutInfoCard(
 fun MesAboutAppCard(
     title: String,
     aboutApp: List<AboutInfoDrawable>,
+    onClick: (uri: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-
-    val localUriHandler = LocalUriHandler.current
-
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
@@ -236,9 +234,7 @@ fun MesAboutAppCard(
             aboutApp.forEach {
                 MesAboutItem(
                     aboutApp = it,
-                    onClick = {
-                        localUriHandler.openUri(it.uri)
-                    }
+                    onClick = { onClick(it.uri) }
                 )
             }
 
@@ -331,7 +327,8 @@ fun MesComposablePreview() {
 
             MesAboutAppCard(
                 title = "Title",
-                aboutApp = mockDataAboutAppList
+                aboutApp = mockDataAboutAppList,
+                onClick = {}
             )
         }
     }

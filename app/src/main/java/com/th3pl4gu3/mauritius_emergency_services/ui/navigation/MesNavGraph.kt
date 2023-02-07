@@ -47,7 +47,6 @@ fun MesNavGraph(
     startDestination: String,
     listState: LazyListState,
     scrollState: ScrollState,
-    openDrawer: () -> Unit = {}
 ) {
     /** Log information **/
     Log.i(TAG, "Starting Navigation Host")

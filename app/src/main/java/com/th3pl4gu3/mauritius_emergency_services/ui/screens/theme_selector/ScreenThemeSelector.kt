@@ -12,6 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.models.AppTheme
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesOneActionDialog
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.toReadableText
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 
@@ -23,16 +24,10 @@ fun ScreenThemeSelector(
     currentAppTheme: AppTheme,
     modifier: Modifier = Modifier
 ) {
-    AlertDialog(
-        onDismissRequest = {
-            dialogState()
-        },
-        title = {
-            Text(
-                text = stringResource(id = R.string.title_theme_selector_dialog)
-            )
-        },
-        text = {
+    MesOneActionDialog(
+        title = stringResource(id = R.string.title_theme_selector_dialog),
+        onDismissRequest = { dialogState() },
+        content = {
             Column {
                 AppTheme.values().forEach {
                     Row(
@@ -73,11 +68,8 @@ fun ScreenThemeSelector(
                 }
             }
         },
-        confirmButton = {
-            TextButton(onClick = { dialogState() }) {
-                Text(text = stringResource(id = R.string.action_close))
-            }
-        },
+        confirmButtonAction = { dialogState() },
+        confirmButtonLabel = stringResource(id = R.string.action_close),
         modifier = modifier
     )
 }

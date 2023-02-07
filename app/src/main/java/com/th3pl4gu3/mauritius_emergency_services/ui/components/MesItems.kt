@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
@@ -26,35 +27,54 @@ import com.th3pl4gu3.mauritius_emergency_services.models.AboutInfoVector
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.models.SettingsItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.capitalize
+import com.th3pl4gu3.mauritius_emergency_services.ui.navigation.MesDestinations
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 
 @Composable
 @ExperimentalMaterial3Api
-fun MesNavigationDrawerItem(
+fun MesNavigationItem(
     label: String,
     icon: @Composable () -> Unit,
     selected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    badge: @Composable () -> Unit = {}
+    badge: @Composable () -> Unit = {},
+    isRail: Boolean = false
 ) {
-    NavigationDrawerItem(
-        label = { Text(text = label) },
-        icon = icon,
-        selected = selected,
-        onClick = onClick,
-        modifier = modifier.padding(end = 16.dp),
-        colors = NavigationDrawerItemDefaults.colors(
-            selectedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-            selectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            selectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            unselectedContainerColor = MaterialTheme.colorScheme.background,
-            unselectedTextColor = MaterialTheme.colorScheme.surfaceVariant,
-            unselectedIconColor = MaterialTheme.colorScheme.surfaceVariant
-        ),
-        badge = badge,
-        shape = RoundedCornerShape(topEnd = 32.dp, bottomEnd = 32.dp)
-    )
+    if(isRail){
+        NavigationRailItem(
+            selected = selected,
+            onClick = onClick,
+            icon = icon,
+            label = { Text(text = label) },
+            alwaysShowLabel = false,
+            modifier = modifier,
+            colors = NavigationRailItemDefaults.colors(
+                selectedTextColor = MaterialTheme.colorScheme.surfaceVariant,
+                selectedIconColor = MaterialTheme.colorScheme.surfaceVariant,
+                unselectedTextColor = MaterialTheme.colorScheme.surfaceVariant,
+                unselectedIconColor = MaterialTheme.colorScheme.surfaceVariant
+            )
+        )
+    }else {
+        NavigationDrawerItem(
+            label = { Text(text = label) },
+            icon = icon,
+            selected = selected,
+            onClick = onClick,
+            modifier = modifier.padding(end = 16.dp),
+            colors = NavigationDrawerItemDefaults.colors(
+                selectedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                selectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                selectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                unselectedContainerColor = MaterialTheme.colorScheme.background,
+                unselectedTextColor = MaterialTheme.colorScheme.surfaceVariant,
+                unselectedIconColor = MaterialTheme.colorScheme.surfaceVariant
+            ),
+            badge = badge,
+            shape = RoundedCornerShape(topEnd = 32.dp, bottomEnd = 32.dp)
+        )
+    }
 }
 
 @Composable
@@ -370,14 +390,14 @@ fun MesNavigationDrawerItemPreview() {
                 .fillMaxHeight(),
             Arrangement.SpaceAround
         ) {
-            MesNavigationDrawerItem(
+            MesNavigationItem(
                 label = "Home",
                 icon = { MesIcon(imageVector = Icons.Outlined.Home) },
                 selected = false,
                 onClick = {}
             )
 
-            MesNavigationDrawerItem(
+            MesNavigationItem(
                 label = "About",
                 icon = { MesIcon(imageVector = Icons.Outlined.Info) },
                 selected = true,

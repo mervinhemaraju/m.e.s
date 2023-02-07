@@ -25,14 +25,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.google.accompanist.pager.*
-import com.th3pl4gu3.mauritius_emergency_services.activity.MesActivity
 import com.th3pl4gu3.mauritius_emergency_services.R
+import com.th3pl4gu3.mauritius_emergency_services.activity.MesActivity
 import com.th3pl4gu3.mauritius_emergency_services.models.WelcomeInfo
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesIcon
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesTextButton
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesTwoActionDialog
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.GetRuntimePermissions
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.HasNecessaryPermissions
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.ShouldShowRationale
@@ -77,7 +77,7 @@ fun ScreenWelcome(
         Text(
             text = stringResource(id = R.string.headline_welcome_primary),
             style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onBackground,
+            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier
                 .constrainAs(mainTitle) {
                     top.linkTo(parent.top, 16.dp)
@@ -89,7 +89,7 @@ fun ScreenWelcome(
         Text(
             text = stringResource(id = R.string.app_name_long),
             style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.onBackground,
+            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier
                 .constrainAs(titleMes) {
                     top.linkTo(mainTitle.bottom, 8.dp)
@@ -186,42 +186,26 @@ fun ScreenWelcome(
 
 @Composable
 @ExperimentalComposeUiApi
+@ExperimentalMaterial3Api
 fun PermissionDialog(
     title: String,
     description: String,
     confirmAction: () -> Unit,
     denyAction: () -> Unit
 ) {
-    AlertDialog(
-        properties = DialogProperties(
-            usePlatformDefaultWidth = true
-        ),
-        title = {
-            Text(
-                text = title
-            )
-        },
-        text = {
-            Text(
-                text = description
-            )
-        },
+    MesTwoActionDialog(
+        title = title,
         onDismissRequest = denyAction,
-
-        dismissButton = {
-            Button(
-                onClick = denyAction,
-            ) {
-                Text(text = stringResource(id = R.string.action_cancel))
-            }
+        content = {
+            Text(
+                text = description,
+                color = MaterialTheme.colorScheme.onSurface
+            )
         },
-        confirmButton = {
-            Button(
-                onClick = confirmAction,
-            ) {
-                Text(text = stringResource(id = R.string.action_proceed))
-            }
-        }
+        confirmButtonAction = confirmAction,
+        confirmButtonLabel = stringResource(id = R.string.action_proceed),
+        denyButtonLabel = stringResource(id = R.string.action_cancel),
+        denyButtonAction = denyAction
     )
 }
 
@@ -240,14 +224,15 @@ fun SliderPageBody(
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(50))
-            .background(MaterialTheme.colorScheme.surface)
+            .background(MaterialTheme.colorScheme.primaryContainer)
             .padding(56.dp)
     ) {
         MesIcon(
             painterResource = image,
             modifier = Modifier
                 .size(120.dp)
-                .align(Alignment.Center)
+                .align(Alignment.Center),
+            tint = MaterialTheme.colorScheme.primary
         )
     }
     Spacer(
@@ -257,7 +242,7 @@ fun SliderPageBody(
     Text(
         text = title,
         style = MaterialTheme.typography.headlineSmall,
-        color = MaterialTheme.colorScheme.primary,
+        color = MaterialTheme.colorScheme.surfaceVariant,
         fontWeight = FontWeight.Bold,
         textAlign = TextAlign.Center,
         modifier = modifier
@@ -270,7 +255,7 @@ fun SliderPageBody(
     Text(
         text = description,
         style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.primary,
+        color = MaterialTheme.colorScheme.secondary,
         textAlign = TextAlign.Center,
         modifier = modifier
     )
@@ -378,6 +363,28 @@ fun WelcomeScreenPreview() {
     MesTheme {
         ScreenWelcome(
             unsetFirstTimeLogging = {}
+        )
+    }
+}
+
+@Preview("Starter Screen Permission Dialog Light Preview", showBackground = true)
+@Preview(
+    "Starter Screen Permission Dialog Dark Preview",
+    showBackground = true,
+    uiMode = UI_MODE_NIGHT_YES
+)
+@Composable
+@ExperimentalPagerApi
+@ExperimentalFoundationApi
+@ExperimentalMaterial3Api
+@ExperimentalComposeUiApi
+fun WelcomeScreenPermissionDialogPreview() {
+    MesTheme {
+        PermissionDialog(
+            title = "This is a title",
+            description = "This is a description",
+            confirmAction = {},
+            denyAction = {}
         )
     }
 }

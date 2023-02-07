@@ -36,7 +36,7 @@ fun MesDrawer(
             modifier = Modifier.padding(horizontal = 28.dp, vertical = 24.dp),
         )
 
-        MesNavigationDrawerItem(
+        MesNavigationItem(
             label = stringResource(id = R.string.title_drawer_page_home),
             icon = {
                 Icon(
@@ -47,7 +47,7 @@ fun MesDrawer(
             selected = currentRoute == MesDestinations.SCREEN_HOME,
             onClick = { navigateToHome(); closeDrawer() },
         )
-        MesNavigationDrawerItem(
+        MesNavigationItem(
             label = stringResource(id = R.string.title_drawer_page_services),
             icon = {
                 Icon(
@@ -58,7 +58,7 @@ fun MesDrawer(
             selected = currentRoute == MesDestinations.SCREEN_SERVICES,
             onClick = { navigateToServices(); closeDrawer() },
         )
-        MesNavigationDrawerItem(
+        MesNavigationItem(
             label = stringResource(id = R.string.title_drawer_page_about),
             icon = {
                 Icon(
@@ -69,7 +69,7 @@ fun MesDrawer(
             selected = currentRoute == MesDestinations.SCREEN_ABOUT,
             onClick = { navigateToAbout(); closeDrawer() },
         )
-        MesNavigationDrawerItem(
+        MesNavigationItem(
             label = stringResource(id = R.string.title_drawer_page_settings),
             icon = {
                 Icon(
@@ -92,7 +92,7 @@ fun MesDrawer(
             )
         )
 
-        MesNavigationDrawerItem(
+        MesNavigationItem(
             label = stringResource(id = R.string.title_drawer_page_choose_theme),
             icon = {
                 Icon(
@@ -104,7 +104,7 @@ fun MesDrawer(
             onClick = { toggleThemeDialog() }
         )
 
-        MesNavigationDrawerItem(
+        MesNavigationItem(
             label = stringResource(id = R.string.title_drawer_page_contact_us),
             icon = {
                 Icon(
