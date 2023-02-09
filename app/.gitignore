@@ -1,3 +1,5 @@
 /build
 /release
+/beta
+/keystore.properties
 keystore.properties

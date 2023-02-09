@@ -1,72 +1,67 @@
-
 buildscript {
-
     ext {
-        // Application Configurations
-        application_id = "com.th3pl4gu3.mes"
+        // Application Dependencies
+        app_id = 'com.th3pl4gu3.mauritius_emergency_services'
+        version_code = 8
+        version_name = "1.0.0"
+        version_equalizer = "07"
+        version_suffix_beta = ".beta:$version_equalizer"
+        version_suffix_preprod = ".preprod:$version_equalizer"
+        version_suffix_dev = ".dev:$version_equalizer"
+        jvm_target = "1.8"
+        com_android_version = '7.4.0'
+        com_google_devtools_ksp_version = "1.7.20-1.0.8"
 
-        // Deploying Configurations
-        versionCode = 1
-        versionName = "1.0-dev"
+        // Material Design Dependencies
+        compose_version = '1.3.3'
+        compose_compiler_version = '1.3.2'
+        material3_version = "1.0.1"
+        material_icons = '1.3.1'
+        material3_window_size_class_version = "1.1.0-alpha04"
 
-        // SDK Versions
-        sdk_compiled_version = 30
-        sdk_minimum_version = 24
+        // Android components
+        core_ktx_version = "1.9.0"
+        room_version = '2.4.3'
+        hilt_compose_version = "1.0.0"
+        app_compat_version = "1.6.0"
+        work_manager_version = "2.7.1"
+        navigation_version = "2.5.3"
+        splash_screen_version = "1.0.0"
+        constraint_layout_version = "2.1.4"
+        constraint_layout_compose_version = "1.0.1"
+        window_core_version = "1.1.0-alpha04"
+        datastore_preferences_version = "1.0.0"
 
-        // Build tools
-        build_tools = "29.0.3"
+        // Google Libraries
+        accompanists_version = "0.28.0"
+        dagger_hilt_version = "2.43.2"
+        gson_version = "2.10.1"
 
-        // Gradle Version
-        gradle_version = "4.1.2"
+        // Kotlin Libraries
+        kotlin_version = "1.7.20"
+        kotlinx_serialization_json_version = "1.4.0"
+        kotlinx_collections_immutable_version = "0.3.5"
 
-        // Kotlin Versions
-        kotlin_version = "1.4.30"
+        // External Libraries
+        retrofit2_version = "2.9.0"
+        retrofit2_kotlinx_serialization_convertor_version = "0.8.0"
+        coil_version = "2.1.0"
+        saket_swipe_version = "1.0.0"
 
-        // Android Versions
-        android_core_version = "1.3.2"
-        android_layout_constraint_version = "2.0.4"
-        android_material_version = "1.3.0"
-        android_lifecycle_version = "2.2.0"
-        android_navigation_version = "2.3.0"
-        android_preference_version = "1.1.1"
-        android_room_version = "2.2.6"
-        android_work_version = "2.5.0"
-        android_paging_version = "2.1.2"
-
-        // External Libraries Dependencies Versions
-        external_retrofit_version = "2.9.0"
-        external_moshi_version = "1.9.2"
-        external_glide_version = "4.11.0"
-        external_lottie_version = "3.4.0"
-        external_gson_version = "2.8.6"
-        external_oss_licences_version = "17.0.0"
-        external_oss_licences_plugin_version = "0.10.2"
-
-        // Testing Frameworks Versions
-        testing_junit = "5.6.2"
-        testing_android_junit = "1.1.2"
-        testing_espresso_core = "3.3.0"
-    }
-
-    repositories {
-        google()
-        jcenter()
+        // Testings
+        junit_version = "4.13.2"
+        android_ext_junit_version = "1.1.4"
+        android_espresson_version = "3.5.0"
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:$gradle_version"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$android_navigation_version"
-        classpath "com.google.android.gms:oss-licenses-plugin:$external_oss_licences_plugin_version"
+//        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$dagger_hilt_version"
     }
-}
-
-allprojects {
-    repositories {
-        google()
-        jcenter()
-    }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
+}// Top-level build file where you can add configuration options common to all sub-projects/modules.
+plugins {
+    id 'com.android.application' version '7.4.0' apply false
+    id 'com.android.library' version "$com_android_version" apply false
+    id 'org.jetbrains.kotlin.android' version "$kotlin_version" apply false
+    id "org.jetbrains.kotlin.plugin.serialization" version "$kotlin_version" apply false
+    id 'com.google.devtools.ksp' version "$com_google_devtools_ksp_version" apply false
 }

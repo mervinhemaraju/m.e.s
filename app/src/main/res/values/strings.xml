@@ -1,140 +1,157 @@
 <resources>
 
-    <!-- Application Specific -->
-    <string name="app_name" translatable="false">MES</string>
+    <!-- App Specific -->
+    <string name="app_name_short" translatable="false">Mes</string>
     <string name="app_name_long" translatable="false">Mauritius Emergency Services</string>
+    <string name="app_development_sweet_message">Developed with ❤ in 🇲🇺</string>
 
-    <string name="app_website_developer" translatable="false">https://mes.th3pl4gu3.com/web#developer</string>
-    <string name="app_website_privacy" translatable="false">https://mes.th3pl4gu3.com/web/privacy</string>
-    <string name="app_url_playstore" translatable="false">https://play.google.com/store/apps/dev?id=5236150593519379806</string>
-
-    <string name="app_share_content">Please find MES on www.mes.com</string>
-
-    <string name="app_support_email" translatable="false">th3pl4gu33@gmail.com</string>
-
-    <!-- Menu Items -->
-    <string name="menu_drawer_emergencies">Emergencies</string>
-    <string name="menu_drawer_all_services">All Services</string>
-    <string name="menu_drawer_settings">Settings</string>
-    <string name="menu_drawer_about">About</string>
-
-    <!-- Titles, Subtitles & Messages-->
-    <string name="title_drawer_categories_others">OTHERS</string>
-
-    <string name="title_emergencies_main">Emergency Police Help Needed?</string>
-    <string name="subtitle_emergencies_main">Just hold the button to call</string>
-
-    <string name="title_emergencies_otherAction">Need other emergency actions?</string>
-    <string name="subtitle_emergencies_otherAction">Pick another action below</string>
-
-    <string name="title_permission_call_info">MES Phone Call Permission</string>
-    <string name="message_permission_call_info">To be able to make phone calls for you, MES needs your permission. Please note that phone calls are not made unless the user does so through the application.</string>
-
-    <string name="title_permission_call_explicit">Allow Permissions in Settings</string>
-    <string name="message_permission_call_explicit">To provide us the permission manually to make phone calls, please click Proceed > Permissions > Allow Phone Permissions</string>
-
-    <string name="title_precall_title">Emergency %1$s</string>
-    <string name="title_precall_subtitle">Don\'t panic. Starting a call to %1$s for you</string>
-
-
-    <string name="title_service_suggestions">Please provide services applicable in Mauritius Only</string>
-    <string name="subtitle_service_suggestions">Providing a proof will be more easy for us to validate it as a service and provide it quicker on the application</string>
-
-    <string name="subtitle_bug_report">Please provide as much details as possible in the steps for us to be able to understand the bug</string>
-
-    <string name="title_unable_open_app_email">Unable to Open Email App</string>
-    <string name="message_unable_open_app_email">There are no application installed to process this request. Please consider installing  an email application to continue</string>
-
-    <!-- Fields Text & Hints -->
-    <string name="hint_field_service_name">Service Name</string>
-    <string name="hint_field_service_number">Service Number</string>
-    <string name="hint_field_service_proof">Proof of service (A link, or a reference of the Service)</string>
-
-    <string name="hint_field_bug_issue">Bug Identified</string>
-    <string name="hint_field_bug_steps">Steps to reproduce issue</string>
+    <!-- Shared -->
 
     <!-- Actions -->
     <string name="action_retry">Retry</string>
-    <string name="action_allow">Allow</string>
+    <string name="action_close">Close</string>
+    <string name="action_slide_cancel">Slide to Cancel</string>
+    <string name="action_launch_mes">Launch Mes</string>
     <string name="action_proceed">Proceed</string>
-    <string name="action_search">Search</string>
     <string name="action_cancel">Cancel</string>
-    <string name="action_ask_me_later">Ask Me Later</string>
-    <string name="action_submit">Submit</string>
-    <string name="action_ok">OK</string>
+    <string name="action_search">Search</string>
+    <string name="action_call_end">End Call</string>
+    <string name="action_swipe_cancel">Swipe to cancel the call</string>
+    <string name="action_scroll_up">Scroll Up</string>
+    <string name="action_drop_down">Drop Down for %1$s</string>
 
-    <!-- Settings -->
-    <string name="settings_key_category_display" translatable="false">settings_key_category_display</string>
-    <string name="settings_key_category_help" translatable="false">settings_key_category_help</string>
+    <!-- Titles -->
+    <string name="title_about_data_rate_mes">Rate Mes</string>
+    <string name="title_about_data_share_mes">Share Mes</string>
+    <string name="title_about_data_about_mes">About Mes</string>
+    <string name="title_about_data_api">Developer API</string>
+    <string name="title_about_privacy_policy">Privacy Policy</string>
+    <string name="title_about_version">Version</string>
+    <string name="title_about_lead_developer" translatable="false">Mervin Hemaraju</string>
+    <string name="title_about_graphic_designer" translatable="false">Nick Foo Kune</string>
 
-    <string name="settings_title_category_display">Display</string>
-    <string name="settings_title_category_help">Help</string>
+    <string name="title_theme_selector_dialog">Choose a Theme</string>
 
-    <string name="settings_key_display_theme" translatable="false">settings_title_display_theme</string>
-    <string name="settings_title_display_theme">App Theme</string>
-    <string name="settings_value_display_default">Follow System</string>
-    <string name="settings_value_display_light">Light</string>
-    <string name="settings_value_display_dark">Dark</string>
+    <string name="title_settings_page_emergency_button_action">Emergency Button Action</string>
+    <string name="title_settings_page_clear_cache">Clear Cache</string>
+    <string name="title_settings_page_change_language">Change Language</string>
 
-    <string name="settings_key_help_feedback" translatable="false">settings_key_help_feedback</string>
-    <string name="settings_title_help_feedback">Send feedback</string>
-    <string name="settings_summary_help_feedback">Report technical issues or suggest new features</string>
+    <string name="title_language_selector_dialog">Choose a Language</string>
+    <string name="title_settings_feature">Feature</string>
+    <string name="title_settings_language">Language</string>
+    <string name="title_settings_cache">Cache</string>
 
-    <string name="settings_key_help_add_services" translatable="false">settings_key_help_add_services</string>
-    <string name="settings_title_help_add_services">Suggest New Service</string>
-    <string name="settings_summary_help_add_services">Send propositions for services not listed on MES</string>
+    <string name="title_welcome_mes_permissions_needed_dialog">Permissions needed for MES</string>
+    <string name="title_welcome_mes_permissions_rationale_dialog">Enable Phone Call Permissions</string>
 
+    <string name="title_welcome_page_services_list">Services List</string>
+    <string name="title_welcome_page_emergency_actions">Emergency Actions</string>
+    <string name="title_welcome_page_sos">SOS</string>
+    <string name="title_welcome_page_offline_availability">Offline Availability</string>
 
-    <!-- About -->
-    <string name="text_subtitle_about_sections_dev">Support &amp; Development</string>
-    <string name="text_subtitle_about_sections_other">Other</string>
+    <string name="title_drawer_page_home">Home</string>
+    <string name="title_drawer_page_services">Services</string>
+    <string name="title_drawer_page_about">About</string>
+    <string name="title_drawer_page_settings">Settings</string>
+    <string name="title_drawer_page_choose_theme">Choose Theme</string>
+    <string name="title_drawer_page_contact_us">Contact Us</string>
 
-    <string name="text_title_about_dev_rate">Rate MES</string>
-    <string name="text_title_about_dev_bug">Report a Bug</string>
-    <string name="text_title_about_dev_suggestion">Suggest a Missing Service</string>
-    <string name="text_title_about_dev_share">Share MES</string>
+    <string name="title_services_page_other_contacts">Other Contacts</string>
 
-    <string name="text_description_about_dev_rate">If you love the app, let us know in the Google Play Store and we can make it even better</string>
-    <string name="text_description_about_dev_suggestion">Send propositions for services not listed on MES</string>
-    <string name="text_description_about_dev_bug">Any error that is persisting in the app, please send an email by clicking here</string>
-    <string name="text_description_about_dev_share">Do not forget to share the app with your friends and family</string>
-
-    <string name="text_title_about_other_license">Open Source Licenses</string>
-    <string name="text_title_about_other_terms">Terms &amp; Privacy Policy</string>
-    <string name="text_title_about_other_version">Version</string>
-    <string name="text_title_about_other_developer">Developer</string>
-
-    <string name="text_description_about_other_developer">The Developer history of MES</string>
-
-
-    <!-- Messages -->
-    <string name="message_info_no_internet">You need to be connected to the internet for the first time to fetch the services.</string>
-    <string name="message_info_permission_denied">Permission has been denied</string>
-    <string name="message_info_field_required">* This field is required</string>
-
-    <string name="message_error_bug_report">An error occurred while fetching the data. Please report a bug issue in Settings</string>
-
-    <string name="message_error_field_empty">This field cannot be empty</string>
-
-    <string name="message_info_hold_emergency_button">You need to hold the big emergency button to perform an emergency call</string>
-
-
-    <!-- Styling -->
-    <string name="styling_seconds_s" translatable="false">%1$ss</string>
-
-    <!-- Image Content Descriptions -->
-    <string name="icd_error_services_unavailable">Error image illustration to represent no services available</string>
-
-    <string name="icd_service_logo">Represents the Service\'s Logo</string>
-    <string name="icd_arrow_logo">An arrow logo pointing to the service\'s logo</string>
-
-    <string name="icd_close_call_countdown">A round button to stop the call countdown</string>
+    <!-- Descriptions -->
+    <string name="description_about_data_rate_mes">
+        If you love the app, let us know in the Google Play Store and we can make it even better.
+    </string>
+    <string name="description_about_data_share_mes">
+        Do not forget to share Mes with your friends and families.
+    </string>
+    <string name="description_about_data_about_mes">
+        Check us out on our official website
+    </string>
+    <string name="description_about_data_api">
+        Application Program Interface (API) used in MES
+    </string>
+    <string name="description_about_privacy_policy">View the privacy policy for Mes</string>
+    <string name="description_about_lead_developer">Lead Developer &amp; Designer</string>
+    <string name="description_about_graphic_designer">Play Store Banner &amp; Images</string>
 
 
-    <!-- Email Literals -->
-    <string name="email_subject_bug_report">MES :: Bug Report :: %1$s</string>
-    <string name="email_body_bug_report">Below are the steps to reproduce issue: \n \n %1$s</string>
+    <string name="description_welcome_mes_permissions_needed_dialog">
+        Notifications are optional permissions that can be allowed to notify the users for activities in MES.
+        However, phone call is a MANDATORY permission needed for MES to work. This is because MES will need to be able to launch
+        phone call for you directly from the app. You won\'t be able to proceed without enabling the phone call permission.
+    </string>
+    <string name="description_welcome_mes_permissions_rationale_dialog">
+        You need to enable phone call permissions manually to continue. To do so,
+        click on the proceed button > Choose permissions > Choose the call permissions > Click Allow
+    </string>
 
-    <string name="email_subject_service_suggestion">MES :: Service Suggestion :: %1$s :: %2$s</string>
-    <string name="email_body_service_suggestion">Below are the links for the service\'s proofs: \n \n %1$s</string>
+    <string name="description_welcome_page_services_list">
+        Get a list of all emergency and non-emergency contacts right from your phone.
+    </string>
+    <string name="description_welcome_page_emergency_actions">
+        Get a dedicated corner on your dashboard just for emergency services
+    </string>
+    <string name="description_welcome_page_sos">
+        Call for urgent help right from the app using the big red button
+    </string>
+    <string name="description_welcome_page_offline_availability">
+        Get all your services available to you offline. You just need to be connected online once for MES to download the services.
+    </string>
+
+    <string name="description_settings_page_emergency_button_action">
+        Set an emergency service for the Red button
+    </string>
+    <string name="description_settings_page_clear_cache">
+        This will allow Mes to clear cache and re-load the services from the Internet
+    </string>
+    <string name="description_settings_page_change_language">
+        Click to change the app\'s language
+    </string>
+
+    <!-- Headlines -->
+    <string name="headline_home_primary">Emergency call help needed ?</string>
+    <string name="headline_home_secondary">Click the button to quick call</string>
+    <string name="headline_home_tertiary">Need other quick emergency actions ?</string>
+    <string name="headline_home_quaternary">Click one below to call</string>
+
+    <string name="headline_pre_call_primary">Starting a call to</string>
+
+    <string name="headline_welcome_primary">Welcome to</string>
+
+    <!-- Sections -->
+    <string name="section_about_title_about">About</string>
+    <string name="section_about_title_support_and_dev">Support &amp; Development</string>
+    <string name="section_about_title_other">Other</string>
+
+    <!-- Messages: Basic -->
+    <string name="message_welcome_mes">Welcome to Mes</string>
+    <string name="message_loading_basic">Loading…</string>
+    <string name="message_loading_services">Getting Services…</string>
+    <string name="message_loading_call_in_progress">Call in progress…</string>
+    <string name="message_updating_services">Updating Services…</string>
+    <string name="message_services_not_found">No services found</string>
+    <string name="message_cache_reset_successfully">Cache reset successfully</string>
+    <string name="message_action_emergency_button_configured">%1$s has been set as the emergency button action</string>
+    <string name="message_toll_free">Toll Free</string>
+    <string name="message_no_other_contacts_found">No other contacts found</string>
+    <string name="message_internet_connection_needed">
+        You need to be connected to the internet for Mes to download the services. Please connect and try again
+    </string>
+    <string name="message_emergency_button_action_updated">Emergency button action updated</string>
+    <string name="message_app_language_updated">Language updated</string>
+    <string name="message_external_link">External Link</string>
+    <string name="message_permissions_enable_phone_call">Please enable call permissions in settings to continue</string>
+    <!-- Message: Error -->
+    <string name="message_error_content_failed">Error getting content</string>
+    <string name="message_error_loading_countdown" translatable="false">X</string>
+    <string name="message_error_loading_failed">Change To French Test</string>
+    <string name="message_error_loading_services_failed">Unable to load services.</string>
+    <string name="message_error_call_startup_failed">Unable to perform the phone call at the moment. Please try again.</string>
+    <string name="message_error_cache_reset">Error occurred while resetting cache: %1$s</string>
+
+    <!-- Content Descriptions -->
+    <string name="ctnt_desc_drawer_open">Open Navigation Drawer</string>
+    <string name="ctnt_desc_emergency_button">Make a quick emergency call</string>
+
 </resources>
