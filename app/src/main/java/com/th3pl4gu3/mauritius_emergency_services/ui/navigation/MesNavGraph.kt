@@ -6,10 +6,12 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -17,6 +19,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.th3pl4gu3.mauritius_emergency_services.MesApplication
+import com.th3pl4gu3.mauritius_emergency_services.R
+import com.th3pl4gu3.mauritius_emergency_services.models.Service
+import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.HasNecessaryPermissions
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.about.ScreenAbout
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.home.HomeViewModel
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.home.ScreenHome
@@ -27,6 +32,8 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.screens.services.ServicesVi
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.settings.ScreenSettings
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.settings.SettingsViewModel
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.welcome.ScreenWelcome
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 private const val TAG = "MES_NAV_GRAPH"
 
@@ -47,9 +54,23 @@ fun MesNavGraph(
     startDestination: String,
     listState: LazyListState,
     scrollState: ScrollState,
+    coroutineScope: CoroutineScope
 ) {
     /** Log information **/
     Log.i(TAG, "Starting Navigation Host")
+
+    // Define a navigate to pre call dependency function
+    val navigateToPreCall: (service: Service, chosenNumber: String) -> Unit = { service, chosenNumber ->
+        if(application.applicationContext.HasNecessaryPermissions){
+            navigationActions.navigateToPreCall(service, chosenNumber)
+        }else{
+            coroutineScope.launch {
+                snackBarHostState.showSnackbar(
+                    application.resources.getString(R.string.message_permissions_enable_phone_call)
+                )
+            }
+        }
+    }
 
     NavHost(
         navController = navController,
@@ -74,7 +95,7 @@ fun MesNavGraph(
             /** Launch the screen UI **/
             ScreenHome(
                 homeViewModel = homeViewModel,
-                navigateToPreCall = navigationActions.navigateToPreCall,
+                navigateToPreCall = navigateToPreCall,
                 scrollState = scrollState
             )
         }
@@ -91,7 +112,7 @@ fun MesNavGraph(
                 retryAction = servicesViewModel::loadOnlineServices,
                 listState = listState,
                 searchBarValue = searchBarValue,
-                navigateToPreCall = navigationActions.navigateToPreCall
+                navigateToPreCall = navigateToPreCall
             )
         }
         composable(MesDestinations.SCREEN_PRE_CALL) {
@@ -127,7 +148,8 @@ fun MesNavGraph(
             ScreenSettings(
                 settingsViewModel = settingsViewModel,
                 snackBarHostState = snackBarHostState,
-                scrollState = scrollState
+                scrollState = scrollState,
+                scope = coroutineScope
             )
         }
     }

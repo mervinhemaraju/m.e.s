@@ -27,6 +27,7 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesServiceItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesSettingsItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 import com.th3pl4gu3.mauritius_emergency_services.utils.KEYWORD_LOCALE_DEFAULT
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
@@ -38,13 +39,13 @@ fun ScreenSettings(
     settingsViewModel: SettingsViewModel,
     snackBarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
-    scrollState: ScrollState = rememberScrollState()
+    scrollState: ScrollState = rememberScrollState(),
+    scope: CoroutineScope = rememberCoroutineScope()
 ) {
     val message = settingsViewModel.messageQueue.collectAsState(initial = null).value
     val services = settingsViewModel.services.collectAsState(initial = listOf()).value
     var openEmergencyButtonItemDialog by remember { mutableStateOf(false) }
     var openAppLanguageDialog by remember { mutableStateOf(false) }
-    val scope = rememberCoroutineScope()
 
     if (message != null) {
 

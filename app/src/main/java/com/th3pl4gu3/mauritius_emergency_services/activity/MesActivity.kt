@@ -32,7 +32,6 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MesActivity : AppCompatActivity() {
 
-    // TODO(Internet check before downloading services)
     // TODO("Check phone permission before launching call")
     companion object {
         private const val TAG = "MAIN_ACTIVITY_LOGS"

@@ -25,7 +25,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import androidx.constraintlayout.compose.ConstraintLayout
 import com.google.accompanist.pager.*
 import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.activity.MesActivity
@@ -59,71 +58,46 @@ fun ScreenWelcome(
     val shouldShowRationale =
         if (activity?.ShouldShowRationale == null) false else activity.ShouldShowRationale
 
-    ConstraintLayout(
+    Column(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
-            .fillMaxSize()
-            .padding(rememberContentPaddingForScreen())
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-        val (
-            pager,
-            pagerIndicator,
-            button,
-            mainTitle,
-            titleMes,
-        ) = createRefs()
 
         Text(
             text = stringResource(id = R.string.headline_welcome_primary),
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier
-                .constrainAs(mainTitle) {
-                    top.linkTo(parent.top, 16.dp)
-                    start.linkTo(parent.start, 16.dp)
-                    end.linkTo(parent.end, 16.dp)
-                }
+                .padding(
+                    top = 16.dp,
+                    start = 16.dp,
+                    end = 16.dp
+                )
         )
 
         Text(
             text = stringResource(id = R.string.app_name_long),
             style = MaterialTheme.typography.headlineLarge,
             color = MaterialTheme.colorScheme.primary,
+            textAlign = TextAlign.Center,
             modifier = Modifier
-                .constrainAs(titleMes) {
-                    top.linkTo(mainTitle.bottom, 8.dp)
-                    start.linkTo(parent.start, 16.dp)
-                    end.linkTo(parent.end, 16.dp)
-                },
-            textAlign = TextAlign.Center
+                .padding(8.dp)
         )
+
+        Spacer(modifier = Modifier.weight(1f))
 
         SliderPager(
             pagerState = pagerState,
-            modifier = Modifier
-                .constrainAs(pager) {
-                    linkTo(
-                        top = parent.top,
-                        start = parent.start,
-                        end = parent.end,
-                        bottom = button.top,
-                        topMargin = 24.dp,
-                        bottomMargin = 24.dp,
-                    )
-                }
         )
 
         HorizontalPagerIndicator(
             pagerState = pagerState,
-            modifier = Modifier
-                .constrainAs(pagerIndicator) {
-                    start.linkTo(pager.start)
-                    end.linkTo(pager.end)
-                    top.linkTo(pager.bottom, 16.dp)
-                },
             activeColor = MaterialTheme.colorScheme.primary
         )
+
+        Spacer(modifier = Modifier.weight(1f))
 
         MesTextButton(
             text = stringResource(id = R.string.action_launch_mes),
@@ -141,11 +115,7 @@ fun ScreenWelcome(
                 }
             },
             modifier = Modifier
-                .constrainAs(button) {
-                    end.linkTo(parent.end)
-                    start.linkTo(parent.start)
-                    bottom.linkTo(parent.bottom, 24.dp)
-                }
+                .padding(16.dp)
         )
 
     }

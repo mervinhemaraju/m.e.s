@@ -207,7 +207,8 @@ fun MesApp(
                         navigationActions = navigationActions,
                         listState = listState,
                         scrollState = scrollState,
-                        startDestination = startDestination
+                        startDestination = startDestination,
+                        coroutineScope = coroutineScope
                     )
                 }
 
