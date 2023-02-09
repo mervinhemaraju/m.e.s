@@ -36,7 +36,7 @@ Reach out to us at the following:
 
 * Website: [mes.mervinhemaraju.com](https://mes.mervinhemaraju.com/web)
 * Play Store: [Mes](https://play.google.com/store/apps/details?id=com.th3pl4gu3.mauritius_emergency_services)
-* Support Email: th3pl4gu33.application@gmail.com
+* Support Email: th3pl4gu33@gmail.com
 
 <a href="donation"></a>
 ## Donations
