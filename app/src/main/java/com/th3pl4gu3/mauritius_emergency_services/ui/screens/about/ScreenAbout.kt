@@ -18,8 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.activity.MesActivity
-import com.th3pl4gu3.mauritius_emergency_services.models.AboutInfoDrawable
-import com.th3pl4gu3.mauritius_emergency_services.models.AboutInfoVector
+import com.th3pl4gu3.mauritius_emergency_services.models.items.AboutInfoDrawable
+import com.th3pl4gu3.mauritius_emergency_services.models.items.AboutInfoVector
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesAboutAppCard
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesAboutInfoCard
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme

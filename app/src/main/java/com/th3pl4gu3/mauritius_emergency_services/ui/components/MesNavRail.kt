@@ -3,22 +3,16 @@ package com.th3pl4gu3.mauritius_emergency_services.ui.components
 import android.content.res.Configuration
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.ListAlt
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,6 +26,7 @@ fun MesNavRail(
     currentRoute: String,
     navigateToHome: () -> Unit,
     navigateToServices: () -> Unit,
+    navigateToCycloneReport: () -> Unit,
     navigateToAbout: () -> Unit,
     navigateToSettings: () -> Unit,
     navigateToContactUs: () -> Unit,
@@ -85,6 +80,18 @@ fun MesNavRail(
                 },
                 selected = currentRoute == MesDestinations.SCREEN_SERVICES,
                 onClick = { navigateToServices() },
+                isRail = true
+            )
+            MesNavigationItem(
+                label = stringResource(id = R.string.title_drawer_page_cyclone_report),
+                icon = {
+                    Icon(
+                        imageVector = Icons.Outlined.Cyclone,
+                        contentDescription = stringResource(id = R.string.title_drawer_page_cyclone_report)
+                    )
+                },
+                selected = currentRoute == MesDestinations.SCREEN_CYCLONE_REPORT,
+                onClick = { navigateToCycloneReport() },
                 isRail = true
             )
             MesNavigationItem(
@@ -151,6 +158,7 @@ fun PreviewAppNavRail() {
             currentRoute = MesDestinations.SCREEN_HOME,
             navigateToHome = {},
             navigateToServices = {},
+            navigateToCycloneReport = {},
             navigateToAbout = {},
             navigateToSettings = {},
             toggleThemeDialog = {},

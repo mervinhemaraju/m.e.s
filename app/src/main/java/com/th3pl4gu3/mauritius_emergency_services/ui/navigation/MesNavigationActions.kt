@@ -34,6 +34,15 @@ class MesNavigationActions(navController: NavHostController) {
             restoreState = true
         }
     }
+    val navigateToCycloneReport: () -> Unit = {
+        navController.navigate(MesDestinations.SCREEN_CYCLONE_REPORT) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
     val navigateToAbout: () -> Unit = {
         navController.navigate(MesDestinations.SCREEN_ABOUT) {
             popUpTo(navController.graph.findStartDestination().id) {

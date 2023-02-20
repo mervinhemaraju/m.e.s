@@ -20,6 +20,7 @@ object MesDestinations {
     const val SCREEN_WELCOME = "welcome"
     const val SCREEN_HOME = "home"
     const val SCREEN_SERVICES = "services"
+    const val SCREEN_CYCLONE_REPORT = "cyclone_report"
     const val SCREEN_ABOUT = "about"
     const val SCREEN_SETTINGS = "settings"
     const val SCREEN_THEME = "theme"

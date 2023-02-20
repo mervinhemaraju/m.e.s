@@ -23,12 +23,8 @@ Mes can be found on its [official website](https://mes.mervinhemaraju.com/web) o
 
 <a href="screenshots"></a>
 ## Screenshots
-<img src="screenshots/image-1.png" height="400" alt="Emergency Button"/> 
-<img src="screenshots/image-2.png" height="400" alt="Services List"/> 
-<img src="screenshots/image-3.png" height="400" alt="Swipe to Call"/> 
-<img src="screenshots/image-4.png" height="400" alt="Dark Mode"/> 
-<img src="screenshots/image-5.png" height="400" alt="Easy to Use"/> 
-<img src="screenshots/image-6.png" height="400" alt="More Contacts"/> 
+<img src="screenshots/image-1.png" height="400" alt="Emergency Button"/> <img src="screenshots/image-2.png" height="400" alt="Services List"/> <img src="screenshots/image-3.png" height="400" alt="Swipe to Call"/> <img src="screenshots/image-4.png" height="400" alt="Dark Mode"/> 
+<img src="screenshots/image-5.png" height="400" alt="Easy to Use"/> <img src="screenshots/image-6.png" height="400" alt="More Contacts"/> 
 
 <a href="support"></a>
 ## Support

@@ -28,11 +28,21 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.IsConnectedToNet
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+// FIXME(Fix MesEmergencyItem: height changes when the title is long)
+// FIXME(Fix MesServiceItem: Long titles are overlapping with the drop down button
+// FIXME(Fix Landscape layout for Home: Emergency button disappears on landscape layout)
+// FIXME(Fix Landscape layout overall)
+// TODO(Improve search screen for services)
+// TODO(Add a most used services list)
+// FEAT(Add towing services)
+// FEAT(Add personal doctors services)
+// FEAT(Add a home screen widget)
+// FEAT(Allow sorting of services)
+// FEAT(Add cyclone report page)
 
 @AndroidEntryPoint
 class MesActivity : AppCompatActivity() {
 
-    // TODO("Check phone permission before launching call")
     companion object {
         private const val TAG = "MAIN_ACTIVITY_LOGS"
     }

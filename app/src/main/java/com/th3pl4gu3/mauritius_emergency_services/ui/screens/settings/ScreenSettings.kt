@@ -19,9 +19,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.LocaleListCompat
 import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.data.DummyData
-import com.th3pl4gu3.mauritius_emergency_services.models.MesLocale
+import com.th3pl4gu3.mauritius_emergency_services.models.items.MesLocale
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
-import com.th3pl4gu3.mauritius_emergency_services.models.SettingsItem
+import com.th3pl4gu3.mauritius_emergency_services.models.items.SettingsItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesOneActionDialog
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesServiceItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesSettingsItem

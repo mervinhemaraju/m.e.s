@@ -135,6 +135,7 @@ fun MesApp(
                     currentRoute = currentRoute,
                     navigateToHome = navigationActions.navigateToHome,
                     navigateToServices = navigationActions.navigateToServices,
+                    navigateToCycloneReport = navigationActions.navigateToCycloneReport,
                     navigateToAbout = navigationActions.navigateToAbout,
                     navigateToSettings = navigationActions.navigateToSettings,
                     toggleThemeDialog = { coroutineScope.launch { showDialog = !showDialog } },
@@ -186,6 +187,7 @@ fun MesApp(
                             currentRoute = currentRoute,
                             navigateToHome = navigationActions.navigateToHome,
                             navigateToServices = navigationActions.navigateToServices,
+                            navigateToCycloneReport = navigationActions.navigateToCycloneReport,
                             navigateToAbout = navigationActions.navigateToAbout,
                             navigateToSettings = navigationActions.navigateToSettings,
                             toggleThemeDialog = {

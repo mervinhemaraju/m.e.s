@@ -8,7 +8,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.work.WorkManager
 import com.th3pl4gu3.mauritius_emergency_services.MesApplication
-import com.th3pl4gu3.mauritius_emergency_services.models.NotificationChannels
+import com.th3pl4gu3.mauritius_emergency_services.models.items.NotificationChannels
 
 fun MesApplication.createNotificationChannels() {
 
