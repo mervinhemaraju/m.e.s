@@ -32,11 +32,13 @@
 
     <string name="title_theme_selector_dialog">Choose a Theme</string>
 
+    <string name="title_settings_page_dynamic_colors">Dynamic Colors</string>
     <string name="title_settings_page_emergency_button_action">Emergency Button Action</string>
     <string name="title_settings_page_clear_cache">Clear Cache</string>
     <string name="title_settings_page_change_language">Change Language</string>
 
     <string name="title_language_selector_dialog">Choose a Language</string>
+    <string name="title_settings_display">Display</string>
     <string name="title_settings_feature">Feature</string>
     <string name="title_settings_language">Language</string>
     <string name="title_settings_cache">Cache</string>
@@ -100,6 +102,9 @@
         Get all your services available to you offline. You just need to be connected online once for MES to download the services.
     </string>
 
+    <string name="description_settings_page_dynamic_colors">
+        Apply dynamic colors, based on your wallpaper (Material YOU)
+    </string>
     <string name="description_settings_page_emergency_button_action">
         Set an emergency service for the Red button
     </string>
@@ -141,6 +146,7 @@
         You need to be connected to the internet for Mes to download the data. Please connect and try again
     </string>
     <string name="message_emergency_button_action_updated">Emergency button action updated</string>
+    <string name="message_dynamic_colors_selection_updated">Dynamic colors updated</string>
     <string name="message_app_language_updated">Language updated</string>
     <string name="message_external_link">External Link</string>
     <string name="message_permissions_enable_phone_call">Please enable call permissions in settings to continue</string>

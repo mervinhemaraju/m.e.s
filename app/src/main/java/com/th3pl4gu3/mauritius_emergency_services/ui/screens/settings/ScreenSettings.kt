@@ -19,12 +19,14 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.LocaleListCompat
 import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.data.DummyData
-import com.th3pl4gu3.mauritius_emergency_services.models.items.MesLocale
+import com.th3pl4gu3.mauritius_emergency_services.models.MesAppSettings
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
+import com.th3pl4gu3.mauritius_emergency_services.models.items.MesLocale
 import com.th3pl4gu3.mauritius_emergency_services.models.items.SettingsItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesOneActionDialog
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesServiceItem
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesSettingsItem
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesSettingsSimpleItem
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesSettingsSwitchItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 import com.th3pl4gu3.mauritius_emergency_services.utils.KEYWORD_LOCALE_DEFAULT
 import kotlinx.coroutines.CoroutineScope
@@ -42,13 +44,13 @@ fun ScreenSettings(
     scrollState: ScrollState = rememberScrollState(),
     scope: CoroutineScope = rememberCoroutineScope()
 ) {
+    val mesAppSettings = settingsViewModel.mesAppSettings.collectAsState(initial = MesAppSettings()).value
     val message = settingsViewModel.messageQueue.collectAsState(initial = null).value
     val services = settingsViewModel.services.collectAsState(initial = listOf()).value
     var openEmergencyButtonItemDialog by remember { mutableStateOf(false) }
     var openAppLanguageDialog by remember { mutableStateOf(false) }
 
     if (message != null) {
-
         val displayMessage = if (!message.first.isNullOrEmpty()) {
             stringResource(id = message.second, message.first!!)
         } else {
@@ -69,9 +71,11 @@ fun ScreenSettings(
     SettingsContent(
         scrollState = scrollState,
         modifier = modifier,
+        dynamicColorsCheckedChange = { settingsViewModel.updateDynamicColorsSelection(it) },
         emergencyButtonAction = { openEmergencyButtonItemDialog = !openEmergencyButtonItemDialog },
         appLanguageAction = { openAppLanguageDialog = !openAppLanguageDialog },
-        resetCacheAction = { settingsViewModel.forceRefreshServices() }
+        resetCacheAction = { settingsViewModel.forceRefreshServices() },
+        isDynamicColorsChecked = mesAppSettings.dynamicColorsEnabled
     )
 
 
@@ -113,9 +117,11 @@ fun ScreenSettings(
 @Composable
 @ExperimentalMaterial3Api
 fun SettingsContent(
+    dynamicColorsCheckedChange: (Boolean) -> Unit,
     emergencyButtonAction: () -> Unit,
     appLanguageAction: () -> Unit,
     resetCacheAction: () -> Unit,
+    isDynamicColorsChecked: Boolean,
     scrollState: ScrollState,
     modifier: Modifier = Modifier
 ) {
@@ -127,10 +133,20 @@ fun SettingsContent(
     ) {
 
         SettingsLabel(
+            text = stringResource(id = R.string.title_settings_display)
+        )
+
+        MesSettingsSwitchItem(
+            settingsItem = SettingsItem.DynamicColors,
+            onCheckedChange = dynamicColorsCheckedChange,
+            isChecked = isDynamicColorsChecked
+        )
+
+        SettingsLabel(
             text = stringResource(id = R.string.title_settings_feature)
         )
 
-        MesSettingsItem(
+        MesSettingsSimpleItem(
             settingsItem = SettingsItem.EmergencyButton,
             onClick = emergencyButtonAction
         )
@@ -139,7 +155,7 @@ fun SettingsContent(
             text = stringResource(id = R.string.title_settings_language)
         )
 
-        MesSettingsItem(
+        MesSettingsSimpleItem(
             settingsItem = SettingsItem.AppLanguage,
             onClick = appLanguageAction
         )
@@ -148,7 +164,7 @@ fun SettingsContent(
             text = stringResource(id = R.string.title_settings_cache)
         )
 
-        MesSettingsItem(
+        MesSettingsSimpleItem(
             settingsItem = SettingsItem.ResetCache,
             onClick = resetCacheAction
         )
@@ -248,10 +264,12 @@ fun EmergencyButtonItemDialog(
 fun SettingsScreenPreview() {
     MesTheme {
         SettingsContent(
+            dynamicColorsCheckedChange = {},
             emergencyButtonAction = {},
             appLanguageAction = {},
             resetCacheAction = {},
             scrollState = rememberScrollState(),
+            isDynamicColorsChecked = true,
         )
     }
 }

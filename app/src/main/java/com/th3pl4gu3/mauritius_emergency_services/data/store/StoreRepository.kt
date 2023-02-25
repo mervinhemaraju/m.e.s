@@ -12,5 +12,7 @@ interface StoreRepository {
 
     suspend fun updateTheme(theme: AppTheme)
 
+    suspend fun updateDynamicColorsSelection(checked: Boolean)
+
     fun fetch(): Flow<MesAppSettings>
 }

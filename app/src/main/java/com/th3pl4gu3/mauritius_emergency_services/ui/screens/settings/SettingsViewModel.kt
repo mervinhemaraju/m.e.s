@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.data.local.LocalServiceRepository
 import com.th3pl4gu3.mauritius_emergency_services.data.store.StoreRepository
+import com.th3pl4gu3.mauritius_emergency_services.models.MesAppSettings
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.ui.wrappers.NetworkRequests
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.GetAppLocale
@@ -33,6 +34,13 @@ class SettingsViewModel @Inject constructor(
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
                 initialValue = listOf()
             )
+
+    val mesAppSettings: StateFlow<MesAppSettings> = dataStoreRepository.fetch().map { it }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = MesAppSettings()
+        )
 
     val messageQueue: StateFlow<Pair<String?, Int>?>
         get() = mMessageQueue
@@ -70,6 +78,13 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             dataStoreRepository.updateEmergencyButtonActionIdentifier(identifier = service.identifier)
             mMessageQueue.value = Pair(service.name, R.string.message_emergency_button_action_updated)
+        }
+    }
+
+    fun updateDynamicColorsSelection(checked: Boolean){
+        viewModelScope.launch {
+            dataStoreRepository.updateDynamicColorsSelection(checked)
+            mMessageQueue.value = Pair(null, R.string.message_dynamic_colors_selection_updated)
         }
     }
 }

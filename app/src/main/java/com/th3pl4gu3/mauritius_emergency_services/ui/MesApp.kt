@@ -61,6 +61,7 @@ fun MesApp(
     }
 
     MesTheme(
+        isDynamicColorsEnabled = appSettings.dynamicColorsEnabled,
         darkTheme = darkTheme // Load the app theme
     ) {
 
