@@ -25,10 +25,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.th3pl4gu3.mauritius_emergency_services.MesApplication
 import com.th3pl4gu3.mauritius_emergency_services.models.AppTheme
 import com.th3pl4gu3.mauritius_emergency_services.models.MesAppSettings
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesAnimatedVisibilitySlideVerticallyContent
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesDrawer
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesNavRail
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesTopAppBar
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.*
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.launchContactUsIntent
 import com.th3pl4gu3.mauritius_emergency_services.ui.navigation.MesDestinations
 import com.th3pl4gu3.mauritius_emergency_services.ui.navigation.MesNavGraph
@@ -131,17 +128,16 @@ fun MesApp(
          **/
         ModalNavigationDrawer(
             drawerContent = {
-                MesDrawer(
+                MesNavigationDrawer(
                     currentRoute = currentRoute,
                     navigateToHome = navigationActions.navigateToHome,
                     navigateToServices = navigationActions.navigateToServices,
-                    navigateToCycloneReport = navigationActions.navigateToCycloneReport,
                     navigateToAbout = navigationActions.navigateToAbout,
                     navigateToSettings = navigationActions.navigateToSettings,
                     toggleThemeDialog = { coroutineScope.launch { showDialog = !showDialog } },
                     navigateToContactUs = { activity.launchContactUsIntent() },
                     closeDrawer = { coroutineScope.launch { sizeAwareDrawerState.close() } }
-                )
+                ).first()
             },
             drawerState = sizeAwareDrawerState,
             // Only enable opening the drawer via gestures if the screen is not expanded
@@ -183,11 +179,10 @@ fun MesApp(
 
                 Row {
                     if (isExpandedScreen) {
-                        MesNavRail(
+                        MesNavigationDrawer(
                             currentRoute = currentRoute,
                             navigateToHome = navigationActions.navigateToHome,
                             navigateToServices = navigationActions.navigateToServices,
-                            navigateToCycloneReport = navigationActions.navigateToCycloneReport,
                             navigateToAbout = navigationActions.navigateToAbout,
                             navigateToSettings = navigationActions.navigateToSettings,
                             toggleThemeDialog = {
@@ -197,7 +192,7 @@ fun MesApp(
                             },
                             navigateToContactUs = { activity.launchContactUsIntent() },
                             scrollState = scrollState
-                        )
+                        ).second()
                     }
                     MesNavGraph(
                         application = application,

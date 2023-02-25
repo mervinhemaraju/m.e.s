@@ -135,10 +135,10 @@
     <string name="message_cache_reset_successfully">Cache reset successfully</string>
     <string name="message_action_emergency_button_configured">%1$s has been set as the emergency button action</string>
     <string name="message_toll_free">Toll Free</string>
-    <string name="message_item_new">New</string>
+    <string name="message_item_coming_soon">Coming soon</string>
     <string name="message_no_other_contacts_found">No other contacts found</string>
     <string name="message_internet_connection_needed">
-        You need to be connected to the internet for Mes to download the services. Please connect and try again
+        You need to be connected to the internet for Mes to download the data. Please connect and try again
     </string>
     <string name="message_emergency_button_action_updated">Emergency button action updated</string>
     <string name="message_app_language_updated">Language updated</string>

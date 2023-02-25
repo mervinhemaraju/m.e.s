@@ -117,18 +117,18 @@ fun MesNavGraph(
                 navigateToPreCall = navigateToPreCall
             )
         }
-        composable(MesDestinations.SCREEN_CYCLONE_REPORT) {
-            /** Log information **/
-            Log.i(TAG, "Starting composable ${MesDestinations.SCREEN_CYCLONE_REPORT}")
-
-            /** Create the view model **/
-            val cycloneReportViewModel = hiltViewModel<CycloneReportViewModel>()
-
-            /** Launch the screen UI **/
-            ScreenCycloneReport(
-                cycloneReportViewModel = cycloneReportViewModel
-            )
-        }
+//        composable(MesDestinations.SCREEN_CYCLONE_REPORT) {
+//            /** Log information **/
+//            Log.i(TAG, "Starting composable ${MesDestinations.SCREEN_CYCLONE_REPORT}")
+//
+//            /** Create the view model **/
+//            val cycloneReportViewModel = hiltViewModel<CycloneReportViewModel>()
+//
+//            /** Launch the screen UI **/
+//            ScreenCycloneReport(
+//                cycloneReportViewModel = cycloneReportViewModel
+//            )
+//        }
         composable(MesDestinations.SCREEN_PRE_CALL) {
             /** Log information **/
             Log.i(TAG, "Starting composable ${MesDestinations.SCREEN_PRE_CALL}")
