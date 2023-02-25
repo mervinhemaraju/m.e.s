@@ -28,8 +28,6 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.IsConnectedToNet
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-// FIXME(Fix MesEmergencyItem: height changes when the title is long)
-// FIXME(Fix MesServiceItem: Long titles are overlapping with the drop down button
 // FIXME(Fix Landscape layout for Home: Emergency button disappears on landscape layout)
 // FIXME(Fix Landscape layout overall)
 // TODO(Improve search screen for services)

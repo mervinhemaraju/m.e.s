@@ -10,6 +10,7 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -21,10 +22,9 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.th3pl4gu3.mauritius_emergency_services.BuildConfig
 import com.th3pl4gu3.mauritius_emergency_services.R
+import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.models.items.AboutInfoDrawable
 import com.th3pl4gu3.mauritius_emergency_services.models.items.AboutInfoVector
-import com.th3pl4gu3.mauritius_emergency_services.models.Service
-import com.th3pl4gu3.mauritius_emergency_services.models.items.SettingsItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.capitalize
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 
@@ -39,7 +39,7 @@ fun MesNavigationItem(
     badge: @Composable () -> Unit = {},
     isRail: Boolean = false
 ) {
-    if(isRail){
+    if (isRail) {
         NavigationRailItem(
             selected = selected,
             onClick = onClick,
@@ -54,7 +54,7 @@ fun MesNavigationItem(
                 unselectedIconColor = MaterialTheme.colorScheme.onBackground
             )
         )
-    }else {
+    } else {
         NavigationDrawerItem(
             label = { Text(text = label) },
             icon = icon,
@@ -82,7 +82,6 @@ fun MesEmergencyItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         shape = MaterialTheme.shapes.medium,
@@ -94,45 +93,43 @@ fun MesEmergencyItem(
             .padding(8.dp)
     ) {
 
-        ConstraintLayout(
-            modifier = modifier.width(240.dp)
+        Column(
+            modifier = modifier
+                .width(240.dp)
+                .height(180.dp)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            val (
-                textTitle,
-                emergencyIcon
-            ) = createRefs()
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
+                Text(
+                    text = service.name.capitalize(),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 2,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+            }
 
-
-            Text(
-                text = service.name.capitalize(),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = modifier
-                    .constrainAs(textTitle) {
-                        with(16.dp) {
-                            top.linkTo(parent.top, this)
-                            start.linkTo(parent.start, this)
-                            end.linkTo(parent.end, this)
-                            bottom.linkTo(emergencyIcon.top, this)
-                        }
-                    },
-            )
-
-            MesAsyncRoundedImage(
-                service = service,
-                modifier = modifier
-                    .padding(8.dp)
-                    .constrainAs(emergencyIcon) {
-                        with(16.dp) {
-                            bottom.linkTo(parent.bottom, this)
-                            start.linkTo(parent.start, this)
-                            end.linkTo(parent.end, this)
-                        }
-                    },
-            )
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
+                MesAsyncRoundedImage(
+                    service = service
+                )
+            }
         }
+
     }
 
 }

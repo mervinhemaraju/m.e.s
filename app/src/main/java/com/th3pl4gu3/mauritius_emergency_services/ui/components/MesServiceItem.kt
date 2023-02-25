@@ -172,9 +172,9 @@ fun MesServiceItemLayout(
                         bottom.linkTo(textSubtitle.top, 4.dp)
                         linkTo(
                             start = iconEmergency.end,
-                            end = parent.end,
+                            end = if(actionVisible) iconDropDown.start else parent.end,
                             startMargin = 8.dp,
-                            endMargin = 16.dp,
+                            endMargin = 8.dp,
                             bias = 0f
                         )
                         width = Dimension.fillToConstraints
@@ -192,9 +192,9 @@ fun MesServiceItemLayout(
                         bottom.linkTo(iconEmergency.bottom)
                         linkTo(
                             start = iconEmergency.end,
-                            end = parent.end,
-                            startMargin = 12.dp,
-                            endMargin = 16.dp,
+                            end = if(actionVisible) iconDropDown.start else parent.end,
+                            startMargin = 8.dp,
+                            endMargin = 8.dp,
                             bias = 0f
                         )
                     }
@@ -331,7 +331,7 @@ fun MesServiceItemExtras(
 fun MesServiceItemPreview() {
     val mockDataService = Service(
         identifier = "security-police-direct-1",
-        name = "Police Direct Line 1",
+        name = "This is a very super duper long long title",
         type = "E",
         icon = "https://img.icons8.com/fluent/100/000000/policeman-male.png",
         main_contact = 999,
