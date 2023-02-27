@@ -212,7 +212,7 @@ fun SliderPageBody(
     Text(
         text = title,
         style = MaterialTheme.typography.headlineSmall,
-        color = MaterialTheme.colorScheme.surfaceVariant,
+        color = MaterialTheme.colorScheme.primary,
         fontWeight = FontWeight.Bold,
         textAlign = TextAlign.Center,
         modifier = modifier

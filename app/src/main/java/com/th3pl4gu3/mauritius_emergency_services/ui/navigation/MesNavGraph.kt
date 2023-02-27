@@ -6,12 +6,10 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -23,8 +21,6 @@ import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.HasNecessaryPermissions
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.about.ScreenAbout
-import com.th3pl4gu3.mauritius_emergency_services.ui.screens.cyclone_report.CycloneReportViewModel
-import com.th3pl4gu3.mauritius_emergency_services.ui.screens.cyclone_report.ScreenCycloneReport
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.home.HomeViewModel
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.home.ScreenHome
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.precall.PreCallViewModel
@@ -47,7 +43,6 @@ private const val TAG = "MES_NAV_GRAPH"
 @ExperimentalAnimationApi
 fun MesNavGraph(
     application: MesApplication,
-    searchBarValue: String,
     snackBarHostState: SnackbarHostState,
     isExpandedScreen: Boolean,
     modifier: Modifier = Modifier,
@@ -62,17 +57,18 @@ fun MesNavGraph(
     Log.i(TAG, "Starting Navigation Host")
 
     // Define a navigate to pre call dependency function
-    val navigateToPreCall: (service: Service, chosenNumber: String) -> Unit = { service, chosenNumber ->
-        if(application.applicationContext.HasNecessaryPermissions){
-            navigationActions.navigateToPreCall(service, chosenNumber)
-        }else{
-            coroutineScope.launch {
-                snackBarHostState.showSnackbar(
-                    application.resources.getString(R.string.message_permissions_enable_phone_call)
-                )
+    val navigateToPreCall: (service: Service, chosenNumber: String) -> Unit =
+        { service, chosenNumber ->
+            if (application.applicationContext.HasNecessaryPermissions) {
+                navigationActions.navigateToPreCall(service, chosenNumber)
+            } else {
+                coroutineScope.launch {
+                    snackBarHostState.showSnackbar(
+                        application.resources.getString(R.string.message_permissions_enable_phone_call)
+                    )
+                }
             }
         }
-    }
 
     NavHost(
         navController = navController,
@@ -113,7 +109,6 @@ fun MesNavGraph(
                 servicesViewModel = servicesViewModel,
                 retryAction = servicesViewModel::loadOnlineServices,
                 listState = listState,
-                searchBarValue = searchBarValue,
                 navigateToPreCall = navigateToPreCall
             )
         }

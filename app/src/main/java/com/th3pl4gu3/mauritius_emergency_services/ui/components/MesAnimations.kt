@@ -1,6 +1,7 @@
 package com.th3pl4gu3.mauritius_emergency_services.ui.components
 
 import androidx.compose.animation.*
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -37,29 +38,7 @@ fun MesAnimatedVisibilityExpandedHorizontallyContent(
 }
 
 @Composable
-fun MesAnimatedVisibilitySlideHorizontallyContent(
-    visibility: Boolean,
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
-) {
-    val duration = 500
-    AnimatedVisibility(
-        visible = visibility,
-        enter = slideInHorizontally(
-            animationSpec = tween(durationMillis = duration),
-            initialOffsetX = { it / 2 }
-        ),
-        exit = slideOutHorizontally(
-            animationSpec = tween(durationMillis = duration),
-            targetOffsetX = { it / 2}
-        ),
-        modifier = modifier
-    ) {
-        content()
-    }
-}
-@Composable
-fun MesAnimatedVisibilitySlideVerticallyContent(
+fun MesAnimatedVisibilityExpandVerticallyContent(
     visibility: Boolean,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
@@ -68,6 +47,30 @@ fun MesAnimatedVisibilitySlideVerticallyContent(
         visible = visibility,
         enter = expandVertically(),
         exit = shrinkVertically(),
+        modifier = modifier
+    ) {
+        content()
+    }
+}
+
+
+@Composable
+fun MesAnimatedVisibilitySlideVerticallyContent(
+    visibility: Boolean,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
+    val duration = 500
+    AnimatedVisibility(
+        visible = visibility,
+        enter = slideInVertically(
+            animationSpec = tween(durationMillis = duration),
+            initialOffsetY = { it / 2 }
+        ),
+        exit = slideOutVertically(
+            animationSpec = tween(durationMillis = duration),
+            targetOffsetY = { it/2 }
+        ),
         modifier = modifier
     ) {
         content()

@@ -1,8 +1,10 @@
 package com.th3pl4gu3.mauritius_emergency_services.ui.extensions
 
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
 
 val Context.IsConnectedToNetwork: Boolean
     get() {
@@ -20,3 +22,14 @@ val Context.IsConnectedToNetwork: Boolean
             else -> false
         }
     }
+
+fun Context.launchEmailIntent(recipient: String) {
+    val intent = Intent(Intent.ACTION_SENDTO).apply {
+        data = Uri.parse("mailto:")
+        putExtra(
+            Intent.EXTRA_EMAIL,
+            arrayOf(recipient)
+        )
+    }
+    startActivity(intent)
+}

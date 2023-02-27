@@ -92,10 +92,9 @@ fun MesApp(
         val coroutineScope = rememberCoroutineScope()
         val topAppBarState = rememberTopAppBarState()
         val sizeAwareDrawerState = rememberSizeAwareDrawerState(isExpandedScreen)
-        var searchBarValue by remember { mutableStateOf("") }
         var showDialog by remember { mutableStateOf(value = false) }
 
-        val hasScrolled by remember { derivedStateOf { listState.firstVisibleItemScrollOffset > 0 }}
+        val hasScrolled by remember { derivedStateOf { listState.firstVisibleItemScrollOffset > 0 } }
 
         /**
          * Define other variables for future use
@@ -116,13 +115,6 @@ fun MesApp(
             currentRoute == MesDestinations.SCREEN_WELCOME,
             widthSizeClass == WindowWidthSizeClass.Expanded
         ).any { it }
-
-
-        /**
-         * Clear the search bar if we are no more in the services screen
-         **/
-        if (currentRoute != MesDestinations.SCREEN_SERVICES)
-            searchBarValue = ""
 
         /**
          * Composable
@@ -146,12 +138,10 @@ fun MesApp(
         ) {
             Scaffold(
                 topBar = {
-                    MesAnimatedVisibilitySlideVerticallyContent(visibility = topAppBarVisible) {
+                    MesAnimatedVisibilityExpandVerticallyContent(visibility = topAppBarVisible) {
                         MesTopAppBar(
                             openDrawer = { coroutineScope.launch { sizeAwareDrawerState.open() } },
-                            showSearchIcon = currentRoute == MesDestinations.SCREEN_SERVICES,
-                            searchValue = searchBarValue,
-                            searchValueChange = { searchBarValue = it },
+                            showSortAction = currentRoute == MesDestinations.SCREEN_SERVICES,
                             hasScrolled = hasScrolled
                         )
                     }
@@ -197,7 +187,6 @@ fun MesApp(
                     }
                     MesNavGraph(
                         application = application,
-                        searchBarValue = searchBarValue,
                         snackBarHostState = snackBarHostState,
                         isExpandedScreen = isExpandedScreen,
                         modifier = contentModifier,
