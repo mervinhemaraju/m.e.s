@@ -107,7 +107,7 @@ fun MesNavGraph(
             /** Launch the screen UI **/
             ScreenServices(
                 servicesViewModel = servicesViewModel,
-                retryAction = servicesViewModel::loadOnlineServices,
+                retryAction = servicesViewModel::reload,
                 listState = listState,
                 navigateToPreCall = navigateToPreCall
             )

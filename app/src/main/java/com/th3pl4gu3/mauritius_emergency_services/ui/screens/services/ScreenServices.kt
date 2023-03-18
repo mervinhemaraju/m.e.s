@@ -9,35 +9,24 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowDropUp
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.*
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.launchEmailIntent
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 private const val TAG: String = "SCREEN_SERVICES"
@@ -53,11 +42,19 @@ fun ScreenServices(
     modifier: Modifier = Modifier
 ) {
 
+    /** Define a remember variable for search queries **/
+    var searchQuery by remember { mutableStateOf("") }
+
     /** Get the UI State from the view model **/
     val servicesUiState by servicesViewModel.servicesUiState.collectAsState()
 
     /** Define a modifier with the screen background color **/
     val servicesModifier = modifier.background(MaterialTheme.colorScheme.background)
+
+    /** Search for the services **/
+    servicesViewModel.search(searchQuery)
+
+    Log.i(TAG, "Search query is: $searchQuery")
 
     /** Launch UI State decisions **/
     ServicesUiStateDecisions(
@@ -65,7 +62,12 @@ fun ScreenServices(
         retryAction = retryAction,
         navigateToPreCall = navigateToPreCall,
         listState = listState,
-        modifier = servicesModifier
+        modifier = servicesModifier,
+        searchQuery = searchQuery,
+        searchValueChange = {
+            Log.i(TAG, "Search query changed to: $it")
+            searchQuery = it
+        }
     )
 }
 
@@ -77,6 +79,8 @@ fun ScreenServices(
 @ExperimentalMaterial3Api
 fun ServicesUiStateDecisions(
     servicesUiState: ServicesUiState,
+    searchValueChange: (String) -> Unit,
+    searchQuery: String,
     retryAction: () -> Unit,
     navigateToPreCall: (service: Service, chosenNumber: String) -> Unit,
     listState: LazyListState,
@@ -92,6 +96,8 @@ fun ServicesUiStateDecisions(
             navigateToPreCall = navigateToPreCall,
             listState = listState,
             modifier = modifier,
+            searchQuery = searchQuery,
+            searchValueChange = searchValueChange
         )
         is ServicesUiState.Error -> MesScreenError(
             retryAction = retryAction,
@@ -117,16 +123,14 @@ fun ServicesUiStateDecisions(
 @ExperimentalMaterial3Api
 fun ServicesList(
     services: List<Service>,
+    searchValueChange: (String) -> Unit,
+    searchQuery: String,
     navigateToPreCall: (service: Service, chosenNumber: String) -> Unit,
     listState: LazyListState,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    var openBottomSheet by rememberSaveable { mutableStateOf(false) }
-    val bottomSheetState = rememberSheetState(skipHalfExpanded = true, confirmValueChange = {
-        false
-    })
 
     val showScrollToTopButton by remember {
         derivedStateOf {
@@ -190,7 +194,6 @@ fun ServicesList(
 
             FloatingActionButton(
                 onClick = {
-                    openBottomSheet = !openBottomSheet
                 }, containerColor = MaterialTheme.colorScheme.primary
             ) {
                 Icon(
@@ -223,179 +226,6 @@ fun ServicesList(
 //        }
 
     }
-
-    if (openBottomSheet) {
-        SearchBottomSheet(
-            sheetState = bottomSheetState,
-            dismissAction = { openBottomSheet = false },
-            scope = coroutineScope
-        )
-    }
-}
-
-@Composable
-@ExperimentalMaterial3Api
-fun SearchBottomSheet(
-    sheetState: SheetState,
-    dismissAction: () -> Unit,
-    scope: CoroutineScope = rememberCoroutineScope()
-) {
-    val searchQuery by remember { mutableStateOf("") }
-    val systemUiController = rememberSystemUiController()
-    val onExitStatusBarColor = MaterialTheme.colorScheme.background
-    val onEnterStatusBarColor = MaterialTheme.colorScheme.primary
-
-    val dismissAction: () -> Unit = {
-        scope.launch {
-            Log.i(TAG, "Hiding sheet")
-            systemUiController.setStatusBarColor(
-                color = onExitStatusBarColor
-            )
-            sheetState.hide()
-        }.invokeOnCompletion {
-            if (!sheetState.isVisible) {
-                Log.i(TAG, "Dismissing")
-                dismissAction()
-            }
-        }
-        Log.i(TAG, "Dismiss requested")
-    }
-
-    // Update the system bar colors
-    systemUiController.setStatusBarColor(
-        color = onEnterStatusBarColor
-    )
-
-    ModalBottomSheet(
-        onDismissRequest = dismissAction,
-        sheetState = sheetState,
-        shape = RoundedCornerShape(0.dp),
-        containerColor = MaterialTheme.colorScheme.background,
-        dragHandle = {}
-    ) {
-        SearchSheetLayout(
-            closeAction = dismissAction,
-            accent = onEnterStatusBarColor,
-            searchQuery = searchQuery,
-            searchValueChange = {}
-        )
-    }
-
-}
-
-@Composable
-@ExperimentalMaterial3Api
-fun SearchSheetLayout(
-    searchQuery: String,
-    searchValueChange: (String) -> Unit,
-    closeAction: () -> Unit,
-    accent: Color,
-    focusManager: FocusManager = LocalFocusManager.current
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-    ) {
-
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    accent
-                )
-                .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            MesIcon(
-                imageVector = Icons.Outlined.Search,
-                tint = MaterialTheme.colorScheme.background
-            )
-
-            Spacer(modifier = Modifier.width(16.dp))
-
-            Text(
-                "Search your services",
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.background
-            )
-            
-            Spacer(modifier = Modifier.weight(1f))
-
-            IconButton(
-                onClick = closeAction,
-                modifier = Modifier
-                    .background(
-                        MaterialTheme.colorScheme.background,
-                        shape = MaterialTheme.shapes.large
-                    )
-            ) {
-                MesIcon(imageVector = Icons.Outlined.Close)
-            }
-        }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    accent,
-                    RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp)
-                )
-                .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            OutlinedTextField(
-                value = searchQuery,
-                onValueChange = searchValueChange,
-                singleLine = true,
-                placeholder = {
-                    Text(text = stringResource(id = R.string.action_search))
-                },
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    textColor = MaterialTheme.colorScheme.primary,
-                    placeholderColor = MaterialTheme.colorScheme.secondary
-                ),
-                textStyle = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier
-                    .fillMaxWidth(),
-                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                shape = MaterialTheme.shapes.large
-            )
-        }
-
-        Text("Hello")
-
-        Text("Hello")
-
-        Text("Hello")
-
-        Text("Hello")
-
-        Text("Hello")
-
-        Text("Hello")
-    }
-}
-
-@Preview("Search Bottom Sheet Light Preview", showBackground = true)
-@Preview("Search Bottom Sheet  Dark Preview", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
-@Composable
-@ExperimentalMaterial3Api
-fun SearchBottomSheetPreview() {
-    MesTheme {
-        SearchSheetLayout(
-            closeAction = {},
-            accent = MaterialTheme.colorScheme.primary,
-            searchQuery = "",
-            searchValueChange = {}
-        )
-    }
 }
 
 @Preview("Main Screen Light Preview", showBackground = true)
@@ -426,7 +256,8 @@ fun AllServicesScreenPreview() {
         ServicesUiStateDecisions(
             servicesUiState = ServicesUiState.Success(services = mockData),
             retryAction = {},
-            
+            searchQuery = "",
+            searchValueChange = {},
             navigateToPreCall = { _, _ -> },
             modifier = modifier,
             listState = rememberLazyListState()
@@ -446,6 +277,8 @@ fun LoadingScreenPreview() {
         ServicesUiStateDecisions(
             servicesUiState = ServicesUiState.Loading,
             retryAction = {},
+            searchQuery = "",
+            searchValueChange = {},
             navigateToPreCall = { _, _ -> },
             listState = rememberLazyListState(),
             modifier = modifier
@@ -465,6 +298,8 @@ fun ErrorScreenPreview() {
         ServicesUiStateDecisions(
             servicesUiState = ServicesUiState.Error,
             retryAction = {},
+            searchQuery = "",
+            searchValueChange = {},
             navigateToPreCall = { _, _ -> },
             listState = rememberLazyListState(),
             modifier = modifier
@@ -486,6 +321,8 @@ fun EmptyServicesScreenPreview() {
         ServicesUiStateDecisions(
             servicesUiState = ServicesUiState.NoContent,
             retryAction = {},
+            searchQuery = "",
+            searchValueChange = {},
             navigateToPreCall = { _, _ -> },
             listState = rememberLazyListState(),
             modifier = modifier

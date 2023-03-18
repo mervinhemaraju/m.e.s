@@ -3,16 +3,14 @@ package com.th3pl4gu3.mauritius_emergency_services.ui.screens.services
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.th3pl4gu3.mauritius_emergency_services.data.local.LocalServiceRepository
+import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.ui.wrappers.NetworkRequests
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.GetAppLocale
 import com.th3pl4gu3.mauritius_emergency_services.utils.NetworkRequestException
 import com.th3pl4gu3.mauritius_emergency_services.utils.TIMEOUT_MILLIS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -25,75 +23,72 @@ class ServicesViewModel @Inject constructor(
 ) : ViewModel() {
 
     /**
-     * Create a private ServicesUiState to hold the MutableStateFlow of the items
+     * Create a private ServicesUiState to hold the MutableStateFlow of the default items
      * It starts as Loading
      **/
     private val mServicesUiState: MutableStateFlow<ServicesUiState> =
         MutableStateFlow(ServicesUiState.Loading)
 
     /**
-     * Create an accessible ServicesUiState for the Composable to collect
+     * Create accessible ServicesUiState for the Composable to collect
      **/
-    val servicesUiState: StateFlow<ServicesUiState> = mServicesUiState
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = ServicesUiState.Loading
-        )
+    val servicesUiState: StateFlow<ServicesUiState> = mServicesUiState.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+        initialValue = ServicesUiState.Loading
+    )
 
     /**
      * On Init, load the offline services
      **/
-    init {
-        loadOfflineServices()
-    }
 
     /**
      * Public Functions
      **/
-    fun loadOnlineServices() =
+    fun reload() =
         viewModelScope.launch(Dispatchers.IO) {
             mServicesUiState.value = try {
-                val services = onlineServiceRequests.getMesServices(language = GetAppLocale).services
+
+                // Get services online
+                val services = loadOnlineServices()
 
                 // Force refresh the services
                 offlineServiceRepository.forceRefresh(
                     services = services
                 )
-                ServicesUiState.Success(services.sortedBy { it.name })
+
+                // Return the UI State
+                ServicesUiState.Success(services)
             } catch (e: NetworkRequestException) {
                 ServicesUiState.NoNetwork
-            }
-            catch (e: IOException) {
+            } catch (e: IOException) {
                 ServicesUiState.Error
             } catch (e: HttpException) {
                 ServicesUiState.Error
             }
         }
 
-    fun search(query: String) =
+    fun search(query: String = "") =
         viewModelScope.launch {
-            offlineServiceRepository.search(query).collect { services ->
-                mServicesUiState.value = if(services.isEmpty()){
-                    ServicesUiState.NoContent
-                }else{
-                    ServicesUiState.Success(services.sortedBy { it.name })
-                }
-            }
+            loadOfflineServices(query)
         }
 
 
     /**
      * Private Functions
      **/
-    private fun loadOfflineServices() = viewModelScope.launch {
-        offlineServiceRepository.getAllServices().collect {
-            mServicesUiState.value = if (it.isNotEmpty()) {
-                ServicesUiState.Success(it)
-            } else {
-                ServicesUiState.Error
-            }
-        }
-    }
+    private suspend fun loadOnlineServices() =
+        onlineServiceRequests.getMesServices(language = GetAppLocale).services
 
+    private suspend fun loadOfflineServices(query: String) =
+        offlineServiceRepository.search(query).collect { services ->
+            mServicesUiState.value = servicesDisplayDecision(services)
+        }
+
+    private fun servicesDisplayDecision(services: List<Service> = listOf()) =
+        if (services.isNotEmpty()) {
+            ServicesUiState.Success(services)
+        } else {
+            ServicesUiState.NoContent
+        }
 }

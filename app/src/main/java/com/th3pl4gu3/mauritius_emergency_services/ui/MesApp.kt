@@ -4,28 +4,36 @@ import android.app.Activity
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.semantics.isContainer
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.th3pl4gu3.mauritius_emergency_services.MesApplication
+import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.models.AppTheme
 import com.th3pl4gu3.mauritius_emergency_services.models.MesAppSettings
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.*
+import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.capitalize
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.launchContactUsIntent
 import com.th3pl4gu3.mauritius_emergency_services.ui.navigation.MesDestinations
 import com.th3pl4gu3.mauritius_emergency_services.ui.navigation.MesNavGraph
@@ -94,7 +102,7 @@ fun MesApp(
         val sizeAwareDrawerState = rememberSizeAwareDrawerState(isExpandedScreen)
         var showDialog by remember { mutableStateOf(value = false) }
 
-        val hasScrolled by remember { derivedStateOf { listState.firstVisibleItemScrollOffset > 0 } }
+//        val hasScrolled by remember { derivedStateOf { listState.firstVisibleItemScrollOffset > 0 } }
 
         /**
          * Define other variables for future use
@@ -110,11 +118,27 @@ fun MesApp(
             widthSizeClass == WindowWidthSizeClass.Expanded
         ).any { it }
 
-        val topAppBarVisible: Boolean = !listOf(
-            currentRoute == MesDestinations.SCREEN_PRE_CALL,
-            currentRoute == MesDestinations.SCREEN_WELCOME,
-            widthSizeClass == WindowWidthSizeClass.Expanded
+//        val topAppBarVisible: Boolean = !listOf(
+//            currentRoute == MesDestinations.SCREEN_PRE_CALL,
+//            currentRoute == MesDestinations.SCREEN_WELCOME,
+//            widthSizeClass == WindowWidthSizeClass.Expanded
+//        ).any { it }
+
+
+        val searchTopBarVisible: Boolean = listOf(
+            currentRoute == MesDestinations.SCREEN_HOME,
+            currentRoute == MesDestinations.SCREEN_SERVICES
         ).any { it }
+
+
+        var text by rememberSaveable { mutableStateOf("") }
+        var active by rememberSaveable { mutableStateOf(false) }
+        val focusManager = LocalFocusManager.current
+
+        fun closeSearchBar() {
+            focusManager.clearFocus()
+            active = false
+        }
 
         /**
          * Composable
@@ -138,13 +162,33 @@ fun MesApp(
         ) {
             Scaffold(
                 topBar = {
-                    MesAnimatedVisibilityExpandVerticallyContent(visibility = topAppBarVisible) {
-                        MesTopAppBar(
+//                    MesAnimatedVisibilityExpandVerticallyContent(visibility = topAppBarVisible) {
+//                        MesTopAppBar(
+//                            openDrawer = { coroutineScope.launch { sizeAwareDrawerState.open() } },
+//                            showSortAction = currentRoute == MesDestinations.SCREEN_SERVICES,
+//                            hasScrolled = hasScrolled
+//                        )
+//                    }
+
+                    if (searchTopBarVisible) {
+                        MesSearchTopBar(
+                            text = text,
+                            active = active,
+                            closeSearchBar = { closeSearchBar() },
                             openDrawer = { coroutineScope.launch { sizeAwareDrawerState.open() } },
-                            showSortAction = currentRoute == MesDestinations.SCREEN_SERVICES,
-                            hasScrolled = hasScrolled
+                            onSearchActiveChange = {
+                                active = it
+                                if (!active) focusManager.clearFocus()
+                            },
+                            onSearchQueryChange = { text = it }
+                        )
+                    } else {
+                        MesBackTopBar(
+                            screenTitle = currentRoute.capitalize(),
+                            backButtonAction = { navController.navigateUp() }
                         )
                     }
+
                 },
                 snackbarHost = {
                     SnackbarHost(snackBarHostState) { data ->
@@ -239,7 +283,6 @@ private fun rememberSizeAwareDrawerState(isExpandedScreen: Boolean): DrawerState
          **/
         DrawerState(DrawerValue.Closed)
     }
-
 }
 
 /**

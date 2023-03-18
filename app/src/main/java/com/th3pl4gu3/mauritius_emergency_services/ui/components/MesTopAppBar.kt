@@ -3,10 +3,7 @@ package com.th3pl4gu3.mauritius_emergency_services.ui.components
 import android.content.res.Configuration
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
@@ -39,17 +36,20 @@ internal fun MesTopAppBar(
 //        mutableStateOf(false)
 //    }
 
-    CenterAlignedTopAppBar(colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-        containerColor = MaterialTheme.colorScheme.background,
-        scrolledContainerColor = MaterialTheme.colorScheme.surface
-    ), title = {
-        AppBarTitleContent(
+    CenterAlignedTopAppBar(
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.background,
+            scrolledContainerColor = MaterialTheme.colorScheme.surface
+        ),
+        title = {
+            AppBarTitleContent(
 //                isSearchBarActivate = searchActivated && showSearchIcon,
 //                searchValue = searchValue,
 //                searchValueChange = searchValueChange,
 //                focusManager = LocalFocusManager.current
-        )
-    }, navigationIcon = {
+            )
+        },
+        navigationIcon = {
 //            Crossfade(targetState = searchActivated && showSearchIcon) { isChecked ->
 //                if (!isChecked) {
 //                    IconButton(onClick = openDrawer) {
@@ -75,22 +75,23 @@ internal fun MesTopAppBar(
 //                    modifier = Modifier.size(32.dp)
 //                )
 //            }
-        IconButton(
-            onClick = openDrawer,
-            modifier = Modifier
-                .background(
-                    MaterialTheme.colorScheme.surfaceVariant,
-                    shape = MaterialTheme.shapes.large
+            IconButton(
+                onClick = openDrawer,
+                modifier = Modifier
+                    .background(
+                        MaterialTheme.colorScheme.surfaceVariant,
+                        shape = MaterialTheme.shapes.large
+                    )
+            ) {
+                MesIcon(
+                    painterResource = R.drawable.ic_mes,
+                    contentDescription = R.string.ctnt_desc_drawer_open,
+                    modifier = Modifier.size(32.dp)
                 )
-        ) {
-            MesIcon(
-                painterResource = R.drawable.ic_mes,
-                contentDescription = R.string.ctnt_desc_drawer_open,
-                modifier = Modifier.size(32.dp)
-            )
-        }
-    }, actions = {
-        if (showSortAction) {
+            }
+        },
+        actions = {
+            if (showSortAction) {
 //                Crossfade(targetState = searchActivated) { isChecked ->
 //                    IconButton(onClick = {
 //                        searchActivated = !isChecked
@@ -107,25 +108,27 @@ internal fun MesTopAppBar(
 //                    contentDescription = stringResource(id = R.string.action_sort)
 //                )
 //            }
-            IconButton(
-                onClick = {},
-                modifier = Modifier
-                    .background(
-                        MaterialTheme.colorScheme.surfaceVariant,
-                        shape = MaterialTheme.shapes.large
+                IconButton(
+                    onClick = {},
+                    modifier = Modifier
+                        .background(
+                            MaterialTheme.colorScheme.surfaceVariant,
+                            shape = MaterialTheme.shapes.large
+                        )
+                ) {
+                    MesIcon(
+                        imageVector = Icons.Outlined.Sort,
+                        contentDescription = stringResource(id = R.string.action_sort)
                     )
-            ) {
-                MesIcon(
-                    imageVector = Icons.Outlined.Sort,
-                    contentDescription = stringResource(id = R.string.action_sort)
-                )
+                }
             }
+        },
+        scrollBehavior = scrollBehavior,
+        modifier = if (hasScrolled) {
+            modifier.shadow(AppBarDefaults.TopAppBarElevation)
+        } else {
+            modifier
         }
-    }, scrollBehavior = scrollBehavior, modifier = if (hasScrolled) {
-        modifier.shadow(AppBarDefaults.TopAppBarElevation)
-    } else {
-        modifier
-    }
     )
 }
 
