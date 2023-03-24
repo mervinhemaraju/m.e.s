@@ -37,7 +37,7 @@ fun MesServiceItem(
     service: Service,
     actionVisible: Boolean = true,
     onClick: () -> Unit,
-    extrasClickAction: (String) -> Unit
+    extrasClickAction: (Service, String) -> Unit
 ) {
 
     var expanded by remember {
@@ -104,7 +104,7 @@ fun MesServiceItem(
             actionVisible = false,
             modifier = Modifier
                 .fillMaxWidth(),
-            extrasClickAction = {}
+            extrasClickAction = {_,_ -> }
         )
     }
 }
@@ -115,7 +115,7 @@ fun MesServiceItemLayout(
     service: Service,
     dropDownClick: () -> Unit,
     onClick: () -> Unit,
-    extrasClickAction: (String) -> Unit,
+    extrasClickAction: (Service, String) -> Unit,
     expanded: Boolean,
     actionVisible: Boolean,
     modifier: Modifier
@@ -246,7 +246,7 @@ fun MesServiceItemLayout(
 @ExperimentalMaterial3Api
 fun MesServiceItemExtras(
     service: Service,
-    extrasClickAction: (String) -> Unit,
+    extrasClickAction: (Service, String) -> Unit,
     modifier: Modifier
 ) {
     // Create a list of other contacts
@@ -290,7 +290,7 @@ fun MesServiceItemExtras(
             contacts.forEach {
 
                 TextButton(
-                    onClick = { extrasClickAction(it.second) },
+                    onClick = { extrasClickAction(service, it.second) },
                     colors = ButtonDefaults.buttonColors(
                         contentColor = MaterialTheme.colorScheme.primary
                     ),
@@ -343,14 +343,14 @@ fun MesServiceItemPreview() {
         MesServiceItem(
             service = mockDataService,
             onClick = {},
-            extrasClickAction = {}
+            extrasClickAction = {_,_ ->}
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         MesServiceItemExtras(
             service = mockDataService,
-            extrasClickAction = {},
+            extrasClickAction = {_,_ -> },
             modifier = Modifier
         )
     }

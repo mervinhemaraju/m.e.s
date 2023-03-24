@@ -6,38 +6,36 @@ import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.semantics.isContainer
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
+import androidx.core.text.isDigitsOnly
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.th3pl4gu3.mauritius_emergency_services.MesApplication
-import com.th3pl4gu3.mauritius_emergency_services.R
+import com.th3pl4gu3.mauritius_emergency_services.activity.MainViewModel
 import com.th3pl4gu3.mauritius_emergency_services.models.AppTheme
 import com.th3pl4gu3.mauritius_emergency_services.models.MesAppSettings
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.*
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.capitalize
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.launchContactUsIntent
+import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.launchEmailIntent
 import com.th3pl4gu3.mauritius_emergency_services.ui.navigation.MesDestinations
 import com.th3pl4gu3.mauritius_emergency_services.ui.navigation.MesNavGraph
 import com.th3pl4gu3.mauritius_emergency_services.ui.navigation.MesNavigationActions
+import com.th3pl4gu3.mauritius_emergency_services.ui.navigation.NavigationActionWrapper
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.theme_selector.ScreenThemeSelector
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 import kotlinx.coroutines.launch
@@ -53,7 +51,8 @@ const val TAG = "MES_APP_COMPOSE"
 fun MesApp(
     application: MesApplication,
     appSettings: MesAppSettings,
-    widthSizeClass: WindowWidthSizeClass
+    widthSizeClass: WindowWidthSizeClass,
+    mainViewModel: MainViewModel
 ) {
     /**
      * This is the Main MES app that will
@@ -97,6 +96,7 @@ fun MesApp(
         val scrollState = rememberScrollState()
         val navController = rememberNavController()
         val navigationActions = remember(navController) { MesNavigationActions(navController) }
+        val navigationActionWrapper = NavigationActionWrapper(application, navigationActions)
         val coroutineScope = rememberCoroutineScope()
         val topAppBarState = rememberTopAppBarState()
         val sizeAwareDrawerState = rememberSizeAwareDrawerState(isExpandedScreen)
@@ -118,11 +118,11 @@ fun MesApp(
             widthSizeClass == WindowWidthSizeClass.Expanded
         ).any { it }
 
-//        val topAppBarVisible: Boolean = !listOf(
-//            currentRoute == MesDestinations.SCREEN_PRE_CALL,
-//            currentRoute == MesDestinations.SCREEN_WELCOME,
-//            widthSizeClass == WindowWidthSizeClass.Expanded
-//        ).any { it }
+        val topAppBarVisible: Boolean = !listOf(
+            currentRoute == MesDestinations.SCREEN_PRE_CALL,
+            currentRoute == MesDestinations.SCREEN_WELCOME,
+            widthSizeClass == WindowWidthSizeClass.Expanded
+        ).any { it }
 
 
         val searchTopBarVisible: Boolean = listOf(
@@ -134,6 +134,7 @@ fun MesApp(
         var text by rememberSaveable { mutableStateOf("") }
         var active by rememberSaveable { mutableStateOf(false) }
         val focusManager = LocalFocusManager.current
+        val context = LocalContext.current
 
         fun closeSearchBar() {
             focusManager.clearFocus()
@@ -161,34 +162,56 @@ fun MesApp(
             gesturesEnabled = gesturesEnabled
         ) {
             Scaffold(
-                topBar = {
-//                    MesAnimatedVisibilityExpandVerticallyContent(visibility = topAppBarVisible) {
-//                        MesTopAppBar(
-//                            openDrawer = { coroutineScope.launch { sizeAwareDrawerState.open() } },
-//                            showSortAction = currentRoute == MesDestinations.SCREEN_SERVICES,
-//                            hasScrolled = hasScrolled
-//                        )
-//                    }
-
-                    if (searchTopBarVisible) {
-                        MesSearchTopBar(
-                            text = text,
-                            active = active,
-                            closeSearchBar = { closeSearchBar() },
-                            openDrawer = { coroutineScope.launch { sizeAwareDrawerState.open() } },
-                            onSearchActiveChange = {
-                                active = it
-                                if (!active) focusManager.clearFocus()
-                            },
-                            onSearchQueryChange = { text = it }
-                        )
-                    } else {
-                        MesBackTopBar(
-                            screenTitle = currentRoute.capitalize(),
-                            backButtonAction = { navController.navigateUp() }
-                        )
+                topBar = if (topAppBarVisible) {
+                    {
+                        if (searchTopBarVisible) {
+                            MesSearchTopBar(
+                                query = text,
+                                active = active,
+                                closeSearchBar = { closeSearchBar() },
+                                openDrawer = { coroutineScope.launch { sizeAwareDrawerState.open() } },
+                                onSearchActiveChange = {
+                                    active = it
+                                    if (!active) focusManager.clearFocus()
+                                },
+                                onSearchQueryChange = {
+                                    text = it; mainViewModel.searchOfflineServices(
+                                    it
+                                )
+                                },
+                                services = mainViewModel.services.collectAsState().value,
+                                onServiceClick = {
+                                    coroutineScope.launch {
+                                        navigationActionWrapper.navigateToPreCall(
+                                            it,
+                                            it.main_contact.toString(),
+                                            snackBarHostState
+                                        )
+                                    }
+                                },
+                                onExtrasClick = { service, contact ->
+                                    if (contact.isDigitsOnly()) {
+                                        coroutineScope.launch {
+                                            navigationActionWrapper.navigateToPreCall(
+                                                service,
+                                                contact,
+                                                snackBarHostState
+                                            )
+                                        }
+                                    } else {
+                                        context.launchEmailIntent(recipient = contact)
+                                    }
+                                }
+                            )
+                        } else {
+                            MesBackTopBar(
+                                screenTitle = currentRoute.capitalize(),
+                                backButtonAction = { navController.navigateUp() }
+                            )
+                        }
                     }
-
+                } else {
+                    {}
                 },
                 snackbarHost = {
                     SnackbarHost(snackBarHostState) { data ->
@@ -235,7 +258,7 @@ fun MesApp(
                         isExpandedScreen = isExpandedScreen,
                         modifier = contentModifier,
                         navController = navController,
-                        navigationActions = navigationActions,
+                        navigationActionWrapper = navigationActionWrapper,
                         listState = listState,
                         scrollState = scrollState,
                         startDestination = startDestination,
@@ -301,7 +324,8 @@ fun PreviewTopAppBarMediumSize() {
         MesApp(
             application = MesApplication(),
             widthSizeClass = WindowWidthSizeClass.Medium,
-            appSettings = MesAppSettings()
+            appSettings = MesAppSettings(),
+            mainViewModel = viewModel()
         )
     }
 }
@@ -319,7 +343,8 @@ fun PreviewTopAppBarExpandedSize() {
         MesApp(
             application = MesApplication(),
             widthSizeClass = WindowWidthSizeClass.Expanded,
-            appSettings = MesAppSettings()
+            appSettings = MesAppSettings(),
+            mainViewModel = viewModel()
         )
     }
 }

@@ -243,7 +243,7 @@ fun EmergencyButtonItemDialog(
                             dismissAction()
                         },
                         actionVisible = false,
-                        extrasClickAction = {}
+                        extrasClickAction = {_,_ ->}
                     )
                 }
             }

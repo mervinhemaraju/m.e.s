@@ -47,7 +47,7 @@ fun MesNavGraph(
     isExpandedScreen: Boolean,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    navigationActions: MesNavigationActions,
+    navigationActionWrapper: NavigationActionWrapper,
     startDestination: String,
     listState: LazyListState,
     scrollState: ScrollState,
@@ -59,15 +59,7 @@ fun MesNavGraph(
     // Define a navigate to pre call dependency function
     val navigateToPreCall: (service: Service, chosenNumber: String) -> Unit =
         { service, chosenNumber ->
-            if (application.applicationContext.HasNecessaryPermissions) {
-                navigationActions.navigateToPreCall(service, chosenNumber)
-            } else {
-                coroutineScope.launch {
-                    snackBarHostState.showSnackbar(
-                        application.resources.getString(R.string.message_permissions_enable_phone_call)
-                    )
-                }
-            }
+            coroutineScope.launch { navigationActionWrapper.navigateToPreCall(service, chosenNumber, snackBarHostState) }
         }
 
     NavHost(

@@ -5,23 +5,29 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.isContainer
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.core.text.isDigitsOnly
+import com.th3pl4gu3.mauritius_emergency_services.models.Service
+import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.launchEmailIntent
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlin.reflect.KSuspendFunction3
 
 @Composable
 @ExperimentalMaterial3Api
@@ -55,12 +61,15 @@ fun MesBackTopBar(
 @Composable
 @ExperimentalMaterial3Api
 fun MesSearchTopBar(
-    text: String,
+    query: String,
     active: Boolean,
     closeSearchBar: () -> Unit,
     openDrawer: () -> Unit,
     onSearchActiveChange: (Boolean) -> Unit,
     onSearchQueryChange: (String) -> Unit,
+    services: List<Service>,
+    onServiceClick: (Service) -> Unit,
+    onExtrasClick: (Service, String) -> Unit
 ) {
 
     val searchBarAdditionalModifier: Modifier = if (active) {
@@ -84,7 +93,8 @@ fun MesSearchTopBar(
         SearchBar(
             modifier = searchBarAdditionalModifier
                 .align(Alignment.TopCenter),
-            query = text,
+            tonalElevation = if(active) 0.dp else 6.dp,
+            query = query,
             onQueryChange = onSearchQueryChange,
             onSearch = { closeSearchBar() },
             active = active,
@@ -115,24 +125,27 @@ fun MesSearchTopBar(
             },
         ) {
             LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
-                items(4) { idx ->
-                    val resultText = "Suggestion $idx"
-                    ListItem(
-                        headlineContent = { Text(resultText) },
-                        supportingContent = { Text("Additional info") },
-                        leadingContent = {
-                            Icon(
-                                Icons.Filled.Star,
-                                contentDescription = null
-                            )
-                        },
-                        modifier = Modifier.clickable {
-                            closeSearchBar()
-                        }
+                item {
+                    Text(
+                        text = "Search for $query in services",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.padding(16.dp),
+                    )
+                }
+                items(
+                    services,
+                    key = { it.identifier }
+                ) { service ->
+                    MesServiceItem(
+                        service = service,
+                        onClick = { onServiceClick(service) },
+                        actionVisible = true,
+                        extrasClickAction = onExtrasClick
                     )
                 }
             }
@@ -167,12 +180,15 @@ fun MesBackTopBarPreview() {
 fun MesSearchTopBarPreview() {
     MesTheme {
         MesSearchTopBar(
-            text = "This is a query",
+            query = "This is a query",
             active = false,
             closeSearchBar = {},
             openDrawer = {},
             onSearchActiveChange = {},
-            onSearchQueryChange = {}
+            onSearchQueryChange = {},
+            services = listOf(),
+            onServiceClick = {},
+            onExtrasClick = {_,_ ->}
         )
     }
 }
@@ -189,12 +205,15 @@ fun MesSearchTopBarPreview() {
 fun MesSearchBarActivePreview() {
     MesTheme {
         MesSearchTopBar(
-            text = "This is a query",
+            query = "This is a query",
             active = true,
             closeSearchBar = {},
             openDrawer = {},
             onSearchActiveChange = {},
-            onSearchQueryChange = {}
+            onSearchQueryChange = {},
+            services = listOf(),
+            onServiceClick = {},
+            onExtrasClick = {_,_ ->}
         )
     }
 }

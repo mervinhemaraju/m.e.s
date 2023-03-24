@@ -16,6 +16,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
@@ -31,7 +32,7 @@ import kotlinx.coroutines.launch
 // FIXME(Fix Landscape layout for Home: Emergency button disappears on landscape layout)
 // FIXME(Fix Landscape layout overall)
 // TODO(Improve search screen for services)
-// TODO(Move so layout to ListItems)
+// TODO(Move some layout to ListItems)
 // TODO(Add a most used services list)
 // FEAT(Add towing services)
 // FEAT(Add personal doctors services)
@@ -46,8 +47,8 @@ class MesActivity : AppCompatActivity() {
         private const val TAG = "MAIN_ACTIVITY_LOGS"
     }
 
-    /** DI to get the [SplashViewModel] **/
-    private val splashViewModel: SplashViewModel by viewModels()
+    /** DI to get the [MainViewModel] **/
+    private val mainViewModel: MainViewModel by viewModels()
 
     /**
      * Activity result for
@@ -106,7 +107,7 @@ class MesActivity : AppCompatActivity() {
          * waits for proper content to load
          **/
         installSplashScreen().setKeepOnScreenCondition {
-            !splashViewModel.isLoading.value
+            !mainViewModel.isLoading.value
         }
 
         /**
@@ -123,11 +124,12 @@ class MesActivity : AppCompatActivity() {
         setContent {
 
             /** Checks if content is not null before loading **/
-            if (splashViewModel.appSettings.value != null) {
+            if (mainViewModel.appSettings.value != null) {
                 MesApp(
                     application = application,
                     widthSizeClass = calculateWindowSizeClass(this).widthSizeClass,
-                    appSettings = splashViewModel.appSettings.value!!
+                    appSettings = mainViewModel.appSettings.value!!,
+                    mainViewModel = mainViewModel
                 )
             }
         }

@@ -153,9 +153,9 @@ fun ServicesList(
                         navigateToPreCall(service, service.main_contact.toString())
                     },
                     modifier = Modifier.animateItemPlacement(),
-                    extrasClickAction = { contact: String ->
+                    extrasClickAction = { this_service, contact: String ->
                         if (contact.isDigitsOnly()) {
-                            navigateToPreCall(service, contact)
+                            navigateToPreCall(this_service, contact)
                         } else {
                             context.launchEmailIntent(recipient = contact)
                         }
