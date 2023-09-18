@@ -42,19 +42,11 @@ fun ScreenServices(
     modifier: Modifier = Modifier
 ) {
 
-    /** Define a remember variable for search queries **/
-    var searchQuery by remember { mutableStateOf("") }
-
     /** Get the UI State from the view model **/
     val servicesUiState by servicesViewModel.servicesUiState.collectAsState()
 
     /** Define a modifier with the screen background color **/
     val servicesModifier = modifier.background(MaterialTheme.colorScheme.background)
-
-    /** Search for the services **/
-    servicesViewModel.search(searchQuery)
-
-    Log.i(TAG, "Search query is: $searchQuery")
 
     /** Launch UI State decisions **/
     ServicesUiStateDecisions(
@@ -63,11 +55,6 @@ fun ScreenServices(
         navigateToPreCall = navigateToPreCall,
         listState = listState,
         modifier = servicesModifier,
-        searchQuery = searchQuery,
-        searchValueChange = {
-            Log.i(TAG, "Search query changed to: $it")
-            searchQuery = it
-        }
     )
 }
 
@@ -79,8 +66,6 @@ fun ScreenServices(
 @ExperimentalMaterial3Api
 fun ServicesUiStateDecisions(
     servicesUiState: ServicesUiState,
-    searchValueChange: (String) -> Unit,
-    searchQuery: String,
     retryAction: () -> Unit,
     navigateToPreCall: (service: Service, chosenNumber: String) -> Unit,
     listState: LazyListState,
@@ -96,8 +81,6 @@ fun ServicesUiStateDecisions(
             navigateToPreCall = navigateToPreCall,
             listState = listState,
             modifier = modifier,
-            searchQuery = searchQuery,
-            searchValueChange = searchValueChange
         )
         is ServicesUiState.Error -> MesScreenError(
             retryAction = retryAction,
@@ -123,8 +106,6 @@ fun ServicesUiStateDecisions(
 @ExperimentalMaterial3Api
 fun ServicesList(
     services: List<Service>,
-    searchValueChange: (String) -> Unit,
-    searchQuery: String,
     navigateToPreCall: (service: Service, chosenNumber: String) -> Unit,
     listState: LazyListState,
     modifier: Modifier = Modifier
@@ -172,26 +153,6 @@ fun ServicesList(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-//            MesAnimatedVisibilitySlideVerticallyContent(
-//                visibility = showScrollToTopButton
-//            ) {
-//                SmallFloatingActionButton(
-//                    onClick = {
-//                        coroutineScope.launch {
-//                            listState.animateScrollToItem(0)
-//                        }
-//                    }, containerColor = MaterialTheme.colorScheme.primary
-//                ) {
-//                    Icon(
-//                        imageVector = Icons.Outlined.ArrowDropUp,
-//                        contentDescription = stringResource(id = R.string.action_scroll_up),
-//                        tint = MaterialTheme.colorScheme.onPrimary
-//                    )
-//                }
-//            }
-//
-//            Spacer(modifier = Modifier.height(12.dp))
-
             MesAnimatedVisibilitySlideVerticallyContent(
                 visibility = showScrollToTopButton
             ) {
@@ -211,28 +172,6 @@ fun ServicesList(
                 }
             }
         }
-//        MesAnimatedVisibilitySlideHorizontallyContent(
-//            visibility = showScrollToTopButton,
-//            modifier = Modifier
-//                .align(Alignment.BottomEnd)
-//                .padding(16.dp),
-//        ) {
-//            FloatingActionButton(
-//                onClick = {
-//                    coroutineScope.launch {
-//                        listState.animateScrollToItem(0)
-//                    }
-//                },
-//                containerColor = MaterialTheme.colorScheme.primary
-//            ) {
-//                Icon(
-//                    imageVector = Icons.Outlined.ArrowDropUp,
-//                    contentDescription = stringResource(id = R.string.action_scroll_up),
-//                    tint = MaterialTheme.colorScheme.onPrimary
-//                )
-//            }
-//        }
-
     }
 }
 
@@ -264,8 +203,6 @@ fun AllServicesScreenPreview() {
         ServicesUiStateDecisions(
             servicesUiState = ServicesUiState.Success(services = mockData),
             retryAction = {},
-            searchQuery = "",
-            searchValueChange = {},
             navigateToPreCall = { _, _ -> },
             modifier = modifier,
             listState = rememberLazyListState()
@@ -285,8 +222,6 @@ fun LoadingScreenPreview() {
         ServicesUiStateDecisions(
             servicesUiState = ServicesUiState.Loading,
             retryAction = {},
-            searchQuery = "",
-            searchValueChange = {},
             navigateToPreCall = { _, _ -> },
             listState = rememberLazyListState(),
             modifier = modifier
@@ -306,8 +241,6 @@ fun ErrorScreenPreview() {
         ServicesUiStateDecisions(
             servicesUiState = ServicesUiState.Error,
             retryAction = {},
-            searchQuery = "",
-            searchValueChange = {},
             navigateToPreCall = { _, _ -> },
             listState = rememberLazyListState(),
             modifier = modifier
@@ -329,8 +262,6 @@ fun EmptyServicesScreenPreview() {
         ServicesUiStateDecisions(
             servicesUiState = ServicesUiState.NoContent,
             retryAction = {},
-            searchQuery = "",
-            searchValueChange = {},
             navigateToPreCall = { _, _ -> },
             listState = rememberLazyListState(),
             modifier = modifier

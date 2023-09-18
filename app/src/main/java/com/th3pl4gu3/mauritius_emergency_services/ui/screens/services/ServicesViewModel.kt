@@ -41,6 +41,11 @@ class ServicesViewModel @Inject constructor(
     /**
      * On Init, load the offline services
      **/
+    init {
+        viewModelScope.launch {
+            loadOfflineServices()
+        }
+    }
 
     /**
      * Public Functions
@@ -58,7 +63,7 @@ class ServicesViewModel @Inject constructor(
                 )
 
                 // Return the UI State
-                ServicesUiState.Success(services)
+                ServicesUiState.Success(services.sortedBy { it.name })
             } catch (e: NetworkRequestException) {
                 ServicesUiState.NoNetwork
             } catch (e: IOException) {
@@ -68,21 +73,15 @@ class ServicesViewModel @Inject constructor(
             }
         }
 
-    fun search(query: String = "") =
-        viewModelScope.launch {
-            loadOfflineServices(query)
-        }
-
-
     /**
      * Private Functions
      **/
     private suspend fun loadOnlineServices() =
         onlineServiceRequests.getMesServices(language = GetAppLocale).services
 
-    private suspend fun loadOfflineServices(query: String) =
-        offlineServiceRepository.search(query).collect { services ->
-            mServicesUiState.value = servicesDisplayDecision(services)
+    private suspend fun loadOfflineServices() =
+        offlineServiceRepository.getAllServices().collect { services ->
+            mServicesUiState.value = servicesDisplayDecision(services.sortedBy { it.name })
         }
 
     private fun servicesDisplayDecision(services: List<Service> = listOf()) =

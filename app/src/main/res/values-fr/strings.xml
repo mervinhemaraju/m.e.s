@@ -102,4 +102,6 @@
     <string name="message_external_link">Lien externe</string>
     <string name="message_permissions_enable_phone_call">Veuillez activer les autorisations d\'appel dans les paramètres pour continuer</string>
     <string name="title_emergency_button_selector_dialog">Choisissez votre urgence</string>
+    <string name="message_services_search_query">Recherche de %1$s dans les services</string>
+    <string name="message_services_search">Entrez le service que vous souhaitez trouver</string>
 </resources>
