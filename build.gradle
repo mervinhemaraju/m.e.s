@@ -2,13 +2,12 @@ buildscript {
     ext {
         // Application Dependencies
         app_id = 'com.th3pl4gu3.mauritius_emergency_services'
-        version_code = 9
+        version_code = 10
         version_name = "1.0.1"
         version_equalizer = "01"
         version_suffix_beta = ".beta:$version_equalizer"
         version_suffix_preprod = ".preprod:$version_equalizer"
         version_suffix_dev = ".dev:$version_equalizer"
-//        jvm_target = "1.8"
         com_android_version = '8.1.1'
         com_google_devtools_ksp_version = "1.9.10-1.0.13"
 
