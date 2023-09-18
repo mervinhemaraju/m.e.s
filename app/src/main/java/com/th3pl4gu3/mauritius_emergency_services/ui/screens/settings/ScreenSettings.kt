@@ -227,7 +227,7 @@ fun EmergencyButtonItemDialog(
     dismissAction: () -> Unit
 ) {
     MesOneActionDialog(
-        title = stringResource(id = R.string.title_theme_selector_dialog),
+        title = stringResource(id = R.string.title_emergency_button_selector_dialog),
         onDismissRequest = dismissAction,
         content = {
             LazyColumn(

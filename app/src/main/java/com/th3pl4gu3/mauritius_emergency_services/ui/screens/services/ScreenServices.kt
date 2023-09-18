@@ -172,15 +172,36 @@ fun ServicesList(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
+//            MesAnimatedVisibilitySlideVerticallyContent(
+//                visibility = showScrollToTopButton
+//            ) {
+//                SmallFloatingActionButton(
+//                    onClick = {
+//                        coroutineScope.launch {
+//                            listState.animateScrollToItem(0)
+//                        }
+//                    }, containerColor = MaterialTheme.colorScheme.primary
+//                ) {
+//                    Icon(
+//                        imageVector = Icons.Outlined.ArrowDropUp,
+//                        contentDescription = stringResource(id = R.string.action_scroll_up),
+//                        tint = MaterialTheme.colorScheme.onPrimary
+//                    )
+//                }
+//            }
+//
+//            Spacer(modifier = Modifier.height(12.dp))
+
             MesAnimatedVisibilitySlideVerticallyContent(
                 visibility = showScrollToTopButton
             ) {
-                SmallFloatingActionButton(
+                FloatingActionButton(
                     onClick = {
                         coroutineScope.launch {
                             listState.animateScrollToItem(0)
                         }
-                    }, containerColor = MaterialTheme.colorScheme.primary
+                    }
+                    , containerColor = MaterialTheme.colorScheme.primary
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.ArrowDropUp,
@@ -188,19 +209,6 @@ fun ServicesList(
                         tint = MaterialTheme.colorScheme.onPrimary
                     )
                 }
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            FloatingActionButton(
-                onClick = {
-                }, containerColor = MaterialTheme.colorScheme.primary
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Search,
-                    contentDescription = stringResource(id = R.string.action_search),
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
             }
         }
 //        MesAnimatedVisibilitySlideHorizontallyContent(
