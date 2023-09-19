@@ -40,5 +40,13 @@ class DataStoreRepository(private val application: MesApplication) : StoreReposi
         }
     }
 
+    override suspend fun updateDynamicColorsSelection(checked: Boolean) {
+        application.datastore.updateData {
+            it.copy(
+                dynamicColorsEnabled = checked
+            )
+        }
+    }
+
     override fun fetch(): Flow<MesAppSettings> = application.datastore.data
 }

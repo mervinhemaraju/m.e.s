@@ -1,35 +1,10 @@
 package com.th3pl4gu3.mauritius_emergency_services.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-
-//internal val MesColorDark = darkColorScheme(
-//    primary = Red100,
-//    onPrimary = Gray500,
-//    inversePrimary = Color.White,
-//
-//    secondary = Red200,
-//    tertiary = Red300,
-//
-//    background = Gray500,
-//    onBackground = Red100,
-//
-//    surface = Gray600,
-//    surfaceVariant = Gray600,
-//    onSurface = Gray50,
-//    onSurfaceVariant = Gray200,
-//
-//    inverseSurface = Gray50,
-//    inverseOnSurface = Gray600,
-//
-//    // Outline Variants
-//    outlineVariant = Red300
-//)
 
 private val MesColorDark = darkColorScheme(
     primary = md_theme_dark_primary,
@@ -62,32 +37,6 @@ private val MesColorDark = darkColorScheme(
     outlineVariant = md_theme_dark_outlineVariant,
     scrim = md_theme_dark_scrim,
 )
-
-//internal val MesColorLight = lightColorScheme(
-//    // Main color palettes
-//    primary = BlueA100,
-//    onPrimary = WhiteBlue10,
-//    inversePrimary = Gray600,
-//
-//    secondary = Red400,
-//    tertiary = Blue900,
-//
-//    // Background variants
-//    background = Color.White,
-//    onBackground = BlueA100,
-//
-//    // Surface variants
-//    surface = Blue20,
-//    surfaceVariant = Blue20,
-//    onSurface = BlueA100,
-//    onSurfaceVariant = Gray600,
-//
-//    inverseSurface = Gray600,
-//    inverseOnSurface = Gray50,
-//
-//    // Outline Variants
-//    outlineVariant = Red500,
-//)
 
 private val MesColorLight = lightColorScheme(
     primary = md_theme_light_primary,
@@ -123,30 +72,27 @@ private val MesColorLight = lightColorScheme(
 
 @Composable
 fun MesTheme(
+    isDynamicColorsEnabled: Boolean = false,
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-//    val mesColorScheme =
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//            val context = LocalContext.current
-//            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-//        } else {
-//            if (darkTheme) MesColorDark else MesColorLight
-//        }
+    // Get the context
+    val context = LocalContext.current
 
+    // Get the system ui controller
     val systemUiController = rememberSystemUiController()
 
+    // Define the MES Color Scheme
     val mesColorScheme = if (darkTheme) {
-        systemUiController.setSystemBarsColor(
-            color = MesColorDark.background
-        )
-        MesColorDark
+        if (isDynamicColorsEnabled) dynamicDarkColorScheme(context) else MesColorDark
     } else {
-        systemUiController.setSystemBarsColor(
-            color = MesColorLight.background
-        )
-        MesColorLight
+        if (isDynamicColorsEnabled) dynamicLightColorScheme(context) else MesColorLight
     }
+
+    // Update the system bar colors
+    systemUiController.setSystemBarsColor(
+        color = mesColorScheme.background
+    )
 
     MaterialTheme(
         colorScheme = mesColorScheme,

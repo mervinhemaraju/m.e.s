@@ -1,4 +1,4 @@
-package com.th3pl4gu3.mauritius_emergency_services.models
+package com.th3pl4gu3.mauritius_emergency_services.models.items
 
 import android.app.NotificationManager
 

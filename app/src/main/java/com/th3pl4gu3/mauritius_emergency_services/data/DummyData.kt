@@ -7,7 +7,7 @@ object DummyData {
     val services = listOf(
         Service(
             identifier = "id-01",
-            name = "Police",
+            name = "This is a super duper very freakishly long text",
             type = "E",
             main_contact = 999,
             icon = "http://www.google.com",
@@ -16,7 +16,7 @@ object DummyData {
         ),
         Service(
             identifier = "id-02",
-            name = "SAMU",
+            name = "Shortest text",
             type = "E",
             main_contact = 999,
             icon = "http://www.google.com",
@@ -26,7 +26,7 @@ object DummyData {
         ),
         Service(
             identifier = "id-03",
-            name = "Hospital",
+            name = "Normal to medium title",
             type = "N",
             main_contact = 999,
             icon = "http://www.google.com",

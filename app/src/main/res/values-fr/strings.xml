@@ -15,10 +15,12 @@
     <string name="title_about_data_api">API Developpeur</string>
     <string name="title_about_version">Version</string>
     <string name="title_theme_selector_dialog">Choisissez un Thème</string>
+    <string name="title_settings_page_dynamic_colors">Couleurs Dynamiques</string>
     <string name="title_settings_page_emergency_button_action">Action du Bouton d\'urgence</string>
     <string name="title_settings_page_clear_cache">Vider le Cache</string>
     <string name="title_settings_page_change_language">Changer de Langue</string>
     <string name="title_language_selector_dialog">Choisissez une Langue</string>
+    <string name="title_settings_display">Afficher</string>
     <string name="title_settings_feature">Caractéristique</string>
     <string name="title_settings_language">Language</string>
     <string name="title_settings_cache">Cache</string>
@@ -30,6 +32,7 @@
     <string name="title_welcome_page_offline_availability">Disponibilité hors ligne</string>
     <string name="title_drawer_page_home">Accueil</string>
     <string name="title_drawer_page_services">Services</string>
+    <string name="title_drawer_page_cyclone_report">Rapport Cyclonique</string>
     <string name="title_drawer_page_about">À propos</string>
     <string name="title_drawer_page_settings">Paramètres</string>
     <string name="title_drawer_page_choose_theme">Choisissez le thème</string>
@@ -53,6 +56,7 @@
     <string name="description_welcome_page_emergency_actions">Obtenez un coin dédié sur votre tableau de bord uniquement pour les services d\'urgence</string>
     <string name="description_welcome_page_sos">Appelez à l\'aide d\'urgence directement depuis l\'application en utilisant le gros bouton rouge</string>
     <string name="description_welcome_page_offline_availability">Obtenez tous vos services disponibles hors ligne. Il vous suffit d\'être connecté en ligne une seule fois pour que MES télécharge les services.</string>
+    <string name="description_settings_page_dynamic_colors">Appliquez des couleurs dynamiques, en fonction de votre fond d\'écran (Matériau VOUS)</string>
     <string name="description_settings_page_emergency_button_action">Définir un service d\'urgence pour le bouton rouge</string>
     <string name="description_settings_page_clear_cache">Cela permettra à Mes de vider le cache et de recharger les services depuis Internet</string>
     <string name="description_settings_page_change_language">Cliquez pour changer la langue de l\'application</string>
@@ -83,15 +87,21 @@
     <string name="ctnt_desc_emergency_button">Passer un appel d\'urgence rapide</string>
     <string name="title_services_page_other_contacts">Autres contacts</string>
     <string name="message_toll_free">Gratuit</string>
+    <string name="message_item_coming_soon">À venir</string>
     <string name="message_no_other_contacts_found">Action du bouton d\'urgence</string>
+    <string name="action_sort">Classer</string>
     <string name="action_call_end">Fin d\'appel</string>
     <string name="action_swipe_cancel">Faites glisser pour annuler l\'appel</string>
     <string name="action_scroll_up">Remonter</string>
     <string name="title_about_privacy_policy">Politique de confidentialité</string>
     <string name="description_about_privacy_policy">Afficher la politique de confidentialité de Mes</string>
     <string name="message_internet_connection_needed">Vous devez être connecté à Internet pour que Mes puisse télécharger les services. Veuillez vous connecter et réessayer</string>
+    <string name="message_dynamic_colors_selection_updated">Couleurs dynamiques mises à jour</string>
     <string name="message_app_language_updated">Langue mise à jour</string>
     <string name="action_drop_down">Menu déroulant pour %1$s</string>
     <string name="message_external_link">Lien externe</string>
     <string name="message_permissions_enable_phone_call">Veuillez activer les autorisations d\'appel dans les paramètres pour continuer</string>
+    <string name="title_emergency_button_selector_dialog">Choisissez votre urgence</string>
+    <string name="message_services_search_query">Recherche de %1$s dans les services</string>
+    <string name="message_services_search">Entrez le service que vous souhaitez trouver</string>
 </resources>

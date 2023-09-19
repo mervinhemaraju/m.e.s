@@ -6,11 +6,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -22,12 +22,10 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.th3pl4gu3.mauritius_emergency_services.BuildConfig
 import com.th3pl4gu3.mauritius_emergency_services.R
-import com.th3pl4gu3.mauritius_emergency_services.models.AboutInfoDrawable
-import com.th3pl4gu3.mauritius_emergency_services.models.AboutInfoVector
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
-import com.th3pl4gu3.mauritius_emergency_services.models.SettingsItem
+import com.th3pl4gu3.mauritius_emergency_services.models.items.AboutInfoDrawable
+import com.th3pl4gu3.mauritius_emergency_services.models.items.AboutInfoVector
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.capitalize
-import com.th3pl4gu3.mauritius_emergency_services.ui.navigation.MesDestinations
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 
 @Composable
@@ -41,7 +39,7 @@ fun MesNavigationItem(
     badge: @Composable () -> Unit = {},
     isRail: Boolean = false
 ) {
-    if(isRail){
+    if (isRail) {
         NavigationRailItem(
             selected = selected,
             onClick = onClick,
@@ -50,13 +48,13 @@ fun MesNavigationItem(
             alwaysShowLabel = false,
             modifier = modifier,
             colors = NavigationRailItemDefaults.colors(
-                selectedTextColor = MaterialTheme.colorScheme.surfaceVariant,
-                selectedIconColor = MaterialTheme.colorScheme.surfaceVariant,
-                unselectedTextColor = MaterialTheme.colorScheme.surfaceVariant,
-                unselectedIconColor = MaterialTheme.colorScheme.surfaceVariant
+                selectedTextColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                unselectedTextColor = MaterialTheme.colorScheme.onBackground,
+                unselectedIconColor = MaterialTheme.colorScheme.onBackground
             )
         )
-    }else {
+    } else {
         NavigationDrawerItem(
             label = { Text(text = label) },
             icon = icon,
@@ -64,12 +62,12 @@ fun MesNavigationItem(
             onClick = onClick,
             modifier = modifier.padding(end = 16.dp),
             colors = NavigationDrawerItemDefaults.colors(
-                selectedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                selectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                selectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                selectedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                selectedTextColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
                 unselectedContainerColor = MaterialTheme.colorScheme.background,
-                unselectedTextColor = MaterialTheme.colorScheme.surfaceVariant,
-                unselectedIconColor = MaterialTheme.colorScheme.surfaceVariant
+                unselectedTextColor = MaterialTheme.colorScheme.onBackground,
+                unselectedIconColor = MaterialTheme.colorScheme.onBackground
             ),
             badge = badge,
             shape = RoundedCornerShape(topEnd = 32.dp, bottomEnd = 32.dp)
@@ -84,7 +82,6 @@ fun MesEmergencyItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         shape = MaterialTheme.shapes.medium,
@@ -96,45 +93,43 @@ fun MesEmergencyItem(
             .padding(8.dp)
     ) {
 
-        ConstraintLayout(
-            modifier = modifier.width(240.dp)
+        Column(
+            modifier = modifier
+                .width(240.dp)
+                .height(180.dp)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            val (
-                textTitle,
-                emergencyIcon
-            ) = createRefs()
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
+                Text(
+                    text = service.name.capitalize(),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 2,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+            }
 
-
-            Text(
-                text = service.name.capitalize(),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = modifier
-                    .constrainAs(textTitle) {
-                        with(16.dp) {
-                            top.linkTo(parent.top, this)
-                            start.linkTo(parent.start, this)
-                            end.linkTo(parent.end, this)
-                            bottom.linkTo(emergencyIcon.top, this)
-                        }
-                    },
-            )
-
-            MesAsyncRoundedImage(
-                service = service,
-                modifier = modifier
-                    .padding(8.dp)
-                    .constrainAs(emergencyIcon) {
-                        with(16.dp) {
-                            bottom.linkTo(parent.bottom, this)
-                            start.linkTo(parent.start, this)
-                            end.linkTo(parent.end, this)
-                        }
-                    },
-            )
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
+                MesAsyncRoundedImage(
+                    service = service
+                )
+            }
         }
+
     }
 
 }
@@ -179,7 +174,7 @@ fun MesAboutItem(
             Text(
                 text = stringResource(id = aboutApp.title),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.surfaceVariant,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.constrainAs(title) {
                     bottom.linkTo(description.top)
                     top.linkTo(icon.top)
@@ -248,13 +243,13 @@ fun MesAboutItem(
                         start.linkTo(parent.start, 16.dp)
                     }
                     .size(20.dp),
-                tint = MaterialTheme.colorScheme.surfaceVariant
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Text(
                 text = stringResource(id = aboutInfo.title),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.surfaceVariant,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.constrainAs(title) {
                     bottom.linkTo(icon.bottom)
                     top.linkTo(icon.top)
@@ -274,81 +269,6 @@ fun MesAboutItem(
                 color = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier.constrainAs(description) {
                     bottom.linkTo(parent.bottom, 16.dp)
-                    top.linkTo(title.bottom, 4.dp)
-                    linkTo(
-                        start = title.start,
-                        end = parent.end,
-                        endMargin = 32.dp,
-                        bias = 0F,
-                    )
-                    width = Dimension.fillToConstraints
-                }
-            )
-
-        }
-    }
-}
-
-@Composable
-@ExperimentalMaterial3Api
-fun MesSettingsItem(
-    settingsItem: SettingsItem,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Surface(
-        color = Color.Transparent,
-        onClick = onClick,
-        modifier = modifier
-            .fillMaxWidth()
-    ) {
-        ConstraintLayout(
-            modifier = modifier
-                .background(Color.Transparent)
-                .fillMaxWidth()
-        ) {
-
-            val (
-                icon,
-                title,
-                description
-            ) = createRefs()
-
-            MesIcon(
-                imageVector = settingsItem.icon,
-                contentDescription = null,
-                modifier = Modifier
-                    .constrainAs(icon) {
-                        bottom.linkTo(parent.bottom, 16.dp)
-                        top.linkTo(parent.top, 16.dp)
-                        start.linkTo(parent.start, 16.dp)
-                    },
-                tint = MaterialTheme.colorScheme.surfaceVariant
-            )
-
-            Text(
-                text = stringResource(id = settingsItem.title),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.surfaceVariant,
-                modifier = Modifier.constrainAs(title) {
-                    bottom.linkTo(description.top)
-                    top.linkTo(icon.top)
-                    linkTo(
-                        start = icon.end,
-                        end = parent.end,
-                        startMargin = 32.dp,
-                        endMargin = 32.dp,
-                        bias = 0F,
-                    )
-                }
-            )
-
-            Text(
-                text = stringResource(id = settingsItem.description),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.secondary,
-                modifier = Modifier.constrainAs(description) {
-                    bottom.linkTo(icon.bottom)
                     top.linkTo(title.bottom, 4.dp)
                     linkTo(
                         start = title.start,
@@ -404,6 +324,22 @@ fun MesNavigationDrawerItemPreview() {
                 onClick = {}
             )
 
+            MesNavigationItem(
+                label = "About",
+                icon = { MesIcon(imageVector = Icons.Outlined.Info) },
+                selected = false,
+                onClick = {},
+                isRail = true
+            )
+
+            MesNavigationItem(
+                label = "About",
+                icon = { MesIcon(imageVector = Icons.Outlined.Info) },
+                selected = true,
+                onClick = {},
+                isRail = true
+            )
+
             MesEmergencyItem(
                 service = mockDataService,
                 onClick = {}
@@ -417,11 +353,6 @@ fun MesNavigationDrawerItemPreview() {
             MesAboutItem(
                 aboutApp = mockDataAboutInfo2,
                 onClick = {}
-            )
-
-            MesSettingsItem(
-                settingsItem = SettingsItem.ResetCache,
-                onClick = {},
             )
         }
     }

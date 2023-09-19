@@ -6,12 +6,10 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -45,12 +43,11 @@ private const val TAG = "MES_NAV_GRAPH"
 @ExperimentalAnimationApi
 fun MesNavGraph(
     application: MesApplication,
-    searchBarValue: String,
     snackBarHostState: SnackbarHostState,
     isExpandedScreen: Boolean,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    navigationActions: MesNavigationActions,
+    navigationActionWrapper: NavigationActionWrapper,
     startDestination: String,
     listState: LazyListState,
     scrollState: ScrollState,
@@ -60,17 +57,10 @@ fun MesNavGraph(
     Log.i(TAG, "Starting Navigation Host")
 
     // Define a navigate to pre call dependency function
-    val navigateToPreCall: (service: Service, chosenNumber: String) -> Unit = { service, chosenNumber ->
-        if(application.applicationContext.HasNecessaryPermissions){
-            navigationActions.navigateToPreCall(service, chosenNumber)
-        }else{
-            coroutineScope.launch {
-                snackBarHostState.showSnackbar(
-                    application.resources.getString(R.string.message_permissions_enable_phone_call)
-                )
-            }
+    val navigateToPreCall: (service: Service, chosenNumber: String) -> Unit =
+        { service, chosenNumber ->
+            coroutineScope.launch { navigationActionWrapper.navigateToPreCall(service, chosenNumber, snackBarHostState) }
         }
-    }
 
     NavHost(
         navController = navController,
@@ -109,12 +99,23 @@ fun MesNavGraph(
             /** Launch the screen UI **/
             ScreenServices(
                 servicesViewModel = servicesViewModel,
-                retryAction = servicesViewModel::loadOnlineServices,
+                retryAction = servicesViewModel::reload,
                 listState = listState,
-                searchBarValue = searchBarValue,
                 navigateToPreCall = navigateToPreCall
             )
         }
+//        composable(MesDestinations.SCREEN_CYCLONE_REPORT) {
+//            /** Log information **/
+//            Log.i(TAG, "Starting composable ${MesDestinations.SCREEN_CYCLONE_REPORT}")
+//
+//            /** Create the view model **/
+//            val cycloneReportViewModel = hiltViewModel<CycloneReportViewModel>()
+//
+//            /** Launch the screen UI **/
+//            ScreenCycloneReport(
+//                cycloneReportViewModel = cycloneReportViewModel
+//            )
+//        }
         composable(MesDestinations.SCREEN_PRE_CALL) {
             /** Log information **/
             Log.i(TAG, "Starting composable ${MesDestinations.SCREEN_PRE_CALL}")

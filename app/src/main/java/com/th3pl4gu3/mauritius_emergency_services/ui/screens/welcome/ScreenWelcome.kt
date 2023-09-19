@@ -28,7 +28,7 @@ import androidx.compose.ui.util.lerp
 import com.google.accompanist.pager.*
 import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.activity.MesActivity
-import com.th3pl4gu3.mauritius_emergency_services.models.WelcomeInfo
+import com.th3pl4gu3.mauritius_emergency_services.models.items.WelcomeInfo
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesIcon
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesTextButton
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesTwoActionDialog
@@ -212,7 +212,7 @@ fun SliderPageBody(
     Text(
         text = title,
         style = MaterialTheme.typography.headlineSmall,
-        color = MaterialTheme.colorScheme.surfaceVariant,
+        color = MaterialTheme.colorScheme.primary,
         fontWeight = FontWeight.Bold,
         textAlign = TextAlign.Center,
         modifier = modifier

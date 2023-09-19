@@ -37,7 +37,7 @@ fun MesServiceItem(
     service: Service,
     actionVisible: Boolean = true,
     onClick: () -> Unit,
-    extrasClickAction: (String) -> Unit
+    extrasClickAction: (Service, String) -> Unit
 ) {
 
     var expanded by remember {
@@ -104,7 +104,7 @@ fun MesServiceItem(
             actionVisible = false,
             modifier = Modifier
                 .fillMaxWidth(),
-            extrasClickAction = {}
+            extrasClickAction = {_,_ -> }
         )
     }
 }
@@ -115,7 +115,7 @@ fun MesServiceItemLayout(
     service: Service,
     dropDownClick: () -> Unit,
     onClick: () -> Unit,
-    extrasClickAction: (String) -> Unit,
+    extrasClickAction: (Service, String) -> Unit,
     expanded: Boolean,
     actionVisible: Boolean,
     modifier: Modifier
@@ -172,9 +172,9 @@ fun MesServiceItemLayout(
                         bottom.linkTo(textSubtitle.top, 4.dp)
                         linkTo(
                             start = iconEmergency.end,
-                            end = parent.end,
+                            end = if(actionVisible) iconDropDown.start else parent.end,
                             startMargin = 8.dp,
-                            endMargin = 16.dp,
+                            endMargin = 8.dp,
                             bias = 0f
                         )
                         width = Dimension.fillToConstraints
@@ -192,9 +192,9 @@ fun MesServiceItemLayout(
                         bottom.linkTo(iconEmergency.bottom)
                         linkTo(
                             start = iconEmergency.end,
-                            end = parent.end,
-                            startMargin = 12.dp,
-                            endMargin = 16.dp,
+                            end = if(actionVisible) iconDropDown.start else parent.end,
+                            startMargin = 8.dp,
+                            endMargin = 8.dp,
                             bias = 0f
                         )
                     }
@@ -246,7 +246,7 @@ fun MesServiceItemLayout(
 @ExperimentalMaterial3Api
 fun MesServiceItemExtras(
     service: Service,
-    extrasClickAction: (String) -> Unit,
+    extrasClickAction: (Service, String) -> Unit,
     modifier: Modifier
 ) {
     // Create a list of other contacts
@@ -290,7 +290,7 @@ fun MesServiceItemExtras(
             contacts.forEach {
 
                 TextButton(
-                    onClick = { extrasClickAction(it.second) },
+                    onClick = { extrasClickAction(service, it.second) },
                     colors = ButtonDefaults.buttonColors(
                         contentColor = MaterialTheme.colorScheme.primary
                     ),
@@ -331,7 +331,7 @@ fun MesServiceItemExtras(
 fun MesServiceItemPreview() {
     val mockDataService = Service(
         identifier = "security-police-direct-1",
-        name = "Police Direct Line 1",
+        name = "This is a very super duper long long title",
         type = "E",
         icon = "https://img.icons8.com/fluent/100/000000/policeman-male.png",
         main_contact = 999,
@@ -343,14 +343,14 @@ fun MesServiceItemPreview() {
         MesServiceItem(
             service = mockDataService,
             onClick = {},
-            extrasClickAction = {}
+            extrasClickAction = {_,_ ->}
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         MesServiceItemExtras(
             service = mockDataService,
-            extrasClickAction = {},
+            extrasClickAction = {_,_ -> },
             modifier = Modifier
         )
     }

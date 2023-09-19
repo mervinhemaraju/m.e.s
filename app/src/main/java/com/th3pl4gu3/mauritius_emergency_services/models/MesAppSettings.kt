@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 data class MesAppSettings (
     val appTheme: AppTheme = AppTheme.FOLLOW_SYSTEM,
     val isFirstTimeLogging: Boolean = true,
+    val dynamicColorsEnabled: Boolean = false,
     val emergencyButtonActionIdentifier: String = ""
 )
 
