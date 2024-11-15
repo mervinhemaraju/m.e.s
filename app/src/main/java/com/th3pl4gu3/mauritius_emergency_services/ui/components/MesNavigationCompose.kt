@@ -26,6 +26,7 @@ fun MesNavigationDrawer(
     currentRoute: String,
     navigateToHome: () -> Unit,
     navigateToServices: () -> Unit,
+    navigateToCycloneReport: () -> Unit,
     navigateToAbout: () -> Unit,
     navigateToSettings: () -> Unit,
     navigateToContactUs: () -> Unit,
@@ -40,6 +41,7 @@ fun MesNavigationDrawer(
                 currentRoute = currentRoute,
                 navigateToHome = navigateToHome,
                 navigateToServices = navigateToServices,
+                navigateToCycloneReport = navigateToCycloneReport,
                 navigateToAbout = navigateToAbout,
                 navigateToSettings = navigateToSettings,
                 navigateToContactUs = navigateToContactUs,
@@ -53,6 +55,7 @@ fun MesNavigationDrawer(
                 currentRoute = currentRoute,
                 navigateToHome = navigateToHome,
                 navigateToServices = navigateToServices,
+                navigateToCycloneReport = navigateToCycloneReport,
                 navigateToAbout = navigateToAbout,
                 navigateToSettings = navigateToSettings,
                 navigateToContactUs = navigateToContactUs,
@@ -70,6 +73,7 @@ private fun MesNavRail(
     currentRoute: String,
     navigateToHome: () -> Unit,
     navigateToServices: () -> Unit,
+    navigateToCycloneReport: () -> Unit,
     navigateToAbout: () -> Unit,
     navigateToSettings: () -> Unit,
     navigateToContactUs: () -> Unit,
@@ -134,7 +138,7 @@ private fun MesNavRail(
                     )
                 },
                 selected = currentRoute == MesDestinations.SCREEN_CYCLONE_REPORT,
-                onClick = {},
+                onClick = { navigateToCycloneReport() },
                 isRail = true
             )
             MesNavigationItem(
@@ -197,6 +201,7 @@ private fun MesDrawer(
     currentRoute: String,
     navigateToHome: () -> Unit,
     navigateToServices: () -> Unit,
+    navigateToCycloneReport: () -> Unit,
     navigateToAbout: () -> Unit,
     navigateToSettings: () -> Unit,
     navigateToContactUs: () -> Unit,
@@ -244,7 +249,7 @@ private fun MesDrawer(
                 )
             },
             selected = currentRoute == MesDestinations.SCREEN_CYCLONE_REPORT,
-            onClick = {},
+            onClick = { navigateToCycloneReport(); closeDrawer()},
             badge = {
                 Badge(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -336,6 +341,7 @@ fun PreviewAppNavRail() {
             currentRoute = MesDestinations.SCREEN_HOME,
             navigateToHome = {},
             navigateToServices = {},
+            navigateToCycloneReport = {},
             navigateToAbout = {},
             navigateToSettings = {},
             toggleThemeDialog = {},
@@ -355,6 +361,7 @@ fun PreviewAppDrawer() {
             currentRoute = MesDestinations.SCREEN_HOME,
             navigateToHome = {},
             navigateToServices = {},
+            navigateToCycloneReport = {},
             navigateToAbout = {},
             navigateToSettings = {},
             toggleThemeDialog = {},

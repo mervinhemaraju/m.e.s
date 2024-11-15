@@ -14,12 +14,12 @@ android {
         beta
     }
     namespace app_id
-    compileSdk 33
+    compileSdk 35
 
     defaultConfig {
         applicationId "$app_id"
         minSdk 29
-        targetSdk 33
+        targetSdk 35
         versionCode version_code
         versionName "$version_name"
 

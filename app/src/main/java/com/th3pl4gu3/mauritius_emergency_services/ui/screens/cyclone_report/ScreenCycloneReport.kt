@@ -1,156 +1,213 @@
 package com.th3pl4gu3.mauritius_emergency_services.ui.screens.cyclone_report
 
 import android.content.res.Configuration
+import android.view.Display.Mode
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.carousel.HorizontalMultiBrowseCarousel
+import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.layout
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.pager.HorizontalPagerIndicator
+import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
-
-fun Modifier.circleLayout() =
-    layout { measurable, constraints ->
-        // Measure the composable
-        val placeable = measurable.measure(constraints)
-
-        //get the current max dimension to assign width=height
-        val currentHeight = placeable.height
-        val currentWidth = placeable.width
-        val newDiameter = maxOf(currentHeight, currentWidth)
-
-        //assign the dimension and the center position
-        layout(newDiameter, newDiameter) {
-            // Where the composable gets placed
-            placeable.placeRelative(
-                (newDiameter - currentWidth) / 2,
-                (newDiameter - currentHeight) / 2
-            )
-        }
-    }
 
 @Composable
 fun ScreenCycloneReport(
-    cycloneReportViewModel: CycloneReportViewModel
+//    cycloneReportViewModel: CycloneReportViewModel
 ) {
+
+    MyCarousel()
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenWarning(
-    modifier: Modifier = Modifier,
-    news: List<String>
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-    ) {
-        Text(
-            text = "Mauritius is in a warning level of",
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier
-                .padding(16.dp)
-        )
+fun MyCarousel() {
+    val carouselState = rememberCarouselState { 2 }
 
-        Spacer(modifier = Modifier.height(32.dp))
+    Box(modifier = Modifier.fillMaxSize()) {
 
-        Text(
-            text = "4",
-            style = MaterialTheme.typography.titleLarge,
-            textAlign = TextAlign.Center,
-            color = Color(0xFFD50000),
-            fontWeight = FontWeight.Bold,
-            fontSize = 104.sp,
-            modifier = Modifier
-                .background(
-                    Color(0xFFD50000).copy(alpha = 0.1f),
-                    RoundedCornerShape(50)
+
+        HorizontalMultiBrowseCarousel(
+            state = carouselState,
+            preferredItemWidth = 300.dp,
+            itemSpacing = 10.dp
+        ) { page ->
+            Box(
+                modifier = Modifier.size(300.dp)
+            ) {
+                Image(
+                    painter = painterResource(
+                        id = when (page) {
+                            0 -> R.drawable.ic_mes
+                            1 -> R.drawable.ic_ambulance
+                            else -> R.drawable.ic_mes
+                        }
+                    ),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
                 )
-                .circleLayout()
-                .padding(54.dp)
-        )
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Text(
-            text = "The next bulletin is at 00:00:00 PM",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackground,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier
-                .padding(16.dp)
-        )
-
-        Text(
-            text = "Cyclone News",
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .padding(12.dp)
-        )
-
-        CycloneNews(
-            news = news
-        )
-    }
-}
-
-@Composable
-fun CycloneNews(
-    modifier: Modifier = Modifier,
-    news: List<String>
-) {
-
-    LazyVerticalGrid(
-        columns = GridCells.Adaptive(minSize = 240.dp),
-        contentPadding = PaddingValues(8.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        modifier = modifier
-    ) {
-        items(
-            news,
-        ) {
-            Text(
-                text = it,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.secondary,
-                lineHeight = 20.sp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(
-                        MaterialTheme.shapes.extraSmall
-                    )
-                    .shadow(
-                        0.7.dp,
-                        shape = MaterialTheme.shapes.extraSmall
-                    )
-                    .padding(
-                        top = 8.dp,
-                        bottom = 8.dp,
-                        start = 16.dp,
-                        end = 16.dp
-                    )
-            )
+            }
         }
     }
 }
+
+@Composable
+fun ScreenWarning(modifier: Modifier = Modifier) {
+
+    MyCarousel()
+
+//    Column(
+//        horizontalAlignment = Alignment.CenterHorizontally,
+//        modifier = modifier
+//            .fillMaxSize()
+//            .background(MaterialTheme.colorScheme.background)
+//    ) {
+//
+//        Icon(
+//            painter = painterResource(id = R.drawable.ic_cyclone),
+//            contentDescription = "",
+//            tint = MaterialTheme.colorScheme.surfaceTint,
+//            modifier = Modifier.padding(32.dp)
+//        )
+//
+//        Text(
+//            text = "Mauritius is in a warning level of",
+//            style = MaterialTheme.typography.labelMedium,
+//            color = MaterialTheme.colorScheme.onBackground,
+//            modifier = Modifier
+//                .padding(16.dp)
+//        )
+//
+//        Text(
+//            text = "4",
+//            style = MaterialTheme.typography.titleLarge,
+//            textAlign = TextAlign.Center,
+//            color = Color(0xFFD50000),
+//            fontWeight = FontWeight.Bold,
+//            fontSize = 104.sp
+//        )
+//
+//    }
+}
+
+//@Composable
+//fun ScreenWarning(
+//    modifier: Modifier = Modifier,
+//    news: List<String>
+//) {
+//    Column(
+//        horizontalAlignment = Alignment.CenterHorizontally,
+//        modifier = modifier
+//            .fillMaxSize()
+//            .background(MaterialTheme.colorScheme.background)
+//    ) {
+//        Text(
+//            text = "Mauritius is in a warning level of",
+//            style = MaterialTheme.typography.labelMedium,
+//            color = MaterialTheme.colorScheme.onBackground,
+//            modifier = Modifier
+//                .padding(16.dp)
+//        )
+//
+//        Spacer(modifier = Modifier.height(32.dp))
+//
+//        Text(
+//            text = "4",
+//            style = MaterialTheme.typography.titleLarge,
+//            textAlign = TextAlign.Center,
+//            color = Color(0xFFD50000),
+//            fontWeight = FontWeight.Bold,
+//            fontSize = 104.sp,
+//            modifier = Modifier
+//                .background(
+//                    Color(0xFFD50000).copy(alpha = 0.1f),
+//                    RoundedCornerShape(50)
+//                )
+//                .circleLayout()
+//                .padding(54.dp)
+//        )
+//
+//        Spacer(modifier = Modifier.height(32.dp))
+//
+//        Text(
+//            text = "The next bulletin is at 00:00:00 PM",
+//            style = MaterialTheme.typography.bodyMedium,
+//            color = MaterialTheme.colorScheme.onBackground,
+//            fontWeight = FontWeight.Bold,
+//            modifier = Modifier
+//                .padding(16.dp)
+//        )
+//
+//        Text(
+//            text = "Cyclone News",
+//            style = MaterialTheme.typography.labelMedium,
+//            color = MaterialTheme.colorScheme.primary,
+//            modifier = Modifier
+//                .padding(12.dp)
+//        )
+//
+//        CycloneNews(
+//            news = news
+//        )
+//    }
+//}
+//
+//@Composable
+//fun CycloneNews(
+//    modifier: Modifier = Modifier,
+//    news: List<String>
+//) {
+//
+//    LazyVerticalGrid(
+//        columns = GridCells.Adaptive(minSize = 240.dp),
+//        contentPadding = PaddingValues(8.dp),
+//        verticalArrangement = Arrangement.spacedBy(10.dp),
+//        horizontalArrangement = Arrangement.spacedBy(10.dp),
+//        modifier = modifier
+//    ) {
+//        items(
+//            news,
+//        ) {
+//            Text(
+//                text = it,
+//                style = MaterialTheme.typography.bodySmall,
+//                color = MaterialTheme.colorScheme.secondary,
+//                lineHeight = 20.sp,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .clip(
+//                        MaterialTheme.shapes.extraSmall
+//                    )
+//                    .shadow(
+//                        0.7.dp,
+//                        shape = MaterialTheme.shapes.extraSmall
+//                    )
+//                    .padding(
+//                        top = 8.dp,
+//                        bottom = 8.dp,
+//                        start = 16.dp,
+//                        end = 16.dp
+//                    )
+//            )
+//        }
+//    }
+//}
 
 @Preview("Warning Light Preview", showBackground = true)
 @Preview("Warning Dark Preview", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
@@ -177,7 +234,7 @@ fun WarningCycloneReportScreenPreview() {
 
     MesTheme {
         ScreenWarning(
-            news = mockData
+//            news = mockData
         )
     }
 }
