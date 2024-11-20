@@ -5,6 +5,7 @@ import android.app.Application
 import android.util.Log
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.*
+import com.google.android.material.color.DynamicColors
 import com.th3pl4gu3.mauritius_emergency_services.data.AppContainer
 import com.th3pl4gu3.mauritius_emergency_services.models.ServiceWorker
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.HasNotificationPermission

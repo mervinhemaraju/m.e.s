@@ -119,6 +119,7 @@ if (propFile.canRead()) {
 dependencies {
 
     // Android Material Design Components
+    implementation 'com.google.android.material:material:1.12.0'
     implementation "androidx.compose.material3:material3:$material3_version"
     implementation "androidx.compose.material3:material3-window-size-class:$material3_window_size_class_version"
     implementation "androidx.compose.material:material-icons-extended:$material_icons"
