@@ -7,7 +7,6 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
@@ -68,7 +67,7 @@ fun MesApp(
     }
 
     MesTheme(
-        isDynamicColorsEnabled = appSettings.dynamicColorsEnabled,
+        dynamicColor = appSettings.dynamicColorsEnabled,
         darkTheme = darkTheme // Load the app theme
     ) {
 
@@ -206,7 +205,7 @@ fun MesApp(
                             )
                         } else {
                             MesBackTopBar(
-                                screenTitle = currentRoute.capitalize(),
+                                screenTitle = currentRoute.replace("_", " ").capitalize(),
                                 backButtonAction = { navController.navigateUp() }
                             )
                         }

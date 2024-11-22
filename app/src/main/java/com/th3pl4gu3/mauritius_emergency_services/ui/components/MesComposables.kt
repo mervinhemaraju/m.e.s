@@ -5,6 +5,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,6 +38,32 @@ import com.th3pl4gu3.mauritius_emergency_services.models.items.AboutInfoVector
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.EmergencyButton
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
+
+@Composable
+fun MesCounter(countdown: String, label: String, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+    ) {
+        Text(
+            text = countdown,
+            style = MaterialTheme.typography.displaySmall,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier
+                .padding(start = 12.dp, end = 12.dp, top = 12.dp)
+                .align(Alignment.CenterHorizontally)
+        )
+
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.Normal,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(top = 8.dp, bottom = 4.dp)
+        )
+    }
+}
 
 @Composable
 fun MesIcon(
@@ -155,9 +182,8 @@ fun MesAboutInfoCard(
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
         ),
-        elevation = CardDefaults.cardElevation(2.dp),
         modifier = modifier
             .fillMaxWidth()
             .padding(6.dp)
@@ -197,9 +223,8 @@ fun MesAboutAppCard(
 ) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
         ),
-        elevation = CardDefaults.cardElevation(2.dp),
         modifier = modifier
             .fillMaxWidth()
             .padding(6.dp)
@@ -301,6 +326,11 @@ fun MesComposablePreview() {
                 .fillMaxHeight(),
             Arrangement.SpaceAround
         ) {
+
+            MesCounter(
+                countdown = "00",
+                label = "min"
+            )
 
             MesIcon(
                 painterResource = R.drawable.ic_image_broken,

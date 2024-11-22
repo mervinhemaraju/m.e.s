@@ -250,18 +250,6 @@ private fun MesDrawer(
             },
             selected = currentRoute == MesDestinations.SCREEN_CYCLONE_REPORT,
             onClick = { navigateToCycloneReport(); closeDrawer()},
-            badge = {
-                Badge(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    modifier = Modifier.clip(MaterialTheme.shapes.extraSmall)
-                ){
-                    Text(
-                        text = stringResource(id = R.string.message_item_coming_soon),
-                        style = MaterialTheme.typography.labelMedium
-                    )
-                }
-            }
         )
         MesNavigationItem(
             label = stringResource(id = R.string.title_drawer_page_about),

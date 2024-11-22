@@ -1,178 +1,193 @@
 package com.th3pl4gu3.mauritius_emergency_services.ui.theme
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
+import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.th3pl4gu3.mauritius_emergency_services.R
-import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.defaultFontFamily
 
-
-/**
- * Defines all the typography separately here and reference them
- * in the main MesTypography below
- **/
-
-private val Montserrat_Alternates = FontFamily(
-    Font(R.font.montserrat_alternates_regular),
-    Font(R.font.montserrat_alternates_medium, FontWeight.Medium),
-    Font(R.font.montserrat_alternates_bold, FontWeight.Bold)
+// Define 'Poppins' Font as the main body FF
+private val bodyFontFamily = FontFamily(
+    Font(R.font.poppins_light, FontWeight.Light),
+    Font(R.font.poppins_regular, FontWeight.Normal),
+    Font(R.font.poppins_medium, FontWeight.Medium),
+    Font(R.font.poppins_semi_bold, FontWeight.SemiBold),
+    Font(R.font.poppins_bold, FontWeight.Bold)
 )
 
-private val Montserrat = FontFamily(
-    Font(R.font.montserrat_regular),
-    Font(R.font.montserrat_medium, FontWeight.Medium),
-    Font(R.font.montserrat_bold, FontWeight.Bold)
+// Define the 'Lato' Font as the main display (header) FF
+private val displayFontFamily = FontFamily(
+    Font(R.font.lato_light, FontWeight.Light),
+    Font(R.font.lato_regular, FontWeight.Normal),
+    Font(R.font.lato_bold, FontWeight.Bold)
 )
 
-private val MesTitleLarge = TextStyle(
-    fontWeight = FontWeight.Bold,
-    fontSize = 28.sp,
-    letterSpacing = 8.sp
-)
+// Default Material 3 typography values
+private val baseline = Typography()
 
-private val MesTitleMedium = TextStyle(
-    fontWeight = FontWeight.Bold,
-    fontSize = 22.sp,
-    letterSpacing = 4.sp
-)
-
-private val MesTitleSmall = TextStyle(
-    fontWeight = FontWeight.Normal,
-    fontSize = 18.sp,
-    letterSpacing = 2.sp
-)
-
-private val MesHeadlineLarge = TextStyle(
-    fontWeight = FontWeight.Bold,
-    fontSize = 28.sp,
-    letterSpacing = 0.4.sp
-)
-
-private val MesHeadlineMedium = TextStyle(
-    fontWeight = FontWeight.Medium,
-    fontSize = 22.sp,
-    letterSpacing = 0.4.sp
-)
-
-private val MesHeadlineSmall = TextStyle(
-    fontWeight = FontWeight.SemiBold,
-    fontSize = 18.sp,
-    letterSpacing = 0.4.sp
-)
-
-private val MesBodyLarge = TextStyle(
-    fontWeight = FontWeight.Normal,
-    fontSize = 16.sp,
-    letterSpacing = 0.2.sp
-)
-private val MesBodyMedium = TextStyle(
-    fontWeight = FontWeight.Medium,
-    fontSize = 14.sp,
-    letterSpacing = 0.1.sp,
-    lineHeight = 20.sp
-)
-
-private val MesBodySmall = TextStyle(
-    fontWeight = FontWeight.Normal,
-    fontSize = 12.sp,
-    letterSpacing = 0.1.sp
-)
-
-private val MesLabelMedium = TextStyle(
-    fontWeight = FontWeight.Normal,
-    fontSize = 12.sp,
-    letterSpacing = 0.3.sp,
-)
-
-private val MesLabelSmall = TextStyle(
-    fontWeight = FontWeight.Normal,
-    fontSize = 8.sp,
-    letterSpacing = 0.3.sp,
-)
-
-/**
- * Set of Material typography styles to for the Mes App
- **/
 val MesTypography = Typography(
-    titleLarge = MesTitleLarge,
-    titleMedium = MesTitleMedium,
-    titleSmall = MesTitleSmall,
-    headlineLarge = MesHeadlineLarge,
-    headlineMedium = MesHeadlineMedium,
-    headlineSmall = MesHeadlineSmall,
-    bodyLarge = MesBodyLarge,
-    bodyMedium = MesBodyMedium,
-    bodySmall = MesBodySmall,
-    labelMedium = MesLabelMedium,
-    labelSmall = MesLabelSmall
-).defaultFontFamily(
-    primaryFontFamily = Montserrat,
-    secondaryFontFamily = Montserrat_Alternates
+
+    // Display Text
+    displayLarge = baseline.displayLarge.copy(
+        fontFamily = displayFontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 104.sp
+    ),
+    displayMedium = baseline.displayMedium.copy(
+        fontFamily = displayFontFamily,
+        fontWeight = FontWeight.Medium,
+        fontSize = 80.sp
+    ),
+    displaySmall = baseline.displaySmall.copy(
+        fontFamily = displayFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 64.sp
+    ),
+
+    // Headline
+    headlineLarge = baseline.headlineLarge.copy(fontFamily = displayFontFamily),
+    headlineMedium = baseline.headlineMedium.copy(fontFamily = displayFontFamily),
+    headlineSmall = baseline.headlineSmall.copy(fontFamily = displayFontFamily),
+
+    // Title
+    titleLarge = baseline.titleLarge.copy(fontFamily = displayFontFamily),
+    titleMedium = baseline.titleMedium.copy(fontFamily = displayFontFamily),
+    titleSmall = baseline.titleSmall.copy(fontFamily = displayFontFamily),
+
+    // Body
+    bodyLarge = baseline.bodyLarge.copy(fontFamily = bodyFontFamily),
+    bodyMedium = baseline.bodyMedium.copy(fontFamily = bodyFontFamily),
+    bodySmall = baseline.bodySmall.copy(fontFamily = bodyFontFamily),
+
+    // Label
+    labelLarge = baseline.labelLarge.copy(fontFamily = bodyFontFamily),
+    labelMedium = baseline.labelMedium.copy(fontFamily = bodyFontFamily, fontSize = 12.sp),
+    labelSmall = baseline.labelSmall.copy(
+        fontFamily = bodyFontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 10.sp
+    ),
 )
 
 @Preview("Typography Light", showBackground = true)
 @Preview("Typography Dark", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun TypographyPreview() {
+    val modifier = Modifier.padding(top = 16.dp)
+
     MesTheme {
-        Column {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Text(
+                text = "Display Large",
+                style = MaterialTheme.typography.displayLarge,
+                textAlign = TextAlign.Center,
+                modifier = modifier
+            )
+            Text(
+                text = "Display Medium",
+                style = MaterialTheme.typography.displayMedium,
+                textAlign = TextAlign.Center,
+                modifier = modifier
+            )
+            Text(
+                text = "Display Small",
+                style = MaterialTheme.typography.displaySmall,
+                textAlign = TextAlign.Center,
+                modifier = modifier
+            )
 
-            Text(
-                text = "Title Large",
-                style = MaterialTheme.typography.titleLarge
-            )
-            Text(
-                text = "Title Medium",
-                style = MaterialTheme.typography.titleMedium
-            )
-            Text(
-                text = "Title Small",
-                style = MaterialTheme.typography.titleSmall
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             Text(
                 text = "Headline Large",
-                style = MaterialTheme.typography.headlineLarge
+                style = MaterialTheme.typography.headlineLarge,
+                textAlign = TextAlign.Center,
+                modifier = modifier
             )
             Text(
                 text = "Headline Medium",
-                style = MaterialTheme.typography.headlineMedium
+                style = MaterialTheme.typography.headlineMedium,
+                textAlign = TextAlign.Center,
+                modifier = modifier
             )
             Text(
                 text = "Headline Small",
-                style = MaterialTheme.typography.headlineSmall
+                style = MaterialTheme.typography.headlineSmall,
+                textAlign = TextAlign.Center,
+                modifier = modifier
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "Title Large",
+                style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Center,
+                modifier = modifier
+            )
+            Text(
+                text = "Title Medium",
+                style = MaterialTheme.typography.titleMedium,
+                textAlign = TextAlign.Center,
+                modifier = modifier
+            )
+            Text(
+                text = "Title Small",
+                style = MaterialTheme.typography.titleSmall,
+                textAlign = TextAlign.Center,
+                modifier = modifier
+            )
+
 
             Text(
                 text = "Body Large",
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
+                textAlign = TextAlign.Center,
+                modifier = modifier
             )
             Text(
                 text = "Body Medium",
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                modifier = modifier
             )
             Text(
                 text = "Body Small",
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = TextAlign.Center,
+                modifier = modifier
             )
 
+
+            Text(
+                text = "Label Large",
+                style = MaterialTheme.typography.labelLarge,
+                textAlign = TextAlign.Center,
+                modifier = modifier
+            )
+            Text(
+                text = "Label Medium",
+                style = MaterialTheme.typography.labelMedium,
+                textAlign = TextAlign.Center,
+                modifier = modifier
+            )
+            Text(
+                text = "Label Small",
+                style = MaterialTheme.typography.labelSmall,
+                textAlign = TextAlign.Center,
+                modifier = modifier
+            )
         }
     }
 }

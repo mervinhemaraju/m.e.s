@@ -41,7 +41,7 @@ fun MesBackTopBar(
         title = {
             Text(
                 text = screenTitle,
-                style = MaterialTheme.typography.headlineMedium,
+                style = MaterialTheme.typography.headlineSmall,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = MaterialTheme.colorScheme.primary
@@ -89,9 +89,12 @@ fun MesSearchTopBar(
 
     Box(
         Modifier
+            // FIXME(Replace isContainer by isTraversalGroup
             .semantics { isContainer = true }
             .zIndex(1f)
             .fillMaxWidth()) {
+
+        // FIXME("Replace search bar")
         SearchBar(
             modifier = searchBarAdditionalModifier
                 .align(Alignment.TopCenter),

@@ -83,7 +83,7 @@ fun MesEmergencyItem(
     modifier: Modifier = Modifier,
 ) {
     Card(
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.outlinedCardElevation(
             0.7.dp

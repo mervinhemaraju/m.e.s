@@ -1,59 +1,45 @@
 package com.th3pl4gu3.mauritius_emergency_services.ui.screens.cyclone_report
 
 import android.content.res.Configuration
-import android.view.Display.Mode
+import android.widget.Space
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.carousel.HorizontalMultiBrowseCarousel
-import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.th3pl4gu3.mauritius_emergency_services.R
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesCounter
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesIcon
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
-import kotlinx.coroutines.delay
 
 @Composable
 fun ScreenCycloneReport(
 //    cycloneReportViewModel: CycloneReportViewModel
+    scrollState: ScrollState = rememberScrollState()
 ) {
     val mockData = listOf(
         "Un avertissement de cyclone de Classe 3 est en vigueur a Maurice.   | Quinzieme et dernier bulletin de cyclone pour Rodrigues emis a 1010 heures ce lundi 20 fevrier 2023.",
@@ -78,7 +64,11 @@ fun ScreenCycloneReport(
 }
 
 @Composable
-fun ScreenWarning(news: List<String>) {
+fun ScreenWarning(
+    news: List<String>,
+    surfaceColor: Color = MaterialTheme.colorScheme.surfaceContainerLow,
+    scrollState: ScrollState = rememberScrollState()
+) {
     val infiniteTransition = rememberInfiniteTransition(label = "")
     val angle by infiniteTransition.animateFloat(
         initialValue = 0F,
@@ -87,11 +77,15 @@ fun ScreenWarning(news: List<String>) {
             animation = tween(2000, easing = LinearEasing)
         ), label = ""
     )
+    val backgroundThemeModifier = Modifier
+        .clip(MaterialTheme.shapes.large)
+        .background(surfaceColor)
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.background)
+            .verticalScroll(scrollState)
     ) {
         Row(
             modifier = Modifier
@@ -99,7 +93,6 @@ fun ScreenWarning(news: List<String>) {
         ) {
             MesIcon(
                 painterResource = R.drawable.ic_cyclone,
-//                contentDescription = "Cyclone",
                 tint = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier
                     .weight(1.5f)
@@ -118,24 +111,82 @@ fun ScreenWarning(news: List<String>) {
                     text = "Current class of",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.secondary,
+                    textAlign = TextAlign.Center,
                     modifier = Modifier
-                        .padding(16.dp)
                         .fillMaxWidth()
                 )
 
+                Spacer(modifier = Modifier.size(12.dp))
+
                 Text(
                     text = "4",
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.displayLarge,
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 112.sp,
-                    modifier = Modifier
+                    modifier = backgroundThemeModifier
                         .fillMaxWidth()
+                        .padding(end = 4.dp)
                 )
 
             }
         }
+
+        Text(
+            text = "Next Bulletin",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onBackground,
+            fontWeight = FontWeight.SemiBold,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth()
+        )
+
+        Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
+
+            MesCounter(
+                countdown = "00",
+                label = "hr",
+                modifier = backgroundThemeModifier
+            )
+
+            Text(
+                text = ":",
+                style = MaterialTheme.typography.headlineLarge,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .padding(4.dp, 0.dp)
+                    .align(Alignment.CenterVertically)
+            )
+
+            MesCounter(
+                countdown = "00",
+                label = "min",
+                modifier = backgroundThemeModifier
+            )
+
+            Text(
+                text = ":",
+                style = MaterialTheme.typography.headlineLarge,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .padding(4.dp, 0.dp)
+                    .align(Alignment.CenterVertically)
+            )
+
+            MesCounter(
+                countdown = "00",
+                label = "s",
+                modifier = backgroundThemeModifier
+            )
+
+        }
+
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .size(32.dp)
+        )
 
 
         Text(
@@ -155,9 +206,13 @@ fun ScreenWarning(news: List<String>) {
         ) {
 
             Column(
-                modifier = Modifier
+                modifier = backgroundThemeModifier
                     .weight(2f)
+                    .padding(
+                        start = 8.dp
+                    )
                     .align(Alignment.CenterVertically)
+
             ) {
                 Text(
                     text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -193,35 +248,6 @@ fun ScreenWarning(news: List<String>) {
         )
 
         Text(
-            text = "Next Bulletin",
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onBackground,
-            fontWeight = FontWeight.SemiBold,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-        )
-
-        Text(
-            text = "00 : 00 : 00",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.primary,
-            textAlign = TextAlign.Center,
-            fontSize = 56.sp,
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth()
-        )
-
-
-        Spacer(
-            modifier = Modifier
-                .fillMaxWidth()
-                .size(32.dp)
-        )
-
-        Text(
             text = "Latest News",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onBackground,
@@ -232,33 +258,30 @@ fun ScreenWarning(news: List<String>) {
                 .fillMaxWidth()
         )
 
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 240.dp),
-            contentPadding = PaddingValues(8.dp),
-            verticalArrangement = Arrangement.spacedBy(6.dp),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        LazyRow(
+            contentPadding = PaddingValues(start = 8.dp, end = 8.dp),
+            modifier = Modifier.padding(bottom = 32.dp)
         ) {
-            items(
-                news,
-            ) {
-                Text(
-                    text = it,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.secondary,
-                    lineHeight = 20.sp,
+            items(news) {
+                Card(
+                    colors = CardDefaults.cardColors(containerColor = surfaceColor),
+                    shape = MaterialTheme.shapes.medium,
+                    elevation = CardDefaults.outlinedCardElevation(
+                        0.7.dp
+                    ),
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(
-                            MaterialTheme.shapes.extraSmall
-                        )
-                        .background(MaterialTheme.colorScheme.tertiaryContainer)
-                        .padding(
-                            top = 8.dp,
-                            bottom = 8.dp,
-                            start = 16.dp,
-                            end = 16.dp
-                        )
-                )
+                        .padding(end = 8.dp)
+                        .width(280.dp)
+                        .height(240.dp)
+                ) {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.secondary,
+                        lineHeight = 20.sp,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
             }
         }
     }
