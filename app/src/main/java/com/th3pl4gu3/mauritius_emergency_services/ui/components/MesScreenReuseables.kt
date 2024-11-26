@@ -42,7 +42,7 @@ fun MesScreenLoading(
 
         Text(
             text = loadingMessage,
-            style = MaterialTheme.typography.headlineMedium,
+            style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
                 .fillMaxWidth()

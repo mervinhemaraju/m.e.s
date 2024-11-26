@@ -141,7 +141,7 @@ fun MesDrawerTitle(title: Pair<String, String>) {
                 append(title.second)
             }
         },
-        style = MaterialTheme.typography.headlineLarge,
+        style = MaterialTheme.typography.headlineSmall,
         color = MaterialTheme.colorScheme.onPrimaryContainer,
         letterSpacing = 4.sp,
         fontWeight = FontWeight.Bold

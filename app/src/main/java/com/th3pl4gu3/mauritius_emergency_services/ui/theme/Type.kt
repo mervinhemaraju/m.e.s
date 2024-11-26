@@ -58,8 +58,12 @@ val MesTypography = Typography(
     ),
 
     // Headline
-    headlineLarge = baseline.headlineLarge.copy(fontFamily = displayFontFamily),
-    headlineMedium = baseline.headlineMedium.copy(fontFamily = displayFontFamily),
+    headlineLarge = baseline.headlineLarge.copy(
+        fontFamily = displayFontFamily,
+        fontSize = 56.sp,
+        fontWeight = FontWeight.Bold
+    ),
+    headlineMedium = baseline.headlineMedium.copy(fontFamily = displayFontFamily, fontSize = 48.sp),
     headlineSmall = baseline.headlineSmall.copy(fontFamily = displayFontFamily),
 
     // Title
@@ -108,7 +112,6 @@ fun TypographyPreview() {
                 textAlign = TextAlign.Center,
                 modifier = modifier
             )
-
 
             Text(
                 text = "Headline Large",

@@ -129,6 +129,10 @@ fun MesApp(
             currentRoute == MesDestinations.SCREEN_SERVICES
         ).any { it }
 
+        val screenTitleVisible: Boolean = listOf(
+            currentRoute != MesDestinations.SCREEN_CYCLONE_REPORT
+        ).any { it }
+
 
         var text by rememberSaveable { mutableStateOf("") }
         var active by rememberSaveable { mutableStateOf(false) }
@@ -205,7 +209,7 @@ fun MesApp(
                             )
                         } else {
                             MesBackTopBar(
-                                screenTitle = currentRoute.replace("_", " ").capitalize(),
+                                screenTitle = if(screenTitleVisible) currentRoute.replace("_", " ").capitalize() else "",
                                 backButtonAction = { navController.navigateUp() }
                             )
                         }
