@@ -4,36 +4,45 @@ import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Phone
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material.icons.automirrored.filled.Help
+import androidx.compose.material.icons.automirrored.filled.ListAlt
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonColors
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -41,26 +50,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.th3pl4gu3.mauritius_emergency_services.R
-import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.models.api.CycloneReport
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesCounter
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesDataTable
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesIcon
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesModalBottomSheet
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenError
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenLoading
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenNoContent
-import com.th3pl4gu3.mauritius_emergency_services.ui.screens.services.ServicesList
-import com.th3pl4gu3.mauritius_emergency_services.ui.screens.services.ServicesUiState
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -78,8 +81,7 @@ fun ScreenCycloneReport(
     val ptrState = rememberPullToRefreshState()
     val animationSpeed: Int by cycloneReportViewModel.animationSpeed.collectAsState()
 
-    ReportUiStateDecisions(
-        cycloneReportUiState = cycloneReportUiState,
+    ReportUiStateDecisions(cycloneReportUiState = cycloneReportUiState,
         isRefreshing = isRefreshing,
         ptrState = ptrState,
         animationSpeed = animationSpeed,
@@ -89,8 +91,7 @@ fun ScreenCycloneReport(
                 cycloneReportViewModel.loadCycloneReport()
                 isRefreshing = false
             }
-        }
-    )
+        })
 }
 
 /**
@@ -122,9 +123,7 @@ fun ReportUiStateDecisions(
         )
 
         is CycloneReportUiState.NoWarning -> ScreenNoWarning(
-            onRefresh = retryAction,
-            isRefreshing = isRefreshing,
-            ptrState = ptrState
+            onRefresh = retryAction, isRefreshing = isRefreshing, ptrState = ptrState
         )
 
         is CycloneReportUiState.Error -> MesScreenError(
@@ -149,6 +148,9 @@ fun ScreenWarning(
 ) {
 
     var angle by remember { mutableFloatStateOf(0f) }
+    val sheetState = rememberModalBottomSheetState()
+    var showCycloneNamesBottomSheet by remember { mutableStateOf(false) }
+    var showCycloneGuidelinesBottomSheet by remember { mutableStateOf(false) }
 
     LaunchedEffect(animationSpeed) {
         while (true) {
@@ -193,21 +195,18 @@ fun ScreenWarning(
                     color = MaterialTheme.colorScheme.primary,
                     letterSpacing = 4.sp,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 Spacer(modifier = Modifier.size(34.dp))
 
-                MesIcon(
-                    painterResource = R.drawable.ic_cyclone,
+                MesIcon(painterResource = R.drawable.ic_cyclone,
                     tint = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .graphicsLayer {
                             rotationZ = angle
-                        }
-                )
+                        })
 
                 Spacer(modifier = Modifier.size(48.dp))
 
@@ -222,8 +221,28 @@ fun ScreenWarning(
                 WidgetLatestNews(news = report.news)
             }
 
-            WidgetActionButtons(modifier = Modifier.align(Alignment.BottomCenter))
+            WidgetActionButtons(
+                namesButtonOnClick = {
+                    showCycloneNamesBottomSheet = true
+                },
+                guidelinesButtonOnClick = {
+                    showCycloneGuidelinesBottomSheet = true
+                },
+                modifier = Modifier.align(Alignment.BottomEnd)
+            )
+
         }
+    }
+
+    if (showCycloneNamesBottomSheet) {
+        ContentCycloneNames(
+            sheetState = sheetState,
+            onDismiss = { showCycloneNamesBottomSheet = false })
+    }
+    if (showCycloneGuidelinesBottomSheet) {
+        ContentCycloneGuidelines(
+            sheetState = sheetState,
+            onDismiss = { showCycloneGuidelinesBottomSheet = false })
     }
 }
 
@@ -276,8 +295,7 @@ fun ScreenNoWarning(
             MesIcon(
                 painterResource = R.drawable.ic_cloud,
                 tint = MaterialTheme.colorScheme.secondary,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
+                modifier = Modifier.align(Alignment.CenterHorizontally)
             )
         }
     }
@@ -300,8 +318,7 @@ fun WidgetLatestNews(news: List<String>) {
 
     LazyRow(
         contentPadding = PaddingValues(start = 8.dp, end = 8.dp),
-        modifier = Modifier
-            .padding(bottom = 80.dp)
+        modifier = Modifier.padding(bottom = 80.dp)
     ) {
         items(news) {
             Card(
@@ -349,9 +366,7 @@ fun WidgetNextBulletin(hour: String = "00", minute: String = "00", second: Strin
     Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
 
         MesCounter(
-            countdown = hour,
-            label = "hr",
-            modifier = backgroundThemeModifier
+            countdown = hour, label = "hr", modifier = backgroundThemeModifier
         )
 
         Text(
@@ -364,9 +379,7 @@ fun WidgetNextBulletin(hour: String = "00", minute: String = "00", second: Strin
         )
 
         MesCounter(
-            countdown = minute,
-            label = "min",
-            modifier = backgroundThemeModifier
+            countdown = minute, label = "min", modifier = backgroundThemeModifier
         )
 
         Text(
@@ -379,72 +392,130 @@ fun WidgetNextBulletin(hour: String = "00", minute: String = "00", second: Strin
         )
 
         MesCounter(
-            countdown = second,
-            label = "s",
-            modifier = backgroundThemeModifier
+            countdown = second, label = "s", modifier = backgroundThemeModifier
         )
     }
 }
 
 @Composable
-fun WidgetActionButtons(modifier: Modifier) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
+fun WidgetActionButtons(
+    namesButtonOnClick: () -> Unit,
+    guidelinesButtonOnClick: () -> Unit,
+    modifier: Modifier
+) {
+    Column(
+        modifier = modifier,
     ) {
-        IconButton(
-            onClick = { /* doSomething() */ },
-            colors = IconButtonDefaults.iconButtonColors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-                contentColor = MaterialTheme.colorScheme.primary
-            ),
-            modifier = Modifier
-                .padding(horizontal = 12.dp)
-                .size(52.dp)
+
+        SmallFloatingActionButton(
+            onClick = namesButtonOnClick,
+            modifier = Modifier.align(Alignment.End),
+            shape = MaterialTheme.shapes.medium,
+            contentColor = MaterialTheme.colorScheme.onSecondary,
+            containerColor = MaterialTheme.colorScheme.secondary
         ) {
-            Icon(Icons.AutoMirrored.Filled.List, contentDescription = "Localized description")
+            Icon(Icons.AutoMirrored.Filled.ListAlt, "Floating action button.", modifier = Modifier.size(16.dp))
         }
 
-        Button(
-            onClick = { },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.error,
-                contentColor = MaterialTheme.colorScheme.onError
-            ),
-            modifier = Modifier
-                .weight(3f)
-                .height(50.dp)
-        ) {
-            Icon(
-                Icons.Outlined.Phone,
-                contentDescription = "Localized description",
-                modifier = Modifier.padding(end = 8.dp)
-            )
+        Spacer(modifier = Modifier.size(8.dp))
 
-            Text("Emergencies")
-        }
-
-        IconButton(
-            onClick = { /* doSomething() */ },
-            colors = IconButtonDefaults.iconButtonColors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-                contentColor = MaterialTheme.colorScheme.primary
-            ),
-            modifier = Modifier
-                .padding(horizontal = 12.dp)
-                .size(52.dp)
-        ) {
-            Icon(Icons.Outlined.Info, contentDescription = "Localized description")
-        }
+        // TODO(Add collapse animation)
+        ExtendedFloatingActionButton(
+            onClick = guidelinesButtonOnClick,
+            icon = { Icon(Icons.AutoMirrored.Filled.Help, "Localized description") },
+            text = { Text(text = "Guidelines") },
+            shape = MaterialTheme.shapes.medium,
+            contentColor = MaterialTheme.colorScheme.onPrimary,
+            containerColor = MaterialTheme.colorScheme.primary
+        )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ContentCycloneNames(sheetState: SheetState, onDismiss: () -> Unit) {
+
+    MesModalBottomSheet(title = "Cyclone Names", sheetState = sheetState, onDismiss = onDismiss) {
+
+        val header = listOf("Name", "Age", "City")
+        val data = listOf(
+            listOf("Alice", "25", "New York"),
+            listOf("Bob", "30", "San Francisco"),
+            listOf("Charlie", "22", "Chicago")
+        )
+
+        MesDataTable(
+            data, header
+        )
+
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ContentCycloneGuidelines(sheetState: SheetState, onDismiss: () -> Unit) {
+
+    MesModalBottomSheet(
+        title = "Cyclone Guidelines",
+        sheetState = sheetState,
+        onDismiss = onDismiss
+    ) {
+
+        val header = listOf("Name", "Age", "City")
+        val data = listOf(
+            listOf("Alice", "25", "New York"),
+            listOf("Bob", "30", "San Francisco"),
+            listOf("Charlie", "22", "Chicago")
+        )
+
+        MesDataTable(
+            data, header
+        )
+
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview("Cyclone Guidelines Light Preview", showBackground = true)
+@Preview(
+    "Cyclone Guidelines Dark Preview",
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+fun SheetCycloneGuidelinesPreview() {
+    MesTheme {
+        ContentCycloneGuidelines(
+            sheetState = rememberStandardBottomSheetState(initialValue = SheetValue.Expanded),
+            onDismiss = {}
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview("Cyclone Names Light Preview", showBackground = true)
+@Preview(
+    "Cyclone Names Dark Preview",
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+fun SheetCycloneNamesPreview() {
+    MesTheme {
+        ContentCycloneNames(
+            sheetState = rememberStandardBottomSheetState(initialValue = SheetValue.Expanded),
+            onDismiss = {}
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Preview("Warning Light Preview", showBackground = true)
 @Preview("Warning Dark Preview", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun ScreenWarningPreview() {
-    val mockData = listOf(
+
+    val newsMockData = listOf(
         "Un avertissement de cyclone de Classe 3 est en vigueur a Maurice.   | Quinzieme et dernier bulletin de cyclone pour Rodrigues emis a 1010 heures ce lundi 20 fevrier 2023.",
         "Mon, Feb 20, 2023A cyclone warning class III is in force in Mauritius. A cyclone warning class III is in force in Mauritius.Eleventh cyclone bulletin for Mauritius issued at 1610 hours on Monday 20 February 2023.At 1600 hours, intense tropical cyclone Freddy was located at about 120 km almost to the north of Grand Bay, in latitude 18.9 degrees south and longitude 57.0 degrees east. The estimated central pressure of Freddy is around 930 hectopascals and the estimated wind gusts near its centre are about 280 km/h. It is moving towards the west south west at a speed of about 30 km/h.A slight recurvature in the trajectory towards the south may still bring the centre of Freddy closer to Mauritius. A further deterioration in the weather is expected in the coming hours and cyclonic conditions may still prevail.A cyclone warning class III is maintained in Mauritius.The public in Mauritius is advised to maintain all precautions and to stay in safe places.Weather will be overcast with scattered showers, moderate to heavy at times, with thunderstorms.Wind will blow from the east at a speed of about 60 km/h, strengthening gradually with gusts reaching 120 km/h in the evening.Sea will be phenomenal with heavy swells of the order of 7 metres beyond the reefs. Storm surge will continue to cause inundation along the low-lying coastal areas. It is, therefore, strictly advised not to go at sea.A cyclone warning class III is in force in Mauritius. A cyclone warning class III is in force in Mauritius.The next bulletin will be issued at around 1910 hours.",
         "A cyclone warning class III is in force in Mauritius.",
@@ -463,43 +534,63 @@ fun ScreenWarningPreview() {
         "The next bulletin will be issued at around 1910 hours."
     )
 
+    val reportMockData = CycloneReport(level = 4, next_bulletin = "12:30:55", news = newsMockData)
+
     MesTheme {
-        ScreenWarning(
-            report = CycloneReport(level = 4, next_bulletin = "00:00:00", news = mockData),
-            onRefresh = {},
+        ReportUiStateDecisions(
+            cycloneReportUiState = CycloneReportUiState.Warning(report = reportMockData),
             isRefreshing = false,
             animationSpeed = 1000,
+            retryAction = {},
             ptrState = rememberPullToRefreshState()
         )
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Preview("No Warning Light Preview", showBackground = true)
 @Preview("No Warning Dark Preview", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun ScreenNoWarningPreview() {
     MesTheme {
-        ScreenNoWarning(
-            onRefresh = {},
+        ReportUiStateDecisions(
+            cycloneReportUiState = CycloneReportUiState.NoWarning,
             isRefreshing = false,
+            animationSpeed = 1000,
+            retryAction = {},
             ptrState = rememberPullToRefreshState()
         )
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Preview("Loading Light Preview", showBackground = true)
 @Preview("Loading Dark Preview", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun LoadingCycloneReportScreenPreview() {
     MesTheme {
+        ReportUiStateDecisions(
+            cycloneReportUiState = CycloneReportUiState.Loading,
+            isRefreshing = false,
+            animationSpeed = 1000,
+            retryAction = {},
+            ptrState = rememberPullToRefreshState()
+        )
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Preview("Error Light Preview", showBackground = true)
 @Preview("Error Dark Preview", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun ErrorCycloneReportScreenPreview() {
     MesTheme {
+        ReportUiStateDecisions(
+            cycloneReportUiState = CycloneReportUiState.Error,
+            isRefreshing = false,
+            animationSpeed = 1000,
+            retryAction = {},
+            ptrState = rememberPullToRefreshState()
+        )
     }
 }

@@ -6,8 +6,8 @@ import com.th3pl4gu3.mauritius_emergency_services.data.local.LocalServiceReposit
 import com.th3pl4gu3.mauritius_emergency_services.data.store.StoreRepository
 import com.th3pl4gu3.mauritius_emergency_services.models.MesAppSettings
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
-import com.th3pl4gu3.mauritius_emergency_services.ui.wrappers.NetworkRequests
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.GetAppLocale
+import com.th3pl4gu3.mauritius_emergency_services.ui.wrappers.NetworkRequests
 import com.th3pl4gu3.mauritius_emergency_services.utils.MES_EMERGENCY_TYPE
 import com.th3pl4gu3.mauritius_emergency_services.utils.MES_KEYWORD_DEFAULT_EB_ACTION
 import com.th3pl4gu3.mauritius_emergency_services.utils.NetworkRequestException

@@ -9,7 +9,18 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.SizeTransform
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CallEnd
@@ -32,10 +43,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.th3pl4gu3.mauritius_emergency_services.activity.MesActivity
 import com.th3pl4gu3.mauritius_emergency_services.R
+import com.th3pl4gu3.mauritius_emergency_services.activity.MesActivity
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.*
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesAsyncRoundedImage
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesCountDownAnimation
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesIcon
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenError
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenLoading
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
@@ -145,7 +160,7 @@ fun PreCallContent(
                 .wrapContentSize()
                 .weight(1f),
             text = service.name,
-            style = MaterialTheme.typography.headlineLarge,
+            style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurface,
         )
@@ -154,9 +169,9 @@ fun PreCallContent(
         Text(
             modifier = Modifier
                 .wrapContentSize()
-                .weight(1f),
+                .weight(2f),
             text = service.main_contact.toString(),
-            style = MaterialTheme.typography.headlineMedium,
+            style = MaterialTheme.typography.headlineLarge,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurface,
         )

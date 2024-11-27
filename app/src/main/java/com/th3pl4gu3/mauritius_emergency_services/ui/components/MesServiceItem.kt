@@ -162,7 +162,7 @@ fun MesServiceItemLayout(
 
             Text(
                 text = service.name.capitalize(),
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.bodyMedium,
                 softWrap = true,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Medium,

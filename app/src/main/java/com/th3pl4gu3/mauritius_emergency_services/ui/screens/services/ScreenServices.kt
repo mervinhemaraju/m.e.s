@@ -4,17 +4,17 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowDropUp
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -24,10 +24,12 @@ import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.*
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenError
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenLoading
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenNoContent
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesServiceItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.launchEmailIntent
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
-import kotlinx.coroutines.launch
 
 private const val TAG: String = "SCREEN_SERVICES"
 
@@ -111,67 +113,32 @@ fun ServicesList(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
 
-    val showScrollToTopButton by remember {
-        derivedStateOf {
-            listState.firstVisibleItemIndex > 0
-        }
-    }
-
-    Box {
-        LazyColumn(
-            modifier = modifier, state = listState
-        ) {
-            items(services, key = { it.identifier }) { service ->
-                MesServiceItem(service = service,
-                    onClick = {
-                        Log.i(
-                            "pre_call_service",
-                            "Launching PreCall with service identifier: ${service.identifier}"
-                        )
-
-                        navigateToPreCall(service, service.main_contact.toString())
-                    },
-                    modifier = Modifier.animateItemPlacement(),
-                    extrasClickAction = { this_service, contact: String ->
-                        if (contact.isDigitsOnly()) {
-                            navigateToPreCall(this_service, contact)
-                        } else {
-                            context.launchEmailIntent(recipient = contact)
-                        }
-                    })
-            }
-
-            item { Spacer(modifier = Modifier.height(54.dp)) }
-        }
-
-        Column(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            MesAnimatedVisibilitySlideVerticallyContent(
-                visibility = showScrollToTopButton
-            ) {
-                FloatingActionButton(
-                    onClick = {
-                        coroutineScope.launch {
-                            listState.animateScrollToItem(0)
-                        }
-                    }
-                    , containerColor = MaterialTheme.colorScheme.primary
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.ArrowDropUp,
-                        contentDescription = stringResource(id = R.string.action_scroll_up),
-                        tint = MaterialTheme.colorScheme.onPrimary
+    LazyColumn(
+        modifier = modifier, state = listState
+    ) {
+        items(services, key = { it.identifier }) { service ->
+            MesServiceItem(service = service,
+                onClick = {
+                    Log.i(
+                        "pre_call_service",
+                        "Launching PreCall with service identifier: ${service.identifier}"
                     )
-                }
-            }
+
+                    navigateToPreCall(service, service.main_contact.toString())
+                },
+                // FIXME(Fix deprecated method)
+                modifier = Modifier.animateItemPlacement(),
+                extrasClickAction = { svc, contact: String ->
+                    if (contact.isDigitsOnly()) {
+                        navigateToPreCall(svc, contact)
+                    } else {
+                        context.launchEmailIntent(recipient = contact)
+                    }
+                })
         }
+
+        item { Spacer(modifier = Modifier.height(54.dp)) }
     }
 }
 

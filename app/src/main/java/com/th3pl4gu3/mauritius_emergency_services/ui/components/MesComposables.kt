@@ -298,6 +298,73 @@ fun MesTextButton(
     }
 }
 
+@Composable
+fun MesDataTable(data: List<List<String>>, header: List<String>) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        // Header row
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(8.dp))
+                .padding(8.dp)
+        ) {
+            header.forEach { text ->
+                Text(
+                    text = text,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(4.dp),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Data rows
+        data.forEach { row ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(8.dp))
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                row.forEach { cell ->
+                    Text(
+                        text = cell,
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(4.dp),
+                        fontSize = 14.sp
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(4.dp))
+        }
+    }
+}
+
+@Composable
+@Preview(name = "Mes DataTable Light", showBackground = true)
+@Preview(name = "Mes DataTable Dark", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+fun DataTablePreview() {
+    val header = listOf("Name", "Age", "City")
+    val data = listOf(
+        listOf("Alice", "25", "New York"),
+        listOf("Bob", "30", "San Francisco"),
+        listOf("Charlie", "22", "Chicago")
+    )
+    MaterialTheme {
+        MesDataTable(data = data, header = header)
+    }
+}
+
 @Preview(name = "Mes Composable Light", showBackground = true)
 @Preview(name = "Mes Composable Dark", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
