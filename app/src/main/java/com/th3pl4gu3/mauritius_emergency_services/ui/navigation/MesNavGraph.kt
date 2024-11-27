@@ -21,6 +21,7 @@ import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.HasNecessaryPermissions
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.about.ScreenAbout
+import com.th3pl4gu3.mauritius_emergency_services.ui.screens.cyclone_report.CycloneReportViewModel
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.cyclone_report.ScreenCycloneReport
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.home.HomeViewModel
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.home.ScreenHome
@@ -60,7 +61,13 @@ fun MesNavGraph(
     // Define a navigate to pre call dependency function
     val navigateToPreCall: (service: Service, chosenNumber: String) -> Unit =
         { service, chosenNumber ->
-            coroutineScope.launch { navigationActionWrapper.navigateToPreCall(service, chosenNumber, snackBarHostState) }
+            coroutineScope.launch {
+                navigationActionWrapper.navigateToPreCall(
+                    service,
+                    chosenNumber,
+                    snackBarHostState
+                )
+            }
         }
 
     NavHost(
@@ -110,11 +117,11 @@ fun MesNavGraph(
             Log.i(TAG, "Starting composable ${MesDestinations.SCREEN_CYCLONE_REPORT}")
 
             /** Create the view model **/
-//            val cycloneReportViewModel = hiltViewModel<CycloneReportViewModel>()
+            val cycloneReportViewModel = hiltViewModel<CycloneReportViewModel>()
 
             /** Launch the screen UI **/
             ScreenCycloneReport(
-//                cycloneReportViewModel = cycloneReportViewModel
+                cycloneReportViewModel = cycloneReportViewModel
             )
         }
         composable(MesDestinations.SCREEN_PRE_CALL) {

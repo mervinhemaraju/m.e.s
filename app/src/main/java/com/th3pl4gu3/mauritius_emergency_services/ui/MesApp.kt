@@ -126,13 +126,9 @@ fun MesApp(
 
         val searchTopBarVisible: Boolean = listOf(
             currentRoute == MesDestinations.SCREEN_HOME,
-            currentRoute == MesDestinations.SCREEN_SERVICES
+            currentRoute == MesDestinations.SCREEN_SERVICES,
+            currentRoute == MesDestinations.SCREEN_CYCLONE_REPORT
         ).any { it }
-
-        val screenTitleVisible: Boolean = listOf(
-            currentRoute != MesDestinations.SCREEN_CYCLONE_REPORT
-        ).any { it }
-
 
         var text by rememberSaveable { mutableStateOf("") }
         var active by rememberSaveable { mutableStateOf(false) }
@@ -209,7 +205,7 @@ fun MesApp(
                             )
                         } else {
                             MesBackTopBar(
-                                screenTitle = if(screenTitleVisible) currentRoute.replace("_", " ").capitalize() else "",
+                                screenTitle = currentRoute.replace("_", " ").capitalize(),
                                 backButtonAction = { navController.navigateUp() }
                             )
                         }

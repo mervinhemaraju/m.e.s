@@ -1,13 +1,13 @@
 package com.th3pl4gu3.mauritius_emergency_services.models.responses
 
 import androidx.annotation.Keep
-import com.th3pl4gu3.mauritius_emergency_services.models.CycloneReport
+import com.th3pl4gu3.mauritius_emergency_services.models.api.CycloneGuideline
 import kotlinx.serialization.Serializable
 
 @Keep
 @Serializable
-data class MesCycloneReportResponse(
-    val report: CycloneReport,
+data class MesCycloneGuidelineResponse(
+    val guidelines: List<CycloneGuideline>,
     val message: String,
     val success: Boolean
 )
