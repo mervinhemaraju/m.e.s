@@ -7,6 +7,9 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -25,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -300,49 +304,57 @@ fun MesTextButton(
 
 @Composable
 fun MesDataTable(data: List<List<String>>, header: List<String>) {
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
     ) {
         // Header row
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(8.dp))
-                .padding(8.dp)
-        ) {
-            header.forEach { text ->
-                Text(
-                    text = text,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(4.dp),
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Data rows
-        data.forEach { row ->
+        item {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(8.dp))
-                    .padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(MaterialTheme.colorScheme.primaryContainer)
+                    .padding(8.dp)
             ) {
-                row.forEach { cell ->
-                    Text(
-                        text = cell,
+                header.forEach { text ->
+                    Box(
                         modifier = Modifier
-                            .weight(1f)
-                            .padding(4.dp),
-                        fontSize = 14.sp
-                    )
+                            .weight(1f) // This works because it's inside a Row
+                            .padding(4.dp)
+                    ) {
+                        Text(
+                            text = text,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+
+        // Data rows
+        items(data) { row ->
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(MaterialTheme.colorScheme.surface)
+                    .padding(8.dp)
+            ) {
+                items(row) { cell ->
+                    Box(
+                        modifier = Modifier
+                            .fillParentMaxWidth(1f / row.size) // Divide the width evenly across items
+                            .padding(4.dp)
+                    ) {
+                        Text(
+                            text = cell,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(4.dp))

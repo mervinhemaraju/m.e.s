@@ -46,7 +46,7 @@ fun MesModalBottomSheet(
             Text(
                 text = title,
                 style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.secondary,
             )
 
             Spacer(modifier = Modifier.size(21.dp))

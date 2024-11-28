@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Keep
 @Serializable
 data class CycloneGuideline(
-    val level: Int,
+    val level: String,
     val description: String,
     val precautions: List<String>
 )
