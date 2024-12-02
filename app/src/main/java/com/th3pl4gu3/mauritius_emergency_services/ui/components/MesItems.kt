@@ -110,7 +110,7 @@ fun MesEmergencyItem(
                 Text(
                     text = service.name.capitalize(),
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.headlineSmall,
+                    style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 2,
                     modifier = Modifier

@@ -38,7 +38,6 @@ import kotlinx.coroutines.launch
 // FEAT(Add personal doctors services)
 // FEAT(Add a home screen widget)
 // FEAT(Allow sorting of services)
-// FEAT(Add cyclone report page)
 
 @AndroidEntryPoint
 class MesActivity : AppCompatActivity() {

@@ -13,6 +13,7 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesDataTable
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesModalBottomSheet
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenError
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenLinearLoading
+import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.capitalize
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,15 +32,19 @@ fun SheetCycloneNamesDecisionsUi(
         ) {
             when (cycloneNamesUiState) {
                 is CycloneNamesUiState.Success -> {
-                    // TODO(Get this automatically from the api)
-                    val header = listOf("Name", "Gender", "Named By", "Provided By")
-                    val data: ArrayList<List<String>> = ArrayList()
 
-                    cycloneNamesUiState.names.forEach { name ->
-                        data.apply {
-                            add(listOf(name.name, name.gender, name.named_by, name.provided_by))
+                    // Extract the attribute names
+                    val header = CycloneName::class.members
+                        .filterIsInstance<kotlin.reflect.KProperty1<CycloneName, *>>()
+                        .map {
+                            it.name.replace("_", " ").capitalize()
                         }
+
+                    // Extract the values
+                    val data = cycloneNamesUiState.names.map { cyclone ->
+                        listOf(cyclone.name, cyclone.gender, cyclone.provided_by, cyclone.named_by)
                     }
+
                     MesDataTable(
                         data, header
                     )

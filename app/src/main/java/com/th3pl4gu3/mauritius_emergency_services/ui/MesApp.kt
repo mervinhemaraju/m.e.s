@@ -131,13 +131,12 @@ fun MesApp(
         ).any { it }
 
         var text by rememberSaveable { mutableStateOf("") }
-        var active by rememberSaveable { mutableStateOf(false) }
+        var searchBarExpanded by rememberSaveable { mutableStateOf(false) }
         val focusManager = LocalFocusManager.current
         val context = LocalContext.current
 
-        fun closeSearchBar() {
-            focusManager.clearFocus()
-            active = false
+        val onSearchExpandChange: (Boolean) -> Unit = { value ->
+            searchBarExpanded = value
         }
 
         /**
@@ -167,13 +166,12 @@ fun MesApp(
                         if (searchTopBarVisible) {
                             MesSearchTopBar(
                                 query = text,
-                                active = active,
-                                closeSearchBar = { closeSearchBar() },
-                                openDrawer = { coroutineScope.launch { sizeAwareDrawerState.open() } },
-                                onSearchActiveChange = {
-                                    active = it
-                                    if (!active) focusManager.clearFocus()
-                                },
+                                expanded = searchBarExpanded,
+                                onExpandedChange = onSearchExpandChange,
+                                onSearch = { focusManager.clearFocus() },
+                                closeSearch = { searchBarExpanded = false },
+                                openDrawer =
+                                    { coroutineScope.launch { sizeAwareDrawerState.open() } },
                                 onSearchQueryChange = {
                                     text = it; mainViewModel.searchOfflineServices(
                                     it
