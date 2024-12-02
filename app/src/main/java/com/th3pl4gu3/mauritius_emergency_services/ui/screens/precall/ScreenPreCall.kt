@@ -49,8 +49,8 @@ import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesAsyncRoundedImage
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesCountDownAnimation
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesIcon
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenAnimatedLoading
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenError
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenLoading
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
@@ -111,11 +111,15 @@ fun PreCallUiStateDecisions(
         }
         is PreCallUiState.Error -> MesScreenError(
             retryAction = closeScreen,
-            errorMessage = stringResource(id = R.string.message_error_call_startup_failed),
-            errorButtonText = stringResource(id = R.string.action_close)
+            errorMessageId = R.string.message_error_call_startup_failed,
+            errorButtonText = stringResource(id = R.string.action_close),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
         )
-        is PreCallUiState.Loading -> MesScreenLoading(
-            loadingMessage = stringResource(id = R.string.message_loading_call_in_progress)
+        is PreCallUiState.Loading -> MesScreenAnimatedLoading(
+            loadingMessage = stringResource(id = R.string.message_loading_call_in_progress),
+            modifier = Modifier.fillMaxSize()
         )
     }
 }

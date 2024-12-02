@@ -280,16 +280,19 @@ fun MesAboutAppCard(
 
 @Composable
 fun MesTextButton(
+
+    modifier: Modifier = Modifier,
     text: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    containerColor: Color = MaterialTheme.colorScheme.primary,
+    contentColor: Color = MaterialTheme.colorScheme.onPrimary,
+    onClick: () -> Unit
 ) {
 
     Button(
         onClick = onClick,
         shape = MaterialTheme.shapes.small,
         colors = ButtonDefaults.buttonColors(
-            MaterialTheme.colorScheme.primary
+            containerColor
         ),
         elevation = ButtonDefaults.buttonElevation(2.dp),
         modifier = modifier
@@ -297,7 +300,7 @@ fun MesTextButton(
         Text(
             text = text,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onPrimary
+            color = contentColor
         )
     }
 }

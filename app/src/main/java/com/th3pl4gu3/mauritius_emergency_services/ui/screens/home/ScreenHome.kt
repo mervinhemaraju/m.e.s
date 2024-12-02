@@ -24,7 +24,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -36,18 +35,18 @@ import com.th3pl4gu3.mauritius_emergency_services.models.MesAppSettings
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesEmergencyButton
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesEmergencyItem
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenAnimatedLoading
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenError
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenLoading
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 
 @Composable
 @ExperimentalMaterial3Api
 @ExperimentalFoundationApi
 fun ScreenHome(
+    modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel,
     navigateToPreCall: (service: Service, chosenNumber: String) -> Unit,
     scrollState: ScrollState = rememberScrollState(),
-    modifier: Modifier = Modifier,
 ) {
 
     // Get the HomeUiState from the view model
@@ -89,21 +88,27 @@ fun HomeUiStateDecisions(
                 scrollState = scrollState
             )
         }
-        is HomeUiState.Loading -> MesScreenLoading(
+
+        is HomeUiState.Loading -> MesScreenAnimatedLoading(
             loadingMessage = stringResource(id = R.string.message_loading_services),
-            modifier = modifier
+            modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
         )
+
         is HomeUiState.Error ->
             MesScreenError(
                 retryAction = retryAction,
                 modifier = modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
             )
+
         is HomeUiState.NoNetwork ->
             MesScreenError(
                 retryAction = retryAction,
-                image = painterResource(id = R.drawable.il_no_network),
-                errorMessage = stringResource(id = R.string.message_internet_connection_needed),
+                errorMessageId = R.string.message_internet_connection_needed,
                 modifier = modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
             )
     }
 }

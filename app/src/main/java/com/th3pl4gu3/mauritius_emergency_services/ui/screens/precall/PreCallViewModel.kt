@@ -59,7 +59,6 @@ class PreCallViewModel @Inject constructor(
         get() = mStartCall
 
     val service: StateFlow<PreCallUiState> = getService().map {
-
         if (it.isNotEmpty()) {
             // Get the first service
             val service = it.first()
@@ -75,7 +74,6 @@ class PreCallViewModel @Inject constructor(
         } else {
             PreCallUiState.Error
         }
-
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),

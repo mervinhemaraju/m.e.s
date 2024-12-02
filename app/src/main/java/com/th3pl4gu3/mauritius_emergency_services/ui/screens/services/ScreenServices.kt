@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -24,8 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenAnimatedLoading
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenError
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenLoading
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenNoContent
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesServiceItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.launchEmailIntent
@@ -74,28 +75,39 @@ fun ServicesUiStateDecisions(
     modifier: Modifier = Modifier
 ) {
     when (servicesUiState) {
-        is ServicesUiState.Loading -> MesScreenLoading(
+        is ServicesUiState.Loading -> MesScreenAnimatedLoading(
             loadingMessage = stringResource(id = R.string.message_loading_services),
-            modifier = modifier
+            modifier = modifier.fillMaxSize()
         )
+
         is ServicesUiState.Success -> ServicesList(
             services = servicesUiState.services,
             navigateToPreCall = navigateToPreCall,
             listState = listState,
             modifier = modifier,
         )
+
         is ServicesUiState.Error -> MesScreenError(
             retryAction = retryAction,
-            errorMessage = stringResource(id = R.string.message_error_loading_services_failed),
+            errorMessageId = R.string.message_error_loading_services_failed,
             modifier = modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
         )
+
         is ServicesUiState.NoContent -> MesScreenNoContent(
-            message = stringResource(id = R.string.message_services_not_found), modifier = modifier
+            messageId = R.string.message_services_not_found,
+            modifier = modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
         )
+
         is ServicesUiState.NoNetwork -> MesScreenError(
             retryAction = retryAction,
-            errorMessage = stringResource(id = R.string.message_internet_connection_needed),
-            image = painterResource(id = R.drawable.il_no_network)
+            errorMessageId = R.string.message_internet_connection_needed,
+            modifier = modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
         )
     }
 }

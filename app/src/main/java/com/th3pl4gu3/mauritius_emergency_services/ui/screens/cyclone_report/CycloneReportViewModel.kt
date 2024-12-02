@@ -20,88 +20,139 @@ class CycloneReportViewModel @Inject constructor(
     private val onlineServiceRequests: NetworkRequests
 ) : ViewModel() {
 
+    /**
+     * Define private UI states
+     **/
     private val mCycloneReportUiState: MutableStateFlow<CycloneReportUiState> =
         MutableStateFlow(CycloneReportUiState.Loading)
-    private val mCycloneNames= MutableStateFlow<List<CycloneName>>(listOf())
-    private val mCycloneGuideline = MutableStateFlow(CycloneGuideline("", "", listOf()))
+
+    private val mCycloneNamesUiState: MutableStateFlow<CycloneNamesUiState> =
+        MutableStateFlow(CycloneNamesUiState.Loading)
+
+    private val mCycloneGuidelinesUiState: MutableStateFlow<CycloneGuidelinesUiState> =
+        MutableStateFlow(CycloneGuidelinesUiState.Loading)
+
     private val mAnimationSpeed = MutableStateFlow(0)
     private val mCurrentCycloneLevel = MutableStateFlow(0)
 
+    /**
+     * Define public accessible UI states
+     **/
     val cycloneReportUiState: StateFlow<CycloneReportUiState> = mCycloneReportUiState.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
         initialValue = CycloneReportUiState.Loading
     )
 
+    val cycloneNamesUiState: StateFlow<CycloneNamesUiState> = mCycloneNamesUiState.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+        initialValue = CycloneNamesUiState.Loading
+    )
+
+    val cycloneGuidelinesUiState: StateFlow<CycloneGuidelinesUiState> =
+        mCycloneGuidelinesUiState.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = CycloneGuidelinesUiState.Loading
+        )
+
     val animationSpeed: StateFlow<Int>
         get() = mAnimationSpeed
 
-    val cycloneNames: StateFlow<List<CycloneName>>
-        get() = mCycloneNames
-
-    val cycloneGuideline: StateFlow<CycloneGuideline>
-        get() = mCycloneGuideline
+    val currentCycloneLevel: StateFlow<Int>
+        get() = mCurrentCycloneLevel
 
     /**
-     * On Init, load the report
+     * On Init, load the data
      **/
     init {
         viewModelScope.launch {
-            // TODO(Load these on demand rather than all at once)
-            loadCycloneReport()
-            loadCycloneNames()
-            loadCycloneGuidelines()
+            // Load the data
+            reload()
         }
+    }
+
+    /**
+     * Public Functions
+     **/
+    suspend fun reload() {
+        // Load the cyclone report
+        loadCycloneReport()
+
+        // Load the cyclone guidelines
+        loadCycloneGuidelines()
+
+        // Load the cyclone names
+        loadCycloneNames()
     }
 
     /**
      * Private Functions
      **/
-    suspend fun loadCycloneNames(){
-        val response = onlineServiceRequests.getCycloneNames(language = GetAppLocale)
-
-        if(response.success){
-            mCycloneNames.value = response.names
-        } else {
-            // TODO(Trigger a snackbar for an error message)
+    private suspend fun loadCycloneNames() {
+        with(getCycloneNames()) {
+            mCycloneNamesUiState.value = if (this.success) {
+                CycloneNamesUiState.Success(this.names)
+            } else {
+                CycloneNamesUiState.Error
+            }
         }
-
     }
 
-    suspend fun loadCycloneGuidelines(){
-        val response = onlineServiceRequests.getCycloneGuidelines(language = GetAppLocale)
+    private suspend fun loadCycloneGuidelines() {
 
-        if(response.success){
-            response.guidelines.forEach { cycloneGuideline ->
-                if(cycloneGuideline.level == mCurrentCycloneLevel.value.toString()){
-                    mCycloneGuideline.value = cycloneGuideline
-                    return
+        with(getCycloneGuidelines()) {
+            if (this.success) {
+                this.guidelines.forEach { cycloneGuideline ->
+                    if (cycloneGuideline.level == mCurrentCycloneLevel.value.toString()) {
+                        mCycloneGuidelinesUiState.value =
+                            CycloneGuidelinesUiState.Success(cycloneGuideline)
+                        return
+                    }
                 }
+
+            } else {
+                mCycloneNamesUiState.value = CycloneNamesUiState.Error
             }
         }
 
-        // TODO(Add some kind of catch all for when guidelines are not found
-
+        // Default error if no guidelines were found
+        mCycloneNamesUiState.value = CycloneNamesUiState.Error
     }
 
-    suspend fun loadCycloneReport() {
-        val report = onlineServiceRequests.getCycloneReportTesting(language = GetAppLocale)
+    private suspend fun loadCycloneReport() {
 
-        mCycloneReportUiState.value = if (report.success) {
+        with(getCycloneReport()) {
 
-            mCurrentCycloneLevel.value = report.report.level
+            mCycloneReportUiState.value = if (this.success) {
 
-            if (report.report.level > 0) {
-                mAnimationSpeed.value = 4000 / report.report.level
-                CycloneReportUiState.Warning(report.report)
+                mCurrentCycloneLevel.value = this.report.level
+
+                if (this.report.level > 0) {
+                    mAnimationSpeed.value = 4000 / this.report.level
+                    CycloneReportUiState.Warning(this.report)
+                } else {
+                    mAnimationSpeed.value = 1000
+                    CycloneReportUiState.NoWarning
+                }
             } else {
                 mAnimationSpeed.value = 1000
-                CycloneReportUiState.NoWarning
+                CycloneReportUiState.Error
             }
-        } else {
-            mAnimationSpeed.value = 1000
-            CycloneReportUiState.Error
         }
     }
 
+
+    /**
+     * Private Functions
+     **/
+    private suspend fun getCycloneNames() =
+        onlineServiceRequests.getCycloneNames(language = GetAppLocale)
+
+    private suspend fun getCycloneGuidelines() =
+        onlineServiceRequests.getCycloneGuidelines(language = GetAppLocale)
+
+    private suspend fun getCycloneReport() =
+        onlineServiceRequests.getCycloneReportTesting(language = GetAppLocale)
 }

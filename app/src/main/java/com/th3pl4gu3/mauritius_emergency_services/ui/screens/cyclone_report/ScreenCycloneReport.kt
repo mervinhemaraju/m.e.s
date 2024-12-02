@@ -1,7 +1,6 @@
 package com.th3pl4gu3.mauritius_emergency_services.ui.screens.cyclone_report
 
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -17,7 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -32,15 +30,10 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SheetState
-import androidx.compose.material3.SheetValue
-import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
-import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -55,21 +48,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.th3pl4gu3.mauritius_emergency_services.R
-import com.th3pl4gu3.mauritius_emergency_services.models.api.CycloneGuideline
-import com.th3pl4gu3.mauritius_emergency_services.models.api.CycloneName
 import com.th3pl4gu3.mauritius_emergency_services.models.api.CycloneReport
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesCounter
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesDataTable
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesIcon
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesModalBottomSheet
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenAnimatedLoading
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenError
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenLoading
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -82,29 +70,50 @@ fun ScreenCycloneReport(
 
     /** Get the UI State from the view model **/
     val cycloneReportUiState by cycloneReportViewModel.cycloneReportUiState.collectAsState()
-    val cycloneNames: List<CycloneName> by cycloneReportViewModel.cycloneNames.collectAsState()
-    val cycloneGuideline: CycloneGuideline by cycloneReportViewModel.cycloneGuideline.collectAsState()
+    val cycloneNamesUiState by cycloneReportViewModel.cycloneNamesUiState.collectAsState()
+    val cycloneGuidelinesUiState by cycloneReportViewModel.cycloneGuidelinesUiState.collectAsState()
+
+    var showCycloneNamesBottomSheet by remember { mutableStateOf(false) }
+    var showCycloneGuidelinesBottomSheet by remember { mutableStateOf(false) }
+
     var isRefreshing by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val ptrState = rememberPullToRefreshState()
     val animationSpeed: Int by cycloneReportViewModel.animationSpeed.collectAsState()
+    val currentCycloneLevel: Int by cycloneReportViewModel.currentCycloneLevel.collectAsState()
 
-    ReportUiStateDecisions(cycloneReportUiState = cycloneReportUiState,
+    val retryAction: () -> Unit = {
+        isRefreshing = true
+        coroutineScope.launch {
+            cycloneReportViewModel.reload()
+            isRefreshing = false
+        }
+    }
+
+    CycloneReportDecisionsUi(
+        cycloneReportUiState = cycloneReportUiState,
+        showCycloneGuidelinesOnClick = { showCycloneGuidelinesBottomSheet = true },
+        showCycloneNamesOnClick = { showCycloneNamesBottomSheet = true },
         isRefreshing = isRefreshing,
         ptrState = ptrState,
         animationSpeed = animationSpeed,
-        cycloneNames = cycloneNames,
-        cycloneGuideline = cycloneGuideline,
-        retryAction = {
-            isRefreshing = true
-            coroutineScope.launch {
-                cycloneReportViewModel.loadCycloneReport()
-                cycloneReportViewModel.loadCycloneNames()
-                cycloneReportViewModel.loadCycloneGuidelines()
-                isRefreshing = false
-                Log.i("CYCLONE_NAME", "cyclone name size is ${cycloneNames.size}")
-            }
-        })
+        retryAction = retryAction
+    )
+
+    SheetCycloneNamesDecisionsUi(
+        showSheetCycloneNames = showCycloneNamesBottomSheet,
+        cycloneNamesUiState = cycloneNamesUiState,
+        onDismissSheetCycloneNames = { showCycloneNamesBottomSheet = false },
+        retryAction = retryAction
+    )
+
+    SheetCycloneGuidelinesDecisionsUi(
+        currentCycloneLevel = currentCycloneLevel,
+        showSheetCycloneGuidelines = showCycloneGuidelinesBottomSheet,
+        cycloneGuidelinesUiState = cycloneGuidelinesUiState,
+        onDismissSheetCycloneNames = { showCycloneGuidelinesBottomSheet = false },
+        retryAction = retryAction
+    )
 }
 
 /**
@@ -113,30 +122,29 @@ fun ScreenCycloneReport(
 @Composable
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
-fun ReportUiStateDecisions(
+fun CycloneReportDecisionsUi(
     cycloneReportUiState: CycloneReportUiState,
     isRefreshing: Boolean,
     retryAction: () -> Unit,
-    cycloneNames: List<CycloneName>,
-    cycloneGuideline: CycloneGuideline,
+    showCycloneNamesOnClick: () -> Unit,
+    showCycloneGuidelinesOnClick: () -> Unit,
     ptrState: PullToRefreshState,
     animationSpeed: Int
 ) {
     when (cycloneReportUiState) {
-        is CycloneReportUiState.Loading -> MesScreenLoading(
-            // FIXME(Update loading text)
-            loadingMessage = stringResource(id = R.string.message_loading_services),
-            modifier = Modifier
+        is CycloneReportUiState.Loading -> MesScreenAnimatedLoading(
+            loadingMessage = stringResource(R.string.message_loading_basic),
+            modifier = Modifier.fillMaxSize()
         )
 
         is CycloneReportUiState.Warning -> ScreenWarning(
             report = cycloneReportUiState.report,
-            cycloneNames = cycloneNames,
-            cycloneGuideline = cycloneGuideline,
             onRefresh = retryAction,
             isRefreshing = isRefreshing,
             ptrState = ptrState,
-            animationSpeed = animationSpeed
+            animationSpeed = animationSpeed,
+            showCycloneNamesOnClick = showCycloneNamesOnClick,
+            showCycloneGuidelinesOnClick = showCycloneGuidelinesOnClick,
         )
 
         is CycloneReportUiState.NoWarning -> ScreenNoWarning(
@@ -146,8 +154,10 @@ fun ReportUiStateDecisions(
         is CycloneReportUiState.Error -> MesScreenError(
             retryAction = retryAction,
             // FIXME(Update error text)
-            errorMessage = stringResource(id = R.string.message_error_loading_services_failed),
+            errorMessageId = R.string.message_error_loading_services_failed,
             modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
         )
     }
 }
@@ -157,20 +167,16 @@ fun ReportUiStateDecisions(
 @Composable
 fun ScreenWarning(
     report: CycloneReport,
-    cycloneNames: List<CycloneName>,
-    cycloneGuideline: CycloneGuideline,
     scrollState: ScrollState = rememberScrollState(),
     onRefresh: () -> Unit,
     isRefreshing: Boolean,
     ptrState: PullToRefreshState,
-    animationSpeed: Int
+    animationSpeed: Int,
+    showCycloneNamesOnClick: () -> Unit,
+    showCycloneGuidelinesOnClick: () -> Unit,
 ) {
 
     var angle by remember { mutableFloatStateOf(0f) }
-    // FIXME(Open sheet in expanded form by default)
-    val sheetState = rememberModalBottomSheetState()
-    var showCycloneNamesBottomSheet by remember { mutableStateOf(false) }
-    var showCycloneGuidelinesBottomSheet by remember { mutableStateOf(false) }
 
     LaunchedEffect(animationSpeed) {
         while (true) {
@@ -241,27 +247,13 @@ fun ScreenWarning(
                 WidgetLatestNews(news = report.news)
             }
 
-            WidgetActionButtons(namesButtonOnClick = {
-                showCycloneNamesBottomSheet = true
-            }, guidelinesButtonOnClick = {
-                showCycloneGuidelinesBottomSheet = true
-            }, modifier = Modifier.align(Alignment.BottomEnd)
+            WidgetActionButtons(
+                namesButtonOnClick = showCycloneNamesOnClick,
+                guidelinesButtonOnClick = showCycloneGuidelinesOnClick,
+                modifier = Modifier.align(Alignment.BottomEnd)
             )
 
         }
-    }
-
-    if (showCycloneNamesBottomSheet) {
-        ContentCycloneNames(
-            sheetState = sheetState,
-            onDismiss = { showCycloneNamesBottomSheet = false },
-            cycloneNames = cycloneNames
-        )
-    }
-    if (showCycloneGuidelinesBottomSheet) {
-        ContentCycloneGuidelines(sheetState = sheetState,
-            cycloneGuideline = cycloneGuideline,
-            onDismiss = { showCycloneGuidelinesBottomSheet = false })
     }
 }
 
@@ -320,7 +312,9 @@ fun ScreenNoWarning(
     }
 }
 
-/** Widgets **/
+/**
+ * Widgets
+ **/
 @Composable
 fun WidgetLatestNews(news: List<String>) {
     Text(
@@ -451,160 +445,44 @@ fun WidgetActionButtons(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ContentCycloneNames(
-    cycloneNames: List<CycloneName>, sheetState: SheetState, onDismiss: () -> Unit
-) {
 
-    MesModalBottomSheet(title = "Cyclone Names", sheetState = sheetState, onDismiss = onDismiss) {
-
-        val header = listOf("Name", "Gender", "Named By", "Provided By")
-        val data: ArrayList<List<String>> = ArrayList()
-
-        cycloneNames.forEach { name ->
-            data.apply {
-                add(listOf(name.name, name.gender, name.named_by, name.provided_by))
-            }
-        }
-
-        MesDataTable(
-            data, header
-        )
-
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ContentCycloneGuidelines(
-    cycloneGuideline: CycloneGuideline, sheetState: SheetState, onDismiss: () -> Unit
-) {
-
-    MesModalBottomSheet(
-        title = "Class ${cycloneGuideline.level} Guidelines",
-        sheetState = sheetState,
-        onDismiss = onDismiss
-    ) {
-
-        Text(
-            text = cycloneGuideline.description,
-            style = MaterialTheme.typography.bodyMedium
-        )
-
-        Spacer(modifier = Modifier.size(32.dp))
-
-        Text(
-            text = "Precautions",
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.Bold,
-        )
-
-        Spacer(modifier = Modifier.size(8.dp))
-
-        LazyColumn{
-            items(cycloneGuideline.precautions) {
-                Text(
-                    text = it,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(MaterialTheme.shapes.small)
-                        .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                        .padding(8.dp)
-                )
-
-                Spacer(modifier = Modifier.size(8.dp))
-            }
-        }
-
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview("Cyclone Guidelines Light Preview", showBackground = true)
+/**
+ * SCREEN PREVIEWS
+ **/
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@Preview("Cyclone Warning Light Preview", showBackground = true)
 @Preview(
-    "Cyclone Guidelines Dark Preview",
+    "Cyclone Warning Dark Preview",
     showBackground = true,
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
-fun SheetCycloneGuidelinesPreview() {
-    val cycloneGuidelineMockData = CycloneGuideline("1", "This is a test", listOf("This is a test"))
-    MesTheme {
-        ContentCycloneGuidelines(
-            sheetState = rememberStandardBottomSheetState(initialValue = SheetValue.Expanded),
-            onDismiss = {},
-            cycloneGuideline = cycloneGuidelineMockData
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview("Cyclone Names Light Preview", showBackground = true)
-@Preview(
-    "Cyclone Names Dark Preview", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES
-)
-@Composable
-fun SheetCycloneNamesPreview() {
-    val cycloneNamesMockData = listOf(
-        CycloneName("Alice", "female", "Bob", "Eve"),
-        CycloneName("Bob", "male", "Charlie", "Dave"),
-        CycloneName("Charlie", "male", "Alice", "Eve"),
-        CycloneName("Dave", "male", "Bob", "Eve"),
-        CycloneName("Eve", "female", "Charlie", "Dave")
-    )
-
-    MesTheme {
-        ContentCycloneNames(
-            sheetState = rememberStandardBottomSheetState(initialValue = SheetValue.Expanded),
-            onDismiss = {},
-            cycloneNames = cycloneNamesMockData
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
-@Preview("Warning Light Preview", showBackground = true)
-@Preview("Warning Dark Preview", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
 fun ScreenWarningPreview() {
 
-    val cycloneGuidelineMockData = CycloneGuideline("1", "This is a test", listOf("This is a test"))
-    val newsMockData = listOf(
-        "Un avertissement de cyclone de Classe 3 est en vigueur a Maurice.   | Quinzieme et dernier bulletin de cyclone pour Rodrigues emis a 1010 heures ce lundi 20 fevrier 2023.",
-        "Mon, Feb 20, 2023A cyclone warning class III is in force in Mauritius. A cyclone warning class III is in force in Mauritius.Eleventh cyclone bulletin for Mauritius issued at 1610 hours on Monday 20 February 2023.At 1600 hours, intense tropical cyclone Freddy was located at about 120 km almost to the north of Grand Bay, in latitude 18.9 degrees south and longitude 57.0 degrees east. The estimated central pressure of Freddy is around 930 hectopascals and the estimated wind gusts near its centre are about 280 km/h. It is moving towards the west south west at a speed of about 30 km/h.A slight recurvature in the trajectory towards the south may still bring the centre of Freddy closer to Mauritius. A further deterioration in the weather is expected in the coming hours and cyclonic conditions may still prevail.A cyclone warning class III is maintained in Mauritius.The public in Mauritius is advised to maintain all precautions and to stay in safe places.Weather will be overcast with scattered showers, moderate to heavy at times, with thunderstorms.Wind will blow from the east at a speed of about 60 km/h, strengthening gradually with gusts reaching 120 km/h in the evening.Sea will be phenomenal with heavy swells of the order of 7 metres beyond the reefs. Storm surge will continue to cause inundation along the low-lying coastal areas. It is, therefore, strictly advised not to go at sea.A cyclone warning class III is in force in Mauritius. A cyclone warning class III is in force in Mauritius.The next bulletin will be issued at around 1910 hours.",
-        "A cyclone warning class III is in force in Mauritius.",
-        "A cyclone warning class III is in force in Mauritius.",
-        "Eleventh cyclone bulletin for Mauritius issued at 1610 hours on Monday 20 February 2023.",
-        "At 1600 hours, intense tropical cyclone Freddy was located at about 120 km almost to the north of Grand Bay, in latitude 18.9 degrees south and longitude 57.0 degrees east.",
-        "The estimated central pressure of Freddy is around 930 hectopascals and the estimated wind gusts near its centre are about 280 km/h. It is moving towards the west south west at a speed of about 30 km/h.",
-        "A slight recurvature in the trajectory towards the south may still bring the centre of Freddy closer to Mauritius. A further deterioration in the weather is expected in the coming hours and cyclonic conditions may still prevail.",
-        "A cyclone warning class III is maintained in Mauritius.",
-        "The public in Mauritius is advised to maintain all precautions and to stay in safe places.",
-        "Weather will be overcast with scattered showers, moderate to heavy at times, with thunderstorms.",
-        "Wind will blow from the east at a speed of about 60 km/h, strengthening gradually with gusts reaching 120 km/h in the evening.",
-        "Sea will be phenomenal with heavy swells of the order of 7 metres beyond the reefs. Storm surge will continue to cause inundation along the low-lying coastal areas. It is, therefore, strictly advised not to go at sea.",
-        "A cyclone warning class III is in force in Mauritius.",
-        "A cyclone warning class III is in force in Mauritius.",
-        "The next bulletin will be issued at around 1910 hours."
+    val mockDataCycloneReport = CycloneReport(
+        level = 4,
+        next_bulletin = "12:50:00",
+        news = listOf(
+            "lorem ipsum dolor sit amet",
+            "lorem ipsum dolor sit amet",
+            "lorem ipsum dolor sit amet",
+            "lorem ipsum dolor sit amet",
+            "lorem ipsum dolor sit amet",
+        )
     )
-
-    val reportMockData = CycloneReport(level = 4, next_bulletin = "12:30:55", news = newsMockData)
-
     MesTheme {
-        ReportUiStateDecisions(
-            cycloneReportUiState = CycloneReportUiState.Warning(report = reportMockData),
+        CycloneReportDecisionsUi(
+            cycloneReportUiState = CycloneReportUiState.Warning(mockDataCycloneReport),
             isRefreshing = false,
             animationSpeed = 1000,
             retryAction = {},
             ptrState = rememberPullToRefreshState(),
-            cycloneNames = listOf(),
-            cycloneGuideline = cycloneGuidelineMockData
+            showCycloneNamesOnClick = {},
+            showCycloneGuidelinesOnClick = {}
         )
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Preview("No Warning Light Preview", showBackground = true)
@@ -612,17 +490,15 @@ fun ScreenWarningPreview() {
 @Composable
 fun ScreenNoWarningPreview() {
 
-    val cycloneGuidelineMockData = CycloneGuideline("1", "This is a test", listOf("This is a test"))
-
     MesTheme {
-        ReportUiStateDecisions(
+        CycloneReportDecisionsUi(
             cycloneReportUiState = CycloneReportUiState.NoWarning,
             isRefreshing = false,
             animationSpeed = 1000,
             retryAction = {},
             ptrState = rememberPullToRefreshState(),
-            cycloneNames = listOf(),
-            cycloneGuideline = cycloneGuidelineMockData
+            showCycloneNamesOnClick = {},
+            showCycloneGuidelinesOnClick = {}
         )
     }
 }
@@ -632,18 +508,15 @@ fun ScreenNoWarningPreview() {
 @Preview("Loading Dark Preview", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun LoadingCycloneReportScreenPreview() {
-
-    val cycloneGuidelineMockData = CycloneGuideline("1", "This is a test", listOf("This is a test"))
-
     MesTheme {
-        ReportUiStateDecisions(
+        CycloneReportDecisionsUi(
             cycloneReportUiState = CycloneReportUiState.Loading,
             isRefreshing = false,
             animationSpeed = 1000,
             retryAction = {},
             ptrState = rememberPullToRefreshState(),
-            cycloneNames = listOf(),
-            cycloneGuideline = cycloneGuidelineMockData
+            showCycloneNamesOnClick = {},
+            showCycloneGuidelinesOnClick = {}
         )
     }
 }
@@ -653,17 +526,15 @@ fun LoadingCycloneReportScreenPreview() {
 @Preview("Error Dark Preview", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun ErrorCycloneReportScreenPreview() {
-    val cycloneGuidelineMockData = CycloneGuideline("1", "This is a test", listOf("This is a test"))
-
     MesTheme {
-        ReportUiStateDecisions(
+        CycloneReportDecisionsUi(
             cycloneReportUiState = CycloneReportUiState.Error,
             isRefreshing = false,
             animationSpeed = 1000,
             retryAction = {},
             ptrState = rememberPullToRefreshState(),
-            cycloneNames = listOf(),
-            cycloneGuideline = cycloneGuidelineMockData
+            showCycloneNamesOnClick = {},
+            showCycloneGuidelinesOnClick = {}
         )
     }
 }
