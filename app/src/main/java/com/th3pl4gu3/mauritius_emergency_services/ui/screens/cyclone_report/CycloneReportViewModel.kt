@@ -152,5 +152,5 @@ class CycloneReportViewModel @Inject constructor(
         onlineServiceRequests.getCycloneGuidelines(language = GetAppLocale)
 
     private suspend fun getCycloneReport() =
-        onlineServiceRequests.getCycloneReportTesting(language = GetAppLocale)
+        onlineServiceRequests.getCycloneReport(language = GetAppLocale)
 }

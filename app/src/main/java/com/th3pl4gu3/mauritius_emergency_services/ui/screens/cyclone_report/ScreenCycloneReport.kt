@@ -242,9 +242,9 @@ fun ScreenWarning(
                 Spacer(modifier = Modifier.size(48.dp))
 
                 WidgetNextBulletin(
-                    hour = report.getNextBulletinHour(),
-                    minute = report.getNextBulletinMinute(),
-                    second = report.getNextBulletinSecond()
+                    hour = report.getTimeSlices().first,
+                    minute = report.getTimeSlices().second,
+                    second = report.getTimeSlices().third
                 )
 
                 Spacer(modifier = Modifier.size(56.dp))

@@ -7,36 +7,19 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CycloneReport(
     val level: Int,
-    val next_bulletin: String,
+    val next_bulletin: String?,
     val news: List<String>
 ){
-    fun getNextBulletinHour(): String {
-        val timeSlices = this.next_bulletin.split(":")
+    fun getTimeSlices(): Triple<String, String, String> {
 
-        return if (timeSlices.isNotEmpty()){
-            timeSlices[0]
-        }else {
-            "00"
+        if(!next_bulletin.isNullOrEmpty()) {
+            val timeSlices = this.next_bulletin.split(":")
+
+            if (timeSlices.isNotEmpty() && timeSlices.size > 3){
+                return Triple(timeSlices[0], timeSlices[1], timeSlices[2])
+            }
         }
-    }
 
-    fun getNextBulletinMinute(): String {
-        val timeSlices = this.next_bulletin.split(":")
-
-        return if (timeSlices.size > 1){
-            timeSlices[1]
-        }else {
-            "00"
-        }
-    }
-
-    fun getNextBulletinSecond(): String {
-        val timeSlices = this.next_bulletin.split(":")
-
-        return if (timeSlices.size > 2){
-            timeSlices[2]
-        }else {
-            "00"
-        }
+        return Triple("00", "00", "00")
     }
 }

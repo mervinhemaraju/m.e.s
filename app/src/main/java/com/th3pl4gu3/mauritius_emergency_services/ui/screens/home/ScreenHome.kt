@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -91,7 +93,9 @@ fun HomeUiStateDecisions(
 
         is HomeUiState.Loading -> MesScreenAnimatedLoading(
             loadingMessage = stringResource(id = R.string.message_loading_services),
-            modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
+            modifier = modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
         )
 
         is HomeUiState.Error ->
@@ -128,48 +132,48 @@ fun HomeContent(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .padding(
-                top = 16.dp,
-                bottom = 16.dp
-            )
+
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
 
-        Text(
-            text = stringResource(id = R.string.headline_home_primary),
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .padding(
-                    start = 16.dp,
-                    end = 16.dp,
-                    top = 8.dp,
-                    bottom = 8.dp
-                )
-        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                text = stringResource(id = R.string.headline_home_primary),
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        top = 32.dp,
+                        bottom = 4.dp
+                    )
+            )
 
-        Text(
-            text = stringResource(id = R.string.headline_home_secondary),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onBackground,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .padding(
-                    start = 16.dp,
-                    end = 16.dp,
-                    top = 8.dp,
-                    bottom = 8.dp
-                )
-        )
+            Text(
+                text = stringResource(id = R.string.headline_home_secondary),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onBackground,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        top = 4.dp,
+                        bottom = 8.dp
+                    )
+            )
+        }
 
         Box(
             modifier = Modifier
                 .wrapContentSize()
-                .weight(10f)
                 .padding(8.dp)
         ) {
             MesEmergencyButton(
@@ -186,31 +190,38 @@ fun HomeContent(
             )
         }
 
-        Text(
-            text = stringResource(id = R.string.headline_home_tertiary),
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .padding(8.dp)
-        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(bottom = 16.dp)
+        ) {
 
-        Text(
-            text = stringResource(id = R.string.headline_home_quaternary),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onBackground,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .padding(
-                    bottom = 16.dp
-                )
-        )
+            Text(
+                text = stringResource(id = R.string.headline_home_tertiary),
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(8.dp)
+            )
 
-        MesEmergencyRow(
-            services = homeUiState.services,
-            navigateToPreCall = navigateToPreCall
-        )
+            Text(
+                text = stringResource(id = R.string.headline_home_quaternary),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onBackground,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(
+                        bottom = 16.dp
+                    )
+            )
+
+            MesEmergencyRow(
+                services = homeUiState.services,
+                navigateToPreCall = navigateToPreCall
+            )
+        }
+
     }
 }
 
@@ -242,6 +253,10 @@ fun MesEmergencyRow(
 
 @Preview("Home Screen Light")
 @Preview("Home Screen Dark", uiMode = UI_MODE_NIGHT_YES)
+@Preview(
+    name = "Home Screen Not Network",
+    device = "spec:width=411dp,height=891dp,dpi=420,isRound=false,chinSize=0dp,orientation=landscape"
+)
 @Composable
 @ExperimentalMaterial3Api
 @ExperimentalFoundationApi
