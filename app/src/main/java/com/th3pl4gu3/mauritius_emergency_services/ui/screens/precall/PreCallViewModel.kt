@@ -27,10 +27,6 @@ class PreCallViewModel @Inject constructor(
     private val offlineServiceRepository: LocalServiceRepository
 ) : ViewModel() {
 
-    companion object {
-        private const val TAG = "PRE_CALL_VIEW_MODEL"
-    }
-
     /**
      * Private properties
      **/

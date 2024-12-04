@@ -338,7 +338,7 @@ fun WidgetLatestNews(news: List<String>) {
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 shape = MaterialTheme.shapes.medium,
                 elevation = CardDefaults.outlinedCardElevation(
-                    MaterialTheme.elevation.superLow
+                    elevation.superLow
                 ),
                 modifier = Modifier
                     .padding(end = 8.dp)

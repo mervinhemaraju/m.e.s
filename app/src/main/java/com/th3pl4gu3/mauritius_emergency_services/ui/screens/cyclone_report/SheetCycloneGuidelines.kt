@@ -105,7 +105,7 @@ fun SheetCycloneGuidelinesDecisionsUi(
 fun SheetCycloneGuidelinesPreview() {
 
     val mockDataGuideline = CycloneGuideline(
-        level = "1",
+        level = 1,
         description = "This is a class 1 guideline",
         precautions = listOf(
             "This is a test",

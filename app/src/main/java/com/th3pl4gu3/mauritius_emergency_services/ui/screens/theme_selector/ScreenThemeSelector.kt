@@ -38,7 +38,7 @@ fun ScreenThemeSelector(
         onDismissRequest = { dialogState() },
         content = {
             Column {
-                AppTheme.values().forEach {
+                AppTheme.entries.forEach {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier

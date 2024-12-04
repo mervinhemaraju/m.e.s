@@ -91,7 +91,7 @@ fun MesSearchTopBar(
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .semantics { traversalIndex = 0f },
-            tonalElevation = MaterialTheme.elevation.extraLow,
+            tonalElevation = elevation.extraLow,
             expanded = expanded,
             onExpandedChange = onExpandedChange,
             inputField = {
@@ -101,7 +101,12 @@ fun MesSearchTopBar(
                     onSearch = onSearch,
                     expanded = expanded,
                     onExpandedChange = onExpandedChange,
-                    placeholder = { Text("Hinted search text") },
+                    placeholder = {
+                        Text(
+                            text = stringResource(R.string.message_welcome_mes),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    },
                     leadingIcon = {
                         if (!expanded)
                             Icon(

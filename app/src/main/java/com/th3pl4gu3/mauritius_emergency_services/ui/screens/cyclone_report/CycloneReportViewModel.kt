@@ -2,8 +2,6 @@ package com.th3pl4gu3.mauritius_emergency_services.ui.screens.cyclone_report
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.th3pl4gu3.mauritius_emergency_services.models.api.CycloneGuideline
-import com.th3pl4gu3.mauritius_emergency_services.models.api.CycloneName
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.GetAppLocale
 import com.th3pl4gu3.mauritius_emergency_services.ui.wrappers.NetworkRequests
 import com.th3pl4gu3.mauritius_emergency_services.utils.TIMEOUT_MILLIS
@@ -105,7 +103,7 @@ class CycloneReportViewModel @Inject constructor(
         with(getCycloneGuidelines()) {
             if (this.success) {
                 this.guidelines.forEach { cycloneGuideline ->
-                    if (cycloneGuideline.level == mCurrentCycloneLevel.value.toString()) {
+                    if (cycloneGuideline.level == mCurrentCycloneLevel.value) {
                         mCycloneGuidelinesUiState.value =
                             CycloneGuidelinesUiState.Success(cycloneGuideline)
                         return

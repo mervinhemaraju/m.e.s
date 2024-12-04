@@ -10,16 +10,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.add
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -42,8 +36,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -92,7 +86,7 @@ fun ScreenWelcome(
 
         Text(
             text = stringResource(id = R.string.headline_welcome_primary),
-            style = MaterialTheme.typography.headlineMedium,
+            style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier
                 .padding(
@@ -104,8 +98,9 @@ fun ScreenWelcome(
 
         Text(
             text = stringResource(id = R.string.app_name_long),
-            style = MaterialTheme.typography.headlineLarge,
+            style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.primary,
+            lineHeight = 54.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .padding(8.dp)
@@ -320,20 +315,6 @@ fun SliderPager(
         }
     }
 }
-
-
-/**
- * Determine the content padding to apply to the different screens of the app
- */
-@Composable
-fun rememberContentPaddingForScreen(
-    additionalTop: Dp = 0.dp,
-    excludeTop: Boolean = false
-) =
-    WindowInsets.systemBars
-        .only(if (excludeTop) WindowInsetsSides.Bottom else WindowInsetsSides.Vertical)
-        .add(WindowInsets(top = additionalTop))
-        .asPaddingValues()
 
 private fun closeDialog(dialog: MutableState<Boolean>) {
     dialog.value = false

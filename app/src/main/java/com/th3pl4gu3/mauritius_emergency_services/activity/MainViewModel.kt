@@ -9,7 +9,6 @@ import com.th3pl4gu3.mauritius_emergency_services.data.local.LocalServiceReposit
 import com.th3pl4gu3.mauritius_emergency_services.data.store.StoreRepository
 import com.th3pl4gu3.mauritius_emergency_services.models.MesAppSettings
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
-import com.th3pl4gu3.mauritius_emergency_services.ui.screens.services.ServicesUiState
 import com.th3pl4gu3.mauritius_emergency_services.utils.TIMEOUT_MILLIS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

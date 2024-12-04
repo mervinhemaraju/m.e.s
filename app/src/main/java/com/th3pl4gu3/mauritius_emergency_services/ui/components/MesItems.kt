@@ -87,7 +87,7 @@ fun MesEmergencyItem(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.outlinedCardElevation(
-            MaterialTheme.elevation.superLow
+            elevation.superLow
         ),
 
         onClick = onClick,
