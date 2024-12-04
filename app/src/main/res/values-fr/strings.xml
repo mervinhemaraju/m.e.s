@@ -104,4 +104,16 @@
     <string name="title_emergency_button_selector_dialog">Choisissez votre urgence</string>
     <string name="message_services_search_query">Recherche de %1$s dans les services</string>
     <string name="message_services_search">Entrez le service que vous souhaitez trouver</string>
+    <string name="title_cyclone_guidelines">Directives de classe %1$s</string>
+    <string name="title_cyclone_names">Noms des cyclones</string>
+    <string name="headline_cyclone_report_primary">Maurice est actuellement en</string>
+    <string name="headline_cyclone_report_status">Classe %1$s</string>
+    <string name="message_cyclone_report_no_warnings">Il n\'y a pas d\'avertissement de cyclone à Maurice pour le moment.</string>
+    <string name="headline_cyclone_report_latest_news">Dernières Nouvelles</string>
+    <string name="headline_cyclone_report_next_bulletin">Prochain Bulletin</string>
+    <string name="label_time_hour">hr</string>
+    <string name="label_time_minute">min</string>
+    <string name="label_time_second">sec</string>
+    <string name="ctnt_desc_cyclone_names_button">Obtenez une liste des noms de cyclones</string>
+    <string name="ctnt_desc_cyclone_guidelines_button">Obtenez une liste des directives relatives aux cyclones</string>
 </resources>

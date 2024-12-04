@@ -37,6 +37,7 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -58,6 +59,7 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesCounter
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesIcon
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenAnimatedLoading
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenError
+import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.capitalize
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.elevation
 import kotlinx.coroutines.delay
@@ -206,7 +208,7 @@ fun ScreenWarning(
             ) {
 
                 Text(
-                    text = "Mauritius is currently in",
+                    text = stringResource(R.string.headline_cyclone_report_primary),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center,
@@ -216,7 +218,10 @@ fun ScreenWarning(
                 )
 
                 Text(
-                    text = "Class " + report.level.toString(),
+                    text = stringResource(
+                        R.string.headline_cyclone_report_status,
+                        report.level.toString()
+                    ),
                     style = MaterialTheme.typography.headlineLarge,
                     color = MaterialTheme.colorScheme.primary,
                     letterSpacing = 4.sp,
@@ -250,7 +255,8 @@ fun ScreenWarning(
             WidgetActionButtons(
                 namesButtonOnClick = showCycloneNamesOnClick,
                 guidelinesButtonOnClick = showCycloneGuidelinesOnClick,
-                modifier = Modifier.align(Alignment.BottomEnd)
+                modifier = Modifier.align(Alignment.BottomEnd),
+                scrollState = scrollState
             )
 
         }
@@ -294,7 +300,7 @@ fun ScreenNoWarning(
             }
 
             Text(
-                text = "There are no cyclone warnings in Mauritius at the moment.",
+                text = stringResource(R.string.message_cyclone_report_no_warnings),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.secondary,
                 textAlign = TextAlign.Center,
@@ -318,7 +324,7 @@ fun ScreenNoWarning(
 @Composable
 fun WidgetLatestNews(news: List<String>) {
     Text(
-        text = "Latest News",
+        text = stringResource(R.string.headline_cyclone_report_latest_news).capitalize(),
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.onBackground,
         textAlign = TextAlign.Center,
@@ -365,7 +371,7 @@ fun WidgetNextBulletin(hour: String = "00", minute: String = "00", second: Strin
         .background(MaterialTheme.colorScheme.surfaceContainerLow)
 
     Text(
-        text = "Next Bulletin",
+        text = stringResource(R.string.headline_cyclone_report_next_bulletin).capitalize(),
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.onBackground,
         textAlign = TextAlign.Center,
@@ -379,11 +385,13 @@ fun WidgetNextBulletin(hour: String = "00", minute: String = "00", second: Strin
     Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
 
         MesCounter(
-            countdown = hour, label = "hr", modifier = backgroundThemeModifier
+            countdown = hour,
+            label = stringResource(R.string.label_time_hour),
+            modifier = backgroundThemeModifier
         )
 
         Text(
-            text = ":",
+            text = stringResource(R.string.label_time_separator),
             style = MaterialTheme.typography.headlineLarge,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier
@@ -392,11 +400,13 @@ fun WidgetNextBulletin(hour: String = "00", minute: String = "00", second: Strin
         )
 
         MesCounter(
-            countdown = minute, label = "min", modifier = backgroundThemeModifier
+            countdown = minute,
+            label = stringResource(R.string.label_time_minute),
+            modifier = backgroundThemeModifier
         )
 
         Text(
-            text = ":",
+            text = stringResource(R.string.label_time_separator),
             style = MaterialTheme.typography.headlineLarge,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier
@@ -405,15 +415,21 @@ fun WidgetNextBulletin(hour: String = "00", minute: String = "00", second: Strin
         )
 
         MesCounter(
-            countdown = second, label = "s", modifier = backgroundThemeModifier
+            countdown = second,
+            label = stringResource(R.string.label_time_minute),
+            modifier = backgroundThemeModifier
         )
     }
 }
 
 @Composable
 fun WidgetActionButtons(
-    namesButtonOnClick: () -> Unit, guidelinesButtonOnClick: () -> Unit, modifier: Modifier
+    namesButtonOnClick: () -> Unit, guidelinesButtonOnClick: () -> Unit,
+    modifier: Modifier,
+    scrollState: ScrollState
 ) {
+    val expandedFab by remember { derivedStateOf { scrollState.value <= 50 } }
+
     Column(
         modifier = modifier,
     ) {
@@ -428,15 +444,24 @@ fun WidgetActionButtons(
             containerColor = MaterialTheme.colorScheme.secondary,
 
             ) {
-            Icon(Icons.AutoMirrored.Filled.Help, "Floating action button.")
+            Icon(
+                Icons.AutoMirrored.Filled.Help,
+                stringResource(R.string.ctnt_desc_cyclone_guidelines_button)
+            )
         }
 
         Spacer(modifier = Modifier.size(8.dp))
 
         // TODO(Add collapse animation)
         ExtendedFloatingActionButton(
+            expanded = expandedFab,
             onClick = namesButtonOnClick,
-            icon = { Icon(Icons.AutoMirrored.Filled.ListAlt, "Localized description") },
+            icon = {
+                Icon(
+                    Icons.AutoMirrored.Filled.ListAlt,
+                    stringResource(R.string.ctnt_desc_cyclone_names_button)
+                )
+            },
             text = { Text(text = "Names") },
             shape = MaterialTheme.shapes.medium,
             contentColor = MaterialTheme.colorScheme.onPrimary,

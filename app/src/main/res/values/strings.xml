@@ -63,6 +63,9 @@
 
     <string name="title_services_page_other_contacts">Other Contacts</string>
 
+    <string name="title_cyclone_guidelines">Class %1$s Guidelines</string>
+    <string name="title_cyclone_names">Cyclone Names</string>
+
     <!-- Descriptions -->
     <string name="description_about_data_rate_mes">
         If you love the app, let us know in the Google Play Store and we can make it even better.
@@ -125,6 +128,11 @@
 
     <string name="headline_welcome_primary">Welcome to</string>
 
+    <string name="headline_cyclone_report_primary">Mauritius is currently in</string>
+    <string name="headline_cyclone_report_status">Class %1$s</string>
+    <string name="headline_cyclone_report_latest_news">Latest News</string>
+    <string name="headline_cyclone_report_next_bulletin">Next Bulletin</string>
+
     <!-- Sections -->
     <string name="section_about_title_about">About</string>
     <string name="section_about_title_support_and_dev">Support &amp; Development</string>
@@ -152,6 +160,7 @@
     <string name="message_permissions_enable_phone_call">Please enable call permissions in settings to continue</string>
     <string name="message_services_search_query">"Searching for %1$s in services"</string>
     <string name="message_services_search">"Enter the service that you want to find"</string>
+    <string name="message_cyclone_report_no_warnings">There are no cyclone warnings in Mauritius at the moment.</string>
     <!-- Message: Error -->
     <string name="message_error_content_failed">Error getting content</string>
     <string name="message_error_loading_countdown" translatable="false">X</string>
@@ -163,5 +172,12 @@
     <!-- Content Descriptions -->
     <string name="ctnt_desc_drawer_open">Open Navigation Drawer</string>
     <string name="ctnt_desc_emergency_button">Make a quick emergency call</string>
+    <string name="ctnt_desc_cyclone_names_button">Get a list of cyclone names</string>
+    <string name="ctnt_desc_cyclone_guidelines_button">Get a list of cyclone guidelines</string>
 
+    <!-- Labels -->
+    <string name="label_time_separator" translatable="false">:</string>
+    <string name="label_time_hour">hr</string>
+    <string name="label_time_minute">min</string>
+    <string name="label_time_second">sec</string>
 </resources>

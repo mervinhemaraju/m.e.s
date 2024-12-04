@@ -28,7 +28,9 @@ fun SheetCycloneNamesDecisionsUi(
 
     if (showSheetCycloneNames) {
         MesModalBottomSheet(
-            title = "Cyclone Names", sheetState = sheetState, onDismiss = onDismissSheetCycloneNames
+            title = "Cyclone Names",
+            sheetState = sheetState,
+            onDismiss = onDismissSheetCycloneNames
         ) {
             when (cycloneNamesUiState) {
                 is CycloneNamesUiState.Success -> {

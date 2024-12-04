@@ -47,7 +47,7 @@ import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.activity.MesActivity
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesAsyncRoundedImage
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesCountDownAnimation
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.mesCountDownAnimation
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesIcon
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenAnimatedLoading
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenError
@@ -204,7 +204,7 @@ fun PreCallContent(
             AnimatedContent(
                 targetState = countdown,
                 transitionSpec = {
-                    MesCountDownAnimation().using(
+                    mesCountDownAnimation().using(
                         SizeTransform(clip = false)
                     )
                 }, label = ""

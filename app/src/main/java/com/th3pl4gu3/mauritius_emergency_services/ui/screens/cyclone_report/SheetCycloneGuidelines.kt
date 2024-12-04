@@ -18,9 +18,11 @@ import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.models.api.CycloneGuideline
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesModalBottomSheet
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenError
@@ -41,7 +43,7 @@ fun SheetCycloneGuidelinesDecisionsUi(
     if (showSheetCycloneGuidelines) {
 
         MesModalBottomSheet(
-            title = "Cyclone $currentCycloneLevel Guideline",
+            title = stringResource(R.string.title_cyclone_guidelines, currentCycloneLevel),
             sheetState = sheetState,
             onDismiss = onDismissSheetCycloneNames
         ) {

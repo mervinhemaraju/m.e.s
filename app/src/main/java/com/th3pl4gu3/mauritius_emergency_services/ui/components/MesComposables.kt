@@ -270,7 +270,8 @@ fun MesAboutAppCard(
                 modifier = Modifier
                     .size(64.dp)
                     .align(Alignment.CenterHorizontally),
-                contentDescription = R.string.app_name_short
+                contentDescription = R.string.app_name_short,
+                tint = MaterialTheme.colorScheme.secondary
             )
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -402,16 +403,6 @@ fun DataTablePreview() {
 @ExperimentalMaterial3Api
 @ExperimentalFoundationApi
 fun MesComposablePreview() {
-
-    val mockDataService = Service(
-        identifier = "security-police-direct-2",
-        name = "Samu",
-        type = "E",
-        icon = "https://img.icons8.com/fluent/100/000000/policeman-male.png",
-        main_contact = 112,
-        emails = listOf(),
-        other_contacts = listOf()
-    )
 
     val mockDataAboutInfoList = AboutInfoVector.supportAndDevelopment
 

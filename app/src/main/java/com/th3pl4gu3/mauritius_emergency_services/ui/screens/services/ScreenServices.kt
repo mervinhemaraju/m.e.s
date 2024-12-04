@@ -6,7 +6,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -124,8 +124,11 @@ fun ServicesList(
     val context = LocalContext.current
 
     LazyColumn(
-        modifier = modifier, state = listState
+        modifier = modifier,
+        state = listState
     ) {
+        item { Spacer(modifier = Modifier.size(21.dp)) }
+
         items(services, key = { it.identifier }) { service ->
             MesServiceItem(
                 service = service,
@@ -147,7 +150,7 @@ fun ServicesList(
                 })
         }
 
-        item { Spacer(modifier = Modifier.height(54.dp)) }
+        item { Spacer(modifier = Modifier.size(48.dp)) }
     }
 }
 
