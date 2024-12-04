@@ -59,6 +59,7 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesIcon
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenAnimatedLoading
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenError
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
+import com.th3pl4gu3.mauritius_emergency_services.ui.theme.elevation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -153,8 +154,7 @@ fun CycloneReportDecisionsUi(
 
         is CycloneReportUiState.Error -> MesScreenError(
             retryAction = retryAction,
-            // FIXME(Update error text)
-            errorMessageId = R.string.message_error_loading_services_failed,
+            errorMessageId = R.string.message_error_loading_cyclone_report_failed,
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
@@ -338,7 +338,7 @@ fun WidgetLatestNews(news: List<String>) {
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 shape = MaterialTheme.shapes.medium,
                 elevation = CardDefaults.outlinedCardElevation(
-                    0.7.dp
+                    MaterialTheme.elevation.superLow
                 ),
                 modifier = Modifier
                     .padding(end = 8.dp)

@@ -55,8 +55,6 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
 
-private const val TAG = "PRE_CALL_SCREEN"
-
 @Composable
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
@@ -155,7 +153,7 @@ fun PreCallContent(
                 .weight(1f),
             text = stringResource(id = R.string.headline_pre_call_primary),
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = MaterialTheme.colorScheme.secondary,
             textAlign = TextAlign.Center
         )
 
@@ -166,7 +164,7 @@ fun PreCallContent(
             text = service.name,
             style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = MaterialTheme.colorScheme.secondary,
         )
 
 
@@ -177,7 +175,7 @@ fun PreCallContent(
             text = service.main_contact.toString(),
             style = MaterialTheme.typography.headlineLarge,
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = MaterialTheme.colorScheme.primary,
         )
 
         Spacer(modifier = Modifier.height(48.dp))
@@ -209,7 +207,7 @@ fun PreCallContent(
                     MesCountDownAnimation().using(
                         SizeTransform(clip = false)
                     )
-                }
+                }, label = ""
             ) { targetCount ->
 
                 Text(
@@ -237,6 +235,7 @@ fun SwipeToCancel(
     modifier: Modifier = Modifier
 ) {
 
+    // FIXME(Implement this functionality using pure jetpack compose)
     val shape = MaterialTheme.shapes.medium
 
     val close = SwipeAction(
@@ -285,11 +284,11 @@ fun SwipeToCancel(
             Icon(
                 imageVector = Icons.Outlined.KeyboardDoubleArrowLeft,
                 contentDescription = stringResource(id = R.string.action_swipe_cancel),
-                Modifier
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
                     .fillMaxHeight()
                     .width(48.dp)
                     .clip(RoundedCornerShape(12.dp))
-//                    .size(54.dp)
                     .background(MaterialTheme.colorScheme.background)
             )
         }

@@ -3,16 +3,34 @@ package com.th3pl4gu3.mauritius_emergency_services.ui.components
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material3.*
+import androidx.compose.material.icons.automirrored.outlined.OpenInNew
+import androidx.compose.material.icons.outlined.Brightness4
+import androidx.compose.material.icons.outlined.Cyclone
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Phone
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.Badge
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,7 +40,10 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.navigation.MesDestinations
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 
 @ExperimentalMaterial3Api
+@Composable
 fun MesNavigationDrawer(
+    modifier: Modifier = Modifier,
+    isExpandedView: Boolean,
     currentRoute: String,
     navigateToHome: () -> Unit,
     navigateToServices: () -> Unit,
@@ -32,39 +53,36 @@ fun MesNavigationDrawer(
     navigateToContactUs: () -> Unit,
     toggleThemeDialog: () -> Unit,
     scrollState: ScrollState? = null,
-    closeDrawer: () -> Unit = {},
-    modifier: Modifier = Modifier
-): Pair<@Composable () -> Unit, @Composable () -> Unit> {
-    return Pair(
-        {
-            MesDrawer(
-                currentRoute = currentRoute,
-                navigateToHome = navigateToHome,
-                navigateToServices = navigateToServices,
-                navigateToCycloneReport = navigateToCycloneReport,
-                navigateToAbout = navigateToAbout,
-                navigateToSettings = navigateToSettings,
-                navigateToContactUs = navigateToContactUs,
-                toggleThemeDialog = toggleThemeDialog,
-                closeDrawer = closeDrawer,
-                modifier = modifier
-            )
-        },
-        {
-            MesNavRail(
-                currentRoute = currentRoute,
-                navigateToHome = navigateToHome,
-                navigateToServices = navigateToServices,
-                navigateToCycloneReport = navigateToCycloneReport,
-                navigateToAbout = navigateToAbout,
-                navigateToSettings = navigateToSettings,
-                navigateToContactUs = navigateToContactUs,
-                toggleThemeDialog = toggleThemeDialog,
-                scrollState = scrollState ?: rememberScrollState(),
-                modifier = modifier
-            )
-        }
-    )
+    closeDrawer: () -> Unit = {}
+) {
+    if (isExpandedView) {
+        MesDrawer(
+            currentRoute = currentRoute,
+            navigateToHome = navigateToHome,
+            navigateToServices = navigateToServices,
+            navigateToCycloneReport = navigateToCycloneReport,
+            navigateToAbout = navigateToAbout,
+            navigateToSettings = navigateToSettings,
+            navigateToContactUs = navigateToContactUs,
+            toggleThemeDialog = toggleThemeDialog,
+            closeDrawer = closeDrawer,
+            modifier = modifier
+        )
+    } else {
+        MesNavRail(
+            currentRoute = currentRoute,
+            navigateToHome = navigateToHome,
+            navigateToServices = navigateToServices,
+            navigateToCycloneReport = navigateToCycloneReport,
+            navigateToAbout = navigateToAbout,
+            navigateToSettings = navigateToSettings,
+            navigateToContactUs = navigateToContactUs,
+            toggleThemeDialog = toggleThemeDialog,
+            scrollState = scrollState ?: rememberScrollState(),
+            modifier = modifier
+        )
+
+    }
 }
 
 @Composable
@@ -84,13 +102,16 @@ private fun MesNavRail(
     NavigationRail(
         containerColor = MaterialTheme.colorScheme.surface,
         header = {
+
+            Spacer(modifier = Modifier.size(16.dp))
+
             MesIcon(
                 painterResource = R.drawable.ic_mes,
                 contentDescription = R.string.app_name_short,
                 modifier = Modifier
                     .size(54.dp)
                     .padding(vertical = 12.dp),
-                tint = MaterialTheme.colorScheme.surfaceVariant,
+                tint = MaterialTheme.colorScheme.onSurface,
             )
         },
         modifier = modifier
@@ -248,8 +269,20 @@ private fun MesDrawer(
                     contentDescription = stringResource(id = R.string.title_drawer_page_cyclone_report)
                 )
             },
+            badge = {
+                Badge(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                ) {
+                    Text(
+                        text = stringResource(R.string.message_item_new),
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(2.dp)
+                    )
+                }
+            },
             selected = currentRoute == MesDestinations.SCREEN_CYCLONE_REPORT,
-            onClick = { navigateToCycloneReport(); closeDrawer()},
+            onClick = { navigateToCycloneReport(); closeDrawer() },
         )
         MesNavigationItem(
             label = stringResource(id = R.string.title_drawer_page_about),
@@ -274,15 +307,15 @@ private fun MesDrawer(
             onClick = { navigateToSettings(); closeDrawer() },
         )
 
-        Divider(
-            thickness = 0.7.dp,
-            color = MaterialTheme.colorScheme.onSurface,
+        HorizontalDivider(
             modifier = Modifier.padding(
                 top = 16.dp,
                 bottom = 16.dp,
                 start = 32.dp,
                 end = 32.dp
-            )
+            ),
+            thickness = 0.7.dp,
+            color = MaterialTheme.colorScheme.onSurface
         )
 
         MesNavigationItem(
@@ -309,7 +342,8 @@ private fun MesDrawer(
             onClick = { navigateToContactUs() },
             badge = {
                 MesIcon(
-                    imageVector = Icons.Outlined.OpenInNew, contentDescription = stringResource(
+                    imageVector = Icons.AutoMirrored.Outlined.OpenInNew,
+                    contentDescription = stringResource(
                         id = R.string.message_external_link
                     )
                 )
@@ -326,6 +360,7 @@ private fun MesDrawer(
 fun PreviewAppNavRail() {
     MesTheme {
         MesNavigationDrawer(
+            isExpandedView = false,
             currentRoute = MesDestinations.SCREEN_HOME,
             navigateToHome = {},
             navigateToServices = {},
@@ -335,7 +370,7 @@ fun PreviewAppNavRail() {
             toggleThemeDialog = {},
             navigateToContactUs = {},
             scrollState = rememberScrollState()
-        ).second()
+        )
     }
 }
 
@@ -346,6 +381,7 @@ fun PreviewAppNavRail() {
 fun PreviewAppDrawer() {
     MesTheme {
         MesNavigationDrawer(
+            isExpandedView = true,
             currentRoute = MesDestinations.SCREEN_HOME,
             navigateToHome = {},
             navigateToServices = {},
@@ -355,6 +391,6 @@ fun PreviewAppDrawer() {
             toggleThemeDialog = {},
             navigateToContactUs = {},
             closeDrawer = {}
-        ).first()
+        )
     }
 }

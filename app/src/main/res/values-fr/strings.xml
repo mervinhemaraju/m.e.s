@@ -61,7 +61,7 @@
     <string name="description_settings_page_clear_cache">Cela permettra à Mes de vider le cache et de recharger les services depuis Internet</string>
     <string name="description_settings_page_change_language">Cliquez pour changer la langue de l\'application</string>
     <string name="headline_home_primary">Aide d\'appel d\'urgence nécessaire ?</string>
-    <string name="headline_home_secondary">Cliquez sur le bouton pour un appel rapide</string>
+    <string name="headline_home_secondary">Maintenez le bouton d\'urgence pour appeler</string>
     <string name="headline_home_tertiary">Besoin d\'autres actions d\'urgence rapides ?</string>
     <string name="headline_home_quaternary">Cliquez ci-dessous pour appeler</string>
     <string name="headline_pre_call_primary">Démarrage d\'un appel vers</string>
@@ -79,7 +79,7 @@
     <string name="message_action_emergency_button_configured">%1$s a été défini comme action du bouton d\'urgence</string>
     <string name="message_emergency_button_action_updated">Action du bouton d\'urgence mise à jour</string>
     <string name="message_error_content_failed">Erreur lors de l\'obtention du contenu</string>
-    <string name="message_error_loading_failed">Échec du chargement</string>
+    <string name="message_error_loading_cyclone_report_failed">Impossible de charger le rapport cyclonique.</string>
     <string name="message_error_loading_services_failed">Échec du chargement des services.</string>
     <string name="message_error_call_startup_failed">Impossible d\'effectuer l\'appel téléphonique pour le moment. Veuillez réessayer.</string>
     <string name="message_error_cache_reset">Une erreur s\'est produite lors de la réinitialisation du cache : %1$s</string>
@@ -87,7 +87,7 @@
     <string name="ctnt_desc_emergency_button">Passer un appel d\'urgence rapide</string>
     <string name="title_services_page_other_contacts">Autres contacts</string>
     <string name="message_toll_free">Gratuit</string>
-    <string name="message_item_coming_soon">À venir</string>
+    <string name="message_item_new">Nouveau</string>
     <string name="message_no_other_contacts_found">Action du bouton d\'urgence</string>
     <string name="action_sort">Classer</string>
     <string name="action_call_end">Fin d\'appel</string>

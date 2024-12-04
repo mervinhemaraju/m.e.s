@@ -117,7 +117,7 @@
 
     <!-- Headlines -->
     <string name="headline_home_primary">Emergency call help needed ?</string>
-    <string name="headline_home_secondary">Click the button to quick call</string>
+    <string name="headline_home_secondary">Hold the emergency button to call</string>
     <string name="headline_home_tertiary">Need other quick emergency actions ?</string>
     <string name="headline_home_quaternary">Click one below to call</string>
 
@@ -140,7 +140,7 @@
     <string name="message_cache_reset_successfully">Cache reset successfully</string>
     <string name="message_action_emergency_button_configured">%1$s has been set as the emergency button action</string>
     <string name="message_toll_free">Toll Free</string>
-    <string name="message_item_coming_soon">Coming soon</string>
+    <string name="message_item_new">New</string>
     <string name="message_no_other_contacts_found">No other contacts found</string>
     <string name="message_internet_connection_needed">
         You need to be connected to the internet for Mes to download the data. Please connect and try again
@@ -155,7 +155,7 @@
     <!-- Message: Error -->
     <string name="message_error_content_failed">Error getting content</string>
     <string name="message_error_loading_countdown" translatable="false">X</string>
-    <string name="message_error_loading_failed">Change To French Test</string>
+    <string name="message_error_loading_cyclone_report_failed">Unable to load cyclone report.</string>
     <string name="message_error_loading_services_failed">Unable to load services.</string>
     <string name="message_error_call_startup_failed">Unable to perform the phone call at the moment. Please try again.</string>
     <string name="message_error_cache_reset">Error occurred while resetting cache: %1$s</string>

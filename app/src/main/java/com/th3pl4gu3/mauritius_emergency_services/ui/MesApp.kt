@@ -145,6 +145,7 @@ fun MesApp(
         ModalNavigationDrawer(
             drawerContent = {
                 MesNavigationDrawer(
+                    isExpandedView = true,
                     currentRoute = currentRoute,
                     navigateToHome = navigationActions.navigateToHome,
                     navigateToServices = navigationActions.navigateToServices,
@@ -154,7 +155,7 @@ fun MesApp(
                     toggleThemeDialog = { coroutineScope.launch { showDialog = !showDialog } },
                     navigateToContactUs = { activity.launchContactUsIntent() },
                     closeDrawer = { coroutineScope.launch { sizeAwareDrawerState.close() } }
-                ).first()
+                )
             },
             drawerState = sizeAwareDrawerState,
             // Only enable opening the drawer via gestures if the screen is not expanded
@@ -171,7 +172,7 @@ fun MesApp(
                                 onSearch = { focusManager.clearFocus() },
                                 closeSearch = { searchBarExpanded = false },
                                 openDrawer =
-                                    { coroutineScope.launch { sizeAwareDrawerState.open() } },
+                                { coroutineScope.launch { sizeAwareDrawerState.open() } },
                                 onSearchQueryChange = {
                                     text = it; mainViewModel.searchOfflineServices(
                                     it
@@ -236,6 +237,7 @@ fun MesApp(
                 Row {
                     if (isExpandedScreen) {
                         MesNavigationDrawer(
+                            isExpandedView = false,
                             currentRoute = currentRoute,
                             navigateToHome = navigationActions.navigateToHome,
                             navigateToServices = navigationActions.navigateToServices,
@@ -249,7 +251,7 @@ fun MesApp(
                             },
                             navigateToContactUs = { activity.launchContactUsIntent() },
                             scrollState = scrollState
-                        ).second()
+                        )
                     }
                     MesNavGraph(
                         application = application,

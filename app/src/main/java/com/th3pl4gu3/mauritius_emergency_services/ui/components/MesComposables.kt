@@ -35,6 +35,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
@@ -48,8 +49,9 @@ import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.models.items.AboutInfoDrawable
 import com.th3pl4gu3.mauritius_emergency_services.models.items.AboutInfoVector
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
-import com.th3pl4gu3.mauritius_emergency_services.ui.theme.EmergencyButton
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
+import com.th3pl4gu3.mauritius_emergency_services.ui.theme.elevation
+
 
 @Composable
 fun MesCounter(countdown: String, label: String, modifier: Modifier = Modifier) {
@@ -131,36 +133,36 @@ fun MesAsyncRoundedImage(
 
 @Composable
 fun MesDrawerHeader(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    contentColor: Color = MaterialTheme.colorScheme.onBackground,
+    contentStyle: TextStyle = MaterialTheme.typography.headlineSmall
 ) {
+    val title: @Composable (text: Pair<String, String>) -> Unit = { it ->
+        Text(
+            buildAnnotatedString {
+                append(it.first)
+                withStyle(
+                    style = SpanStyle(
+                        fontWeight = FontWeight.Medium
+                    )
+                ) {
+                    append(it.second)
+                }
+            },
+            style = contentStyle,
+            color = contentColor,
+            letterSpacing = 4.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+
     Column(modifier = modifier) {
-        MesDrawerTitle(title = Pair("M", "auritius"))
-        MesDrawerTitle(title = Pair("E", "mergency"))
-        MesDrawerTitle(title = Pair("S", "ervices"))
+        title(Pair("M", "auritius"))
+        title(Pair("E", "mergency"))
+        title(Pair("S", "ervices"))
     }
 }
 
-@Composable
-fun MesDrawerTitle(title: Pair<String, String>) {
-    Text(
-        buildAnnotatedString {
-            append(title.first)
-            withStyle(
-                style = SpanStyle(
-                    fontWeight = FontWeight.Medium
-                )
-            ) {
-                append(title.second)
-            }
-        },
-        style = MaterialTheme.typography.headlineSmall,
-        color = MaterialTheme.colorScheme.onPrimaryContainer,
-        letterSpacing = 4.sp,
-        fontWeight = FontWeight.Bold
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @ExperimentalFoundationApi
 fun MesEmergencyButton(
@@ -175,7 +177,7 @@ fun MesEmergencyButton(
         ),
         shape = RoundedCornerShape(50),
         elevation = CardDefaults.elevatedCardElevation(
-            defaultElevation = 6.dp,
+            defaultElevation = MaterialTheme.elevation.normal,
             hoveredElevation = 0.dp
         ),
         modifier = modifier
@@ -449,8 +451,6 @@ fun MesComposablePreview() {
             MesEmergencyButton(onClick = {}, modifier = Modifier.size(200.dp))
 
             MesDrawerHeader()
-
-            MesDrawerTitle(title = Pair("T", "esting"))
 
             MesAboutInfoCard(
                 title = "Title",

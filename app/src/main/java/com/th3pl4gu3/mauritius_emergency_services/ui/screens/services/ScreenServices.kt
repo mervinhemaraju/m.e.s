@@ -130,7 +130,8 @@ fun ServicesList(
         modifier = modifier, state = listState
     ) {
         items(services, key = { it.identifier }) { service ->
-            MesServiceItem(service = service,
+            MesServiceItem(
+                service = service,
                 onClick = {
                     Log.i(
                         "pre_call_service",
@@ -139,8 +140,7 @@ fun ServicesList(
 
                     navigateToPreCall(service, service.main_contact.toString())
                 },
-                // FIXME(Fix deprecated method)
-                modifier = Modifier.animateItemPlacement(),
+                modifier = Modifier.animateItem(fadeInSpec = null, fadeOutSpec = null),
                 extrasClickAction = { svc, contact: String ->
                     if (contact.isDigitsOnly()) {
                         navigateToPreCall(svc, contact)

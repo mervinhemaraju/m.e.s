@@ -37,7 +37,8 @@ fun MesServiceItem(
     service: Service,
     actionVisible: Boolean = true,
     onClick: () -> Unit,
-    extrasClickAction: (Service, String) -> Unit
+    extrasClickAction: (Service, String) -> Unit,
+    containerColor: Color = MaterialTheme.colorScheme.background
 ) {
 
     var expanded by remember {
@@ -50,7 +51,7 @@ fun MesServiceItem(
             if (expanded) {
                 MaterialTheme.colorScheme.secondaryContainer
             } else {
-                MaterialTheme.colorScheme.background
+                containerColor
             }
         )
 

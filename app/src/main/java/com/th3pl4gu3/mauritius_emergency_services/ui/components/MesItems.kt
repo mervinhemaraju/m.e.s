@@ -27,6 +27,7 @@ import com.th3pl4gu3.mauritius_emergency_services.models.items.AboutInfoDrawable
 import com.th3pl4gu3.mauritius_emergency_services.models.items.AboutInfoVector
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.capitalize
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
+import com.th3pl4gu3.mauritius_emergency_services.ui.theme.elevation
 
 @Composable
 @ExperimentalMaterial3Api
@@ -44,7 +45,7 @@ fun MesNavigationItem(
             selected = selected,
             onClick = onClick,
             icon = icon,
-            label = { Text(text = label) },
+            label = { Text(text = label, style = MaterialTheme.typography.bodyMedium) },
             alwaysShowLabel = false,
             modifier = modifier,
             colors = NavigationRailItemDefaults.colors(
@@ -56,7 +57,7 @@ fun MesNavigationItem(
         )
     } else {
         NavigationDrawerItem(
-            label = { Text(text = label) },
+            label = { Text(text = label, style = MaterialTheme.typography.bodyMedium) },
             icon = icon,
             selected = selected,
             onClick = onClick,
@@ -86,8 +87,9 @@ fun MesEmergencyItem(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.outlinedCardElevation(
-            0.7.dp
+            MaterialTheme.elevation.superLow
         ),
+
         onClick = onClick,
         modifier = modifier
             .padding(8.dp)

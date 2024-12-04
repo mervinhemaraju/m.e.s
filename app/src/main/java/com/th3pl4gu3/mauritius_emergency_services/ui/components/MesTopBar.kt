@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
+import com.th3pl4gu3.mauritius_emergency_services.ui.theme.elevation
 
 @Composable
 @ExperimentalMaterial3Api
@@ -90,7 +91,7 @@ fun MesSearchTopBar(
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .semantics { traversalIndex = 0f },
-            tonalElevation = 2.dp,
+            tonalElevation = MaterialTheme.elevation.extraLow,
             expanded = expanded,
             onExpandedChange = onExpandedChange,
             inputField = {
@@ -151,7 +152,8 @@ fun MesSearchTopBar(
                         service = service,
                         onClick = { onServiceClick(service) },
                         actionVisible = true,
-                        extrasClickAction = onExtrasClick
+                        extrasClickAction = onExtrasClick,
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
                     )
                 }
             }
