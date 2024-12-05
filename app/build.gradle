@@ -170,8 +170,6 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-collections-immutable:$kotlinx_collections_immutable_version"
     // Coil
     implementation "io.coil-kt:coil-compose:$coil_version"
-    // Saket Swipe
-    implementation "me.saket.swipe:swipe:$saket_swipe_version"
 
     // Unit Testings
     testImplementation "junit:junit:$junit_version"

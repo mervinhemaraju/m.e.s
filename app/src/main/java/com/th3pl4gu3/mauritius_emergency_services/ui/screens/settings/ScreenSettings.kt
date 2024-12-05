@@ -39,9 +39,9 @@ import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.models.items.MesLocale
 import com.th3pl4gu3.mauritius_emergency_services.models.items.SettingsItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesOneActionDialog
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesServiceItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesSettingsSimpleItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesSettingsSwitchItem
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesSwipeAbleServiceItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 import com.th3pl4gu3.mauritius_emergency_services.utils.KEYWORD_LOCALE_DEFAULT
 import kotlinx.coroutines.CoroutineScope
@@ -251,15 +251,27 @@ fun EmergencyButtonItemDialog(
                     .height(220.dp)
             ) {
                 items(emergencyServices) { service ->
-                    MesServiceItem(
+
+                    MesSwipeAbleServiceItem(
                         service = service,
                         onClick = {
                             updateEmergencyButtonAction(service)
                             dismissAction()
                         },
                         actionVisible = false,
-                        extrasClickAction = {_,_ ->}
+                        extrasClickAction = {_,_ ->},
+                        enableSwipeAction = false
                     )
+
+//                    MesServiceItem(
+//                        service = service,
+//                        onClick = {
+//                            updateEmergencyButtonAction(service)
+//                            dismissAction()
+//                        },
+//                        actionVisible = false,
+//                        extrasClickAction = {_,_ ->}
+//                    )
                 }
             }
         },

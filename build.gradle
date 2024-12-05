@@ -45,7 +45,6 @@ buildscript {
         retrofit2_version = "2.9.0"
         retrofit2_kotlinx_serialization_convertor_version = "0.8.0"
         coil_version = "2.1.0"
-        saket_swipe_version = "1.0.0"
 
         // Testings
         junit_version = "4.13.2"

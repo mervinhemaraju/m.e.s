@@ -153,13 +153,20 @@ fun MesSearchTopBar(
                     services,
                     key = { it.identifier }
                 ) { service ->
-                    MesServiceItem(
+                    MesSwipeAbleServiceItem(
                         service = service,
                         onClick = { onServiceClick(service) },
                         actionVisible = true,
                         extrasClickAction = onExtrasClick,
                         containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
                     )
+//                    MesServiceItem(
+//                        service = service,
+//                        onClick = { onServiceClick(service) },
+//                        actionVisible = true,
+//                        extrasClickAction = onExtrasClick,
+//                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+//                    )
                 }
             }
         }

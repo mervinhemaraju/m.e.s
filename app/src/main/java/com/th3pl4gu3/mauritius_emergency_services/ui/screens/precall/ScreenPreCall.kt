@@ -7,6 +7,11 @@ import android.util.Log
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -21,21 +26,38 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.DismissDirection
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.CallEnd
 import androidx.compose.material.icons.outlined.KeyboardDoubleArrowLeft
+import androidx.compose.material.rememberDismissState
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxState
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -52,8 +74,6 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesIcon
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenAnimatedLoading
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenError
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
-import me.saket.swipe.SwipeAction
-import me.saket.swipe.SwipeableActionsBox
 
 @Composable
 @ExperimentalComposeUiApi
@@ -88,13 +108,12 @@ fun PreCallUiStateDecisions(
     countdown: String?,
     startCall: Boolean,
     closeScreen: () -> Unit,
-){
+) {
     when (preCallUiState) {
-        is PreCallUiState.Success ->
-        {
-            if(startCall){
+        is PreCallUiState.Success -> {
+            if (startCall) {
                 val activity = LocalContext.current as MesActivity
-                with(Intent(Intent.ACTION_CALL)){
+                with(Intent(Intent.ACTION_CALL)) {
                     data = Uri.parse("tel:${preCallUiState.service.main_contact}")
                     closeScreen()
                     activity.startActivity(this)
@@ -107,6 +126,7 @@ fun PreCallUiStateDecisions(
                 closeScreen = closeScreen
             )
         }
+
         is PreCallUiState.Error -> MesScreenError(
             retryAction = closeScreen,
             errorMessageId = R.string.message_error_call_startup_failed,
@@ -115,6 +135,7 @@ fun PreCallUiStateDecisions(
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         )
+
         is PreCallUiState.Loading -> MesScreenAnimatedLoading(
             loadingMessage = stringResource(id = R.string.message_loading_call_in_progress),
             modifier = Modifier.fillMaxSize()
@@ -128,6 +149,7 @@ fun PreCallContent(
     service: Service,
     countdown: String,
     closeScreen: () -> Unit,
+    scrollState: ScrollState = rememberScrollState()
 ) {
 
     // Log for information
@@ -142,43 +164,43 @@ fun PreCallContent(
             .background(
                 MaterialTheme.colorScheme.background
             )
+            .verticalScroll(scrollState)
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
 
-        Text(
-            modifier = Modifier
-                .wrapContentSize()
-                .weight(1f),
-            text = stringResource(id = R.string.headline_pre_call_primary),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.secondary,
-            textAlign = TextAlign.Center
-        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                modifier = Modifier
+                    .wrapContentSize(),
+                text = stringResource(id = R.string.headline_pre_call_primary),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.secondary,
+                textAlign = TextAlign.Center
+            )
 
-        Text(
-            modifier = Modifier
-                .wrapContentSize()
-                .weight(1f),
-            text = service.name,
-            style = MaterialTheme.typography.headlineSmall,
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.secondary,
-        )
+            Text(
+                modifier = Modifier
+                    .wrapContentSize(),
+                text = service.name,
+                style = MaterialTheme.typography.headlineSmall,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.secondary,
+            )
 
 
-        Text(
-            modifier = Modifier
-                .wrapContentSize()
-                .weight(2f),
-            text = service.main_contact.toString(),
-            style = MaterialTheme.typography.headlineLarge,
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.primary,
-        )
-
-        Spacer(modifier = Modifier.height(48.dp))
+            Text(
+                modifier = Modifier
+                    .wrapContentSize(),
+                text = service.main_contact.toString(),
+                style = MaterialTheme.typography.headlineLarge,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.primary,
+            )
+        }
 
         MesAsyncRoundedImage(
             service = service,
@@ -196,8 +218,8 @@ fun PreCallContent(
         Box(
             modifier = Modifier
                 .wrapContentSize()
-                .weight(10f)
-                .background(Color.Transparent),
+                .background(Color.Transparent)
+                .padding(vertical = 16.dp),
             contentAlignment = Alignment.Center
         ) {
 
@@ -223,8 +245,7 @@ fun PreCallContent(
         }
 
         SwipeToCancel(
-            closeScreen = closeScreen,
-            modifier = Modifier
+            closeScreen = closeScreen
         )
     }
 }
@@ -232,67 +253,98 @@ fun PreCallContent(
 @Composable
 fun SwipeToCancel(
     closeScreen: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
-
-    // FIXME(Implement this functionality using pure jetpack compose)
-    val shape = MaterialTheme.shapes.medium
-
-    val close = SwipeAction(
-        onSwipe = {
-            closeScreen()
+    val threshold = 0.5f
+    var state: SwipeToDismissBoxState? = null
+    state = rememberSwipeToDismissBoxState(
+        positionalThreshold = {
+            it * threshold
         },
-        icon = {
-            MesIcon(
-                imageVector = Icons.Outlined.CallEnd,
-                modifier = Modifier.padding(start = 16.dp),
-                tint = MaterialTheme.colorScheme.onError,
-                contentDescription = stringResource(R.string.action_call_end)
-            )
-        },
-        background = MaterialTheme.colorScheme.error,
+        confirmValueChange = {
+            if (it == SwipeToDismissBoxValue.EndToStart && state!!.progress > threshold) {
+                closeScreen()
+            }
+            false
+        }
     )
 
-    SwipeableActionsBox(
-        swipeThreshold = 120.dp,
-        endActions = listOf(close),
-        backgroundUntilSwipeThreshold = MaterialTheme.colorScheme.surface,
-        modifier = modifier
-            .height(80.dp)
-            .clip(shape)
-            .background(MaterialTheme.colorScheme.background)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .clip(shape)
-                .background(MaterialTheme.colorScheme.primary)
-                .padding(4.dp),
-            horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Text(
-                text = stringResource(id = R.string.action_slide_cancel),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimary
+    SwipeToDismissBox(
+        state = state,
+        enableDismissFromStartToEnd = false,
+        enableDismissFromEndToStart = true,
+        backgroundContent = {
+            val containerColor by animateColorAsState(
+                if (state.targetValue == SwipeToDismissBoxValue.Settled) {
+                    MaterialTheme.colorScheme.surfaceContainerHighest
+                } else {
+                    MaterialTheme.colorScheme.error
+                }, label = ""
             )
-
-            Spacer(modifier = Modifier.width(16.dp))
-
-            Icon(
-                imageVector = Icons.Outlined.KeyboardDoubleArrowLeft,
-                contentDescription = stringResource(id = R.string.action_swipe_cancel),
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(48.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(MaterialTheme.colorScheme.background)
+            val contentColor by animateColorAsState(
+                if (state.targetValue == SwipeToDismissBoxValue.Settled) {
+                    MaterialTheme.colorScheme.onSurface
+                } else {
+                    MaterialTheme.colorScheme.onError
+                }, label = ""
             )
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(containerColor)
+            ) {
+                MesIcon(
+                    imageVector = Icons.Outlined.CallEnd,
+                    tint = contentColor,
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(16.dp)
+                )
+            }
         }
+    ) {
+
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.outlinedCardColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer
+            )
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(80.dp)
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(MaterialTheme.colorScheme.primary)
+                    .padding(4.dp),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Text(
+                    text = stringResource(id = R.string.action_slide_cancel),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                Icon(
+                    imageVector = Icons.Outlined.KeyboardDoubleArrowLeft,
+                    contentDescription = stringResource(id = R.string.action_swipe_cancel),
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier
+                        .width(48.dp)
+                        .fillMaxHeight()
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(MaterialTheme.colorScheme.background)
+                )
+            }
+
+        }
+
     }
+
 }
 
 @Preview("PreCall Screen Light", showBackground = true)

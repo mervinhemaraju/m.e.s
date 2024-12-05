@@ -286,7 +286,11 @@ fun ScreenNoWarning(
                 .fillMaxSize()
                 .verticalScroll(scrollState)
         ) {
-            Row {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
                 MesIcon(
                     painterResource = R.drawable.ic_cloud,
                     tint = MaterialTheme.colorScheme.secondary,

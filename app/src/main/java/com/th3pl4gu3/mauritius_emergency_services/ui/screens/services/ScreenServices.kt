@@ -27,7 +27,7 @@ import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenAnimatedLoading
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenError
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenNoContent
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesServiceItem
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesSwipeAbleServiceItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.launchEmailIntent
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 
@@ -130,7 +130,8 @@ fun ServicesList(
         item { Spacer(modifier = Modifier.size(21.dp)) }
 
         items(services, key = { it.identifier }) { service ->
-            MesServiceItem(
+
+            MesSwipeAbleServiceItem(
                 service = service,
                 onClick = {
                     Log.i(
@@ -147,7 +148,29 @@ fun ServicesList(
                     } else {
                         context.launchEmailIntent(recipient = contact)
                     }
-                })
+                },
+                actionVisible = true
+            )
+
+//            MesServiceItem(
+//                service = service,
+//                onClick = {
+//                    Log.i(
+//                        "pre_call_service",
+//                        "Launching PreCall with service identifier: ${service.identifier}"
+//                    )
+//
+//                    navigateToPreCall(service, service.main_contact.toString())
+//                },
+//                modifier = Modifier.animateItem(fadeInSpec = null, fadeOutSpec = null),
+//                extrasClickAction = { svc, contact: String ->
+//                    if (contact.isDigitsOnly()) {
+//                        navigateToPreCall(svc, contact)
+//                    } else {
+//                        context.launchEmailIntent(recipient = contact)
+//                    }
+//                }
+//            )
         }
 
         item { Spacer(modifier = Modifier.size(48.dp)) }

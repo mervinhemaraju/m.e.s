@@ -28,10 +28,13 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.IsConnectedToNet
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-// FIXME(Fix Landscape layout overall)
 // TODO(Improve search screen for services)
-// TODO(Move some layout to ListItems)
 // TODO(Add a most used services list)
+// FIXME(Fix issue where swiping back from a call and going into precall screen again, it tries to perform a call again)
+// FIXME(Swipe to cancel slider is too long on landscape and big screen devices)
+// FIXME(Search bar disappears on landscape)
+// FIXME(Changing language manually in the app doesn't change properly)
+// FIXME(Cache clearing in the app isn't working properly)
 // FEAT(Add towing services)
 // FEAT(Add personal doctors services)
 // FEAT(Add a home screen widget)
