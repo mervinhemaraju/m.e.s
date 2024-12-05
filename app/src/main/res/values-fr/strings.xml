@@ -116,4 +116,6 @@
     <string name="label_time_second">sec</string>
     <string name="ctnt_desc_cyclone_names_button">Obtenez une liste des noms de cyclones</string>
     <string name="ctnt_desc_cyclone_guidelines_button">Obtenez une liste des directives relatives aux cyclones</string>
+    <string name="title_welcome_page_cyclone_report">Rapport Cyclonique</string>
+    <string name="description_welcome_page_cyclone_report">Soyez informé des avertissements de cyclone et lisez les directives en matière de cyclones en direct depuis votre téléphone.</string>
 </resources>

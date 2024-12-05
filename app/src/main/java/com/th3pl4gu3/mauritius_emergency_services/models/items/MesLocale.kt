@@ -5,7 +5,7 @@ sealed class MesLocale(
     val name: String
 ) {
 
-    private object Default : MesLocale(
+    private data object Default : MesLocale(
         "default",
         "English"
     )

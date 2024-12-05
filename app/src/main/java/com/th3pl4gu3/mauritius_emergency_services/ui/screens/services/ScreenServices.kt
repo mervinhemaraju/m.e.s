@@ -151,26 +151,6 @@ fun ServicesList(
                 },
                 actionVisible = true
             )
-
-//            MesServiceItem(
-//                service = service,
-//                onClick = {
-//                    Log.i(
-//                        "pre_call_service",
-//                        "Launching PreCall with service identifier: ${service.identifier}"
-//                    )
-//
-//                    navigateToPreCall(service, service.main_contact.toString())
-//                },
-//                modifier = Modifier.animateItem(fadeInSpec = null, fadeOutSpec = null),
-//                extrasClickAction = { svc, contact: String ->
-//                    if (contact.isDigitsOnly()) {
-//                        navigateToPreCall(svc, contact)
-//                    } else {
-//                        context.launchEmailIntent(recipient = contact)
-//                    }
-//                }
-//            )
         }
 
         item { Spacer(modifier = Modifier.size(48.dp)) }

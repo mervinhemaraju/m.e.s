@@ -135,6 +135,7 @@ fun MesNavGraph(
             ScreenPreCall(
                 preCallViewModel = preCallViewModel,
                 closeScreen = navController::navigateUp,
+                isExpandedScreen = isExpandedScreen
             )
         }
         composable(MesDestinations.SCREEN_ABOUT) {

@@ -7,14 +7,18 @@ import android.provider.Settings
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -48,6 +52,7 @@ import com.google.accompanist.pager.rememberPagerState
 import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.activity.MesActivity
 import com.th3pl4gu3.mauritius_emergency_services.models.items.WelcomeInfo
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesDrawerHeader
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesIcon
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesTextButton
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesTwoActionDialog
@@ -71,42 +76,55 @@ fun ScreenWelcome(
     val activity = (context as? MesActivity)
 
     val coroutineScope = rememberCoroutineScope()
-    val openDialog = remember { mutableStateOf(false) }
+    val isDialogOpen = remember { mutableStateOf(false) }
     val pagerState = rememberPagerState()
     val showRationale = remember { mutableStateOf(false) }
     val shouldShowRationale =
         if (activity?.ShouldShowRationale == null) false else activity.ShouldShowRationale
 
+    val closeDialog = { dialog: MutableState<Boolean> ->
+        dialog.value = false
+    }
+
+    val openDialog = { dialog: MutableState<Boolean> ->
+        dialog.value = true
+    }
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .fillMaxSize()
+            .verticalScroll(scrollState),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly
     ) {
 
-        Text(
-            text = stringResource(id = R.string.headline_welcome_primary),
-            style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .padding(
-                    top = 16.dp,
-                    start = 16.dp,
-                    end = 16.dp
-                )
-        )
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Text(
+                text = stringResource(id = R.string.headline_welcome_primary),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.secondary,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 16.dp,
+                        start = 16.dp,
+                        end = 16.dp
+                    )
+            )
 
-        Text(
-            text = stringResource(id = R.string.app_name_long),
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.primary,
-            lineHeight = 54.sp,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .padding(8.dp)
-        )
-
-        Spacer(modifier = Modifier.weight(1f))
+            Text(
+                text = stringResource(id = R.string.app_name_long),
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.primary,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp, vertical = 8.dp)
+            )
+        }
 
         SliderPager(
             pagerState = pagerState,
@@ -116,8 +134,6 @@ fun ScreenWelcome(
             pagerState = pagerState,
             activeColor = MaterialTheme.colorScheme.primary
         )
-
-        Spacer(modifier = Modifier.weight(1f))
 
         MesTextButton(
             text = stringResource(id = R.string.action_launch_mes),
@@ -129,7 +145,7 @@ fun ScreenWelcome(
                         if (shouldShowRationale) {
                             openDialog(showRationale)
                         } else {
-                            openDialog(openDialog)
+                            openDialog(isDialogOpen)
                         }
                     }
                 }
@@ -155,20 +171,20 @@ fun ScreenWelcome(
             },
             denyAction = { closeDialog(showRationale) }
         )
-    } else if (openDialog.value) {
+    } else if (isDialogOpen.value) {
         PermissionDialog(
             title = stringResource(id = R.string.title_welcome_mes_permissions_needed_dialog),
             description = stringResource(id = R.string.description_welcome_mes_permissions_needed_dialog),
             confirmAction = {
 
-                closeDialog(openDialog)
+                closeDialog(isDialogOpen)
 
                 activity?.requestMultiplePermissions?.launch(
                     GetRuntimePermissions
                 )
             },
             denyAction = {
-                closeDialog(openDialog)
+                closeDialog(isDialogOpen)
             }
         )
     }
@@ -214,7 +230,7 @@ fun SliderPageBody(
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(50))
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .background(MaterialTheme.colorScheme.secondaryContainer)
             .padding(56.dp)
     ) {
         MesIcon(
@@ -222,7 +238,7 @@ fun SliderPageBody(
             modifier = Modifier
                 .size(120.dp)
                 .align(Alignment.Center),
-            tint = MaterialTheme.colorScheme.primary
+            tint = MaterialTheme.colorScheme.secondary
         )
     }
     Spacer(
@@ -314,14 +330,6 @@ fun SliderPager(
             }
         }
     }
-}
-
-private fun closeDialog(dialog: MutableState<Boolean>) {
-    dialog.value = false
-}
-
-private fun openDialog(dialog: MutableState<Boolean>) {
-    dialog.value = true
 }
 
 @Preview("Starter Screen Light Preview", showBackground = true)

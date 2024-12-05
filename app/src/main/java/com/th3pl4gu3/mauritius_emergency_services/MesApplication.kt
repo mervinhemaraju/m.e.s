@@ -4,8 +4,12 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
 import androidx.core.app.NotificationManagerCompat
-import androidx.work.*
-import com.google.android.material.color.DynamicColors
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequest
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkInfo
 import com.th3pl4gu3.mauritius_emergency_services.data.AppContainer
 import com.th3pl4gu3.mauritius_emergency_services.models.ServiceWorker
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.HasNotificationPermission
@@ -17,7 +21,7 @@ import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 

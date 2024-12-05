@@ -13,6 +13,7 @@ android {
         release
         beta
     }
+
     namespace app_id
     compileSdk 35
 
@@ -35,22 +36,16 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+            ndk.debugSymbolLevel = "FULL"
         }
+
         beta {
             versionNameSuffix version_suffix_beta
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-            matchingFallbacks = ['debug']
-        }
-        preprod {
-            versionNameSuffix version_suffix_preprod
-            debuggable true
-            minifyEnabled true
-            shrinkResources true
-            signingConfig signingConfigs.debug
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            ndk.debugSymbolLevel = "FULL"
             matchingFallbacks = ['debug']
         }
         debug {
@@ -62,25 +57,35 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
+
     buildFeatures {
         compose true
+        buildConfig = true
     }
+
     composeOptions {
         kotlinCompilerExtensionVersion compose_compiler_version
     }
+
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
-//    buildToolsVersion '33.0.1'
+
+    androidResources {
+        generateLocaleConfig true
+    }
+    ndkVersion '28.0.12674087 rc2'
 }
 
 // Create a variable called keystorePropertiesFile, and initialize it to your
@@ -119,7 +124,7 @@ if (propFile.canRead()) {
 dependencies {
 
     // Android Material Design Components
-    implementation 'com.google.android.material:material:1.12.0'
+    implementation "com.google.android.material:material:$com_google_android_material_version"
     implementation "androidx.compose.material3:material3:$material3_version"
     implementation "androidx.compose.material3:material3-window-size-class:$material3_window_size_class_version"
     implementation "androidx.compose.material:material-icons-extended:$material_icons"
@@ -168,6 +173,7 @@ dependencies {
     // Kotlinx
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_json_version"
     implementation "org.jetbrains.kotlinx:kotlinx-collections-immutable:$kotlinx_collections_immutable_version"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_reflect_version"
     // Coil
     implementation "io.coil-kt:coil-compose:$coil_version"
 
@@ -180,5 +186,4 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:1.9.10"
 }

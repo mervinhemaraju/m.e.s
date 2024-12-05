@@ -8,9 +8,6 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -29,14 +26,9 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.DismissDirection
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.CallEnd
 import androidx.compose.material.icons.outlined.KeyboardDoubleArrowLeft
-import androidx.compose.material.rememberDismissState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -49,16 +41,14 @@ import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -69,10 +59,10 @@ import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.activity.MesActivity
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesAsyncRoundedImage
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.mesCountDownAnimation
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesIcon
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenAnimatedLoading
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenError
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.mesCountDownAnimation
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 
 @Composable
@@ -81,6 +71,7 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 fun ScreenPreCall(
     preCallViewModel: PreCallViewModel,
     closeScreen: () -> Unit,
+    isExpandedScreen: Boolean = false
 ) {
     /** Get the UI State from the view model **/
     val preCallUiState by preCallViewModel.service.collectAsState()
@@ -96,7 +87,8 @@ fun ScreenPreCall(
         preCallUiState = preCallUiState,
         countdown = countdown.toString(),
         startCall = startCall,
-        closeScreen = closeScreen
+        closeScreen = closeScreen,
+        isExpandedScreen = isExpandedScreen
     )
 }
 
@@ -108,6 +100,7 @@ fun PreCallUiStateDecisions(
     countdown: String?,
     startCall: Boolean,
     closeScreen: () -> Unit,
+    isExpandedScreen: Boolean
 ) {
     when (preCallUiState) {
         is PreCallUiState.Success -> {
@@ -123,7 +116,8 @@ fun PreCallUiStateDecisions(
             PreCallContent(
                 service = preCallUiState.service,
                 countdown = if (countdown.isNullOrEmpty()) stringResource(id = R.string.message_error_loading_countdown) else countdown,
-                closeScreen = closeScreen
+                closeScreen = closeScreen,
+                isExpandedScreen = isExpandedScreen
             )
         }
 
@@ -149,6 +143,7 @@ fun PreCallContent(
     service: Service,
     countdown: String,
     closeScreen: () -> Unit,
+    isExpandedScreen: Boolean,
     scrollState: ScrollState = rememberScrollState()
 ) {
 
@@ -172,6 +167,7 @@ fun PreCallContent(
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(bottom = 32.dp)
         ) {
             Text(
                 modifier = Modifier
@@ -191,6 +187,7 @@ fun PreCallContent(
                 color = MaterialTheme.colorScheme.secondary,
             )
 
+            Spacer(Modifier.height(8.dp))
 
             Text(
                 modifier = Modifier
@@ -219,7 +216,7 @@ fun PreCallContent(
             modifier = Modifier
                 .wrapContentSize()
                 .background(Color.Transparent)
-                .padding(vertical = 16.dp),
+                .padding(vertical = 32.dp),
             contentAlignment = Alignment.Center
         ) {
 
@@ -245,7 +242,8 @@ fun PreCallContent(
         }
 
         SwipeToCancel(
-            closeScreen = closeScreen
+            closeScreen = closeScreen,
+            isExpandedScreen = isExpandedScreen
         )
     }
 }
@@ -253,14 +251,17 @@ fun PreCallContent(
 @Composable
 fun SwipeToCancel(
     closeScreen: () -> Unit,
+    isExpandedScreen: Boolean
 ) {
     val threshold = 0.5f
+    val haptic = LocalHapticFeedback.current
     var state: SwipeToDismissBoxState? = null
     state = rememberSwipeToDismissBoxState(
         positionalThreshold = {
             it * threshold
         },
         confirmValueChange = {
+            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
             if (it == SwipeToDismissBoxValue.EndToStart && state!!.progress > threshold) {
                 closeScreen()
             }
@@ -275,14 +276,14 @@ fun SwipeToCancel(
         backgroundContent = {
             val containerColor by animateColorAsState(
                 if (state.targetValue == SwipeToDismissBoxValue.Settled) {
-                    MaterialTheme.colorScheme.surfaceContainerHighest
+                    MaterialTheme.colorScheme.inverseSurface
                 } else {
                     MaterialTheme.colorScheme.error
                 }, label = ""
             )
             val contentColor by animateColorAsState(
                 if (state.targetValue == SwipeToDismissBoxValue.Settled) {
-                    MaterialTheme.colorScheme.onSurface
+                    MaterialTheme.colorScheme.inverseOnSurface
                 } else {
                     MaterialTheme.colorScheme.onError
                 }, label = ""
@@ -305,7 +306,8 @@ fun SwipeToCancel(
     ) {
 
         Card(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth(if (isExpandedScreen) 0.5f else 1f),
             colors = CardDefaults.outlinedCardColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer
             )
@@ -369,7 +371,8 @@ fun PreviewScreenPreCallContent() {
             preCallUiState = PreCallUiState.Success(mockData),
             closeScreen = {},
             countdown = "N",
-            startCall = false
+            startCall = false,
+            isExpandedScreen = false
         )
     }
 }
@@ -386,6 +389,7 @@ fun PreviewScreenPreCallLoading() {
             closeScreen = {},
             countdown = "N",
             startCall = true,
+            isExpandedScreen = false
         )
     }
 }
@@ -402,6 +406,7 @@ fun PreviewScreenPreCallError() {
             closeScreen = {},
             countdown = "N",
             startCall = true,
+            isExpandedScreen = false
         )
     }
 }

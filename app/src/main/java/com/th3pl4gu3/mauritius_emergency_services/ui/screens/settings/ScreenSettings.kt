@@ -262,16 +262,6 @@ fun EmergencyButtonItemDialog(
                         extrasClickAction = {_,_ ->},
                         enableSwipeAction = false
                     )
-
-//                    MesServiceItem(
-//                        service = service,
-//                        onClick = {
-//                            updateEmergencyButtonAction(service)
-//                            dismissAction()
-//                        },
-//                        actionVisible = false,
-//                        extrasClickAction = {_,_ ->}
-//                    )
                 }
             }
         },
