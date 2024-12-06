@@ -14,7 +14,7 @@
     <string name="title_about_data_about_mes">À propos de Mes</string>
     <string name="title_about_data_api">API Developpeur</string>
     <string name="title_about_version">Version</string>
-    <string name="title_theme_selector_dialog">Choisissez un Thème</string>
+    <string name="title_theme_selector_dialog">Choisissez votre Thème</string>
     <string name="title_settings_page_dynamic_colors">Couleurs Dynamiques</string>
     <string name="title_settings_page_emergency_button_action">Action du Bouton d\'urgence</string>
     <string name="title_settings_page_clear_cache">Vider le Cache</string>
@@ -61,7 +61,7 @@
     <string name="description_settings_page_clear_cache">Cela permettra à Mes de vider le cache et de recharger les services depuis Internet</string>
     <string name="description_settings_page_change_language">Cliquez pour changer la langue de l\'application</string>
     <string name="headline_home_primary">Aide d\'appel d\'urgence nécessaire ?</string>
-    <string name="headline_home_secondary">Cliquez sur le bouton pour un appel rapide</string>
+    <string name="headline_home_secondary">Maintenez le bouton d\'urgence pour appeler</string>
     <string name="headline_home_tertiary">Besoin d\'autres actions d\'urgence rapides ?</string>
     <string name="headline_home_quaternary">Cliquez ci-dessous pour appeler</string>
     <string name="headline_pre_call_primary">Démarrage d\'un appel vers</string>
@@ -79,7 +79,7 @@
     <string name="message_action_emergency_button_configured">%1$s a été défini comme action du bouton d\'urgence</string>
     <string name="message_emergency_button_action_updated">Action du bouton d\'urgence mise à jour</string>
     <string name="message_error_content_failed">Erreur lors de l\'obtention du contenu</string>
-    <string name="message_error_loading_failed">Échec du chargement</string>
+    <string name="message_error_loading_cyclone_report_failed">Impossible de charger le rapport cyclonique.</string>
     <string name="message_error_loading_services_failed">Échec du chargement des services.</string>
     <string name="message_error_call_startup_failed">Impossible d\'effectuer l\'appel téléphonique pour le moment. Veuillez réessayer.</string>
     <string name="message_error_cache_reset">Une erreur s\'est produite lors de la réinitialisation du cache : %1$s</string>
@@ -87,7 +87,7 @@
     <string name="ctnt_desc_emergency_button">Passer un appel d\'urgence rapide</string>
     <string name="title_services_page_other_contacts">Autres contacts</string>
     <string name="message_toll_free">Gratuit</string>
-    <string name="message_item_coming_soon">À venir</string>
+    <string name="message_item_new">Nouveau</string>
     <string name="message_no_other_contacts_found">Action du bouton d\'urgence</string>
     <string name="action_sort">Classer</string>
     <string name="action_call_end">Fin d\'appel</string>
@@ -104,4 +104,26 @@
     <string name="title_emergency_button_selector_dialog">Choisissez votre urgence</string>
     <string name="message_services_search_query">Recherche de %1$s dans les services</string>
     <string name="message_services_search">Entrez le service que vous souhaitez trouver</string>
+    <string name="title_cyclone_guidelines">Directives de classe %1$s</string>
+    <string name="title_cyclone_names">Noms des cyclones</string>
+    <string name="headline_cyclone_report_primary">Maurice est actuellement en</string>
+    <string name="headline_cyclone_report_status">Classe %1$s</string>
+    <string name="message_cyclone_report_no_warnings">Il n\'y a pas d\'avertissement de cyclone à Maurice pour le moment.</string>
+    <string name="headline_cyclone_report_latest_news">Dernières Nouvelles</string>
+    <string name="headline_cyclone_report_next_bulletin">Prochain Bulletin</string>
+    <string name="label_time_hour">hr</string>
+    <string name="label_time_minute">min</string>
+    <string name="label_time_second">sec</string>
+    <string name="ctnt_desc_cyclone_names_button">Obtenez une liste des noms de cyclones</string>
+    <string name="ctnt_desc_cyclone_guidelines_button">Obtenez une liste des directives relatives aux cyclones</string>
+    <string name="title_welcome_page_cyclone_report">Rapport Cyclonique</string>
+    <string name="description_welcome_page_cyclone_report">Soyez informé des avertissements de cyclone et lisez les directives en matière de cyclones en direct depuis votre téléphone.</string>
+    <string name="section_theme_preferences_contrast">Contraste</string>
+    <string name="option_theme_follow_system">Selon le système</string>
+    <string name="option_theme_light">Clair</string>
+    <string name="option_theme_dark">Sombre</string>
+    <string name="option_theme_contrast_default">Défaut</string>
+    <string name="option_theme_contrast_medium">Moyen</string>
+    <string name="option_theme_contrast_high">Haut</string>
+    <string name="message_error_color_contrast_disabled_with_dynamics_color">Le contraste des couleurs ne peut pas être défini lorsque la couleur dynamique est activée.</string>
 </resources>

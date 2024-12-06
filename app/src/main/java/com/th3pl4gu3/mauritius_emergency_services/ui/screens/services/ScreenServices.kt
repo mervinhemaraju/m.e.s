@@ -4,32 +4,32 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowDropUp
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.*
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenAnimatedLoading
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenError
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesScreenNoContent
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesSwipeAbleServiceItem
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.launchEmailIntent
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
-import kotlinx.coroutines.launch
-
-private const val TAG: String = "SCREEN_SERVICES"
 
 @Composable
 @ExperimentalFoundationApi
@@ -72,28 +72,39 @@ fun ServicesUiStateDecisions(
     modifier: Modifier = Modifier
 ) {
     when (servicesUiState) {
-        is ServicesUiState.Loading -> MesScreenLoading(
+        is ServicesUiState.Loading -> MesScreenAnimatedLoading(
             loadingMessage = stringResource(id = R.string.message_loading_services),
-            modifier = modifier
+            modifier = modifier.fillMaxSize()
         )
+
         is ServicesUiState.Success -> ServicesList(
             services = servicesUiState.services,
             navigateToPreCall = navigateToPreCall,
             listState = listState,
             modifier = modifier,
         )
+
         is ServicesUiState.Error -> MesScreenError(
             retryAction = retryAction,
-            errorMessage = stringResource(id = R.string.message_error_loading_services_failed),
+            errorMessageId = R.string.message_error_loading_services_failed,
             modifier = modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
         )
+
         is ServicesUiState.NoContent -> MesScreenNoContent(
-            message = stringResource(id = R.string.message_services_not_found), modifier = modifier
+            messageId = R.string.message_services_not_found,
+            modifier = modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
         )
+
         is ServicesUiState.NoNetwork -> MesScreenError(
             retryAction = retryAction,
-            errorMessage = stringResource(id = R.string.message_internet_connection_needed),
-            image = painterResource(id = R.drawable.il_no_network)
+            errorMessageId = R.string.message_internet_connection_needed,
+            modifier = modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
         )
     }
 }
@@ -111,67 +122,38 @@ fun ServicesList(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
 
-    val showScrollToTopButton by remember {
-        derivedStateOf {
-            listState.firstVisibleItemIndex > 0
-        }
-    }
+    LazyColumn(
+        modifier = modifier,
+        state = listState
+    ) {
+        item { Spacer(modifier = Modifier.size(21.dp)) }
 
-    Box {
-        LazyColumn(
-            modifier = modifier, state = listState
-        ) {
-            items(services, key = { it.identifier }) { service ->
-                MesServiceItem(service = service,
-                    onClick = {
-                        Log.i(
-                            "pre_call_service",
-                            "Launching PreCall with service identifier: ${service.identifier}"
-                        )
+        items(services, key = { it.identifier }) { service ->
 
-                        navigateToPreCall(service, service.main_contact.toString())
-                    },
-                    modifier = Modifier.animateItemPlacement(),
-                    extrasClickAction = { this_service, contact: String ->
-                        if (contact.isDigitsOnly()) {
-                            navigateToPreCall(this_service, contact)
-                        } else {
-                            context.launchEmailIntent(recipient = contact)
-                        }
-                    })
-            }
-
-            item { Spacer(modifier = Modifier.height(54.dp)) }
-        }
-
-        Column(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            MesAnimatedVisibilitySlideVerticallyContent(
-                visibility = showScrollToTopButton
-            ) {
-                FloatingActionButton(
-                    onClick = {
-                        coroutineScope.launch {
-                            listState.animateScrollToItem(0)
-                        }
-                    }
-                    , containerColor = MaterialTheme.colorScheme.primary
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.ArrowDropUp,
-                        contentDescription = stringResource(id = R.string.action_scroll_up),
-                        tint = MaterialTheme.colorScheme.onPrimary
+            MesSwipeAbleServiceItem(
+                service = service,
+                onClick = {
+                    Log.i(
+                        "pre_call_service",
+                        "Launching PreCall with service identifier: ${service.identifier}"
                     )
-                }
-            }
+
+                    navigateToPreCall(service, service.main_contact.toString())
+                },
+                modifier = Modifier.animateItem(fadeInSpec = null, fadeOutSpec = null),
+                extrasClickAction = { svc, contact: String ->
+                    if (contact.isDigitsOnly()) {
+                        navigateToPreCall(svc, contact)
+                    } else {
+                        context.launchEmailIntent(recipient = contact)
+                    }
+                },
+                actionVisible = true
+            )
         }
+
+        item { Spacer(modifier = Modifier.size(48.dp)) }
     }
 }
 

@@ -3,25 +3,49 @@ package com.th3pl4gu3.mauritius_emergency_services.ui.components
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Phone
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
@@ -32,11 +56,42 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.th3pl4gu3.mauritius_emergency_services.R
+import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.models.items.AboutInfoDrawable
 import com.th3pl4gu3.mauritius_emergency_services.models.items.AboutInfoVector
-import com.th3pl4gu3.mauritius_emergency_services.models.Service
-import com.th3pl4gu3.mauritius_emergency_services.ui.theme.EmergencyButton
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
+import com.th3pl4gu3.mauritius_emergency_services.ui.theme.elevation
+
+
+@Composable
+fun MesCounter(
+    countdown: String,
+    label: String,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+    ) {
+        Text(
+            text = countdown,
+            style = MaterialTheme.typography.displaySmall,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier
+                .padding(start = 12.dp, end = 12.dp, top = 12.dp)
+                .align(Alignment.CenterHorizontally)
+        )
+
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.Normal,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(top = 8.dp, bottom = 4.dp)
+        )
+    }
+}
 
 @Composable
 fun MesIcon(
@@ -92,33 +147,34 @@ fun MesAsyncRoundedImage(
 
 @Composable
 fun MesDrawerHeader(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    contentColor: Color = MaterialTheme.colorScheme.onBackground,
+    contentStyle: TextStyle = MaterialTheme.typography.headlineSmall
 ) {
-    Column(modifier = modifier) {
-        MesDrawerTitle(title = Pair("M", "auritius"))
-        MesDrawerTitle(title = Pair("E", "mergency"))
-        MesDrawerTitle(title = Pair("S", "ervices"))
+    val title: @Composable (text: Pair<String, String>) -> Unit = { it ->
+        Text(
+            buildAnnotatedString {
+                append(it.first)
+                withStyle(
+                    style = SpanStyle(
+                        fontWeight = FontWeight.Medium
+                    )
+                ) {
+                    append(it.second)
+                }
+            },
+            style = contentStyle,
+            color = contentColor,
+            letterSpacing = 4.sp,
+            fontWeight = FontWeight.Bold
+        )
     }
-}
 
-@Composable
-fun MesDrawerTitle(title: Pair<String, String>) {
-    Text(
-        buildAnnotatedString {
-            append(title.first)
-            withStyle(
-                style = SpanStyle(
-                    fontWeight = FontWeight.Medium
-                )
-            ) {
-                append(title.second)
-            }
-        },
-        style = MaterialTheme.typography.headlineLarge,
-        color = MaterialTheme.colorScheme.onPrimaryContainer,
-        letterSpacing = 4.sp,
-        fontWeight = FontWeight.Bold
-    )
+    Column(modifier = modifier) {
+        title(Pair("M", "auritius"))
+        title(Pair("E", "mergency"))
+        title(Pair("S", "ervices"))
+    }
 }
 
 @Composable
@@ -127,20 +183,33 @@ fun MesEmergencyButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    ElevatedButton(
-        onClick = onClick,
-        modifier = modifier,
-        shape = CircleShape,
-        colors = ButtonDefaults.elevatedButtonColors(containerColor = EmergencyButton),
-        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.outlineVariant),
-        elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 4.dp),
+    val haptic = LocalHapticFeedback.current
+
+    ElevatedCard(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.error
+        ),
+        shape = RoundedCornerShape(50),
+        elevation = CardDefaults.elevatedCardElevation(
+            defaultElevation = elevation.normal,
+            hoveredElevation = 0.dp
+        ),
+        modifier = modifier
+            .combinedClickable(
+                onClick = {},
+                onLongClick = {
+                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    onClick()
+                }
+            )
     ) {
-        // Adding an Icon "Add" inside the Button
-        MesIcon(
-            painterResource = R.drawable.ic_emergency_beacons,
-            contentDescription = R.string.ctnt_desc_emergency_button,
-            tint = MaterialTheme.colorScheme.surface
-        )
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+            MesIcon(
+                painterResource = R.drawable.ic_emergency_beacons,
+                contentDescription = R.string.ctnt_desc_emergency_button,
+                tint = MaterialTheme.colorScheme.surface
+            )
+        }
     }
 }
 
@@ -155,9 +224,8 @@ fun MesAboutInfoCard(
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
         ),
-        elevation = CardDefaults.cardElevation(2.dp),
         modifier = modifier
             .fillMaxWidth()
             .padding(6.dp)
@@ -197,9 +265,8 @@ fun MesAboutAppCard(
 ) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
         ),
-        elevation = CardDefaults.cardElevation(2.dp),
         modifier = modifier
             .fillMaxWidth()
             .padding(6.dp)
@@ -225,7 +292,8 @@ fun MesAboutAppCard(
                 modifier = Modifier
                     .size(64.dp)
                     .align(Alignment.CenterHorizontally),
-                contentDescription = R.string.app_name_short
+                contentDescription = R.string.app_name_short,
+                tint = MaterialTheme.colorScheme.secondary
             )
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -251,16 +319,19 @@ fun MesAboutAppCard(
 
 @Composable
 fun MesTextButton(
+
+    modifier: Modifier = Modifier,
     text: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    containerColor: Color = MaterialTheme.colorScheme.primary,
+    contentColor: Color = MaterialTheme.colorScheme.onPrimary,
+    onClick: () -> Unit
 ) {
 
     Button(
         onClick = onClick,
         shape = MaterialTheme.shapes.small,
         colors = ButtonDefaults.buttonColors(
-            MaterialTheme.colorScheme.primary
+            containerColor
         ),
         elevation = ButtonDefaults.buttonElevation(2.dp),
         modifier = modifier
@@ -268,8 +339,86 @@ fun MesTextButton(
         Text(
             text = text,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onPrimary
+            color = contentColor
         )
+    }
+}
+
+@Composable
+fun MesDataTable(
+    data: List<List<String>>,
+    header: List<String>
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        // Header row
+        item {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(MaterialTheme.colorScheme.primaryContainer)
+                    .padding(8.dp)
+            ) {
+                header.forEach { text ->
+                    Box(
+                        modifier = Modifier
+                            .weight(1f) // This works because it's inside a Row
+                            .padding(4.dp)
+                    ) {
+                        Text(
+                            text = text,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+
+        // Data rows
+        items(data) { row ->
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(MaterialTheme.colorScheme.surface)
+                    .padding(8.dp)
+            ) {
+                items(row) { cell ->
+                    Box(
+                        modifier = Modifier
+                            .fillParentMaxWidth(1f / row.size) // Divide the width evenly across items
+                            .padding(4.dp)
+                    ) {
+                        Text(
+                            text = cell,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(4.dp))
+        }
+    }
+}
+
+@Composable
+@Preview(name = "Mes DataTable Light", showBackground = true)
+@Preview(name = "Mes DataTable Dark", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+fun MesDataTablePreview() {
+    val header = listOf("Name", "Age", "City")
+    val data = listOf(
+        listOf("Alice", "25", "New York"),
+        listOf("Bob", "30", "San Francisco"),
+        listOf("Charlie", "22", "Chicago")
+    )
+    MaterialTheme {
+        MesDataTable(data = data, header = header)
     }
 }
 
@@ -279,16 +428,6 @@ fun MesTextButton(
 @ExperimentalMaterial3Api
 @ExperimentalFoundationApi
 fun MesComposablePreview() {
-
-    val mockDataService = Service(
-        identifier = "security-police-direct-2",
-        name = "Samu",
-        type = "E",
-        icon = "https://img.icons8.com/fluent/100/000000/policeman-male.png",
-        main_contact = 112,
-        emails = listOf(),
-        other_contacts = listOf()
-    )
 
     val mockDataAboutInfoList = AboutInfoVector.supportAndDevelopment
 
@@ -301,6 +440,11 @@ fun MesComposablePreview() {
                 .fillMaxHeight(),
             Arrangement.SpaceAround
         ) {
+
+            MesCounter(
+                countdown = "00",
+                label = "min"
+            )
 
             MesIcon(
                 painterResource = R.drawable.ic_image_broken,
@@ -315,8 +459,6 @@ fun MesComposablePreview() {
             MesEmergencyButton(onClick = {}, modifier = Modifier.size(200.dp))
 
             MesDrawerHeader()
-
-            MesDrawerTitle(title = Pair("T", "esting"))
 
             MesAboutInfoCard(
                 title = "Title",

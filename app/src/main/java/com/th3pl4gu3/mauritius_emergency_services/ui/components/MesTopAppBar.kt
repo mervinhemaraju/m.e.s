@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Sort
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Sort
 import androidx.compose.material3.*
@@ -117,7 +118,7 @@ internal fun MesTopAppBar(
                         )
                 ) {
                     MesIcon(
-                        imageVector = Icons.Outlined.Sort,
+                        imageVector = Icons.AutoMirrored.Outlined.Sort,
                         contentDescription = stringResource(id = R.string.action_sort)
                     )
                 }

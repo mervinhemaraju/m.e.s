@@ -1,7 +1,11 @@
 package com.th3pl4gu3.mauritius_emergency_services.ui.components
 
 import android.content.res.Configuration
-import androidx.compose.material3.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,7 +27,8 @@ fun MesOneActionDialog(
         title = {
             Text(
                 text = title,
-                color = MaterialTheme.colorScheme.secondary
+                color = MaterialTheme.colorScheme.secondary,
+                style = MaterialTheme.typography.headlineSmall
             )
         },
         text = content,
