@@ -14,8 +14,8 @@ data class MesAppSettings (
 
 enum class AppTheme(val stringId: Int) {
     FOLLOW_SYSTEM(R.string.option_theme_follow_system),
-    LIGHT(R.string.option_theme_dark),
-    DARK(R.string.option_theme_light)
+    LIGHT(R.string.option_theme_light),
+    DARK(R.string.option_theme_dark)
 }
 
 enum class AppColorContrast(val stringId: Int) {

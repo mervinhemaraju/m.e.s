@@ -142,16 +142,13 @@ fun MesServiceItemExtras(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MesSwipeAbleServiceItem(
+    modifier: Modifier = Modifier,
     service: Service,
     actionVisible: Boolean,
     onClick: () -> Unit,
     extrasClickAction: (Service, String) -> Unit,
     enableSwipeAction: Boolean = true,
-    containerColor: Color = MaterialTheme.colorScheme.background,
-    actionSettledContainerColor: Color = MaterialTheme.colorScheme.inverseSurface,
-    actionActiveContainerColor: Color = MaterialTheme.colorScheme.primary,
-    actionActiveContentColor: Color = MaterialTheme.colorScheme.onPrimary,
-    modifier: Modifier = Modifier
+    topContainerColor: Color = MaterialTheme.colorScheme.background
 ) {
     val threshold = 0.5f
     var state: SwipeToDismissBoxState? = null
@@ -182,21 +179,28 @@ fun MesSwipeAbleServiceItem(
         enableDismissFromStartToEnd = false,
         enableDismissFromEndToStart = enableSwipeAction,
         backgroundContent = {
-            val color by animateColorAsState(
+            val containerColor by animateColorAsState(
                 if (state.targetValue == SwipeToDismissBoxValue.Settled) {
-                    actionSettledContainerColor
+                    MaterialTheme.colorScheme.inverseSurface
                 } else {
-                    actionActiveContainerColor
+                    MaterialTheme.colorScheme.primary
+                }, label = ""
+            )
+            val contentColor by animateColorAsState(
+                if (state.targetValue == SwipeToDismissBoxValue.Settled) {
+                    MaterialTheme.colorScheme.inverseOnSurface
+                } else {
+                    MaterialTheme.colorScheme.onPrimary
                 }, label = ""
             )
             Box(
                 Modifier
                     .fillMaxSize()
-                    .background(color),
+                    .background(containerColor),
             ) {
                 MesIcon(
                     imageVector = Icons.Outlined.Call,
-                    tint = actionActiveContentColor,
+                    tint = contentColor,
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
                         .padding(16.dp)
@@ -209,9 +213,9 @@ fun MesSwipeAbleServiceItem(
             shape = RectangleShape,
             colors = CardDefaults.outlinedCardColors(
                 containerColor = if (expanded) {
-                    MaterialTheme.colorScheme.primaryContainer
+                    MaterialTheme.colorScheme.surfaceContainerHighest
                 } else {
-                    containerColor
+                    topContainerColor
                 }
             )
         ) {

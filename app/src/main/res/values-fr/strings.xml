@@ -125,4 +125,5 @@
     <string name="option_theme_contrast_default">Défaut</string>
     <string name="option_theme_contrast_medium">Moyen</string>
     <string name="option_theme_contrast_high">Haut</string>
+    <string name="message_error_color_contrast_disabled_with_dynamics_color">Le contraste des couleurs ne peut pas être défini lorsque la couleur dynamique est activée.</string>
 </resources>

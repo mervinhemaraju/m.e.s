@@ -177,6 +177,7 @@
     <string name="message_error_loading_services_failed">Unable to load services.</string>
     <string name="message_error_call_startup_failed">Unable to perform the phone call at the moment. Please try again.</string>
     <string name="message_error_cache_reset">Error occurred while resetting cache: %1$s</string>
+    <string name="message_error_color_contrast_disabled_with_dynamics_color">Color contrast cannot be set when dynamics color scheme is enabled.</string>
 
     <!-- Content Descriptions -->
     <string name="ctnt_desc_drawer_open">Open Navigation Drawer</string>

@@ -2,6 +2,7 @@ package com.th3pl4gu3.mauritius_emergency_services.activity
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -13,18 +14,24 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.th3pl4gu3.mauritius_emergency_services.MesApplication
 import com.th3pl4gu3.mauritius_emergency_services.R
+import com.th3pl4gu3.mauritius_emergency_services.models.AppTheme
 import com.th3pl4gu3.mauritius_emergency_services.ui.MesApp
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.IsConnectedToNetwork
+import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.launchContactUsIntent
+import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -32,7 +39,6 @@ import kotlinx.coroutines.launch
 // TODO(Add a most used services list)
 // TODO(Add follow system for automatic apply of color contrast schemes)
 // FIXME(Fix issue where swiping back from a call and going into pre-call screen again, it tries to perform a call again)
-// FIXME(Search bar disappears on landscape)
 // FIXME(Cache clearing in the app isn't working properly)
 // FEAT(Add towing services / doctor services)
 // FEAT(Add a home screen widget)
@@ -120,15 +126,37 @@ class MesActivity : AppCompatActivity() {
 
         /** Launch the Compose App **/
         setContent {
+            val activity = LocalContext.current as Activity
 
             /** Checks if content is not null before loading **/
             if (mainViewModel.appSettings.value != null) {
-                MesApp(
-                    application = application,
-                    widthSizeClass = calculateWindowSizeClass(this).widthSizeClass,
-                    appSettings = mainViewModel.appSettings.value!!,
-                    mainViewModel = mainViewModel
-                )
+
+                val appSettings = mainViewModel.appSettings.value!!
+
+                /** Set the correct app theme that the user has set **/
+                val darkTheme = when (appSettings.appTheme) {
+                    AppTheme.FOLLOW_SYSTEM -> isSystemInDarkTheme()
+                    AppTheme.DARK -> true
+                    AppTheme.LIGHT -> false
+                }
+
+                MesTheme(
+                    dynamicColor = appSettings.dynamicColorsEnabled,
+                    darkTheme = darkTheme,
+                    colorContrast = appSettings.appColorContrast
+                ) {
+
+                    MesApp(
+                        application = application,
+                        widthSizeClass = calculateWindowSizeClass(this).widthSizeClass,
+                        appSettings = mainViewModel.appSettings.value!!,
+                        searchOfflineServices = {
+                            mainViewModel.searchOfflineServices(it)
+                        },
+                        services = mainViewModel.services.collectAsState().value,
+                        launchContactUsIntent = { activity.launchContactUsIntent() }
+                    )
+                }
             }
         }
     }

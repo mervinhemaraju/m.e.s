@@ -35,6 +35,7 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 @ExperimentalMaterial3Api
 fun ScreenThemeSelector(
     dialogState: () -> Unit,
+    dynamicColorsEnabled: Boolean,
     updateTheme: (app: AppTheme, colorContrast: AppColorContrast) -> Unit,
     currentAppTheme: AppTheme,
     currentColorContrast: AppColorContrast,
@@ -102,8 +103,13 @@ fun ScreenThemeSelector(
                                 index = it.ordinal,
                                 count = AppColorContrast.entries.size
                             ),
+                            colors = SegmentedButtonDefaults.colors(
+                                disabledInactiveContentColor = MaterialTheme.colorScheme.onSurface,
+                                disabledInactiveContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest
+                            ),
+                            enabled = !dynamicColorsEnabled,
                             onClick = { updateTheme(currentAppTheme, it) },
-                            selected = it == currentColorContrast
+                            selected = it == currentColorContrast && !dynamicColorsEnabled,
                         ) {
                             Text(
                                 text = stringResource(it.stringId),
@@ -111,6 +117,15 @@ fun ScreenThemeSelector(
                             )
                         }
                     }
+                }
+
+                if (dynamicColorsEnabled) {
+                    Text(
+                        text = stringResource(R.string.message_error_color_contrast_disabled_with_dynamics_color),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.error,
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
         },
@@ -120,17 +135,38 @@ fun ScreenThemeSelector(
     )
 }
 
-@Preview("PreCall Screen Loading Light", showBackground = true)
-@Preview("PreCall Screen Loading Dark", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@Preview("Theme Selector Light", showBackground = true)
+@Preview("Theme Selector Dark", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 @ExperimentalMaterial3Api
-fun PreviewScreenPreCallLoading() {
+fun ThemeSelectorScreenPreview() {
     MesTheme {
         ScreenThemeSelector(
             dialogState = {},
             updateTheme = { _, _ -> },
             currentAppTheme = AppTheme.LIGHT,
-            currentColorContrast = AppColorContrast.MEDIUM
+            currentColorContrast = AppColorContrast.MEDIUM,
+            dynamicColorsEnabled = false
+        )
+    }
+}
+
+@Preview("Theme Selector with Dynamics Color Light", showBackground = true)
+@Preview(
+    "Theme Selector with Dynamics Color Dark",
+    showBackground = true,
+    uiMode = UI_MODE_NIGHT_YES
+)
+@Composable
+@ExperimentalMaterial3Api
+fun ThemeSelectorWithDynamicsColorScreenPreview() {
+    MesTheme {
+        ScreenThemeSelector(
+            dialogState = {},
+            updateTheme = { _, _ -> },
+            currentAppTheme = AppTheme.LIGHT,
+            currentColorContrast = AppColorContrast.MEDIUM,
+            dynamicColorsEnabled = true
         )
     }
 }

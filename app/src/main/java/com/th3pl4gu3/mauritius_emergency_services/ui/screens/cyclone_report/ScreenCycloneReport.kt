@@ -456,7 +456,6 @@ fun WidgetActionButtons(
 
         Spacer(modifier = Modifier.size(8.dp))
 
-        // TODO(Add collapse animation)
         ExtendedFloatingActionButton(
             expanded = expandedFab,
             onClick = namesButtonOnClick,

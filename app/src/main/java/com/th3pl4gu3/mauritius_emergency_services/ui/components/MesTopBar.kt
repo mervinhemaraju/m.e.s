@@ -40,7 +40,7 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.theme.elevation
 
 @Composable
 @ExperimentalMaterial3Api
-fun MesBackTopBar(
+fun MesSimpleTopBar(
     screenTitle: String,
     backButtonAction: () -> Unit
 ) {
@@ -82,14 +82,18 @@ fun MesSearchTopBar(
     onExtrasClick: (Service, String) -> Unit
 ) {
 
+    val basePadding = if(!expanded) 8.dp else 0.dp
+
     Box(
         Modifier
             .fillMaxWidth()
+            .padding(vertical = basePadding, horizontal = basePadding * 2)
             .semantics { isTraversalGroup = true }) {
 
         SearchBar(
             modifier = Modifier
-                .align(Alignment.TopCenter)
+                .fillMaxWidth()
+                .align(Alignment.Center)
                 .semantics { traversalIndex = 0f },
             tonalElevation = elevation.extraLow,
             expanded = expanded,
@@ -158,15 +162,8 @@ fun MesSearchTopBar(
                         onClick = { onServiceClick(service) },
                         actionVisible = true,
                         extrasClickAction = onExtrasClick,
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                        topContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh
                     )
-//                    MesServiceItem(
-//                        service = service,
-//                        onClick = { onServiceClick(service) },
-//                        actionVisible = true,
-//                        extrasClickAction = onExtrasClick,
-//                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
-//                    )
                 }
             }
         }
@@ -182,7 +179,7 @@ fun MesSearchTopBar(
 @ExperimentalMaterial3Api
 fun MesBackTopBarPreview() {
     MesTheme {
-        MesBackTopBar(
+        MesSimpleTopBar(
             screenTitle = "Settings",
             backButtonAction = {}
         )

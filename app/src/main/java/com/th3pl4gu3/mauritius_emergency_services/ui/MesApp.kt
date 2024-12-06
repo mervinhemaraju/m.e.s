@@ -1,11 +1,9 @@
 package com.th3pl4gu3.mauritius_emergency_services.ui
 
-import android.app.Activity
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -26,7 +24,6 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,19 +38,16 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.th3pl4gu3.mauritius_emergency_services.MesApplication
-import com.th3pl4gu3.mauritius_emergency_services.activity.MainViewModel
-import com.th3pl4gu3.mauritius_emergency_services.models.AppTheme
 import com.th3pl4gu3.mauritius_emergency_services.models.MesAppSettings
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesBackTopBar
+import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesNavigationDrawer
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesSearchTopBar
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesSimpleTopBar
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.capitalize
-import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.launchContactUsIntent
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.launchEmailIntent
 import com.th3pl4gu3.mauritius_emergency_services.ui.navigation.MesDestinations
 import com.th3pl4gu3.mauritius_emergency_services.ui.navigation.MesNavGraph
@@ -75,7 +69,9 @@ fun MesApp(
     application: MesApplication,
     appSettings: MesAppSettings,
     widthSizeClass: WindowWidthSizeClass,
-    mainViewModel: MainViewModel
+    launchContactUsIntent: () -> Unit,
+    searchOfflineServices: (String) -> Unit,
+    services: List<Service>
 ) {
     /**
      * This is the Main MES app that will
@@ -83,244 +79,206 @@ fun MesApp(
      **/
 
 
-    /** Set the correct app theme that the user has set **/
-    val darkTheme = when (appSettings.appTheme) {
-        AppTheme.FOLLOW_SYSTEM -> isSystemInDarkTheme()
-        AppTheme.DARK -> true
-        AppTheme.LIGHT -> false
+    Log.i(TAG, "Settings -> ${appSettings.emergencyButtonActionIdentifier}")
+
+    /**
+     * Define the start destination
+     **/
+    val startDestination = if (appSettings.isFirstTimeLogging) {
+        MesDestinations.SCREEN_WELCOME
+    } else {
+        MesDestinations.SCREEN_HOME
     }
 
-    MesTheme(
-        dynamicColor = appSettings.dynamicColorsEnabled,
-        darkTheme = darkTheme,
-        colorContrast = appSettings.appColorContrast
+    /**
+     * Define a variable to know if the screen has been expanded
+     **/
+    val isExpandedScreen = widthSizeClass == WindowWidthSizeClass.Expanded
+
+    /**
+     * Define remember state variables
+     **/
+    val snackBarHostState = remember { SnackbarHostState() }
+    val listState = rememberLazyListState()
+    val scrollState = rememberScrollState()
+    val navController = rememberNavController()
+    val navigationActions = remember(navController) { MesNavigationActions(navController) }
+    val navigationActionWrapper = NavigationActionWrapper(application, navigationActions)
+    val coroutineScope = rememberCoroutineScope()
+    val topAppBarState = rememberTopAppBarState()
+    val sizeAwareDrawerState = rememberSizeAwareDrawerState(isExpandedScreen)
+    var showDialog by remember { mutableStateOf(value = false) }
+
+    /**
+     * Define other variables for future use
+     **/
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route ?: MesDestinations.SCREEN_HOME
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topAppBarState)
+
+    val gesturesEnabled: Boolean = !listOf(
+        currentRoute == MesDestinations.SCREEN_WELCOME,
+        currentRoute == MesDestinations.SCREEN_PRE_CALL,
+        currentRoute == MesDestinations.SCREEN_SETTINGS,
+        currentRoute == MesDestinations.SCREEN_ABOUT
+    ).any { it }
+
+    /** Top App Bar is not visible on these conditions **/
+    val topAppBarVisible: Boolean = !listOf(
+        currentRoute == MesDestinations.SCREEN_PRE_CALL,
+        currentRoute == MesDestinations.SCREEN_WELCOME
+    ).any { it }
+
+    /** Search Bar is only visible on these conditions **/
+    val searchTopBarVisible: Boolean = listOf(
+        currentRoute == MesDestinations.SCREEN_HOME,
+        currentRoute == MesDestinations.SCREEN_SERVICES,
+        currentRoute == MesDestinations.SCREEN_CYCLONE_REPORT
+    ).any { it }
+
+    var text by rememberSaveable { mutableStateOf("") }
+    var searchBarExpanded by rememberSaveable { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
+    val context = LocalContext.current
+
+    val onSearchExpandChange: (Boolean) -> Unit = { value ->
+        searchBarExpanded = value
+    }
+
+    /**
+     * Composable
+     **/
+    ModalNavigationDrawer(
+        drawerContent = {
+            MesNavigationDrawer(
+                currentRoute = currentRoute,
+                navigateToHome = navigationActions.navigateToHome,
+                navigateToServices = navigationActions.navigateToServices,
+                navigateToCycloneReport = navigationActions.navigateToCycloneReport,
+                navigateToAbout = navigationActions.navigateToAbout,
+                navigateToSettings = navigationActions.navigateToSettings,
+                toggleThemeDialog = { coroutineScope.launch { showDialog = !showDialog } },
+                navigateToContactUs = launchContactUsIntent,
+                closeDrawer = { coroutineScope.launch { sizeAwareDrawerState.close() } }
+            )
+        },
+        drawerState = sizeAwareDrawerState,
+        gesturesEnabled = gesturesEnabled
     ) {
-
-        Log.i(TAG, "Settings -> ${appSettings.emergencyButtonActionIdentifier}")
-
-        /**
-         * Define the start destination
-         **/
-        val startDestination = if (appSettings.isFirstTimeLogging) {
-            MesDestinations.SCREEN_WELCOME
-        } else {
-            MesDestinations.SCREEN_HOME
-        }
-
-        /**
-         * Define a variable to know if the screen has been expanded
-         **/
-        val isExpandedScreen = widthSizeClass == WindowWidthSizeClass.Expanded
-
-        /**
-         * Define remember state variables
-         **/
-        val snackBarHostState = remember { SnackbarHostState() }
-        val listState = rememberLazyListState()
-        val scrollState = rememberScrollState()
-        val navController = rememberNavController()
-        val navigationActions = remember(navController) { MesNavigationActions(navController) }
-        val navigationActionWrapper = NavigationActionWrapper(application, navigationActions)
-        val coroutineScope = rememberCoroutineScope()
-        val topAppBarState = rememberTopAppBarState()
-        val sizeAwareDrawerState = rememberSizeAwareDrawerState(isExpandedScreen)
-        var showDialog by remember { mutableStateOf(value = false) }
-
-//        val hasScrolled by remember { derivedStateOf { listState.firstVisibleItemScrollOffset > 0 } }
-
-        /**
-         * Define other variables for future use
-         **/
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route ?: MesDestinations.SCREEN_HOME
-        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topAppBarState)
-        val activity = LocalContext.current as Activity
-
-        val gesturesEnabled: Boolean = !listOf(
-            currentRoute == MesDestinations.SCREEN_WELCOME,
-            currentRoute == MesDestinations.SCREEN_PRE_CALL,
-            widthSizeClass == WindowWidthSizeClass.Expanded
-        ).any { it }
-
-        val topAppBarVisible: Boolean = !listOf(
-            currentRoute == MesDestinations.SCREEN_PRE_CALL,
-            currentRoute == MesDestinations.SCREEN_WELCOME,
-            widthSizeClass == WindowWidthSizeClass.Expanded
-        ).any { it }
-
-
-        val searchTopBarVisible: Boolean = listOf(
-            currentRoute == MesDestinations.SCREEN_HOME,
-            currentRoute == MesDestinations.SCREEN_SERVICES,
-            currentRoute == MesDestinations.SCREEN_CYCLONE_REPORT
-        ).any { it }
-
-        var text by rememberSaveable { mutableStateOf("") }
-        var searchBarExpanded by rememberSaveable { mutableStateOf(false) }
-        val focusManager = LocalFocusManager.current
-        val context = LocalContext.current
-
-        val onSearchExpandChange: (Boolean) -> Unit = { value ->
-            searchBarExpanded = value
-        }
-
-        /**
-         * Composable
-         **/
-        ModalNavigationDrawer(
-            drawerContent = {
-                MesNavigationDrawer(
-                    isExpandedView = true,
-                    currentRoute = currentRoute,
-                    navigateToHome = navigationActions.navigateToHome,
-                    navigateToServices = navigationActions.navigateToServices,
-                    navigateToCycloneReport = navigationActions.navigateToCycloneReport,
-                    navigateToAbout = navigationActions.navigateToAbout,
-                    navigateToSettings = navigationActions.navigateToSettings,
-                    toggleThemeDialog = { coroutineScope.launch { showDialog = !showDialog } },
-                    navigateToContactUs = { activity.launchContactUsIntent() },
-                    closeDrawer = { coroutineScope.launch { sizeAwareDrawerState.close() } }
-                )
-            },
-            drawerState = sizeAwareDrawerState,
-            // Only enable opening the drawer via gestures if the screen is not expanded
-            gesturesEnabled = gesturesEnabled
-        ) {
-            Scaffold(
-                topBar = if (topAppBarVisible) {
-                    {
-                        if (searchTopBarVisible) {
-                            MesSearchTopBar(
-                                query = text,
-                                expanded = searchBarExpanded,
-                                onExpandedChange = onSearchExpandChange,
-                                onSearch = { focusManager.clearFocus() },
-                                closeSearch = { searchBarExpanded = false },
-                                openDrawer =
-                                { coroutineScope.launch { sizeAwareDrawerState.open() } },
-                                onSearchQueryChange = {
-                                    text = it; mainViewModel.searchOfflineServices(
-                                    it
-                                )
-                                },
-                                services = mainViewModel.services.collectAsState().value,
-                                onServiceClick = {
+        Scaffold(
+            topBar = {
+                if (topAppBarVisible) {
+                    if (searchTopBarVisible) {
+                        MesSearchTopBar(
+                            query = text,
+                            expanded = searchBarExpanded,
+                            onExpandedChange = onSearchExpandChange,
+                            onSearch = { focusManager.clearFocus() },
+                            closeSearch = { searchBarExpanded = false },
+                            openDrawer =
+                            { coroutineScope.launch { sizeAwareDrawerState.open() } },
+                            onSearchQueryChange = {
+                                text = it
+                                searchOfflineServices(it)
+                            },
+                            services = services,
+                            onServiceClick = {
+                                coroutineScope.launch {
+                                    navigationActionWrapper.navigateToPreCall(
+                                        it,
+                                        it.main_contact.toString(),
+                                        snackBarHostState
+                                    )
+                                }
+                            },
+                            onExtrasClick = { service, contact ->
+                                if (contact.isDigitsOnly()) {
                                     coroutineScope.launch {
                                         navigationActionWrapper.navigateToPreCall(
-                                            it,
-                                            it.main_contact.toString(),
+                                            service,
+                                            contact,
                                             snackBarHostState
                                         )
                                     }
-                                },
-                                onExtrasClick = { service, contact ->
-                                    if (contact.isDigitsOnly()) {
-                                        coroutineScope.launch {
-                                            navigationActionWrapper.navigateToPreCall(
-                                                service,
-                                                contact,
-                                                snackBarHostState
-                                            )
-                                        }
-                                    } else {
-                                        context.launchEmailIntent(recipient = contact)
-                                    }
+                                } else {
+                                    context.launchEmailIntent(recipient = contact)
                                 }
-                            )
-                        } else {
-                            MesBackTopBar(
-                                screenTitle = currentRoute.replace("_", " ").capitalize(),
-                                backButtonAction = { navController.navigateUp() }
-                            )
-                        }
-                    }
-                } else {
-                    {}
-                },
-                snackbarHost = {
-                    SnackbarHost(snackBarHostState) { data ->
-                        Snackbar(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            contentColor = MaterialTheme.colorScheme.onPrimary,
-                            modifier = Modifier
-                                .padding(12.dp),
-                            action = {
-                                TextButton(
-                                    onClick = { data.dismiss() }
-                                ) { Text(data.visuals.actionLabel ?: "") }
                             }
-                        ) {
-                            Text(data.visuals.message)
-                        }
-                    }
-                }
-            ) { innerPadding ->
-                val contentModifier = Modifier
-                    .padding(innerPadding)
-                    .nestedScroll(scrollBehavior.nestedScrollConnection)
-
-                Row {
-                    if (isExpandedScreen) {
-                        MesNavigationDrawer(
-                            isExpandedView = false,
-                            currentRoute = currentRoute,
-                            navigateToHome = navigationActions.navigateToHome,
-                            navigateToServices = navigationActions.navigateToServices,
-                            navigateToCycloneReport = navigationActions.navigateToCycloneReport,
-                            navigateToAbout = navigationActions.navigateToAbout,
-                            navigateToSettings = navigationActions.navigateToSettings,
-                            toggleThemeDialog = {
-                                coroutineScope.launch {
-                                    showDialog = !showDialog
-                                }
-                            },
-                            navigateToContactUs = { activity.launchContactUsIntent() },
-                            scrollState = scrollState
+                        )
+                    } else {
+                        MesSimpleTopBar(
+                            screenTitle = currentRoute.replace("_", " ").capitalize(),
+                            backButtonAction = { navController.navigateUp() }
                         )
                     }
-                    MesNavGraph(
-                        application = application,
-                        snackBarHostState = snackBarHostState,
-                        isExpandedScreen = isExpandedScreen,
-                        modifier = contentModifier,
-                        navController = navController,
-                        navigationActionWrapper = navigationActionWrapper,
-                        listState = listState,
-                        scrollState = scrollState,
-                        startDestination = startDestination,
-                        coroutineScope = coroutineScope
-                    )
                 }
-
-            }
-        }
-
-        if (showDialog) {
-            ScreenThemeSelector(
-                dialogState = { coroutineScope.launch { showDialog = !showDialog } },
-                updateTheme = { appTheme, colorContrast ->
-                    coroutineScope.launch {
-                        if(appTheme != appSettings.appTheme){
-                            application.container.dataStoreServiceRepository.updateTheme(
-                                appTheme
-                            )
+            },
+            snackbarHost = {
+                SnackbarHost(snackBarHostState) { data ->
+                    Snackbar(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier
+                            .padding(12.dp),
+                        action = {
+                            TextButton(
+                                onClick = { data.dismiss() }
+                            ) { Text(data.visuals.actionLabel ?: "") }
                         }
-
-                        if(colorContrast != appSettings.appColorContrast){
-                            application.container.dataStoreServiceRepository.updateColorContrast(
-                                colorContrast
-                            )
-                        }
-
+                    ) {
+                        Text(data.visuals.message)
                     }
-                },
-                currentAppTheme = appSettings.appTheme,
-                currentColorContrast = appSettings.appColorContrast
-            )
+                }
+            }
+        ) { innerPadding ->
+            val contentModifier = Modifier
+                .padding(innerPadding)
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+
+            Row {
+                MesNavGraph(
+                    application = application,
+                    snackBarHostState = snackBarHostState,
+                    isExpandedScreen = isExpandedScreen,
+                    modifier = contentModifier,
+                    navController = navController,
+                    navigationActionWrapper = navigationActionWrapper,
+                    listState = listState,
+                    scrollState = scrollState,
+                    startDestination = startDestination,
+                    coroutineScope = coroutineScope
+                )
+            }
+
         }
     }
-}
 
+    if (showDialog) {
+        ScreenThemeSelector(
+            dialogState = { coroutineScope.launch { showDialog = !showDialog } },
+            updateTheme = { appTheme, colorContrast ->
+                coroutineScope.launch {
+                    if (appTheme != appSettings.appTheme) {
+                        application.container.dataStoreServiceRepository.updateTheme(
+                            appTheme
+                        )
+                    }
+
+                    if (colorContrast != appSettings.appColorContrast) {
+                        application.container.dataStoreServiceRepository.updateColorContrast(
+                            colorContrast
+                        )
+                    }
+
+                }
+            },
+            currentAppTheme = appSettings.appTheme,
+            currentColorContrast = appSettings.appColorContrast,
+            dynamicColorsEnabled = appSettings.dynamicColorsEnabled
+        )
+    }
+
+}
 
 /**
  * Determine the drawer state to pass to the modal drawer.
@@ -347,40 +305,90 @@ private fun rememberSizeAwareDrawerState(isExpandedScreen: Boolean): DrawerState
 /**
  * Application Previews
  **/
-@Preview("Mes App Light")
-@Preview("Mes App Dark", uiMode = UI_MODE_NIGHT_YES)
+@Preview("Mes App Welcome Medium Size Light")
+@Preview("Mes App Welcome Medium Size Dark", uiMode = UI_MODE_NIGHT_YES)
 @Composable
 @ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
 @ExperimentalFoundationApi
 @ExperimentalPagerApi
 @ExperimentalAnimationApi
-fun PreviewTopAppBarMediumSize() {
+fun WelcomeTopAppBarMediumSizePreview() {
+    val mockAppSettings = MesAppSettings(isFirstTimeLogging = true)
     MesTheme {
         MesApp(
             application = MesApplication(),
             widthSizeClass = WindowWidthSizeClass.Medium,
-            appSettings = MesAppSettings(),
-            mainViewModel = viewModel()
+            appSettings = mockAppSettings,
+            searchOfflineServices = {},
+            services = listOf(),
+            launchContactUsIntent = {}
         )
     }
 }
 
-@Preview("Mes App Light")
-@Preview("Mes App Dark", uiMode = UI_MODE_NIGHT_YES)
+@Preview("Mes App Home Medium Size Light")
+@Preview("Mes App Home Medium Size Dark", uiMode = UI_MODE_NIGHT_YES)
 @Composable
 @ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
 @ExperimentalFoundationApi
 @ExperimentalPagerApi
 @ExperimentalAnimationApi
-fun PreviewTopAppBarExpandedSize() {
+fun HomeTopAppBarMediumSizePreview() {
+    val mockAppSettings = MesAppSettings(isFirstTimeLogging = false)
+    MesTheme {
+        MesApp(
+            application = MesApplication(),
+            widthSizeClass = WindowWidthSizeClass.Medium,
+            appSettings = mockAppSettings,
+            searchOfflineServices = {},
+            services = listOf(),
+            launchContactUsIntent = {}
+        )
+    }
+}
+
+@Preview("Mes App Welcome Expanded Size Light")
+@Preview("Mes App Welcome Expanded Size Dark", uiMode = UI_MODE_NIGHT_YES)
+@Composable
+@ExperimentalMaterial3Api
+@ExperimentalComposeUiApi
+@ExperimentalFoundationApi
+@ExperimentalPagerApi
+@ExperimentalAnimationApi
+fun WelcomeTopAppBarExpandedSizePreview() {
+    val mockAppSettings = MesAppSettings(isFirstTimeLogging = true)
     MesTheme {
         MesApp(
             application = MesApplication(),
             widthSizeClass = WindowWidthSizeClass.Expanded,
-            appSettings = MesAppSettings(),
-            mainViewModel = viewModel(),
+            appSettings = mockAppSettings,
+            searchOfflineServices = {},
+            services = listOf(),
+            launchContactUsIntent = {}
+        )
+    }
+}
+
+@Preview("Mes App Home Expanded Size Light")
+@Preview("Mes App Home Expanded Size Dark", uiMode = UI_MODE_NIGHT_YES)
+@Composable
+@ExperimentalMaterial3Api
+@ExperimentalComposeUiApi
+@ExperimentalFoundationApi
+@ExperimentalPagerApi
+@ExperimentalAnimationApi
+fun HomeTopAppBarExpandedSizePreview() {
+    val mockAppSettings = MesAppSettings(isFirstTimeLogging = false)
+    MesTheme {
+        MesApp(
+            application = MesApplication(),
+            widthSizeClass = WindowWidthSizeClass.Expanded,
+            appSettings = mockAppSettings,
+            searchOfflineServices = {},
+            services = listOf(),
+            launchContactUsIntent = {}
         )
     }
 }
