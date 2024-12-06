@@ -161,6 +161,14 @@ fun CycloneReportDecisionsUi(
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         )
+
+        is CycloneReportUiState.NoNetwork -> MesScreenError(
+            retryAction = retryAction,
+            errorMessageId = R.string.message_internet_connection_needed,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+        )
     }
 }
 
@@ -557,6 +565,24 @@ fun ErrorCycloneReportScreenPreview() {
     MesTheme {
         CycloneReportDecisionsUi(
             cycloneReportUiState = CycloneReportUiState.Error,
+            isRefreshing = false,
+            animationSpeed = 1000,
+            retryAction = {},
+            ptrState = rememberPullToRefreshState(),
+            showCycloneNamesOnClick = {},
+            showCycloneGuidelinesOnClick = {}
+        )
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@Preview("Error Network Light Preview", showBackground = true)
+@Preview("Error Network Dark Preview", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun ErrorNetworkCycloneReportScreenPreview() {
+    MesTheme {
+        CycloneReportDecisionsUi(
+            cycloneReportUiState = CycloneReportUiState.NoNetwork,
             isRefreshing = false,
             animationSpeed = 1000,
             retryAction = {},

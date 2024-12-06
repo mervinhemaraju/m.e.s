@@ -13,9 +13,10 @@ data class CycloneReport(
     fun getTimeSlices(): Triple<String, String, String> {
 
         if(!next_bulletin.isNullOrEmpty()) {
+
             val timeSlices = this.next_bulletin.split(":")
 
-            if (timeSlices.isNotEmpty() && timeSlices.size > 3){
+            if (timeSlices.isNotEmpty() && timeSlices.size > 2){
                 return Triple(timeSlices[0], timeSlices[1], timeSlices[2])
             }
         }

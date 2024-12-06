@@ -6,4 +6,5 @@ sealed interface CycloneGuidelinesUiState {
     data class Success(val guideline: CycloneGuideline) : CycloneGuidelinesUiState
     data object Error : CycloneGuidelinesUiState
     data object Loading : CycloneGuidelinesUiState
+    data object NoNetwork: CycloneGuidelinesUiState
 }

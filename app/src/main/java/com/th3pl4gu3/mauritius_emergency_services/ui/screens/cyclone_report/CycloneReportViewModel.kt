@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.GetAppLocale
 import com.th3pl4gu3.mauritius_emergency_services.ui.wrappers.NetworkRequests
+import com.th3pl4gu3.mauritius_emergency_services.utils.NetworkRequestException
 import com.th3pl4gu3.mauritius_emergency_services.utils.TIMEOUT_MILLIS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -89,55 +90,78 @@ class CycloneReportViewModel @Inject constructor(
      * Private Functions
      **/
     private suspend fun loadCycloneNames() {
-        with(getCycloneNames()) {
-            mCycloneNamesUiState.value = if (this.success) {
-                CycloneNamesUiState.Success(this.names)
-            } else {
-                CycloneNamesUiState.Error
+
+        // Update the ui state for cyclone names based
+        // on the try catch block response
+        mCycloneNamesUiState.value = try {
+
+            with(getCycloneNames()) {
+                if (this.success) {
+                    CycloneNamesUiState.Success(this.names)
+                } else {
+                    CycloneNamesUiState.Error
+                }
             }
+
+        } catch (e: NetworkRequestException) {
+            CycloneNamesUiState.NoNetwork
+        } catch (e: Exception) {
+            CycloneNamesUiState.Error
         }
     }
 
     private suspend fun loadCycloneGuidelines() {
 
-        with(getCycloneGuidelines()) {
-            if (this.success) {
-                this.guidelines.forEach { cycloneGuideline ->
-                    if (cycloneGuideline.level == mCurrentCycloneLevel.value) {
-                        mCycloneGuidelinesUiState.value =
-                            CycloneGuidelinesUiState.Success(cycloneGuideline)
-                        return
-                    }
+        // Update the ui state for cyclone guidelines based
+        // on the try catch block response
+        mCycloneGuidelinesUiState.value = try {
+
+            with(getCycloneGuidelines()) {
+                if (this.success) {
+                    CycloneGuidelinesUiState.Success(
+                        this.guidelines.first { it.level == mCurrentCycloneLevel.value }
+                    )
+                } else {
+                    CycloneGuidelinesUiState.Error
                 }
-
-            } else {
-                mCycloneNamesUiState.value = CycloneNamesUiState.Error
             }
+        } catch (e: NetworkRequestException) {
+            CycloneGuidelinesUiState.NoNetwork
+        } catch (e: Exception) {
+            CycloneGuidelinesUiState.Error
         }
-
-        // Default error if no guidelines were found
-        mCycloneNamesUiState.value = CycloneNamesUiState.Error
     }
 
     private suspend fun loadCycloneReport() {
 
-        with(getCycloneReport()) {
+        // Update the ui state for cyclone report based
+        // on the try catch block response
+        mCycloneReportUiState.value = try {
 
-            mCycloneReportUiState.value = if (this.success) {
+            with(getCycloneReport()) {
 
-                mCurrentCycloneLevel.value = this.report.level
+                if (this.success) {
 
-                if (this.report.level > 0) {
-                    mAnimationSpeed.value = 4000 / this.report.level
-                    CycloneReportUiState.Warning(this.report)
+                    mCurrentCycloneLevel.value = this.report.level
+
+                    if (this.report.level > 0) {
+                        mAnimationSpeed.value = 4000 / this.report.level
+                        CycloneReportUiState.Warning(this.report)
+                    } else {
+                        mAnimationSpeed.value = 1000
+                        CycloneReportUiState.NoWarning
+                    }
                 } else {
                     mAnimationSpeed.value = 1000
-                    CycloneReportUiState.NoWarning
+                    CycloneReportUiState.Error
                 }
-            } else {
-                mAnimationSpeed.value = 1000
-                CycloneReportUiState.Error
+
             }
+
+        } catch (e: NetworkRequestException) {
+            CycloneReportUiState.NoNetwork
+        } catch (e: Exception) {
+            CycloneReportUiState.Error
         }
     }
 

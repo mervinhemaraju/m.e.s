@@ -7,4 +7,5 @@ sealed interface CycloneReportUiState {
     data object Error : CycloneReportUiState
     data object Loading : CycloneReportUiState
     data object NoWarning: CycloneReportUiState
+    data object NoNetwork: CycloneReportUiState
 }

@@ -85,13 +85,14 @@ fun SheetCycloneGuidelinesDecisionsUi(
 
                 }
 
-                is CycloneGuidelinesUiState.Loading -> {
-                    MesScreenLinearLoading()
-                }
+                is CycloneGuidelinesUiState.Loading -> MesScreenLinearLoading()
 
-                is CycloneGuidelinesUiState.Error -> {
-                    MesScreenError(retryAction = retryAction)
-                }
+                is CycloneGuidelinesUiState.Error -> MesScreenError(retryAction = retryAction)
+
+                is CycloneGuidelinesUiState.NoNetwork -> MesScreenError(
+                    retryAction = retryAction,
+                    errorMessageId = R.string.message_internet_connection_needed
+                )
             }
 
         }
@@ -160,6 +161,25 @@ fun SheetCycloneGuidelinesErrorPreview() {
             currentCycloneLevel = 1,
             showSheetCycloneGuidelines = true,
             cycloneGuidelinesUiState = CycloneGuidelinesUiState.Error,
+            onDismissSheetCycloneNames = {},
+            retryAction = {},
+            sheetState = rememberStandardBottomSheetState(initialValue = SheetValue.Expanded)
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview("Cyclone Guidelines Network Error Light Preview", showBackground = true)
+@Preview(
+    "Cyclone Guidelines Network Error Dark Preview", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+fun SheetCycloneGuidelinesNetworkErrorPreview() {
+    MesTheme {
+        SheetCycloneGuidelinesDecisionsUi(
+            currentCycloneLevel = 1,
+            showSheetCycloneGuidelines = true,
+            cycloneGuidelinesUiState = CycloneGuidelinesUiState.NoNetwork,
             onDismissSheetCycloneNames = {},
             retryAction = {},
             sheetState = rememberStandardBottomSheetState(initialValue = SheetValue.Expanded)

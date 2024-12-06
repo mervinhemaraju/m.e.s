@@ -8,6 +8,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.models.api.CycloneName
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesDataTable
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesModalBottomSheet
@@ -59,6 +60,11 @@ fun SheetCycloneNamesDecisionsUi(
                 is CycloneNamesUiState.Error -> {
                     MesScreenError(retryAction = retryAction)
                 }
+
+                is CycloneNamesUiState.NoNetwork -> MesScreenError(
+                    retryAction = retryAction,
+                    errorMessageId = R.string.message_internet_connection_needed
+                )
             }
 
         }
@@ -95,7 +101,9 @@ fun SheetCycloneNamesPreview() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview("Cyclone Names Loading Light Preview", showBackground = true)
 @Preview(
-    "Cyclone Names Dark Loading Preview", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES
+    "Cyclone Names Dark Loading Preview",
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
 fun SheetCycloneNamesLoadingPreview() {
@@ -113,7 +121,9 @@ fun SheetCycloneNamesLoadingPreview() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview("Cyclone Names Error Light Preview", showBackground = true)
 @Preview(
-    "Cyclone Names Dark Error Preview", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES
+    "Cyclone Names Dark Error Preview",
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
 fun SheetCycloneNamesErrorPreview() {
@@ -121,6 +131,26 @@ fun SheetCycloneNamesErrorPreview() {
         SheetCycloneNamesDecisionsUi(
             showSheetCycloneNames = true,
             cycloneNamesUiState = CycloneNamesUiState.Error,
+            onDismissSheetCycloneNames = {},
+            retryAction = {},
+            sheetState = rememberStandardBottomSheetState(initialValue = SheetValue.Expanded)
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview("Cyclone Names Network Error Light Preview", showBackground = true)
+@Preview(
+    "Cyclone Names Dark Network Error Preview",
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+fun SheetCycloneNamesNetworkErrorPreview() {
+    MesTheme {
+        SheetCycloneNamesDecisionsUi(
+            showSheetCycloneNames = true,
+            cycloneNamesUiState = CycloneNamesUiState.NoNetwork,
             onDismissSheetCycloneNames = {},
             retryAction = {},
             sheetState = rememberStandardBottomSheetState(initialValue = SheetValue.Expanded)
