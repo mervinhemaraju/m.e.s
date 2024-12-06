@@ -3,6 +3,7 @@ package com.th3pl4gu3.mauritius_emergency_services.data.store
 import android.content.Context
 import androidx.datastore.dataStore
 import com.th3pl4gu3.mauritius_emergency_services.MesApplication
+import com.th3pl4gu3.mauritius_emergency_services.models.AppColorContrast
 import com.th3pl4gu3.mauritius_emergency_services.models.AppTheme
 import com.th3pl4gu3.mauritius_emergency_services.models.MesAppSettings
 import com.th3pl4gu3.mauritius_emergency_services.models.MesAppSettingsSerializer
@@ -36,6 +37,14 @@ class DataStoreRepository(private val application: MesApplication) : StoreReposi
         application.datastore.updateData {
             it.copy(
                 appTheme = theme
+            )
+        }
+    }
+
+    override suspend fun updateColorContrast(colorContrast: AppColorContrast) {
+        application.datastore.updateData {
+            it.copy(
+                appColorContrast = colorContrast
             )
         }
     }

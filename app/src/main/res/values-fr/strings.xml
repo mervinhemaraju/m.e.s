@@ -14,7 +14,7 @@
     <string name="title_about_data_about_mes">À propos de Mes</string>
     <string name="title_about_data_api">API Developpeur</string>
     <string name="title_about_version">Version</string>
-    <string name="title_theme_selector_dialog">Choisissez un Thème</string>
+    <string name="title_theme_selector_dialog">Choisissez votre Thème</string>
     <string name="title_settings_page_dynamic_colors">Couleurs Dynamiques</string>
     <string name="title_settings_page_emergency_button_action">Action du Bouton d\'urgence</string>
     <string name="title_settings_page_clear_cache">Vider le Cache</string>
@@ -118,4 +118,11 @@
     <string name="ctnt_desc_cyclone_guidelines_button">Obtenez une liste des directives relatives aux cyclones</string>
     <string name="title_welcome_page_cyclone_report">Rapport Cyclonique</string>
     <string name="description_welcome_page_cyclone_report">Soyez informé des avertissements de cyclone et lisez les directives en matière de cyclones en direct depuis votre téléphone.</string>
+    <string name="section_theme_preferences_contrast">Contraste</string>
+    <string name="option_theme_follow_system">Selon le système</string>
+    <string name="option_theme_light">Clair</string>
+    <string name="option_theme_dark">Sombre</string>
+    <string name="option_theme_contrast_default">Défaut</string>
+    <string name="option_theme_contrast_medium">Moyen</string>
+    <string name="option_theme_contrast_high">Haut</string>
 </resources>

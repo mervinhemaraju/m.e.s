@@ -92,7 +92,8 @@ fun MesApp(
 
     MesTheme(
         dynamicColor = appSettings.dynamicColorsEnabled,
-        darkTheme = darkTheme // Load the app theme
+        darkTheme = darkTheme,
+        colorContrast = appSettings.appColorContrast
     ) {
 
         Log.i(TAG, "Settings -> ${appSettings.emergencyButtonActionIdentifier}")
@@ -297,14 +298,24 @@ fun MesApp(
         if (showDialog) {
             ScreenThemeSelector(
                 dialogState = { coroutineScope.launch { showDialog = !showDialog } },
-                updateTheme = {
+                updateTheme = { appTheme, colorContrast ->
                     coroutineScope.launch {
-                        application.container.dataStoreServiceRepository.updateTheme(
-                            it
-                        )
+                        if(appTheme != appSettings.appTheme){
+                            application.container.dataStoreServiceRepository.updateTheme(
+                                appTheme
+                            )
+                        }
+
+                        if(colorContrast != appSettings.appColorContrast){
+                            application.container.dataStoreServiceRepository.updateColorContrast(
+                                colorContrast
+                            )
+                        }
+
                     }
                 },
-                currentAppTheme = appSettings.appTheme
+                currentAppTheme = appSettings.appTheme,
+                currentColorContrast = appSettings.appColorContrast
             )
         }
     }
@@ -369,7 +380,7 @@ fun PreviewTopAppBarExpandedSize() {
             application = MesApplication(),
             widthSizeClass = WindowWidthSizeClass.Expanded,
             appSettings = MesAppSettings(),
-            mainViewModel = viewModel()
+            mainViewModel = viewModel(),
         )
     }
 }

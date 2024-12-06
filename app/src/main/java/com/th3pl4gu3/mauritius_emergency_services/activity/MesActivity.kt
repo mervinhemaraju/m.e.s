@@ -30,11 +30,11 @@ import kotlinx.coroutines.launch
 
 // TODO(Improve search screen for services)
 // TODO(Add a most used services list)
-// FIXME(Fix issue where swiping back from a call and going into precall screen again, it tries to perform a call again)
+// TODO(Add follow system for automatic apply of color contrast schemes)
+// FIXME(Fix issue where swiping back from a call and going into pre-call screen again, it tries to perform a call again)
 // FIXME(Search bar disappears on landscape)
 // FIXME(Cache clearing in the app isn't working properly)
-// FEAT(Add towing services)
-// FEAT(Add personal doctors services)
+// FEAT(Add towing services / doctor services)
 // FEAT(Add a home screen widget)
 // FEAT(Allow sorting of services)
 

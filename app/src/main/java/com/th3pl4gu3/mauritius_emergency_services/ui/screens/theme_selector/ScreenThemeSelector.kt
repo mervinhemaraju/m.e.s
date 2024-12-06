@@ -6,20 +6,26 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.th3pl4gu3.mauritius_emergency_services.R
+import com.th3pl4gu3.mauritius_emergency_services.models.AppColorContrast
 import com.th3pl4gu3.mauritius_emergency_services.models.AppTheme
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesOneActionDialog
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.toReadableText
@@ -29,8 +35,9 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 @ExperimentalMaterial3Api
 fun ScreenThemeSelector(
     dialogState: () -> Unit,
-    updateTheme: (app: AppTheme) -> Unit,
+    updateTheme: (app: AppTheme, colorContrast: AppColorContrast) -> Unit,
     currentAppTheme: AppTheme,
+    currentColorContrast: AppColorContrast,
     modifier: Modifier = Modifier
 ) {
     MesOneActionDialog(
@@ -44,7 +51,7 @@ fun ScreenThemeSelector(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable(
-                                onClick = { updateTheme(it) },
+                                onClick = { updateTheme(it, currentColorContrast) },
                                 onClickLabel = it.toReadableText()
                             )
                     ) {
@@ -66,13 +73,43 @@ fun ScreenThemeSelector(
                         )
 
                         Text(
-                            text = it.toReadableText(),
+                            text = stringResource(it.stringId),
                             style = MaterialTheme.typography.bodyLarge,
                             modifier = Modifier
                                 .weight(9f)
                                 .padding(8.dp),
                             color = if (it == currentAppTheme) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
                         )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = stringResource(R.string.section_theme_preferences_contrast),
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.secondary
+                )
+
+                SingleChoiceSegmentedButtonRow(
+                    modifier = Modifier.padding(vertical = 8.dp)
+                ) {
+                    AppColorContrast.entries.map {
+                        SegmentedButton(
+                            shape = SegmentedButtonDefaults.itemShape(
+                                index = it.ordinal,
+                                count = AppColorContrast.entries.size
+                            ),
+                            onClick = { updateTheme(currentAppTheme, it) },
+                            selected = it == currentColorContrast
+                        ) {
+                            Text(
+                                text = stringResource(it.stringId),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
                     }
                 }
             }
@@ -91,8 +128,9 @@ fun PreviewScreenPreCallLoading() {
     MesTheme {
         ScreenThemeSelector(
             dialogState = {},
-            updateTheme = {},
-            currentAppTheme = AppTheme.LIGHT
+            updateTheme = { _, _ -> },
+            currentAppTheme = AppTheme.LIGHT,
+            currentColorContrast = AppColorContrast.MEDIUM
         )
     }
 }
