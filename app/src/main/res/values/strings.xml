@@ -26,6 +26,7 @@
     <string name="title_about_data_api">Developer API</string>
     <string name="title_about_privacy_policy">Privacy Policy</string>
     <string name="title_about_version">Version</string>
+    <string name="title_about_disclaimer">Disclaimer</string>
     <string name="title_about_lead_developer" translatable="false">Mervin Hemaraju</string>
     <string name="title_about_graphic_designer" translatable="false">Nick Foo Kune</string>
 
@@ -81,6 +82,11 @@
     <string name="description_about_privacy_policy">View the privacy policy for Mes</string>
     <string name="description_about_lead_developer">Lead Developer &amp; Designer</string>
     <string name="description_about_graphic_designer">Play Store Banner &amp; Images</string>
+    <string name="description_about_disclaimer">
+        This application is NOT affiliated with, endorsed by, or connected to any government entity or agency.
+        MES relies on publicly available resources and a proprietary API built by the app\'s developer.
+        All information, features, and services provided within the app are for informational and personal use only.
+    </string>
 
 
     <string name="description_welcome_mes_permissions_needed_dialog">

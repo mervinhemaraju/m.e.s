@@ -12,12 +12,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.th3pl4gu3.mauritius_emergency_services.R
-import com.th3pl4gu3.mauritius_emergency_services.activity.MesActivity
 import com.th3pl4gu3.mauritius_emergency_services.models.items.AboutInfoDrawable
 import com.th3pl4gu3.mauritius_emergency_services.models.items.AboutInfoVector
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesAboutAppCard
@@ -31,11 +29,11 @@ import com.th3pl4gu3.mauritius_emergency_services.utils.URI_MES_WEBSITE_PRIVACY
 @Composable
 @ExperimentalMaterial3Api
 fun ScreenAbout(
+    launchIntent: (Intent) -> Unit,
     scrollState: ScrollState = rememberScrollState()
 ) {
 
     val localUriHandler = LocalUriHandler.current
-    val activity = LocalContext.current as MesActivity
     val aboutInfoVectorOnClick: (AboutInfoVector) -> Unit = {
         when (it) {
             AboutInfoVector.RateApp -> {
@@ -59,7 +57,8 @@ fun ScreenAbout(
                     Intent.createChooser(this@apply, null)
                 }
 
-                activity.startActivity(intent)
+                // Launch the intent
+                launchIntent(intent)
             }
             else -> {}
         }
@@ -95,13 +94,14 @@ fun ScreenAbout(
     }
 }
 
-
 @Preview("Home Screen Light")
 @Preview("Home Screen Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 @ExperimentalMaterial3Api
 fun ScreenHomePreview() {
     MesTheme {
-        ScreenAbout()
+        ScreenAbout(
+            launchIntent = {}
+        )
     }
 }

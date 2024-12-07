@@ -1,5 +1,6 @@
 package com.th3pl4gu3.mauritius_emergency_services.ui
 
+import android.content.Intent
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -48,6 +49,7 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesNavigationDra
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesSearchTopBar
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesSimpleTopBar
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.capitalize
+import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.getContactUsIntent
 import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.launchEmailIntent
 import com.th3pl4gu3.mauritius_emergency_services.ui.navigation.MesDestinations
 import com.th3pl4gu3.mauritius_emergency_services.ui.navigation.MesNavGraph
@@ -69,9 +71,9 @@ fun MesApp(
     application: MesApplication,
     appSettings: MesAppSettings,
     widthSizeClass: WindowWidthSizeClass,
-    launchContactUsIntent: () -> Unit,
     searchOfflineServices: (String) -> Unit,
-    services: List<Service>
+    services: List<Service>,
+    launchIntent: (Intent) -> Unit
 ) {
     /**
      * This is the Main MES app that will
@@ -158,7 +160,11 @@ fun MesApp(
                 navigateToAbout = navigationActions.navigateToAbout,
                 navigateToSettings = navigationActions.navigateToSettings,
                 toggleThemeDialog = { coroutineScope.launch { showDialog = !showDialog } },
-                navigateToContactUs = launchContactUsIntent,
+                navigateToContactUs = {
+                    launchIntent(
+                        getContactUsIntent()
+                    )
+                },
                 closeDrawer = { coroutineScope.launch { sizeAwareDrawerState.close() } }
             )
         },
@@ -246,7 +252,8 @@ fun MesApp(
                     listState = listState,
                     scrollState = scrollState,
                     startDestination = startDestination,
-                    coroutineScope = coroutineScope
+                    coroutineScope = coroutineScope,
+                    launchIntent = launchIntent
                 )
             }
 
@@ -322,7 +329,7 @@ fun WelcomeTopAppBarMediumSizePreview() {
             appSettings = mockAppSettings,
             searchOfflineServices = {},
             services = listOf(),
-            launchContactUsIntent = {}
+            launchIntent = {}
         )
     }
 }
@@ -344,7 +351,7 @@ fun HomeTopAppBarMediumSizePreview() {
             appSettings = mockAppSettings,
             searchOfflineServices = {},
             services = listOf(),
-            launchContactUsIntent = {}
+            launchIntent = {}
         )
     }
 }
@@ -366,7 +373,7 @@ fun WelcomeTopAppBarExpandedSizePreview() {
             appSettings = mockAppSettings,
             searchOfflineServices = {},
             services = listOf(),
-            launchContactUsIntent = {}
+            launchIntent = {}
         )
     }
 }
@@ -388,7 +395,7 @@ fun HomeTopAppBarExpandedSizePreview() {
             appSettings = mockAppSettings,
             searchOfflineServices = {},
             services = listOf(),
-            launchContactUsIntent = {}
+            launchIntent = {}
         )
     }
 }

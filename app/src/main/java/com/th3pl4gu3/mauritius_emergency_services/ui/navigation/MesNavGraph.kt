@@ -1,5 +1,6 @@
 package com.th3pl4gu3.mauritius_emergency_services.ui.navigation
 
+import android.content.Intent
 import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -17,9 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.th3pl4gu3.mauritius_emergency_services.MesApplication
-import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
-import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.HasNecessaryPermissions
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.about.ScreenAbout
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.cyclone_report.CycloneReportViewModel
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.cyclone_report.ScreenCycloneReport
@@ -53,7 +52,8 @@ fun MesNavGraph(
     startDestination: String,
     listState: LazyListState,
     scrollState: ScrollState,
-    coroutineScope: CoroutineScope
+    coroutineScope: CoroutineScope,
+    launchIntent: (Intent) -> Unit
 ) {
     /** Log information **/
     Log.i(TAG, "Starting Navigation Host")
@@ -144,7 +144,8 @@ fun MesNavGraph(
 
             /** Launch the screen UI **/
             ScreenAbout(
-                scrollState = scrollState
+                scrollState = scrollState,
+                launchIntent = launchIntent
             )
         }
         composable(MesDestinations.SCREEN_SETTINGS) {
