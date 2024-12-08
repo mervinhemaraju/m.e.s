@@ -48,6 +48,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -102,6 +103,21 @@ fun MesIcon(
 ) {
     Icon(
         imageVector = imageVector,
+        contentDescription = contentDescription,
+        tint = tint,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun MesIcon(
+    modifier: Modifier = Modifier,
+    @DrawableRes painterResource: Int,
+    contentDescription: String? = null,
+    tint: Color = MaterialTheme.colorScheme.onSurface
+) {
+    Icon(
+        painter = painterResource(id = painterResource),
         contentDescription = contentDescription,
         tint = tint,
         modifier = modifier
@@ -305,6 +321,36 @@ fun MesAboutAppCard(
                 )
             }
 
+            Spacer(modifier = Modifier.height(21.dp))
+
+
+            Text(
+                text = stringResource(R.string.title_about_disclaimer),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(4.dp)
+            )
+
+            Box(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+            ) {
+
+                Text(
+                    text = stringResource(R.string.description_about_disclaimer),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    textAlign = TextAlign.Justify,
+                    modifier = Modifier
+                        .padding(16.dp)
+                )
+            }
+
+
             Text(
                 text = stringResource(id = R.string.app_development_sweet_message),
                 style = MaterialTheme.typography.labelMedium,
@@ -407,6 +453,20 @@ fun MesDataTable(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+@Preview(name = "Mes About Card Light", showBackground = true)
+@Preview(name = "Mes About Card Dark", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+fun MesAboutCardPreview() {
+    MaterialTheme {
+        MesAboutAppCard(
+            title = stringResource(id = R.string.section_about_title_about),
+            aboutApp = AboutInfoDrawable.developers,
+            onClick = {}
+        )
+    }
+}
+
 @Composable
 @Preview(name = "Mes DataTable Light", showBackground = true)
 @Preview(name = "Mes DataTable Dark", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
@@ -448,6 +508,7 @@ fun MesComposablePreview() {
 
             MesIcon(
                 painterResource = R.drawable.ic_image_broken,
+                contentDescription = ""
             )
 
             MesIcon(

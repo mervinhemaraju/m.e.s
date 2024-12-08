@@ -270,6 +270,8 @@ fun SwipeToCancel(
     )
 
     SwipeToDismissBox(
+        modifier = Modifier
+            .clip(MaterialTheme.shapes.medium),
         state = state,
         enableDismissFromStartToEnd = false,
         enableDismissFromEndToStart = true,

@@ -239,13 +239,16 @@ fun ScreenWarning(
 
                 Spacer(modifier = Modifier.size(34.dp))
 
-                MesIcon(painterResource = R.drawable.ic_cyclone,
+                MesIcon(
+                    painterResource = R.drawable.ic_cyclone,
                     tint = MaterialTheme.colorScheme.secondary,
+                    contentDescription = report.level.toString(),
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .graphicsLayer {
                             rotationZ = angle
-                        })
+                        }
+                )
 
                 Spacer(modifier = Modifier.size(48.dp))
 
@@ -302,11 +305,13 @@ fun ScreenNoWarning(
                 MesIcon(
                     painterResource = R.drawable.ic_cloud,
                     tint = MaterialTheme.colorScheme.secondary,
+                    contentDescription = R.string.message_cyclone_report_no_warnings,
                     modifier = Modifier
                 )
                 MesIcon(
                     painterResource = R.drawable.ic_cloud,
                     tint = MaterialTheme.colorScheme.secondary,
+                    contentDescription = R.string.message_cyclone_report_no_warnings,
                     modifier = Modifier
                 )
             }
@@ -324,6 +329,7 @@ fun ScreenNoWarning(
             MesIcon(
                 painterResource = R.drawable.ic_cloud,
                 tint = MaterialTheme.colorScheme.secondary,
+                contentDescription = R.string.message_cyclone_report_no_warnings,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
         }
@@ -577,7 +583,11 @@ fun ErrorCycloneReportScreenPreview() {
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Preview("Error Network Light Preview", showBackground = true)
-@Preview("Error Network Dark Preview", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(
+    "Error Network Dark Preview",
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 fun ErrorNetworkCycloneReportScreenPreview() {
     MesTheme {

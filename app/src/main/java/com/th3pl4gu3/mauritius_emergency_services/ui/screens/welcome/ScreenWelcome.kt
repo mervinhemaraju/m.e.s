@@ -41,7 +41,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -52,7 +51,6 @@ import com.google.accompanist.pager.rememberPagerState
 import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.activity.MesActivity
 import com.th3pl4gu3.mauritius_emergency_services.models.items.WelcomeInfo
-import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesDrawerHeader
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesIcon
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesTextButton
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesTwoActionDialog
@@ -238,7 +236,8 @@ fun SliderPageBody(
             modifier = Modifier
                 .size(120.dp)
                 .align(Alignment.Center),
-            tint = MaterialTheme.colorScheme.secondary
+            tint = MaterialTheme.colorScheme.secondary,
+            contentDescription = description
         )
     }
     Spacer(

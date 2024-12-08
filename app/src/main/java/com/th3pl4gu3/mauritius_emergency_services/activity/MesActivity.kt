@@ -11,7 +11,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -29,8 +28,6 @@ import com.th3pl4gu3.mauritius_emergency_services.MesApplication
 import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.models.AppTheme
 import com.th3pl4gu3.mauritius_emergency_services.ui.MesApp
-import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.IsConnectedToNetwork
-import com.th3pl4gu3.mauritius_emergency_services.ui.extensions.launchContactUsIntent
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -46,10 +43,6 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MesActivity : AppCompatActivity() {
-
-    companion object {
-        private const val TAG = "MAIN_ACTIVITY_LOGS"
-    }
 
     /** DI to get the [MainViewModel] **/
     private val mainViewModel: MainViewModel by viewModels()
@@ -94,23 +87,17 @@ class MesActivity : AppCompatActivity() {
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        /** Install the splash screen before onCreate() **/
+        val splashScreen = installSplashScreen()
+
+        /** Launch onCreate() **/
         super.onCreate(savedInstanceState)
 
-        Log.i(
-            TAG, "Starting app with app compat ${
-                AppCompatDelegate.getApplicationLocales()
-            }"
-        )
-
-        Log.i(
-            TAG, "Is connected to network $IsConnectedToNetwork"
-        )
-
         /**
-         * Installs the custom splash screen and
-         * waits for proper content to load
+         * Waits for proper content to load
          **/
-        installSplashScreen().setKeepOnScreenCondition {
+        splashScreen.setKeepOnScreenCondition {
             !mainViewModel.isLoading.value
         }
 
@@ -154,7 +141,9 @@ class MesActivity : AppCompatActivity() {
                             mainViewModel.searchOfflineServices(it)
                         },
                         services = mainViewModel.services.collectAsState().value,
-                        launchContactUsIntent = { activity.launchContactUsIntent() }
+                        launchIntent = {
+                            activity.startActivity(it)
+                        }
                     )
                 }
             }
