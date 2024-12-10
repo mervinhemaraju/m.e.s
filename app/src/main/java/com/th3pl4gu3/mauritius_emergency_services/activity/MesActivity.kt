@@ -32,12 +32,16 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-// TODO(Improve search screen for services)
-// TODO(Add a most used services list)
+// TODO(Improve search screen for services: Add history of searches)
 // TODO(Add follow system for automatic apply of color contrast schemes)
+// TODO(Make cyclone names available even when there is no cyclone warnings)
+// TODO(Add notifications for cyclone warnings)
+// FIXME(emergency number doesn't auto call.)
+// FIXME(Theme selector on landscape mode)
 // FIXME(Fix issue where swiping back from a call and going into pre-call screen again, it tries to perform a call again)
 // FIXME(Cache clearing in the app isn't working properly)
 // FEAT(Add towing services / doctor services)
+// FEAT(Cyclone predictions)
 // FEAT(Add a home screen widget)
 // FEAT(Allow sorting of services)
 

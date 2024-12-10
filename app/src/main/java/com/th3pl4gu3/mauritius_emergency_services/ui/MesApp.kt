@@ -209,7 +209,8 @@ fun MesApp(
                                 } else {
                                     context.launchEmailIntent(recipient = contact)
                                 }
-                            }
+                            },
+                            clearSearch = { text = ""}
                         )
                     } else {
                         MesSimpleTopBar(

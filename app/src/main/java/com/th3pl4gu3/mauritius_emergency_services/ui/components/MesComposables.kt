@@ -3,6 +3,8 @@ package com.th3pl4gu3.mauritius_emergency_services.ui.components
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -30,9 +32,11 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -63,6 +67,36 @@ import com.th3pl4gu3.mauritius_emergency_services.models.items.AboutInfoVector
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.elevation
 
+@Composable
+fun AnimatedChangingIconButtons(
+    isInitialVisible: Boolean,
+    initialIconButton: @Composable (rotation: Float) -> Unit,
+    finalIconButton: @Composable (rotation: Float) -> Unit,
+    initialButtonOnClick: () -> Unit,
+    finalButtonOnClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+
+    // Animate the rotation for a smooth transition
+    val rotation by animateFloatAsState(
+        targetValue = if (isInitialVisible) 0f else 180f,
+        animationSpec = tween(
+            durationMillis = 100, // Increased duration for slower animation
+        ),
+        label = ""
+    )
+
+    IconButton(
+        onClick = if (isInitialVisible) initialButtonOnClick else finalButtonOnClick,
+        modifier = modifier
+    ) {
+        if(isInitialVisible){
+            initialIconButton(rotation)
+        }else{
+            finalIconButton(rotation)
+        }
+    }
+}
 
 @Composable
 fun MesCounter(

@@ -2,7 +2,6 @@ package com.th3pl4gu3.mauritius_emergency_services.ui.components
 
 import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,8 +9,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.ArrowForward
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,6 +26,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
@@ -79,10 +80,11 @@ fun MesSearchTopBar(
     onSearchQueryChange: (String) -> Unit,
     services: List<Service>,
     onServiceClick: (Service) -> Unit,
-    onExtrasClick: (Service, String) -> Unit
+    onExtrasClick: (Service, String) -> Unit,
+    clearSearch: () -> Unit
 ) {
 
-    val basePadding = if(!expanded) 8.dp else 0.dp
+    val basePadding = if (!expanded) 8.dp else 0.dp
 
     Box(
         Modifier
@@ -112,26 +114,49 @@ fun MesSearchTopBar(
                         )
                     },
                     leadingIcon = {
-                        if (!expanded)
-                            Icon(
-                                Icons.Default.Menu,
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .clickable { openDrawer() }
-                            )
-                        else
-                            Icon(
-                                Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = null,
-                                modifier = Modifier.clickable {
-                                    closeSearch()
-                                }
-                            )
+                        AnimatedChangingIconButtons(
+                            isInitialVisible = !expanded,
+                            initialIconButton = { rotation ->
+                                Icon(
+                                    imageVector = Icons.Default.Menu,
+                                    contentDescription = stringResource(R.string.ctnt_desc_drawer_open),
+                                    tint = MaterialTheme.colorScheme.onSurface,
+                                    modifier = Modifier.rotate(rotation)
+                                )
+                            },
+                            finalIconButton = { rotation ->
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Outlined.ArrowForward,
+                                    contentDescription = stringResource(R.string.ctnt_desc_drawer_close),
+                                    tint = MaterialTheme.colorScheme.onSurface,
+                                    modifier = Modifier.rotate(rotation)
+                                )
+                            },
+                            initialButtonOnClick = openDrawer,
+                            finalButtonOnClick = closeSearch
+                        )
                     },
                     trailingIcon = {
-                        Icon(
-                            Icons.Default.Search,
-                            contentDescription = null
+                        AnimatedChangingIconButtons(
+                            isInitialVisible = query.isEmpty(),
+                            initialIconButton = { rotation ->
+                                Icon(
+                                    imageVector = Icons.Default.Search,
+                                    contentDescription = stringResource(R.string.action_search),
+                                    tint = MaterialTheme.colorScheme.onSurface,
+                                    modifier = Modifier.rotate(rotation)
+                                )
+                            },
+                            finalIconButton = { rotation ->
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = stringResource(R.string.action_close),
+                                    tint = MaterialTheme.colorScheme.onSurface,
+                                    modifier = Modifier.rotate(rotation)
+                                )
+                            },
+                            initialButtonOnClick = {},
+                            finalButtonOnClick = clearSearch
                         )
                     }
                 )
@@ -170,6 +195,7 @@ fun MesSearchTopBar(
     }
 }
 
+
 @Preview("Mes Back Top Bar Light Preview", showBackground = true)
 @Preview(
     "Mes Back Top Bar Dark Preview", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES
@@ -205,7 +231,8 @@ fun MesSearchTopBarPreview() {
             onSearchQueryChange = {},
             services = listOf(),
             onServiceClick = {},
-            onExtrasClick = { _, _ -> }
+            onExtrasClick = { _, _ -> },
+            clearSearch = {}
         )
     }
 }
@@ -231,7 +258,8 @@ fun MesSearchBarActivePreview() {
             onSearchQueryChange = {},
             services = listOf(),
             onServiceClick = {},
-            onExtrasClick = { _, _ -> }
+            onExtrasClick = { _, _ -> },
+            clearSearch = {}
         )
     }
 }

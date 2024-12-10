@@ -1,5 +1,7 @@
 <resources>
 
+    <!-- TODO(Re organize strings) -->
+
     <!-- App Specific -->
     <string name="app_name_short" translatable="false">Mes</string>
     <string name="app_name_long" translatable="false">Mauritius Emergency Services</string>
@@ -187,6 +189,7 @@
 
     <!-- Content Descriptions -->
     <string name="ctnt_desc_drawer_open">Open Navigation Drawer</string>
+    <string name="ctnt_desc_drawer_close">Close Navigation Drawer</string>
     <string name="ctnt_desc_emergency_button">Make a quick emergency call</string>
     <string name="ctnt_desc_cyclone_names_button">Get a list of cyclone names</string>
     <string name="ctnt_desc_cyclone_guidelines_button">Get a list of cyclone guidelines</string>

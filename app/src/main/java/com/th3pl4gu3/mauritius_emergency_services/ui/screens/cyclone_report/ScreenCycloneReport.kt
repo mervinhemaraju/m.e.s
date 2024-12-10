@@ -434,7 +434,7 @@ fun WidgetNextBulletin(hour: String = "00", minute: String = "00", second: Strin
 
         MesCounter(
             countdown = second,
-            label = stringResource(R.string.label_time_minute),
+            label = stringResource(R.string.label_time_second),
             modifier = backgroundThemeModifier
         )
     }

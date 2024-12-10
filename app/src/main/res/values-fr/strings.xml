@@ -84,6 +84,7 @@
     <string name="message_error_call_startup_failed">Impossible d\'effectuer l\'appel téléphonique pour le moment. Veuillez réessayer.</string>
     <string name="message_error_cache_reset">Une erreur s\'est produite lors de la réinitialisation du cache : %1$s</string>
     <string name="ctnt_desc_drawer_open">Ouvrir la navigation</string>
+    <string name="ctnt_desc_drawer_close">Fermer la navigation</string>
     <string name="ctnt_desc_emergency_button">Passer un appel d\'urgence rapide</string>
     <string name="title_services_page_other_contacts">Autres contacts</string>
     <string name="message_toll_free">Gratuit</string>
