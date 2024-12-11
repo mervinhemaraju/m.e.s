@@ -119,7 +119,7 @@ fun MesSearchTopBar(
                             initialIconButton = { rotation ->
                                 Icon(
                                     imageVector = Icons.Default.Menu,
-                                    contentDescription = stringResource(R.string.ctnt_desc_drawer_open),
+                                    contentDescription = stringResource(R.string.description_content_drawer_open),
                                     tint = MaterialTheme.colorScheme.onSurface,
                                     modifier = Modifier.rotate(rotation)
                                 )
@@ -127,7 +127,7 @@ fun MesSearchTopBar(
                             finalIconButton = { rotation ->
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Outlined.ArrowForward,
-                                    contentDescription = stringResource(R.string.ctnt_desc_drawer_close),
+                                    contentDescription = stringResource(R.string.description_content_drawer_close),
                                     tint = MaterialTheme.colorScheme.onSurface,
                                     modifier = Modifier.rotate(rotation)
                                 )

@@ -326,7 +326,7 @@ fun MesSwipeAbleServiceItem(
                         MesIcon(
                             imageVector = if (!expanded) Icons.Outlined.ArrowDropDown else Icons.Outlined.ArrowDropUp,
                             contentDescription = String.format(
-                                stringResource(id = R.string.action_drop_down),
+                                stringResource(id = R.string.description_content_drop_down_service),
                                 service.name
                             )
                         )

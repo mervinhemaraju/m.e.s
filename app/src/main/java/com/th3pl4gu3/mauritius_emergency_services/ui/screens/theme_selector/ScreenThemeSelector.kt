@@ -87,7 +87,7 @@ fun ScreenThemeSelector(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = stringResource(R.string.section_theme_preferences_contrast),
+                    text = stringResource(R.string.title_theme_preferences_contrast),
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodyMedium,

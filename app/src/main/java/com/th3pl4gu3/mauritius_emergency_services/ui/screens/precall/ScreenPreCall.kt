@@ -185,7 +185,7 @@ fun PreCallContent(
             Text(
                 modifier = Modifier
                     .wrapContentSize(),
-                text = stringResource(id = R.string.headline_pre_call_primary),
+                text = stringResource(id = R.string.title_pre_call_primary),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.secondary,
                 textAlign = TextAlign.Center
@@ -348,7 +348,7 @@ fun SwipeToCancel(
 
                 Icon(
                     imageVector = Icons.Outlined.KeyboardDoubleArrowLeft,
-                    contentDescription = stringResource(id = R.string.action_swipe_cancel),
+                    contentDescription = stringResource(id = R.string.description_content_swipe_to_cancel_call),
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .width(48.dp)

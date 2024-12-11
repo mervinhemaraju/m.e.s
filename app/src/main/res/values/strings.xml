@@ -1,13 +1,27 @@
 <resources>
 
-    <!-- TODO(Re organize strings) -->
+    <!--
+    === String categories are listed below and should be one of these
+    >>> app: Strings related to the app directly
+    >>> action: Actions such as button labels, radio buttons etc..
+    >>> option: drop down items etc...
+    >>> title: Screen main titles, dialog titles, top bar titles etc..
+    >>> description: Screen descriptions, dialog descriptions etc...
+    >>> message: error message, success message, toast/snack message etc.
+    >>> label: any kinds of labels
+    ===
+    -->
 
-    <!-- App Specific -->
+    <!--
+    ==== App Specific ====
+    -->
     <string name="app_name_short" translatable="false">Mes</string>
     <string name="app_name_long" translatable="false">Mauritius Emergency Services</string>
     <string name="app_development_sweet_message">Developed with ❤ in 🇲🇺</string>
 
-    <!-- Actions -->
+    <!--
+    ==== Actions ====
+    -->
     <string name="action_retry">Retry</string>
     <string name="action_close">Close</string>
     <string name="action_slide_cancel">Slide to Cancel</string>
@@ -16,12 +30,122 @@
     <string name="action_cancel">Cancel</string>
     <string name="action_search">Search</string>
     <string name="action_sort">Sort</string>
-    <string name="action_call_end">End Call</string>
-    <string name="action_swipe_cancel">Swipe to cancel the call</string>
-    <string name="action_scroll_up">Scroll Up</string>
-    <string name="action_drop_down">Drop Down for %1$s</string>
 
-    <!-- Titles -->
+    <!--
+    ==== Options ====
+    -->
+    <string name="option_theme_follow_system">Follow System</string>
+    <string name="option_theme_light">Light</string>
+    <string name="option_theme_dark">Dark</string>
+    <string name="option_theme_contrast_default">Default</string>
+    <string name="option_theme_contrast_medium">Medium</string>
+    <string name="option_theme_contrast_high">High</string>
+
+    <!--
+    ==== Descriptions ====
+    -->
+    <string name="description_content_swipe_to_cancel_call">Swipe to cancel the call</string>
+    <string name="description_content_drop_down_service">Drop Down for %1$s</string>
+    <string name="description_content_drawer_open">Open Navigation Drawer</string>
+    <string name="description_content_drawer_close">Close Navigation Drawer</string>
+    <string name="description_content_button_emergency">Make a quick emergency call</string>
+    <string name="description_content_button_cyclone_names">Get a list of cyclone names</string>
+    <string name="description_content_button_cyclone_guidelines">Get a list of cyclone guidelines</string>
+    <string name="description_about_rate_mes">
+        If you love the app, let us know in the Google Play Store and we can make it even better.
+    </string>
+    <string name="description_about_share_mes">
+        Do not forget to share Mes with your friends and families.
+    </string>
+    <string name="description_about_about_mes">
+        Check us out on our official website
+    </string>
+    <string name="description_about_api">
+        Application Program Interface (API) used in MES
+    </string>
+    <string name="description_about_privacy_policy">View the privacy policy for Mes</string>
+    <string name="description_about_lead_developer">Lead Developer &amp; Designer</string>
+    <string name="description_about_graphic_designer">Play Store Banner &amp; Images</string>
+    <string name="description_about_disclaimer">
+        This application is NOT affiliated with, endorsed by, or connected to any government entity or agency.
+        MES relies on publicly available resources and a proprietary API built by the app\'s developer.
+        All information, features, and services provided within the app are for informational and personal use only.
+    </string>
+    <string name="description_welcome_mes_permissions_needed_dialog">
+        Notifications are optional permissions that can be allowed to notify the users for activities in MES.
+        However, phone call is a MANDATORY permission needed for MES to work. This is because MES will need to be able to launch
+        phone call for you directly from the app. You won\'t be able to proceed without enabling the phone call permission.
+    </string>
+    <string name="description_welcome_mes_permissions_rationale_dialog">
+        You need to enable phone call permissions manually to continue. To do so,
+        click on the proceed button > Choose permissions > Choose the call permissions > Click Allow
+    </string>
+    <string name="description_welcome_page_services_list">
+        Get a list of all emergency and non-emergency contacts right from your phone.
+    </string>
+    <string name="description_welcome_page_cyclone_report">Get notified of cyclone warnings and read the cyclone guidelines live from your phone.</string>
+    <string name="description_welcome_page_emergency_actions">
+        Get a dedicated corner on your dashboard just for emergency services
+    </string>
+    <string name="description_welcome_page_sos">
+        Call for urgent help right from the app using the big red button
+    </string>
+    <string name="description_welcome_page_offline_availability">
+        Get all your services available to you offline. You just need to be connected online once for MES to download the services.
+    </string>
+    <string name="description_settings_page_dynamic_colors">Apply dynamic colors, based on your wallpaper (Material YOU)</string>
+    <string name="description_settings_page_emergency_button_action">
+        Set an emergency service for the Red button
+    </string>
+    <string name="description_settings_page_clear_cache">
+        This will allow Mes to clear cache and re-load the services from the Internet
+    </string>
+    <string name="description_settings_page_change_language">
+        Click to change the app\'s language
+    </string>
+
+    <!--
+    ==== Messages ====
+    -->
+    <!-- Messages: Basic -->
+    <string name="message_welcome_mes">Welcome to Mes</string>
+    <string name="message_loading_basic">Loading…</string>
+    <string name="message_loading_services">Getting Services…</string>
+    <string name="message_loading_call_in_progress">Call in progress…</string>
+    <string name="message_updating_services">Updating Services…</string>
+    <string name="message_services_not_found">No services found</string>
+    <string name="message_cache_reset_successfully">Cache reset successfully</string>
+<!--    <string name="message_action_emergency_button_configured">%1$s has been set as the emergency button action</string>-->
+    <string name="message_toll_free">Toll Free</string>
+    <string name="message_item_new">New</string>
+    <string name="message_no_other_contacts_found">No other contacts found</string>
+    <string name="message_internet_connection_needed">
+        You need to be connected to the internet for Mes to download the data. Please connect and try again
+    </string>
+    <string name="message_emergency_button_action_updated">Emergency button action updated</string>
+    <string name="message_dynamic_colors_selection_updated">Dynamic colors updated</string>
+    <string name="message_app_language_updated">Language updated</string>
+    <string name="message_external_link">External Link</string>
+    <string name="message_permissions_enable_phone_call">Please enable call permissions in settings to continue</string>
+    <string name="message_services_search_query">Searching for %1$s in services</string>
+    <string name="message_services_search">Enter the service that you want to find</string>
+    <string name="message_cyclone_report_no_warnings">There are no cyclone warnings in Mauritius at the moment.</string>
+
+    <!-- Messages: Error -->
+    <string name="message_error_content_failed">Error getting content</string>
+    <string name="message_error_loading_countdown" translatable="false">X</string>
+    <string name="message_error_loading_cyclone_report_failed">Unable to load cyclone report.</string>
+    <string name="message_error_loading_services_failed">Unable to load services.</string>
+    <string name="message_error_call_startup_failed">Unable to perform the phone call at the moment. Please try again.</string>
+    <string name="message_error_cache_reset">Error occurred while resetting cache: %1$s</string>
+    <string name="message_error_color_contrast_disabled_with_dynamics_color">Color contrast cannot be set when dynamics color scheme is enabled.</string>
+
+    <!--
+    ==== Titles ====
+    -->
+    <string name="title_about_card_main">About</string>
+    <string name="title_about_card_support_and_dev">Support &amp; Development</string>
+    <string name="title_about_card_other">Other</string>
     <string name="title_about_data_rate_mes">Rate Mes</string>
     <string name="title_about_data_share_mes">Share Mes</string>
     <string name="title_about_data_about_mes">About Mes</string>
@@ -68,131 +192,24 @@
     <string name="title_cyclone_guidelines">Class %1$s Guidelines</string>
     <string name="title_cyclone_names">Cyclone Names</string>
 
-    <!-- Descriptions -->
-    <string name="description_about_data_rate_mes">
-        If you love the app, let us know in the Google Play Store and we can make it even better.
-    </string>
-    <string name="description_about_data_share_mes">
-        Do not forget to share Mes with your friends and families.
-    </string>
-    <string name="description_about_data_about_mes">
-        Check us out on our official website
-    </string>
-    <string name="description_about_data_api">
-        Application Program Interface (API) used in MES
-    </string>
-    <string name="description_about_privacy_policy">View the privacy policy for Mes</string>
-    <string name="description_about_lead_developer">Lead Developer &amp; Designer</string>
-    <string name="description_about_graphic_designer">Play Store Banner &amp; Images</string>
-    <string name="description_about_disclaimer">
-        This application is NOT affiliated with, endorsed by, or connected to any government entity or agency.
-        MES relies on publicly available resources and a proprietary API built by the app\'s developer.
-        All information, features, and services provided within the app are for informational and personal use only.
-    </string>
+    <string name="title_home_primary">Emergency call help needed ?</string>
+    <string name="title_home_secondary">Hold the emergency button to call</string>
+    <string name="title_home_tertiary">Need other quick emergency actions ?</string>
+    <string name="title_home_quaternary">Click one below to call</string>
 
+    <string name="title_pre_call_primary">Starting a call to</string>
 
-    <string name="description_welcome_mes_permissions_needed_dialog">
-        Notifications are optional permissions that can be allowed to notify the users for activities in MES.
-        However, phone call is a MANDATORY permission needed for MES to work. This is because MES will need to be able to launch
-        phone call for you directly from the app. You won\'t be able to proceed without enabling the phone call permission.
-    </string>
-    <string name="description_welcome_mes_permissions_rationale_dialog">
-        You need to enable phone call permissions manually to continue. To do so,
-        click on the proceed button > Choose permissions > Choose the call permissions > Click Allow
-    </string>
+    <string name="title_welcome_primary">Welcome to</string>
 
-    <string name="description_welcome_page_services_list">
-        Get a list of all emergency and non-emergency contacts right from your phone.
-    </string>
-    <string name="description_welcome_page_cyclone_report">Get notified of cyclone warnings and read the cyclone guidelines live from your phone.</string>
-    <string name="description_welcome_page_emergency_actions">
-        Get a dedicated corner on your dashboard just for emergency services
-    </string>
-    <string name="description_welcome_page_sos">
-        Call for urgent help right from the app using the big red button
-    </string>
-    <string name="description_welcome_page_offline_availability">
-        Get all your services available to you offline. You just need to be connected online once for MES to download the services.
-    </string>
+    <string name="title_cyclone_report_primary">Mauritius is currently in</string>
+    <string name="title_cyclone_report_status">Class %1$s</string>
+    <string name="title_cyclone_report_latest_news">Latest News</string>
+    <string name="title_cyclone_report_next_bulletin">Next Bulletin</string>
 
-    <string name="description_settings_page_dynamic_colors">Apply dynamic colors, based on your wallpaper (Material YOU)</string>
-    <string name="description_settings_page_emergency_button_action">
-        Set an emergency service for the Red button
-    </string>
-    <string name="description_settings_page_clear_cache">
-        This will allow Mes to clear cache and re-load the services from the Internet
-    </string>
-    <string name="description_settings_page_change_language">
-        Click to change the app\'s language
-    </string>
+    <string name="title_theme_preferences_contrast">Contrast</string>
 
-    <!-- Headlines -->
-    <string name="headline_home_primary">Emergency call help needed ?</string>
-    <string name="headline_home_secondary">Hold the emergency button to call</string>
-    <string name="headline_home_tertiary">Need other quick emergency actions ?</string>
-    <string name="headline_home_quaternary">Click one below to call</string>
+    <string name="title_dialog_emergency_call_verifier">This is an emergency number. Are you sure you want to call?</string>
 
-    <string name="headline_pre_call_primary">Starting a call to</string>
-
-    <string name="headline_welcome_primary">Welcome to</string>
-
-    <string name="headline_cyclone_report_primary">Mauritius is currently in</string>
-    <string name="headline_cyclone_report_status">Class %1$s</string>
-    <string name="headline_cyclone_report_latest_news">Latest News</string>
-    <string name="headline_cyclone_report_next_bulletin">Next Bulletin</string>
-
-    <!-- Sections -->
-    <string name="section_about_title_about">About</string>
-    <string name="section_about_title_support_and_dev">Support &amp; Development</string>
-    <string name="section_about_title_other">Other</string>
-    <string name="section_theme_preferences_contrast">Contrast</string>
-
-    <!-- Options -->
-    <string name="option_theme_follow_system">Follow System</string>
-    <string name="option_theme_light">Light</string>
-    <string name="option_theme_dark">Dark</string>
-    <string name="option_theme_contrast_default">Default</string>
-    <string name="option_theme_contrast_medium">Medium</string>
-    <string name="option_theme_contrast_high">High</string>
-
-    <!-- Messages: Basic -->
-    <string name="message_welcome_mes">Welcome to Mes</string>
-    <string name="message_loading_basic">Loading…</string>
-    <string name="message_loading_services">Getting Services…</string>
-    <string name="message_loading_call_in_progress">Call in progress…</string>
-    <string name="message_updating_services">Updating Services…</string>
-    <string name="message_services_not_found">No services found</string>
-    <string name="message_cache_reset_successfully">Cache reset successfully</string>
-    <string name="message_action_emergency_button_configured">%1$s has been set as the emergency button action</string>
-    <string name="message_toll_free">Toll Free</string>
-    <string name="message_item_new">New</string>
-    <string name="message_no_other_contacts_found">No other contacts found</string>
-    <string name="message_internet_connection_needed">
-        You need to be connected to the internet for Mes to download the data. Please connect and try again
-    </string>
-    <string name="message_emergency_button_action_updated">Emergency button action updated</string>
-    <string name="message_dynamic_colors_selection_updated">Dynamic colors updated</string>
-    <string name="message_app_language_updated">Language updated</string>
-    <string name="message_external_link">External Link</string>
-    <string name="message_permissions_enable_phone_call">Please enable call permissions in settings to continue</string>
-    <string name="message_services_search_query">Searching for %1$s in services</string>
-    <string name="message_services_search">Enter the service that you want to find</string>
-    <string name="message_cyclone_report_no_warnings">There are no cyclone warnings in Mauritius at the moment.</string>
-    <!-- Message: Error -->
-    <string name="message_error_content_failed">Error getting content</string>
-    <string name="message_error_loading_countdown" translatable="false">X</string>
-    <string name="message_error_loading_cyclone_report_failed">Unable to load cyclone report.</string>
-    <string name="message_error_loading_services_failed">Unable to load services.</string>
-    <string name="message_error_call_startup_failed">Unable to perform the phone call at the moment. Please try again.</string>
-    <string name="message_error_cache_reset">Error occurred while resetting cache: %1$s</string>
-    <string name="message_error_color_contrast_disabled_with_dynamics_color">Color contrast cannot be set when dynamics color scheme is enabled.</string>
-
-    <!-- Content Descriptions -->
-    <string name="ctnt_desc_drawer_open">Open Navigation Drawer</string>
-    <string name="ctnt_desc_drawer_close">Close Navigation Drawer</string>
-    <string name="ctnt_desc_emergency_button">Make a quick emergency call</string>
-    <string name="ctnt_desc_cyclone_names_button">Get a list of cyclone names</string>
-    <string name="ctnt_desc_cyclone_guidelines_button">Get a list of cyclone guidelines</string>
 
     <!-- Labels -->
     <string name="label_time_separator" translatable="false">:</string>

@@ -139,7 +139,7 @@ fun HomeContent(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = stringResource(id = R.string.headline_home_primary),
+                text = stringResource(id = R.string.title_home_primary),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface,
@@ -154,7 +154,7 @@ fun HomeContent(
             )
 
             Text(
-                text = stringResource(id = R.string.headline_home_secondary),
+                text = stringResource(id = R.string.title_home_secondary),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center,
@@ -193,7 +193,7 @@ fun HomeContent(
         ) {
 
             Text(
-                text = stringResource(id = R.string.headline_home_tertiary),
+                text = stringResource(id = R.string.title_home_tertiary),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface,
@@ -203,7 +203,7 @@ fun HomeContent(
             )
 
             Text(
-                text = stringResource(id = R.string.headline_home_quaternary),
+                text = stringResource(id = R.string.title_home_quaternary),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center,

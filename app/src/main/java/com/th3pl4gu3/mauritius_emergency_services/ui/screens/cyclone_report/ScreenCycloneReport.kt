@@ -216,7 +216,7 @@ fun ScreenWarning(
             ) {
 
                 Text(
-                    text = stringResource(R.string.headline_cyclone_report_primary),
+                    text = stringResource(R.string.title_cyclone_report_primary),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center,
@@ -227,7 +227,7 @@ fun ScreenWarning(
 
                 Text(
                     text = stringResource(
-                        R.string.headline_cyclone_report_status,
+                        R.string.title_cyclone_report_status,
                         report.level.toString()
                     ),
                     style = MaterialTheme.typography.headlineLarge,
@@ -342,7 +342,7 @@ fun ScreenNoWarning(
 @Composable
 fun WidgetLatestNews(news: List<String>) {
     Text(
-        text = stringResource(R.string.headline_cyclone_report_latest_news).capitalize(),
+        text = stringResource(R.string.title_cyclone_report_latest_news).capitalize(),
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.onBackground,
         textAlign = TextAlign.Center,
@@ -389,7 +389,7 @@ fun WidgetNextBulletin(hour: String = "00", minute: String = "00", second: Strin
         .background(MaterialTheme.colorScheme.surfaceContainerLow)
 
     Text(
-        text = stringResource(R.string.headline_cyclone_report_next_bulletin).capitalize(),
+        text = stringResource(R.string.title_cyclone_report_next_bulletin).capitalize(),
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.onBackground,
         textAlign = TextAlign.Center,
@@ -464,7 +464,7 @@ fun WidgetActionButtons(
             ) {
             Icon(
                 Icons.AutoMirrored.Filled.Help,
-                stringResource(R.string.ctnt_desc_cyclone_guidelines_button)
+                stringResource(R.string.description_content_button_cyclone_guidelines)
             )
         }
 
@@ -476,7 +476,7 @@ fun WidgetActionButtons(
             icon = {
                 Icon(
                     Icons.AutoMirrored.Filled.ListAlt,
-                    stringResource(R.string.ctnt_desc_cyclone_names_button)
+                    stringResource(R.string.description_content_button_cyclone_names)
                 )
             },
             text = { Text(text = "Names") },

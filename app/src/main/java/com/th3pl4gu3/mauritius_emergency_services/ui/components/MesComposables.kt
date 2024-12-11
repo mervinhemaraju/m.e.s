@@ -256,7 +256,7 @@ fun MesEmergencyButton(
         Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
             MesIcon(
                 painterResource = R.drawable.ic_emergency_beacons,
-                contentDescription = R.string.ctnt_desc_emergency_button,
+                contentDescription = R.string.description_content_button_emergency,
                 tint = MaterialTheme.colorScheme.surface
             )
         }
@@ -494,7 +494,7 @@ fun MesDataTable(
 fun MesAboutCardPreview() {
     MaterialTheme {
         MesAboutAppCard(
-            title = stringResource(id = R.string.section_about_title_about),
+            title = stringResource(id = R.string.title_about_card_main),
             aboutApp = AboutInfoDrawable.developers,
             onClick = {}
         )

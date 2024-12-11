@@ -72,7 +72,7 @@ fun ScreenAbout(
     ) {
 
         MesAboutAppCard(
-            title = stringResource(id = R.string.section_about_title_about),
+            title = stringResource(id = R.string.title_about_card_main),
             aboutApp = AboutInfoDrawable.developers,
             onClick = {
                 localUriHandler.openUri(it)
@@ -80,13 +80,13 @@ fun ScreenAbout(
         )
 
         MesAboutInfoCard(
-            title = stringResource(id = R.string.section_about_title_support_and_dev),
+            title = stringResource(id = R.string.title_about_card_support_and_dev),
             aboutInfo = AboutInfoVector.supportAndDevelopment,
             onClick = aboutInfoVectorOnClick
         )
 
         MesAboutInfoCard(
-            title = stringResource(id = R.string.section_about_title_other),
+            title = stringResource(id = R.string.title_about_card_other),
             aboutInfo = AboutInfoVector.others,
             onClick = aboutInfoVectorOnClick
         )

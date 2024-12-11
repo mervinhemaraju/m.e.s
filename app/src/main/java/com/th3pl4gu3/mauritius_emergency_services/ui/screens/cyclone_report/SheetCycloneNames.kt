@@ -7,6 +7,7 @@ import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.th3pl4gu3.mauritius_emergency_services.R
 import com.th3pl4gu3.mauritius_emergency_services.models.api.CycloneName
@@ -29,7 +30,7 @@ fun SheetCycloneNamesDecisionsUi(
 
     if (showSheetCycloneNames) {
         MesModalBottomSheet(
-            title = "Cyclone Names",
+            title = stringResource(R.string.title_cyclone_names),
             sheetState = sheetState,
             onDismiss = onDismissSheetCycloneNames
         ) {

@@ -76,7 +76,7 @@ fun MesNavGraph(
 
     if (isDialogVisible) {
         MesTwoActionDialog(
-            title = "This is an emergency number. Are you sure you want to call?",
+            title = stringResource(R.string.title_dialog_emergency_call_verifier),
             confirmButtonAction = {
                 isDialogVisible = false
                 coroutineScope.launch {

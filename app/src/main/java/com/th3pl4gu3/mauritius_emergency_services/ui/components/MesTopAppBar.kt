@@ -58,7 +58,7 @@ internal fun MesTopAppBar(
             ) {
                 MesIcon(
                     painterResource = R.drawable.ic_mes,
-                    contentDescription = R.string.ctnt_desc_drawer_open,
+                    contentDescription = R.string.description_content_drawer_open,
                     modifier = Modifier.size(32.dp)
                 )
             }
