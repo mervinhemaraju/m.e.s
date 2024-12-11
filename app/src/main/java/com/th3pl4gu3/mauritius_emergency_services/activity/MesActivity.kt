@@ -36,7 +36,6 @@ import kotlinx.coroutines.launch
 // TODO(Add follow system for automatic apply of color contrast schemes)
 // TODO(Make cyclone names available even when there is no cyclone warnings)
 // TODO(Add notifications for cyclone warnings)
-// FIXME(emergency number doesn't auto call.)
 // FIXME(Theme selector on landscape mode)
 // FIXME(Fix issue where swiping back from a call and going into pre-call screen again, it tries to perform a call again)
 // FIXME(Cache clearing in the app isn't working properly)

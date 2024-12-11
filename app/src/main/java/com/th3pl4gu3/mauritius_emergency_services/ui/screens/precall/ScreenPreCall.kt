@@ -1,8 +1,10 @@
 package com.th3pl4gu3.mauritius_emergency_services.ui.screens.precall
 
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.net.Uri
+import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -56,7 +58,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.th3pl4gu3.mauritius_emergency_services.R
-import com.th3pl4gu3.mauritius_emergency_services.activity.MesActivity
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesAsyncRoundedImage
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesIcon
@@ -71,7 +72,8 @@ import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 fun ScreenPreCall(
     preCallViewModel: PreCallViewModel,
     closeScreen: () -> Unit,
-    isExpandedScreen: Boolean = false
+    isExpandedScreen: Boolean = false,
+    launchIntent: (Intent) -> Unit
 ) {
     /** Get the UI State from the view model **/
     val preCallUiState by preCallViewModel.service.collectAsState()
@@ -88,7 +90,8 @@ fun ScreenPreCall(
         countdown = countdown.toString(),
         startCall = startCall,
         closeScreen = closeScreen,
-        isExpandedScreen = isExpandedScreen
+        isExpandedScreen = isExpandedScreen,
+        launchIntent = launchIntent
     )
 }
 
@@ -100,16 +103,26 @@ fun PreCallUiStateDecisions(
     countdown: String?,
     startCall: Boolean,
     closeScreen: () -> Unit,
-    isExpandedScreen: Boolean
+    isExpandedScreen: Boolean,
+    launchIntent: (Intent) -> Unit
 ) {
     when (preCallUiState) {
         is PreCallUiState.Success -> {
             if (startCall) {
-                val activity = LocalContext.current as MesActivity
+                val telephonyManager =
+                    LocalContext.current.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+
+                val tel =
+                    if (telephonyManager.isEmergencyNumber(preCallUiState.service.main_contact.toString())) {
+                        "tel:${preCallUiState.service.main_contact}+"
+                    } else {
+                        "tel:${preCallUiState.service.main_contact}"
+                    }
+
                 with(Intent(Intent.ACTION_CALL)) {
-                    data = Uri.parse("tel:${preCallUiState.service.main_contact}")
+                    data = Uri.parse(tel)
                     closeScreen()
-                    activity.startActivity(this)
+                    launchIntent(this)
                 }
             }
 
@@ -370,11 +383,12 @@ fun PreviewScreenPreCallContent() {
 
     MesTheme {
         PreCallUiStateDecisions(
-            preCallUiState = PreCallUiState.Success(mockData),
+            preCallUiState = PreCallUiState.Success(mockData, false),
             closeScreen = {},
             countdown = "N",
             startCall = false,
-            isExpandedScreen = false
+            isExpandedScreen = false,
+            launchIntent = {}
         )
     }
 }
@@ -391,7 +405,8 @@ fun PreviewScreenPreCallLoading() {
             closeScreen = {},
             countdown = "N",
             startCall = true,
-            isExpandedScreen = false
+            isExpandedScreen = false,
+            launchIntent = {}
         )
     }
 }
@@ -408,7 +423,8 @@ fun PreviewScreenPreCallError() {
             closeScreen = {},
             countdown = "N",
             startCall = true,
-            isExpandedScreen = false
+            isExpandedScreen = false,
+            launchIntent = {}
         )
     }
 }
