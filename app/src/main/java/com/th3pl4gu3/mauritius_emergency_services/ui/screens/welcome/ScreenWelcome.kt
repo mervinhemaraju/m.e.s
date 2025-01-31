@@ -100,7 +100,7 @@ fun ScreenWelcome(
 
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(
-                text = stringResource(id = R.string.headline_welcome_primary),
+                text = stringResource(id = R.string.title_welcome_primary),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.secondary,
                 textAlign = TextAlign.Center,

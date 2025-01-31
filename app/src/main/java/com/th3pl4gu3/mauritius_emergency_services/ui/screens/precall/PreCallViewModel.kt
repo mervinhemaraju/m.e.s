@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.th3pl4gu3.mauritius_emergency_services.data.local.LocalServiceRepository
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
+import com.th3pl4gu3.mauritius_emergency_services.utils.KEYWORD_IS_EMERGENCY_ARGUMENT
 import com.th3pl4gu3.mauritius_emergency_services.utils.KEYWORD_SERVICE_IDENTIFIER_ARGUMENT
 import com.th3pl4gu3.mauritius_emergency_services.utils.KEYWORD_SERVICE_NUMBER_ARGUMENT
 import com.th3pl4gu3.mauritius_emergency_services.utils.PRE_CALL_COUNTDOWN_RANGE
@@ -63,9 +64,12 @@ class PreCallViewModel @Inject constructor(
             val serviceNumber: String =
                 savedStateHandle[KEYWORD_SERVICE_NUMBER_ARGUMENT] ?: service.main_contact.toString()
 
+            // Get the emergency flag from saved state handle
+            val isEmergency: Boolean = savedStateHandle.get<String>(KEYWORD_IS_EMERGENCY_ARGUMENT).toBoolean()
+
             // Replace main contact number to called number
             PreCallUiState.Success(
-                service.copy(main_contact = serviceNumber.toInt())
+                service.copy(main_contact = serviceNumber.toInt()), isEmergency = isEmergency
             )
         } else {
             PreCallUiState.Error

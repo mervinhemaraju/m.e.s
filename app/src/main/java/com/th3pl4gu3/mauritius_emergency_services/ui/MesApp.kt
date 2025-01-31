@@ -44,6 +44,7 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.th3pl4gu3.mauritius_emergency_services.MesApplication
 import com.th3pl4gu3.mauritius_emergency_services.models.MesAppSettings
+import com.th3pl4gu3.mauritius_emergency_services.models.PreCallDetails
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesNavigationDrawer
 import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesSearchTopBar
@@ -191,8 +192,11 @@ fun MesApp(
                             onServiceClick = {
                                 coroutineScope.launch {
                                     navigationActionWrapper.navigateToPreCall(
-                                        it,
-                                        it.main_contact.toString(),
+                                        PreCallDetails(
+                                            it.identifier,
+                                            it.main_contact.toString(),
+                                            false
+                                        ),
                                         snackBarHostState
                                     )
                                 }
@@ -201,15 +205,19 @@ fun MesApp(
                                 if (contact.isDigitsOnly()) {
                                     coroutineScope.launch {
                                         navigationActionWrapper.navigateToPreCall(
-                                            service,
-                                            contact,
+                                            PreCallDetails(
+                                                service.identifier,
+                                                contact,
+                                                false
+                                            ),
                                             snackBarHostState
                                         )
                                     }
                                 } else {
                                     context.launchEmailIntent(recipient = contact)
                                 }
-                            }
+                            },
+                            clearSearch = { text = "" }
                         )
                     } else {
                         MesSimpleTopBar(

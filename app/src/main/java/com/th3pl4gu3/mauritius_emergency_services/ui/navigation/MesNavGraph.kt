@@ -1,6 +1,8 @@
 package com.th3pl4gu3.mauritius_emergency_services.ui.navigation
 
+import android.content.Context
 import android.content.Intent
+import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -9,8 +11,14 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -18,7 +26,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.th3pl4gu3.mauritius_emergency_services.MesApplication
+import com.th3pl4gu3.mauritius_emergency_services.R
+import com.th3pl4gu3.mauritius_emergency_services.models.PreCallDetails
 import com.th3pl4gu3.mauritius_emergency_services.models.Service
+import com.th3pl4gu3.mauritius_emergency_services.ui.components.MesTwoActionDialog
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.about.ScreenAbout
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.cyclone_report.CycloneReportViewModel
 import com.th3pl4gu3.mauritius_emergency_services.ui.screens.cyclone_report.ScreenCycloneReport
@@ -58,15 +69,57 @@ fun MesNavGraph(
     /** Log information **/
     Log.i(TAG, "Starting Navigation Host")
 
+    val telephonyManager =
+        LocalContext.current.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+    var serviceCallContent by remember { mutableStateOf(value = PreCallDetails()) }
+    var isDialogVisible by remember { mutableStateOf(false) }
+
+    if (isDialogVisible) {
+        MesTwoActionDialog(
+            title = stringResource(R.string.title_dialog_emergency_call_verifier),
+            confirmButtonAction = {
+                isDialogVisible = false
+                coroutineScope.launch {
+                    navigationActionWrapper.navigateToPreCall(
+                        serviceCallContent,
+                        snackBarHostState
+                    )
+                }
+            },
+            denyButtonAction = {
+                isDialogVisible = false
+            },
+            confirmButtonLabel = stringResource(R.string.action_proceed),
+            denyButtonLabel = stringResource(R.string.action_cancel),
+            onDismissRequest = {
+                isDialogVisible = false
+            },
+            content = {}
+        )
+    }
+
     // Define a navigate to pre call dependency function
     val navigateToPreCall: (service: Service, chosenNumber: String) -> Unit =
         { service, chosenNumber ->
             coroutineScope.launch {
-                navigationActionWrapper.navigateToPreCall(
-                    service,
-                    chosenNumber,
-                    snackBarHostState
+
+                // Create a pre call details
+                val preCallDetails = PreCallDetails(
+                    serviceIdentifier = service.identifier,
+                    chosenNumber = chosenNumber,
+                    isEmergency = telephonyManager.isEmergencyNumber(chosenNumber)
                 )
+
+                if (preCallDetails.isEmergency) {
+                    serviceCallContent = preCallDetails
+                    isDialogVisible = true
+                } else {
+                    navigationActionWrapper.navigateToPreCall(
+                        preCallDetails,
+                        snackBarHostState
+                    )
+                }
+
             }
         }
 
@@ -135,7 +188,8 @@ fun MesNavGraph(
             ScreenPreCall(
                 preCallViewModel = preCallViewModel,
                 closeScreen = navController::navigateUp,
-                isExpandedScreen = isExpandedScreen
+                isExpandedScreen = isExpandedScreen,
+                launchIntent = launchIntent
             )
         }
         composable(MesDestinations.SCREEN_ABOUT) {

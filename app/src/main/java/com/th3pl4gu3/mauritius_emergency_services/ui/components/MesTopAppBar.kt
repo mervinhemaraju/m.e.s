@@ -1,18 +1,24 @@
 package com.th3pl4gu3.mauritius_emergency_services.ui.components
 
 import android.content.res.Configuration
-import androidx.compose.animation.*
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Sort
-import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.Sort
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.TopAppBarState
+import androidx.compose.material3.rememberTopAppBarState
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
@@ -33,49 +39,15 @@ internal fun MesTopAppBar(
         topAppBarState
     )
 ) {
-//    var searchActivated by remember {
-//        mutableStateOf(false)
-//    }
-
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.background,
             scrolledContainerColor = MaterialTheme.colorScheme.surface
         ),
         title = {
-            AppBarTitleContent(
-//                isSearchBarActivate = searchActivated && showSearchIcon,
-//                searchValue = searchValue,
-//                searchValueChange = searchValueChange,
-//                focusManager = LocalFocusManager.current
-            )
+            AppBarTitleContent()
         },
         navigationIcon = {
-//            Crossfade(targetState = searchActivated && showSearchIcon) { isChecked ->
-//                if (!isChecked) {
-//                    IconButton(onClick = openDrawer) {
-//                        MesIcon(
-//                            painterResource = R.drawable.ic_mes,
-//                            contentDescription = R.string.ctnt_desc_drawer_open,
-//                            modifier = Modifier.size(32.dp)
-//                        )
-//                    }
-//                } else {
-//                    IconButton(enabled = false, onClick = {}) {
-//                        MesIcon(
-//                            imageVector = Icons.Outlined.Search,
-//                            contentDescription = stringResource(id = R.string.action_search)
-//                        )
-//                    }
-//                }
-//            }
-//            IconButton(onClick = openDrawer) {
-//                MesIcon(
-//                    painterResource = R.drawable.ic_mes,
-//                    contentDescription = R.string.ctnt_desc_drawer_open,
-//                    modifier = Modifier.size(32.dp)
-//                )
-//            }
             IconButton(
                 onClick = openDrawer,
                 modifier = Modifier
@@ -86,29 +58,13 @@ internal fun MesTopAppBar(
             ) {
                 MesIcon(
                     painterResource = R.drawable.ic_mes,
-                    contentDescription = R.string.ctnt_desc_drawer_open,
+                    contentDescription = R.string.description_content_drawer_open,
                     modifier = Modifier.size(32.dp)
                 )
             }
         },
         actions = {
             if (showSortAction) {
-//                Crossfade(targetState = searchActivated) { isChecked ->
-//                    IconButton(onClick = {
-//                        searchActivated = !isChecked
-//                    }) {
-//MesIcon(
-//                    imageVector = Icons.Outlined.Sort,
-//                    contentDescription = stringResource(id = R.string.action_sort)
-//                )
-//                    }
-//                }
-//            IconButton(onClick = {}) {
-//                MesIcon(
-//                    imageVector = Icons.Outlined.Sort,
-//                    contentDescription = stringResource(id = R.string.action_sort)
-//                )
-//            }
                 IconButton(
                     onClick = {},
                     modifier = Modifier
@@ -135,53 +91,7 @@ internal fun MesTopAppBar(
 
 @Composable
 @ExperimentalMaterial3Api
-fun AppBarTitleContent(
-//    isSearchBarActivate: Boolean,
-//    searchValue: String,
-//    focusManager: FocusManager,
-//    searchValueChange: (String) -> Unit
-) {
-
-//    MesAnimatedVisibilityExpandedHorizontallyContent(visibility = isSearchBarActivate) {
-//        OutlinedTextField(
-//            value = searchValue,
-//            onValueChange = searchValueChange,
-//            singleLine = true,
-//            placeholder = {
-//                Text(text = stringResource(id = R.string.action_search))
-//            },
-//            colors = TextFieldDefaults.textFieldColors(
-//                containerColor = Color.Transparent,
-//                focusedIndicatorColor = Color.Transparent,
-//                unfocusedIndicatorColor = Color.Transparent,
-//                textColor = MaterialTheme.colorScheme.primary,
-//                placeholderColor = MaterialTheme.colorScheme.secondary
-//            ),
-//            textStyle = MaterialTheme.typography.bodyLarge,
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .wrapContentWidth(align = Alignment.CenterHorizontally)
-//                .animateContentSize(
-//                    animationSpec = spring(
-//                        dampingRatio = Spring.DampingRatioMediumBouncy,
-//                        stiffness = Spring.StiffnessLow
-//                    )
-//                ),
-//            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-//            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-//        )
-//    }
-
-//    MesAnimatedVisibilityExpandedHorizontallyContent(visibility = !isSearchBarActivate) {
-//        Text(
-//            text = stringResource(id = R.string.app_name_short).lowercase(),
-//            style = MaterialTheme.typography.titleLarge,
-//            color = MaterialTheme.colorScheme.onSurface,
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .wrapContentWidth(align = Alignment.CenterHorizontally)
-//        )
-//    }
+fun AppBarTitleContent() {
     Text(
         text = stringResource(id = R.string.app_name_short).lowercase(),
         style = MaterialTheme.typography.titleLarge,

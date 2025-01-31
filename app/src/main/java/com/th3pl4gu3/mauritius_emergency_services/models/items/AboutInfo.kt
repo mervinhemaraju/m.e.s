@@ -18,25 +18,25 @@ sealed class AboutInfoVector(
     object RateApp : AboutInfoVector(
         icon = Icons.Outlined.Grade,
         title = R.string.title_about_data_rate_mes,
-        description = R.string.description_about_data_rate_mes
+        description = R.string.description_about_rate_mes
     )
 
     object ShareApp : AboutInfoVector(
         icon = Icons.Outlined.Share,
         title = R.string.title_about_data_share_mes,
-        description = R.string.description_about_data_share_mes
+        description = R.string.description_about_share_mes
     )
 
     object AboutUs : AboutInfoVector(
         icon = Icons.Outlined.People,
         title = R.string.title_about_data_about_mes,
-        description = R.string.description_about_data_about_mes
+        description = R.string.description_about_about_mes
     )
 
     object Api : AboutInfoVector(
         icon = Icons.Outlined.Api,
         title = R.string.title_about_data_api,
-        description = R.string.description_about_data_api
+        description = R.string.description_about_api
     )
 
     object PrivacyPolicy : AboutInfoVector(

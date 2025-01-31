@@ -151,7 +151,10 @@ fun CycloneReportDecisionsUi(
         )
 
         is CycloneReportUiState.NoWarning -> ScreenNoWarning(
-            onRefresh = retryAction, isRefreshing = isRefreshing, ptrState = ptrState
+            onRefresh = retryAction,
+            isRefreshing = isRefreshing,
+            ptrState = ptrState,
+            showCycloneNamesOnClick = showCycloneNamesOnClick
         )
 
         is CycloneReportUiState.Error -> MesScreenError(
@@ -216,7 +219,7 @@ fun ScreenWarning(
             ) {
 
                 Text(
-                    text = stringResource(R.string.headline_cyclone_report_primary),
+                    text = stringResource(R.string.title_cyclone_report_primary),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center,
@@ -227,7 +230,7 @@ fun ScreenWarning(
 
                 Text(
                     text = stringResource(
-                        R.string.headline_cyclone_report_status,
+                        R.string.title_cyclone_report_status,
                         report.level.toString()
                     ),
                     style = MaterialTheme.typography.headlineLarge,
@@ -280,57 +283,75 @@ fun ScreenNoWarning(
     onRefresh: () -> Unit,
     isRefreshing: Boolean,
     ptrState: PullToRefreshState,
+    showCycloneNamesOnClick: () -> Unit,
     scrollState: ScrollState = rememberScrollState(),
 ) {
 
-    PullToRefreshBox(
+    Box(
         modifier = Modifier
-            .padding(8.dp)
-            .fillMaxSize(),
-        state = ptrState,
-        isRefreshing = isRefreshing,
-        onRefresh = onRefresh,
+            .fillMaxSize()
+            .padding(bottom = 8.dp, top = 16.dp)
+            .background(MaterialTheme.colorScheme.background)
     ) {
-        Column(
-            verticalArrangement = Arrangement.Center,
+        PullToRefreshBox(
             modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(scrollState)
+                .padding(8.dp)
+                .fillMaxSize(),
+            state = ptrState,
+            isRefreshing = isRefreshing,
+            onRefresh = onRefresh,
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(scrollState)
             ) {
-                MesIcon(
-                    painterResource = R.drawable.ic_cloud,
-                    tint = MaterialTheme.colorScheme.secondary,
-                    contentDescription = R.string.message_cyclone_report_no_warnings,
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    MesIcon(
+                        painterResource = R.drawable.ic_cloud,
+                        tint = MaterialTheme.colorScheme.secondary,
+                        contentDescription = R.string.message_cyclone_report_no_warnings,
+                        modifier = Modifier
+                    )
+                    MesIcon(
+                        painterResource = R.drawable.ic_cloud,
+                        tint = MaterialTheme.colorScheme.secondary,
+                        contentDescription = R.string.message_cyclone_report_no_warnings,
+                        modifier = Modifier
+                    )
+                }
+
+                Text(
+                    text = stringResource(R.string.message_cyclone_report_no_warnings),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.secondary,
+                    textAlign = TextAlign.Center,
                     modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 32.dp)
                 )
+
                 MesIcon(
                     painterResource = R.drawable.ic_cloud,
                     tint = MaterialTheme.colorScheme.secondary,
                     contentDescription = R.string.message_cyclone_report_no_warnings,
-                    modifier = Modifier
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
             }
 
-            Text(
-                text = stringResource(R.string.message_cyclone_report_no_warnings),
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.secondary,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 32.dp)
-            )
-
-            MesIcon(
-                painterResource = R.drawable.ic_cloud,
-                tint = MaterialTheme.colorScheme.secondary,
-                contentDescription = R.string.message_cyclone_report_no_warnings,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+            WidgetActionButtons(
+                namesButtonOnClick = showCycloneNamesOnClick,
+                guidelinesButtonOnClick = {},
+                modifier = Modifier.align(Alignment.BottomEnd),
+                scrollState = scrollState,
+                showGuidelinesButton = false
             )
         }
     }
@@ -342,7 +363,7 @@ fun ScreenNoWarning(
 @Composable
 fun WidgetLatestNews(news: List<String>) {
     Text(
-        text = stringResource(R.string.headline_cyclone_report_latest_news).capitalize(),
+        text = stringResource(R.string.title_cyclone_report_latest_news).capitalize(),
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.onBackground,
         textAlign = TextAlign.Center,
@@ -389,7 +410,7 @@ fun WidgetNextBulletin(hour: String = "00", minute: String = "00", second: Strin
         .background(MaterialTheme.colorScheme.surfaceContainerLow)
 
     Text(
-        text = stringResource(R.string.headline_cyclone_report_next_bulletin).capitalize(),
+        text = stringResource(R.string.title_cyclone_report_next_bulletin).capitalize(),
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.onBackground,
         textAlign = TextAlign.Center,
@@ -434,7 +455,7 @@ fun WidgetNextBulletin(hour: String = "00", minute: String = "00", second: Strin
 
         MesCounter(
             countdown = second,
-            label = stringResource(R.string.label_time_minute),
+            label = stringResource(R.string.label_time_second),
             modifier = backgroundThemeModifier
         )
     }
@@ -442,9 +463,11 @@ fun WidgetNextBulletin(hour: String = "00", minute: String = "00", second: Strin
 
 @Composable
 fun WidgetActionButtons(
-    namesButtonOnClick: () -> Unit, guidelinesButtonOnClick: () -> Unit,
+    namesButtonOnClick: () -> Unit,
+    guidelinesButtonOnClick: () -> Unit,
     modifier: Modifier,
-    scrollState: ScrollState
+    scrollState: ScrollState,
+    showGuidelinesButton: Boolean = true,
 ) {
     val expandedFab by remember { derivedStateOf { scrollState.value <= 50 } }
 
@@ -452,23 +475,25 @@ fun WidgetActionButtons(
         modifier = modifier,
     ) {
 
-        FloatingActionButton(
-            onClick = guidelinesButtonOnClick,
-            modifier = Modifier
-                .align(Alignment.End)
-                .size(48.dp),
-            shape = MaterialTheme.shapes.medium,
-            contentColor = MaterialTheme.colorScheme.onSecondary,
-            containerColor = MaterialTheme.colorScheme.secondary,
+        if(showGuidelinesButton){
+            FloatingActionButton(
+                onClick = guidelinesButtonOnClick,
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .size(48.dp),
+                shape = MaterialTheme.shapes.medium,
+                contentColor = MaterialTheme.colorScheme.onSecondary,
+                containerColor = MaterialTheme.colorScheme.secondary,
 
-            ) {
-            Icon(
-                Icons.AutoMirrored.Filled.Help,
-                stringResource(R.string.ctnt_desc_cyclone_guidelines_button)
-            )
+                ) {
+                Icon(
+                    Icons.AutoMirrored.Filled.Help,
+                    stringResource(R.string.description_content_button_cyclone_guidelines)
+                )
+            }
+
+            Spacer(modifier = Modifier.size(8.dp))
         }
-
-        Spacer(modifier = Modifier.size(8.dp))
 
         ExtendedFloatingActionButton(
             expanded = expandedFab,
@@ -476,10 +501,10 @@ fun WidgetActionButtons(
             icon = {
                 Icon(
                     Icons.AutoMirrored.Filled.ListAlt,
-                    stringResource(R.string.ctnt_desc_cyclone_names_button)
+                    stringResource(R.string.description_content_button_cyclone_names)
                 )
             },
-            text = { Text(text = "Names") },
+            text = { Text(text = stringResource(R.string.title_cyclone_names)) },
             shape = MaterialTheme.shapes.medium,
             contentColor = MaterialTheme.colorScheme.onPrimary,
             containerColor = MaterialTheme.colorScheme.primary

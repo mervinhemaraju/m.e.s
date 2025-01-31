@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.th3pl4gu3.mauritius_emergency_services.ui.theme.MesTheme
 
@@ -34,9 +35,15 @@ fun MesOneActionDialog(
         text = content,
         confirmButton = {
             TextButton(
-                onClick = confirmButtonAction)
+                onClick = confirmButtonAction
+            )
             {
-                Text(text = confirmButtonLabel)
+                Text(
+                    text = confirmButtonLabel,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Medium,
+                )
             }
         },
         modifier = modifier
@@ -61,22 +68,35 @@ fun MesTwoActionDialog(
         title = {
             Text(
                 text = title,
-                color = MaterialTheme.colorScheme.secondary
+                color = MaterialTheme.colorScheme.secondary,
+                style = MaterialTheme.typography.bodyLarge
             )
         },
         text = content,
         confirmButton = {
             TextButton(
-                onClick = confirmButtonAction)
+                onClick = confirmButtonAction
+            )
             {
-                Text(text = confirmButtonLabel)
+                Text(
+                    text = confirmButtonLabel,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
         },
         dismissButton = {
             TextButton(
-                onClick = denyButtonAction)
+                onClick = denyButtonAction
+            )
             {
-                Text(text = denyButtonLabel)
+                Text(
+                    text = denyButtonLabel,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.secondary
+                )
             }
         },
         modifier = modifier
@@ -84,7 +104,11 @@ fun MesTwoActionDialog(
 }
 
 @Preview("Mes One Action Dialog Light", showBackground = true)
-@Preview("Mes One Action Dialog Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(
+    "Mes One Action Dialog Dark",
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 @ExperimentalMaterial3Api
 fun PreviewMesOneActionDialog() {
@@ -100,7 +124,11 @@ fun PreviewMesOneActionDialog() {
 }
 
 @Preview("Mes Two Action Dialog Light", showBackground = true)
-@Preview("Mes Two Action Dialog Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(
+    "Mes Two Action Dialog Dark",
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 @ExperimentalMaterial3Api
 fun PreviewMesTwoActionDialog() {

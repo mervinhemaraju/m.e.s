@@ -1,6 +1,7 @@
 package com.th3pl4gu3.mauritius_emergency_services.ui.screens.theme_selector
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
@@ -39,13 +42,16 @@ fun ScreenThemeSelector(
     updateTheme: (app: AppTheme, colorContrast: AppColorContrast) -> Unit,
     currentAppTheme: AppTheme,
     currentColorContrast: AppColorContrast,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    scrollState: ScrollState = rememberScrollState()
 ) {
     MesOneActionDialog(
         title = stringResource(id = R.string.title_theme_selector_dialog),
         onDismissRequest = { dialogState() },
         content = {
-            Column {
+            Column(
+                modifier = Modifier.verticalScroll(scrollState)
+            ) {
                 AppTheme.entries.forEach {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -87,7 +93,7 @@ fun ScreenThemeSelector(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = stringResource(R.string.section_theme_preferences_contrast),
+                    text = stringResource(R.string.title_theme_preferences_contrast),
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodyMedium,
