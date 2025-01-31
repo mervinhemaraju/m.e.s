@@ -1,9 +1,7 @@
 # Mauritius Emergency Services (Mes)
 
-#### **Note:** This repo is an outdated one. This app has been migrated to Flutter for cross platform access. The new flutter repo is a private one and will be henced managed in secret ;) However, feel free to look into the previous code to have an idea on how MES has started.
+### **Note:** This is an outdated repo. This app has been migrated to Flutter for cross platform deployment. The new flutter repo can be found [here](https://github.com/mervinhemaraju/mauritius-emergency-services). Feel free to look into the previous code to have an idea on how MES started using Android's native Jetpack Compose.
 
-
-<img src="screenshots/banner.png" alt="banner"/>
 
 ## Table of Contents
 
@@ -14,7 +12,6 @@
 - [Donations](#donations)
 - [License](#license)
 
-`<a href="intro"></a>`
 
 ## Introduction
 
@@ -24,20 +21,17 @@ Mes is a local app developed by citizen of Mauritius to help people call the rig
 Mes also includes other services contact that could be helpful in certain situations.
 It has been designed using the guidelines of Material Design and has been adapted to the new Material You by Android
 
-`<a href="official_website"></a>`
 
 ## Official Website
 
 Mes can be found on its [official website](https://mes.mervinhemaraju.com/web) or via the [playstore](https://play.google.com/store/apps/details?id=com.th3pl4gu3.mauritius_emergency_services)
 
-`<a href="screenshots"></a>`
 
 ## Screenshots
 
 <img src="screenshots/image-1.png" height="400" alt="Emergency Button"/> <img src="screenshots/image-2.png" height="400" alt="Services List"/> <img src="screenshots/image-3.png" height="400" alt="Swipe to Call"/> <img src="screenshots/image-4.png" height="400" alt="Dark Mode"/> 
 <img src="screenshots/image-5.png" height="400" alt="Easy to Use"/> <img src="screenshots/image-6.png" height="400" alt="More Contacts"/>
 
-`<a href="support"></a>`
 
 ## Support
 
@@ -47,7 +41,7 @@ Reach out to us at the following:
 * Play Store: [Mes](https://play.google.com/store/apps/details?id=com.th3pl4gu3.mauritius_emergency_services)
 * Support Email: th3pl4gu33@gmail.com
 
-`<a href="donation"></a>`
+
 
 ## Donations
 
